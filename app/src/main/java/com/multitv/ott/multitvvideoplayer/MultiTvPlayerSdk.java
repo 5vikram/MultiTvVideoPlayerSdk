@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Handler;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.AttributeSet;
@@ -48,9 +49,10 @@ public class MultiTvPlayerSdk extends FrameLayout {
     private int seekPlayerTo;
     private String mContentUrl;
     private boolean isPlayerReady;
+    private Handler bufferingTimeHandler;
 
 
-    private LinearLayout errorRetryLayout;
+    private LinearLayout errorRetryLayout, bufferingProgressBarLayout;
 
 
     public MultiTvPlayerSdk(Context context, AttributeSet attrs) {
@@ -239,6 +241,14 @@ public class MultiTvPlayerSdk extends FrameLayout {
                 case ExoPlayer.STATE_BUFFERING:
                     text += "buffering";
 
+                    if (playWhenReady && bufferingProgressBarLayout != null) {
+                        bufferingProgressBarLayout.bringToFront();
+                        bufferingProgressBarLayout.setVisibility(VISIBLE);
+                    }
+
+                    if (contentType == ContentType.LIVE)
+                        startBufferingTimer();
+
                     break;
                 case ExoPlayer.STATE_ENDED:
                     text += "ended";
@@ -270,5 +280,32 @@ public class MultiTvPlayerSdk extends FrameLayout {
         }
     };
 
+
+    private void startBufferingTimer() {
+        if (bufferingTimeHandler == null) {
+            bufferingTimeHandler = new Handler();
+        }
+        if (bufferingTimeRunnable != null)
+            bufferingTimeHandler.postDelayed(bufferingTimeRunnable, 0);
+    }
+
+    public void stopBufferingTimer() {
+        if (bufferingTimeHandler != null && bufferingTimeRunnable != null) {
+            bufferingTimeHandler.removeCallbacks(bufferingTimeRunnable);
+            bufferingTimeHandler.removeCallbacksAndMessages(null);
+        }
+    }
+
+    private Runnable bufferingTimeRunnable = new Runnable() {
+        @Override
+        public void run() {
+            bufferingTimeInMillis = bufferingTimeInMillis + 1000;
+
+            //Log.e("Naseeb", "Buffering time " + bufferingTimeInMillis);
+
+            if (bufferingTimeHandler != null)
+                bufferingTimeHandler.postDelayed(this, 1000);
+        }
+    };
 
 }
