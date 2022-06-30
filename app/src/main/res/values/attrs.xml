@@ -98,4 +98,26 @@
         <attr name="played_ad_marker_color" format="color" />
     </declare-styleable>
 
+
+    <declare-styleable name="CircleImageView">
+        <attr name="android:src" />
+        <attr name="android:color" />
+        <attr name="android:indeterminate"/>
+        <attr name="android:progress"/>
+        <attr name="android:max"/>
+        <attr name="android:shadowDx"/>
+        <attr name="android:shadowDy"/>
+        <attr name="android:shadowRadius"/>
+        <attr name="android:shadowColor"/>
+        <attr name="android:indeterminateDuration"/>
+        <attr name="fbb_progressColor" format="reference|color"/>
+        <attr name="fbb_autoStart" format="boolean" />
+        <attr name="fbb_animSteps" format="integer" />
+        <attr name="fbb_progressWidthRatio" format="float" />
+        <attr name="fbb_endBitmap" format="reference" />
+        <attr name="fbb_showEndBitmap" format="boolean" />
+        <attr name="fbb_hideProgressOnComplete" format="boolean" />
+        <attr name="fbb_showShadow" format="boolean" />
+    </declare-styleable>
+
 </resources>

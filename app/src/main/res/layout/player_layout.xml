@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.google.android.exoplayer2.ui.StyledPlayerView
+        android:id="@+id/videoPlayer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:controller_layout_id="@layout/exo_playback_control_view"
+        app:use_controller="false" />
+
+    <LinearLayout
+        android:id="@+id/errorRetryLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/black"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Something went wrong."
+            android:textColor="@android:color/white"
+            android:textSize="14sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tap to retry"
+            android:textColor="@android:color/white"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/bufferingProgressBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminateTint="@android:color/white"
+            android:indeterminateTintMode="src_atop" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/circularProgressLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/black"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+
+        <com.multitv.ott.multitvvideoplayer.fabbutton.FabButton
+            android:id="@+id/circular_progress_ring"
+            class="mbanje.kurt.fabbutton.FabButton"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:clickable="true"
+            android:color="#F20007"
+            android:indeterminate="false"
+            android:max="100"
+            android:src="@android:drawable/ic_media_play"
+            app:fbb_autoStart="false"
+            app:fbb_endBitmap="@drawable/ic_fab_complete"
+            app:fbb_hideProgressOnComplete="false"
+            app:fbb_progressColor="@android:color/white"
+            app:fbb_progressWidthRatio="0.12"
+            app:fbb_showEndBitmap="false"
+            app:fbb_showShadow="true" />
+
+    </LinearLayout>
+
+
+
+
+    <LinearLayout
+        android:id="@+id/gesture_controls_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="20dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="left"
+            android:gravity="left">
+
+            <com.multitv.ott.multitvvideoplayer.custom.VerticalSeekBar
+                android:id="@+id/palyer_seek_brightness_gesture"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            android:gravity="right">
+
+            <com.multitv.ott.multitvvideoplayer.custom.VerticalSeekBar
+                android:id="@+id/palyer_seek_volume_gesture"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:visibility="gone" />
+        </LinearLayout>
+    </LinearLayout>
+
+
+
+</FrameLayout>
