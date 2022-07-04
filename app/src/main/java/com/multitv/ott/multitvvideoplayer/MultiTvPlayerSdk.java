@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -67,7 +68,7 @@ public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.Re
     private final String TAG = "VikramExoVideoPlayer";
 
     private LinearLayout errorRetryLayout, bufferingProgressBarLayout, circularProgressLayout;
-    private ImageButton videoRotationButton;
+    private ImageView videoRotationButton;
 
 
     public ArrayList<String> availableResolutionContainerList, availableAudioTracksList,
@@ -193,17 +194,13 @@ public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.Re
                     ((Activity) getContext()).setRequestedOrientation(SCREEN_ORIENTATION_PORTRAIT);
                     ((Activity) getContext()).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
                     showSystemBar();
-                    ((ImageButton) videoRotationButton).setImageResource(R.drawable.minimize);
+                    videoRotationButton.setImageResource(R.drawable.rotate);
+
                 } else if (orientation == Configuration.ORIENTATION_PORTRAIT) {
                     ((Activity) getContext()).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
                     ((Activity) getContext()).getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
                     hideSystemBars();
-                    ((ImageButton) videoRotationButton).setImageResource(R.drawable.rotate);
-                } else {
-                    ((Activity) getContext()).setRequestedOrientation(SCREEN_ORIENTATION_PORTRAIT);
-                    ((Activity) getContext()).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-                    showSystemBar();
-                    ((ImageButton) videoRotationButton).setImageResource(R.drawable.minimize);
+                    videoRotationButton.setImageResource(R.drawable.minimize);
                 }
 
             }
