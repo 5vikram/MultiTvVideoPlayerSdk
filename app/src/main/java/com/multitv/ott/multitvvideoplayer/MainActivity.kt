@@ -50,6 +50,8 @@ class MainActivity : AppCompatActivity(), VideoPlayerSdkCallBackListener {
             vikramExoVideoPlayer?.resumeVideoPlayer()
         else
             vikramExoVideoPlayer?.pauseVideoPlayer()
+
+        vikramExoVideoPlayer?.hideSpeedDailog()
     }
 
     override fun onResume() {
@@ -61,6 +63,7 @@ class MainActivity : AppCompatActivity(), VideoPlayerSdkCallBackListener {
     override fun onDestroy() {
         super.onDestroy()
         vikramExoVideoPlayer?.releaseVideoPlayer()
+        vikramExoVideoPlayer?.hideSpeedDailog()
     }
 
     override fun onPlayerReady(contentUrl: String?) {
