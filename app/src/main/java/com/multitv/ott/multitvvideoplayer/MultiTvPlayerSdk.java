@@ -52,7 +52,6 @@ public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.Re
     private StyledPlayerView simpleExoPlayerView;
     private DefaultTrackSelector trackSelector;
     private VideoPlayerSdkCallBackListener videoPlayerSdkCallBackListener;
-    private boolean isPlayerReady;
 
     private long millisecondsForResume, adPlayedTimeInMillis, contentPlayedTimeInMillis, bufferingTimeInMillis;
     private int seekPlayerTo;
@@ -236,13 +235,7 @@ public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.Re
 
     // start video player when player is ready state
     public void startVideoPlayer(boolean isNeedToPlayInstantly) {
-        if (isPlayerReady) {
-            isPlayerReady = true;
-            initializeMainPlayer(mContentUrl, isNeedToPlayInstantly);
-        } else
-            Toast.makeText(context, "Please wait, Player is preparing...", Toast.LENGTH_LONG).show();
-
-
+        initializeMainPlayer(mContentUrl, isNeedToPlayInstantly);
     }
 
     // resume video player
@@ -287,7 +280,6 @@ public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.Re
             mMediaPlayer.prepare(playerMediaSource);
 
             if (isNeedToPlayInstantly) {
-                isPlayerReady = true;
                 mMediaPlayer.setPlayWhenReady(true);
             }
 
@@ -335,7 +327,7 @@ public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.Re
                     break;
                 case ExoPlayer.STATE_ENDED:
                     text += "ended";
-                    if (isPlayerReady && contentType == ContentType.VOD) {
+                    if (contentType == ContentType.VOD) {
                         if (mMediaPlayer != null)
                             contentPlayedTimeInMillis = mMediaPlayer.getCurrentPosition();
 
@@ -394,7 +386,7 @@ public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.Re
                     break;
                 case ExoPlayer.STATE_READY:
                     text += "ready";
-                    videoPlayerSdkCallBackListener.onPlayerReady(mContentUrl);
+                    //videoPlayerSdkCallBackListener.onPlayerReady(mContentUrl);
                     break;
                 default:
                     text += "unknown";

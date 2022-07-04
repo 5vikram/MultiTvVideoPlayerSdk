@@ -7,6 +7,7 @@ import android.widget.FrameLayout
 import com.multitv.ott.multitvvideoplayer.R
 import com.multitv.ott.multitvvideoplayer.custom.ToastMessage
 import com.multitv.ott.multitvvideoplayer.listener.VideoPlayerSdkCallBackListener
+import com.multitv.ott.multitvvideoplayer.utils.CommonUtils
 import com.multitv.ott.multitvvideoplayer.utils.ContentType
 import com.multitv.ott.multitvvideoplayer.utils.ScreenUtils
 
@@ -34,7 +35,6 @@ class MainActivity : AppCompatActivity(), VideoPlayerSdkCallBackListener {
             vikramExoVideoPlayer?.releaseVideoPlayer()
 
         vikramExoVideoPlayer?.setContentType(ContentType.VOD)
-        //vikramExoVideoPlayer?.setWatermarkEnable(true)
         vikramExoVideoPlayer?.setContentFilePath("http://dpvruylq68d5u.cloudfront.net/1048/1048_624c3ec915773/1048_624c3ec915773_master.m3u8")
         /*vikramExoVideoPlayer?.setMultiTvPlayerListner(this)
         vikramExoVideoPlayer?.setMenuClickListener(this)
@@ -43,8 +43,32 @@ class MainActivity : AppCompatActivity(), VideoPlayerSdkCallBackListener {
         vikramExoVideoPlayer?.prepareVideoPlayer()
     }
 
+    override fun onPause() {
+        super.onPause()
+
+        if (!CommonUtils.isAppIsInBackground(this))
+            vikramExoVideoPlayer?.resumeVideoPlayer()
+        else
+            vikramExoVideoPlayer?.pauseVideoPlayer()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (!CommonUtils.isAppIsInBackground(this))
+            vikramExoVideoPlayer?.resumeVideoPlayer()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        vikramExoVideoPlayer?.releaseVideoPlayer()
+    }
+
     override fun onPlayerReady(contentUrl: String?) {
-        ToastMessage.showLogs(ToastMessage.LogType.ERROR, "Video Player Ready::::::::::", contentUrl)
+        ToastMessage.showLogs(
+            ToastMessage.LogType.ERROR,
+            "Video Player Ready::::::::::",
+            contentUrl
+        )
         vikramExoVideoPlayer?.startVideoPlayer(true)
     }
 
@@ -65,6 +89,10 @@ class MainActivity : AppCompatActivity(), VideoPlayerSdkCallBackListener {
     }
 
     override fun prepareVideoPlayer() {
-        ToastMessage.showLogs(ToastMessage.LogType.ERROR, "Video Player State:::"," Prepare video player")
+        ToastMessage.showLogs(
+            ToastMessage.LogType.ERROR,
+            "Video Player State:::",
+            " Prepare video player"
+        )
     }
 }
