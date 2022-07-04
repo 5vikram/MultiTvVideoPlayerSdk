@@ -5,6 +5,8 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
+import android.widget.RadioButton
+import android.widget.RadioGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.multitv.ott.multitvvideoplayer.R
@@ -29,18 +31,15 @@ object TrackSelectionDialog {
         alertDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         alertDialog.show()
 
-        val qualityRecyclerView: RecyclerView = view.findViewById(R.id.quality_recycler_view)
+        val qualityRadioGroup: RadioGroup = view.findViewById(R.id.quality_radio_group)
         val cancelButton: TextView = view.findViewById(R.id.cancel_btn)
         val okayButton: TextView = view.findViewById(R.id.okay_btn)
 
-        qualityRecyclerView.adapter = ResolutionAdapter(trackList,
-                    object : ResolutionAdapter.AdapterCallbacks{
-                        override fun onItemSelected(trackResolution: TrackResolution) {
-                            // here you will get the selected track resolution
-                            resolution = trackResolution
-                        }
-                    })
-
+        for (item in trackList){
+            val radioButton = RadioButton(context)
+            radioButton.text = item.height.toString()
+            qualityRadioGroup.addView(radioButton)
+        }
 
         cancelButton.setOnClickListener {
             alertDialog.dismiss()
