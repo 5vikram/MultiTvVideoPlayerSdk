@@ -12,4 +12,6 @@ public interface VideoPlayerSdkCallBackListener {
     void onPlayerError(String message);
 
     void prepareVideoPlayer();
+
+    //void showSpeedControllMenu();
 }

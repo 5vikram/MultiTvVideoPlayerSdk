@@ -1,6 +1,7 @@
 package com.multitv.ott.multitvvideoplayer.models;
 
 public class TrackResolution {
+
     private int width ;
 
     private int height;
@@ -18,6 +19,12 @@ public class TrackResolution {
     }
 
     public void setHeight(int height) {
+        this.height = height;
+    }
+
+
+    public TrackResolution(int width, int height) {
+        this.width = width;
         this.height = height;
     }
 }

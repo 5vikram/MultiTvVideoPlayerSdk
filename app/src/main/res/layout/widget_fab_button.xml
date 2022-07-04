@@ -28,24 +28,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.multitv.ott.multitvvideoplayer.fabbutton.CircleImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        class="com.multitv.ott.multitvvideoplayer.fabbutton.CircleImageView"
-        android:id="@+id/fabbutton_circle"
-        android:layout_gravity="center"
-        android:scaleType="center"
-        />
+        <com.multitv.ott.multitvvideoplayer.fabbutton.CircleImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            class="com.multitv.ott.multitvvideoplayer.fabbutton.CircleImageView"
+            android:id="@+id/fabbutton_circle"
+            android:layout_gravity="center"
+            android:scaleType="center"
+            />
 
-    <com.multitv.ott.multitvvideoplayer.fabbutton.ProgressRingView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        class="com.multitv.ott.multitvvideoplayer.fabbutton.ProgressRingView"
-        android:id="@+id/fabbutton_ring"
-        android:indeterminate="false"
-        android:progress="0"
-        android:max="100"
-        app:fbb_autoStart="false"
-        android:layout_gravity="center"
-        />
+        <com.multitv.ott.multitvvideoplayer.fabbutton.ProgressRingView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            class="com.multitv.ott.multitvvideoplayer.fabbutton.ProgressRingView"
+            android:id="@+id/fabbutton_ring"
+            android:indeterminate="false"
+            android:progress="0"
+            android:max="100"
+            app:fbb_autoStart="false"
+            android:layout_gravity="center"
+            />
 </merge>

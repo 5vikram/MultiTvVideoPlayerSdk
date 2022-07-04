@@ -10,7 +10,8 @@
         android:id="@+id/videoPlayer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:controller_layout_id="@layout/exo_playback_control_view" />
+        app:controller_layout_id="@layout/exo_playback_control_view"
+        app:resize_mode="fill" />
 
     <LinearLayout
         android:id="@+id/errorRetryLayout"
