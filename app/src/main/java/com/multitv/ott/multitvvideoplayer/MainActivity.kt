@@ -1,10 +1,10 @@
 package com.multitv.ott.multitvvideoplayer
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.Gravity
 import android.widget.FrameLayout
-import com.multitv.ott.multitvvideoplayer.R
+import androidx.appcompat.app.AppCompatActivity
 import com.multitv.ott.multitvvideoplayer.custom.ToastMessage
 import com.multitv.ott.multitvvideoplayer.listener.VideoPlayerSdkCallBackListener
 import com.multitv.ott.multitvvideoplayer.utils.CommonUtils
@@ -28,6 +28,17 @@ class MainActivity : AppCompatActivity(), VideoPlayerSdkCallBackListener {
             )
         )
         startPlayer()
+    }
+
+    override fun onPictureInPictureModeChanged(
+        isInPictureInPictureMode: Boolean,
+        newConfig: Configuration?
+    ) {
+        if (isInPictureInPictureMode) {
+            supportActionBar?.hide()
+        } else {
+            supportActionBar?.show()
+        }
     }
 
     private fun startPlayer() {

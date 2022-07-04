@@ -65,7 +65,7 @@ import java.util.Locale;
 
 public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.ResolutionAudioSrtSelection, PreviewLoader, PreviewBar.OnScrubListener {
 
-    private Context context;
+    private Activity context;
     private SharedPreferencePlayer sharedPreferencePlayer;
     private ContentType contentType;
     private ExoPlayer mMediaPlayer;
@@ -88,16 +88,17 @@ public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.Re
     public static final int DEFAULT_FAST_FORWARD_MS = 10000;
     public static final int DEFAULT_REWIND_MS = 10000;
     public static final int DEFAULT_SHOW_TIMEOUT_MS = 5000;
+    private ImageView pictureInPicture;
 
     private final StringBuilder formatBuilder;
     private final Formatter formatter;
 
 
     public MultiTvPlayerSdk(Context context, AttributeSet attrs) {
-        this(context, attrs, 0);
+        this((Activity) context, attrs, 0);
     }
 
-    public MultiTvPlayerSdk(Context context, AttributeSet attrs, int defStyleAttr) {
+    public MultiTvPlayerSdk(Activity context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         this.context = context;
         formatBuilder = new StringBuilder();
@@ -133,6 +134,7 @@ public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.Re
         videoFarwardButton = view.findViewById(R.id.exo_ffwd);
         videoPlayButton = view.findViewById(R.id.exo_play);
         videoPauseButton = view.findViewById(R.id.exo_pause);
+
         playerProgress = (PreviewTimeBar) findViewById(R.id.exo_progress);
         currentDurationPlayTv = view.findViewById(R.id.exo_position);
         previewImageView = view.findViewById(R.id.previewImageView);
@@ -143,6 +145,19 @@ public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.Re
         playerProgress.addOnScrubListener(this);
         playerProgress.setPreviewLoader(this);
 
+        pictureInPicture = view.findViewById(R.id.picture_in_picture);
+
+        videoNextButton.setVisibility(View.GONE);
+        videoPerviousButton.setVisibility(View.GONE);
+
+        pictureInPicture.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    context.enterPictureInPictureMode();
+                }
+            }
+        });
         VideoRenuButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -903,14 +918,14 @@ public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.Re
     public void onScrubStart(PreviewBar previewBar) {
         previewImageView.setVisibility(View.VISIBLE);
         Log.d("Scrub", "START");
-        findViewById(R.id.centerButtonLayout).setVisibility(View.GONE);
+        //findViewById(R.id.centerButtonLayout).setVisibility(View.GONE);
         findViewById(R.id.previewFrameLayout).setVisibility(View.VISIBLE);
         pauseVideoPlayer();
     }
 
     @Override
     public void onScrubMove(PreviewBar previewBar, int progress, boolean fromUser) {
-        findViewById(R.id.centerButtonLayout).setVisibility(View.GONE);
+        //findViewById(R.id.centerButtonLayout).setVisibility(View.GONE);
         findViewById(R.id.previewFrameLayout).setVisibility(View.VISIBLE);
         if (currentDurationPlayTv != null) {
             currentDurationPlayTv.setText(Util.getStringForTime(formatBuilder, formatter, progress));
@@ -921,7 +936,7 @@ public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.Re
     public void onScrubStop(PreviewBar previewBar) {
         previewImageView.setVisibility(View.GONE);
         findViewById(R.id.previewFrameLayout).setVisibility(View.GONE);
-        findViewById(R.id.centerButtonLayout).setVisibility(View.VISIBLE);
+        //findViewById(R.id.centerButtonLayout).setVisibility(View.VISIBLE);
         if (mMediaPlayer != null) {
             seekTo(previewBar.getProgress());
         }
@@ -938,3 +953,4 @@ public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.Re
                 .into(previewImageView);
     }
 }
+
