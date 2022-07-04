@@ -3,6 +3,7 @@ package com.multitv.ott.multitvvideoplayer;
 import static android.content.Context.TELEPHONY_SERVICE;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -16,6 +17,7 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -45,7 +47,7 @@ import java.util.HashMap;
 
 public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.ResolutionAudioSrtSelection {
 
-    private Context context;
+    private Activity context;
     private SharedPreferencePlayer sharedPreferencePlayer;
     private ContentType contentType;
     private ExoPlayer mMediaPlayer;
@@ -67,12 +69,14 @@ public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.Re
             availableSrtTracksList;
     private HashMap<String, Integer> availableResolutionContainerMap;
 
+    private ImageView pictureInPicture;
+
 
     public MultiTvPlayerSdk(Context context, AttributeSet attrs) {
-        this(context, attrs, 0);
+        this((Activity) context, attrs, 0);
     }
 
-    public MultiTvPlayerSdk(Context context, AttributeSet attrs, int defStyleAttr) {
+    public MultiTvPlayerSdk(Activity context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         this.context = context;
         CommonUtils.setDefaultCookieManager();
@@ -98,6 +102,16 @@ public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.Re
         errorRetryLayout = view.findViewById(R.id.errorRetryLayout);
         bufferingProgressBarLayout = view.findViewById(R.id.bufferingProgressBarLayout);
         circularProgressLayout = view.findViewById(R.id.circularProgressLayout);
+        pictureInPicture = view.findViewById(R.id.picture_in_picture);
+
+        pictureInPicture.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    context.enterPictureInPictureMode();
+                }
+            }
+        });
 
         super.onFinishInflate();
     }

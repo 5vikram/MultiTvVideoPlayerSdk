@@ -30,6 +30,13 @@ class MainActivity : AppCompatActivity(), VideoPlayerSdkCallBackListener {
         startPlayer()
     }
 
+    override fun onUserLeaveHint() {
+        super.onUserLeaveHint()
+
+
+
+    }
+
     private fun startPlayer() {
         if (vikramExoVideoPlayer != null)
             vikramExoVideoPlayer?.releaseVideoPlayer()
