@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Handler;
 import android.telephony.PhoneStateListener;
@@ -16,6 +17,7 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -25,16 +27,20 @@ import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.PlaybackException;
 import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
+import com.google.android.exoplayer2.TracksInfo;
 import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.source.TrackGroup;
 import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.ui.StyledPlayerView;
+import com.google.common.collect.ImmutableList;
 import com.multitv.ott.multitvvideoplayer.custom.CountDownTimerWithPause;
 import com.multitv.ott.multitvvideoplayer.custom.ToastMessage;
 import com.multitv.ott.multitvvideoplayer.database.SharedPreferencePlayer;
 import com.multitv.ott.multitvvideoplayer.fabbutton.FabButton;
 import com.multitv.ott.multitvvideoplayer.listener.VideoPlayerSdkCallBackListener;
+import com.multitv.ott.multitvvideoplayer.models.TrackResolution;
 import com.multitv.ott.multitvvideoplayer.popup.MyDialogFragment;
 import com.multitv.ott.multitvvideoplayer.utils.CommonUtils;
 import com.multitv.ott.multitvvideoplayer.utils.ContentType;
@@ -43,7 +49,7 @@ import com.multitv.ott.multitvvideoplayer.utils.ExoUttils;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.ResolutionAudioSrtSelection {
+public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.ResolutionAudioSrtSelection, View.OnClickListener {
 
     private Context context;
     private SharedPreferencePlayer sharedPreferencePlayer;
@@ -59,12 +65,14 @@ public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.Re
     private Handler bufferingTimeHandler;
     private CountDownTimerWithPause countDownTimer;
     private final String TAG = "VikramExoVideoPlayer";
-
+    private ImageButton setting, pause, play;
     private LinearLayout errorRetryLayout, bufferingProgressBarLayout, circularProgressLayout;
 
 
     public ArrayList<String> availableResolutionContainerList, availableAudioTracksList,
             availableSrtTracksList;
+
+    public ArrayList<TrackResolution> trackResolutionsList;
     private HashMap<String, Integer> availableResolutionContainerMap;
 
 
@@ -98,6 +106,11 @@ public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.Re
         errorRetryLayout = view.findViewById(R.id.errorRetryLayout);
         bufferingProgressBarLayout = view.findViewById(R.id.bufferingProgressBarLayout);
         circularProgressLayout = view.findViewById(R.id.circularProgressLayout);
+        setting = view.findViewById(R.id.settings_btn);
+        setting.setOnClickListener(this);
+
+        pause = view.findViewById(R.id.exo_pause);
+        pause.setOnClickListener(this);
 
         super.onFinishInflate();
     }
@@ -169,7 +182,6 @@ public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.Re
         initViews();
     }
 
-
     // init view and view group here
     private void initViews() {
         ToastMessage.showLogs(ToastMessage.LogType.ERROR, "Video Player:::", "initViews()");
@@ -185,13 +197,12 @@ public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.Re
 
         if (videoPlayerSdkCallBackListener != null)
             videoPlayerSdkCallBackListener.onPlayerReady(mContentUrl);
-    }
 
+    }
 
     public void setMultiTvVideoPlayerSdkListener(VideoPlayerSdkCallBackListener videoPlayerSdkCallBackListener) {
         this.videoPlayerSdkCallBackListener = videoPlayerSdkCallBackListener;
     }
-
 
     public void setContentFilePath(String path) {
         this.mContentUrl = path;
@@ -504,7 +515,6 @@ public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.Re
     }
 */
 
-
     private void startBufferingTimer() {
         if (bufferingTimeHandler == null) {
             bufferingTimeHandler = new Handler();
@@ -611,9 +621,24 @@ public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.Re
         dialog.show();
     }
 
-
     public void showMenuDailog() {
         //new ResolutionDailog().showResolutionDailog(context, this);
+    }
+
+    public void getTrackResolution(){
+      TracksInfo trackInfo = mMediaPlayer.getCurrentTracksInfo();
+      ImmutableList<TracksInfo.TrackGroupInfo> trackGroupInfo = trackInfo.getTrackGroupInfos();
+      TracksInfo.TrackGroupInfo  trackGroupResolution = trackGroupInfo.get(0);
+      TrackGroup trackGroup = trackGroupResolution.getTrackGroup();
+
+      for(int i = 0; i<trackGroup.length; i++){
+          if(trackGroupResolution.isTrackSupported(i)){
+              trackResolutionsList.set
+          }
+      }
+
+
+
     }
 
 
@@ -635,6 +660,15 @@ public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.Re
                 break;
         }
 */
+    }
+
+    @Override
+    public void onClick(View view) {
+       if(view == pause) mMediaPlayer.pause();
+
+       if(view == setting){
+           getTrackResolution();
+       }
     }
 
 /*
