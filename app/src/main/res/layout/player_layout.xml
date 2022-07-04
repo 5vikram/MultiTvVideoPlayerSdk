@@ -10,8 +10,7 @@
         android:id="@+id/videoPlayer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:controller_layout_id="@layout/exo_playback_control_view"
-        app:use_controller="false" />
+        app:controller_layout_id="@layout/exo_playback_control_view" />
 
     <LinearLayout
         android:id="@+id/errorRetryLayout"
@@ -53,6 +52,7 @@
             android:indeterminateTintMode="src_atop" />
 
     </LinearLayout>
+
     <LinearLayout
         android:id="@+id/circularProgressLayout"
         android:layout_width="match_parent"
@@ -84,16 +84,14 @@
     </LinearLayout>
 
 
-
-
     <LinearLayout
         android:id="@+id/gesture_controls_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="20dp"
         android:layout_marginLeft="40dp"
+        android:layout_marginTop="20dp"
         android:layout_marginRight="40dp"
-        android:layout_marginTop="20dp">
+        android:layout_marginBottom="20dp">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -126,7 +124,6 @@
                 android:visibility="gone" />
         </LinearLayout>
     </LinearLayout>
-
 
 
 </FrameLayout>
