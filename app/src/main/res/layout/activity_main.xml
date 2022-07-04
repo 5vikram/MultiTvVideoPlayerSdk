@@ -7,7 +7,13 @@
     tools:context=".MainActivity">
 
     <com.multitv.ott.multitvvideoplayer.MultiTvPlayerSdk
+        android:id="@+id/vikramExoVideoPlayer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:keepScreenOn="true"
+        android:scrollbars="none" />
 
 </FrameLayout>
