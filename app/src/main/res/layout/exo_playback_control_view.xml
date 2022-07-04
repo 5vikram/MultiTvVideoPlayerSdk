@@ -21,72 +21,69 @@
 
 
     <LinearLayout
+        android:id="@+id/centerButtonLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:orientation="horizontal">
 
-        <ImageButton
+        <ImageView
             android:id="@id/exo_prev"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:background="@android:color/transparent"
-            android:minWidth="32dp"
-            android:minHeight="48dp"
-            android:src="@drawable/ic_baseline_skip_previous_24" />
-
-        <ImageButton
-            android:id="@id/exo_rew"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:minWidth="48dp"
-            android:minHeight="48dp"
-            android:src="@drawable/ic_baseline_replay_10_24" />
-
-        <ImageButton
-            android:id="@id/exo_play"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="10dp"
             android:visibility="gone"
-            android:background="@android:color/transparent"
-            android:src="@drawable/ic_baseline_play_circle_outline_24" />
+            android:src="@drawable/pervious" />
 
-        <ImageButton
+        <ImageView
+            android:id="@id/exo_rew"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="@android:color/transparent"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="15dp"
+            android:src="@drawable/backward" />
+
+        <ImageView
+            android:id="@id/exo_play"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="@android:color/transparent"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="15dp"
+            android:src="@drawable/play" />
+
+        <ImageView
             android:id="@id/exo_pause"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:background="@android:color/transparent"
-            android:src="@drawable/ic_baseline_pause_circle_outline_24" />
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="15dp"
+            android:src="@drawable/pause" />
 
-        <ImageButton
+        <ImageView
             android:id="@id/exo_ffwd"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:background="@android:color/transparent"
-            android:minWidth="48dp"
-            android:minHeight="48dp"
-            android:src="@drawable/ic_baseline_forward_10_24"/>
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/forward"/>
 
-        <ImageButton
+        <ImageView
             android:id="@id/exo_next"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:background="@android:color/transparent"
-            android:minWidth="32dp"
-            android:minHeight="48dp"
-            android:src="@drawable/ic_baseline_skip_next_24"/>
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="10dp"
+            android:visibility="gone"
+            android:src="@drawable/next"/>
 
     </LinearLayout>
-
-
-
-
-
-
-
-
-
 
 
 
@@ -158,6 +155,7 @@
             android:includeFontPadding="false"
             android:paddingLeft="4dp"
             android:paddingRight="4dp"
+            android:layout_gravity="center_vertical"
             android:textColor="#FFBEBEBE"
             android:textSize="14sp"
             android:textStyle="bold" />
@@ -206,6 +204,7 @@
             android:paddingLeft="4dp"
             android:paddingRight="4dp"
             android:textColor="#FFBEBEBE"
+            android:layout_gravity="center_vertical"
             android:textSize="14sp"
             android:textStyle="bold" />
 
