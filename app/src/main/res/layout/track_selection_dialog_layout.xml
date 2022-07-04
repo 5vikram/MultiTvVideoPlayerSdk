@@ -4,6 +4,7 @@
     android:layout_height="wrap_content"
     android:padding="10dp"
     android:background="@color/white"
+    android:layout_marginHorizontal="24dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
@@ -12,6 +13,7 @@
         android:layout_height="wrap_content"
         android:text="Video Quality"
         android:textSize="16sp"
+        android:textStyle="bold"
         android:textColor="@color/black"
         android:layout_margin="16dp"
         />
@@ -37,8 +39,9 @@
             android:layout_height="wrap_content"
             android:text="Cancel"
             android:padding="8dp"
+            android:textStyle="bold"
             android:layout_marginEnd="8dp"
-            android:textColor="@color/purple_500"
+            android:textColor="@color/black"
             android:textAllCaps="true"/>
 
         <TextView
@@ -46,8 +49,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Okay"
+            android:textStyle="bold"
             android:padding="8dp"
-            android:textColor="@color/purple_500"
+            android:textColor="@color/black"
             android:textAllCaps="true"/>
 
     </LinearLayout>

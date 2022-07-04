@@ -20,6 +20,7 @@ class ResolutionAdapter(val list: List<TrackResolution>, val callbacks: Resoluti
         init {
             itemView.setOnClickListener {
                 callbacks.onItemSelected(list[adapterPosition])
+                notifyDataSetChanged()
             }
         }
     }
@@ -30,6 +31,11 @@ class ResolutionAdapter(val list: List<TrackResolution>, val callbacks: Resoluti
 
     override fun onBindViewHolder(holder: ResolutionViewHolder, position: Int) {
         holder.radioBtn.text = list[position].height.toString()
+        for (i in 0..list.size){
+            if (i != position){
+                holder.radioBtn.isChecked = false
+            }
+        }
     }
 
     override fun getItemCount(): Int = list.size
