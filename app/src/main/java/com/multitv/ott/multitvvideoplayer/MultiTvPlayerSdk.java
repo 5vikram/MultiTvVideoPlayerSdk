@@ -17,6 +17,7 @@ import android.os.Handler;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -24,10 +25,13 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.Target;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.PlaybackException;
@@ -39,20 +43,27 @@ import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.ui.StyledPlayerView;
+import com.google.android.exoplayer2.util.Util;
 import com.multitv.ott.multitvvideoplayer.custom.CountDownTimerWithPause;
 import com.multitv.ott.multitvvideoplayer.custom.ToastMessage;
 import com.multitv.ott.multitvvideoplayer.database.SharedPreferencePlayer;
 import com.multitv.ott.multitvvideoplayer.fabbutton.FabButton;
 import com.multitv.ott.multitvvideoplayer.listener.VideoPlayerSdkCallBackListener;
+import com.multitv.ott.multitvvideoplayer.playerglide.GlideThumbnailTransformation;
 import com.multitv.ott.multitvvideoplayer.popup.MyDialogFragment;
+import com.multitv.ott.multitvvideoplayer.timebar.PreviewTimeBar;
+import com.multitv.ott.multitvvideoplayer.timebar.previewseekbar.PreviewBar;
+import com.multitv.ott.multitvvideoplayer.timebar.previewseekbar.PreviewLoader;
 import com.multitv.ott.multitvvideoplayer.utils.CommonUtils;
 import com.multitv.ott.multitvvideoplayer.utils.ContentType;
 import com.multitv.ott.multitvvideoplayer.utils.ExoUttils;
 
 import java.util.ArrayList;
+import java.util.Formatter;
 import java.util.HashMap;
+import java.util.Locale;
 
-public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.ResolutionAudioSrtSelection {
+public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.ResolutionAudioSrtSelection, PreviewLoader, PreviewBar.OnScrubListener {
 
     private Activity context;
     private SharedPreferencePlayer sharedPreferencePlayer;
@@ -70,18 +81,17 @@ public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.Re
     private final String TAG = "VikramExoVideoPlayer";
 
     private LinearLayout errorRetryLayout, bufferingProgressBarLayout, circularProgressLayout, centerButtonLayout;
-    private ImageView videoRotationButton, videoPerviousButton, videoNextButton, VideoRenuButton, videoFarwardButton, videoPlayButton, videoPauseButton;
-
-
-    public ArrayList<String> availableResolutionContainerList, availableAudioTracksList,
-            availableSrtTracksList;
-    private HashMap<String, Integer> availableResolutionContainerMap;
-
+    private ImageView previewImageView, videoRotationButton, videoPerviousButton, videoNextButton, VideoRenuButton, videoFarwardButton, videoPlayButton, videoPauseButton;
+    private PreviewTimeBar playerProgress;
+    private TextView currentDurationPlayTv;
 
     public static final int DEFAULT_FAST_FORWARD_MS = 10000;
     public static final int DEFAULT_REWIND_MS = 10000;
     public static final int DEFAULT_SHOW_TIMEOUT_MS = 5000;
     private ImageView pictureInPicture;
+
+    private final StringBuilder formatBuilder;
+    private final Formatter formatter;
 
 
     public MultiTvPlayerSdk(Context context, AttributeSet attrs) {
@@ -91,6 +101,8 @@ public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.Re
     public MultiTvPlayerSdk(Activity context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         this.context = context;
+        formatBuilder = new StringBuilder();
+        formatter = new Formatter(formatBuilder, Locale.getDefault());
         CommonUtils.setDefaultCookieManager();
         TelephonyManager mgr = (TelephonyManager) context.getSystemService(TELEPHONY_SERVICE);
 //        if (mgr != null) {
@@ -122,6 +134,17 @@ public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.Re
         videoFarwardButton = view.findViewById(R.id.exo_ffwd);
         videoPlayButton = view.findViewById(R.id.exo_play);
         videoPauseButton = view.findViewById(R.id.exo_pause);
+
+        playerProgress = (PreviewTimeBar) findViewById(R.id.exo_progress);
+        currentDurationPlayTv = view.findViewById(R.id.exo_position);
+        previewImageView = view.findViewById(R.id.previewImageView);
+        videoNextButton.setVisibility(View.GONE);
+        videoPerviousButton.setVisibility(View.GONE);
+
+
+        playerProgress.addOnScrubListener(this);
+        playerProgress.setPreviewLoader(this);
+
         pictureInPicture = view.findViewById(R.id.picture_in_picture);
 
         videoNextButton.setVisibility(View.GONE);
@@ -135,7 +158,6 @@ public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.Re
                 }
             }
         });
-
         VideoRenuButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -171,6 +193,47 @@ public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.Re
                 }
             }
         });
+
+
+        playerProgress.addOnPreviewVisibilityListener(new PreviewBar.OnPreviewVisibilityListener() {
+            @Override
+            public void onVisibilityChanged(PreviewBar previewBar, boolean isPreviewShowing) {
+                Log.d("PreviewShowing::::", String.valueOf(isPreviewShowing));
+            }
+        });
+
+
+/*
+        playerProgress.addOnScrubListener(new PreviewBar.OnScrubListener() {
+            @Override
+            public void onScrubStart(PreviewBar previewBar) {
+                Log.d("Scrub", "START");
+                findViewById(R.id.centerButtonLayout).setVisibility(View.GONE);
+                findViewById(R.id.previewFrameLayout).setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onScrubMove(PreviewBar previewBar, int progress, boolean fromUser) {
+                Log.e("Scrub", "MOVE to " + progress / 1000 + " FROM USER: " + fromUser);
+                findViewById(R.id.centerButtonLayout).setVisibility(View.GONE);
+                findViewById(R.id.previewFrameLayout).setVisibility(View.VISIBLE);
+                if (currentDurationPlayTv != null) {
+                    currentDurationPlayTv.setText(Util.getStringForTime(formatBuilder, formatter, progress));
+                }
+            }
+
+            @Override
+            public void onScrubStop(PreviewBar previewBar) {
+                Log.e("Scrub", "STOP and time progress:::" + previewBar.getProgress());
+                findViewById(R.id.previewFrameLayout).setVisibility(View.GONE);
+                findViewById(R.id.centerButtonLayout).setVisibility(View.VISIBLE);
+                if (mMediaPlayer != null) {
+                    seekTo(previewBar.getProgress());
+                }
+
+            }
+        });
+*/
 
         super.onFinishInflate();
     }
@@ -851,4 +914,43 @@ public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.Re
     }
 
 
+    @Override
+    public void onScrubStart(PreviewBar previewBar) {
+        previewImageView.setVisibility(View.VISIBLE);
+        Log.d("Scrub", "START");
+        //findViewById(R.id.centerButtonLayout).setVisibility(View.GONE);
+        findViewById(R.id.previewFrameLayout).setVisibility(View.VISIBLE);
+        pauseVideoPlayer();
+    }
+
+    @Override
+    public void onScrubMove(PreviewBar previewBar, int progress, boolean fromUser) {
+        //findViewById(R.id.centerButtonLayout).setVisibility(View.GONE);
+        findViewById(R.id.previewFrameLayout).setVisibility(View.VISIBLE);
+        if (currentDurationPlayTv != null) {
+            currentDurationPlayTv.setText(Util.getStringForTime(formatBuilder, formatter, progress));
+        }
+    }
+
+    @Override
+    public void onScrubStop(PreviewBar previewBar) {
+        previewImageView.setVisibility(View.GONE);
+        findViewById(R.id.previewFrameLayout).setVisibility(View.GONE);
+        //findViewById(R.id.centerButtonLayout).setVisibility(View.VISIBLE);
+        if (mMediaPlayer != null) {
+            seekTo(previewBar.getProgress());
+        }
+        resumeVideoPlayer();
+    }
+
+    @Override
+    public void loadPreview(long currentPosition, long max) {
+        pauseVideoPlayer();
+        Glide.with(previewImageView)
+                .load("http://103.253.175.13/rahuls/output-160x90-thumb-001.jpg")
+                .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
+                .transform(new GlideThumbnailTransformation(currentPosition))
+                .into(previewImageView);
+    }
 }
+
