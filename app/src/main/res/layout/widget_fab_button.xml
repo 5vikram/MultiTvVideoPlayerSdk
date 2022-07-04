@@ -28,19 +28,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <View
+    <com.multitv.ott.multitvvideoplayer.fabbutton.CircleImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        class="mbanje.kurt.fabbutton.CircleImageView"
         android:id="@+id/fabbutton_circle"
         android:layout_gravity="center"
         android:scaleType="center"
         />
 
-    <View
+    <com.multitv.ott.multitvvideoplayer.fabbutton.ProgressRingView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        class="mbanje.kurt.fabbutton.ProgressRingView"
         android:id="@+id/fabbutton_ring"
         android:indeterminate="false"
         android:progress="0"

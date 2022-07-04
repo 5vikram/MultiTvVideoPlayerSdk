@@ -4,34 +4,32 @@ import static android.content.Context.TELEPHONY_SERVICE;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.media.AudioManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
-import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 
-import com.google.android.exoplayer2.C;
-import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.PlaybackException;
 import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
-import com.google.android.exoplayer2.RendererCapabilities;
 import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.Timeline;
-import com.google.android.exoplayer2.source.TrackGroup;
 import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.MappingTrackSelector;
@@ -46,12 +44,12 @@ import com.multitv.ott.multitvvideoplayer.utils.CommonUtils;
 import com.multitv.ott.multitvvideoplayer.utils.ContentType;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 public class MultiTvPlayerSdk extends FrameLayout {
 
-    private Context context;
+    private Activity activity;
     private SharedPreferencePlayer sharedPreferencePlayer;
     private ContentType contentType;
     private SimpleExoPlayer mMediaPlayer;
@@ -67,6 +65,8 @@ public class MultiTvPlayerSdk extends FrameLayout {
     private Handler bufferingTimeHandler;
     private CountDownTimerWithPause countDownTimer;
 
+    private ImageButton pictureInPicture, settingsBtn;
+
 
     private LinearLayout errorRetryLayout, bufferingProgressBarLayout, circularProgressLayout;
 
@@ -76,22 +76,20 @@ public class MultiTvPlayerSdk extends FrameLayout {
     private HashMap<String, Integer> availableResolutionContainerMap;
 
 
-    public MultiTvPlayerSdk(Context context, AttributeSet attrs) {
-        this(context, attrs, 0);
+    public MultiTvPlayerSdk(Activity activity, AttributeSet attrs) {
+        this(activity, attrs, 0);
     }
 
-    public MultiTvPlayerSdk(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-        this.context = context;
+    public MultiTvPlayerSdk(Activity activity, AttributeSet attrs, int defStyleAttr) {
+        super(activity, attrs, defStyleAttr);
+        this.activity = activity;
         CommonUtils.setDefaultCookieManager();
-        TelephonyManager mgr = (TelephonyManager) context.getSystemService(TELEPHONY_SERVICE);
-//        if (mgr != null) {
-//            mgr.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
-//        }
+        TelephonyManager mgr = (TelephonyManager) activity.getSystemService(TELEPHONY_SERVICE);
+
         sharedPreferencePlayer = new SharedPreferencePlayer();
-        sharedPreferencePlayer.setPreferenceInt(context, "pos", 0);
+        sharedPreferencePlayer.setPreferenceInt(activity, "pos", 0);
         if (Build.VERSION.SDK_INT >= 31) {
-            if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
+            if (ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
                 mgr.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
             }
         } else {
@@ -107,7 +105,49 @@ public class MultiTvPlayerSdk extends FrameLayout {
         bufferingProgressBarLayout = view.findViewById(R.id.bufferingProgressBarLayout);
         circularProgressLayout = view.findViewById(R.id.circularProgressLayout);
         simpleExoPlayerView = view.findViewById(R.id.videoPlayer);
+        pictureInPicture = view.findViewById(R.id.picture_in_picture);
+        settingsBtn = view.findViewById(R.id.settings_btn);
+
+        pictureInPicture.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                enterPictureInPictureMode(activity);
+            }
+        });
+
+        settingsBtn.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showTrackSelectionDialog();
+            }
+        });
+
         super.onFinishInflate();
+    }
+
+    private void showTrackSelectionDialog() {
+        final Dialog dialog = new Dialog(activity);
+        dialog.setTitle("Select resolution");
+        dialog.setContentView(R.layout.track_selection_dialog_layout);
+        List<String> stringList =new ArrayList<>();
+        for(int i=0;i<2;i++) {
+            stringList.add("Item " + i);
+        }
+
+        RadioGroup rg = dialog.findViewById(R.id.radio_group);
+
+        for(int i=0; i<stringList.size(); i++){
+            RadioButton rb = new RadioButton(activity);
+            rb.setText(stringList.get(i));
+            rg.addView(rb);
+        }
+
+
+        // Start
+
+        MappingTrackSelector.MappedTrackInfo mappedTrackInfo = trackSelector.getCurrentMappedTrackInfo();
+
+
     }
 
 
@@ -115,7 +155,6 @@ public class MultiTvPlayerSdk extends FrameLayout {
         @Override
         public void onAudioFocusChange(int focusChange) {
             if (focusChange == AudioManager.AUDIOFOCUS_LOSS) {
-
                 if ((mMediaPlayer != null && mMediaPlayer.getPlayWhenReady())) {
                     checkForAudioFocus();
                 }
@@ -124,7 +163,7 @@ public class MultiTvPlayerSdk extends FrameLayout {
     };
 
     private boolean checkForAudioFocus() {
-        final AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+        final AudioManager audioManager = (AudioManager) activity.getSystemService(Context.AUDIO_SERVICE);
 
         // Request audio focus for playback
         int result = audioManager.requestAudioFocus(audioFocusChangeListener,
@@ -240,7 +279,7 @@ public class MultiTvPlayerSdk extends FrameLayout {
         if (isPlayerReady)
             initializeMainPlayer(mContentUrl, isNeedToPlayInstantly);
         else
-            Toast.makeText(context, "Please wait, Player is preparing...", Toast.LENGTH_LONG).show();
+            Toast.makeText(activity, "Please wait, Player is preparing...", Toast.LENGTH_LONG).show();
     }
 
     // resume video player
@@ -259,7 +298,7 @@ public class MultiTvPlayerSdk extends FrameLayout {
         }
     }
 
-    // relase and destroy video player
+    // release and destroy video player
     public void releaseVideoPlayer() {
         if (mMediaPlayer != null && simpleExoPlayerView != null) {
             simpleExoPlayerView.getPlayer().release();
@@ -370,7 +409,7 @@ public class MultiTvPlayerSdk extends FrameLayout {
                     break;
                 case ExoPlayer.STATE_READY:
                     text += "ready";
-                    videoPlayerSdkCallBackListener.onPlayerReady(mContentUrl);
+                    //videoPlayerSdkCallBackListener.onPlayerReady(mContentUrl);
                     break;
                 default:
                     text += "unknown";
@@ -378,7 +417,7 @@ public class MultiTvPlayerSdk extends FrameLayout {
 
             }
 
-            ToastMessage.showToastMsg(context, text, Toast.LENGTH_SHORT);
+            ToastMessage.showToastMsg(activity, text, Toast.LENGTH_SHORT);
             ToastMessage.showLogs(ToastMessage.LogType.DEBUG, "Video Player:::", text);
 
         }
@@ -454,7 +493,7 @@ public class MultiTvPlayerSdk extends FrameLayout {
     }
 */
 
-    private boolean haveTracks(int type) {
+    /* private boolean haveTracks(int type) {
         if (mMediaPlayer == null || trackSelector == null || trackSelector.getCurrentMappedTrackInfo() == null)
             return false;
 
@@ -484,6 +523,13 @@ public class MultiTvPlayerSdk extends FrameLayout {
         }
 
         return false;
+    }*/
+
+
+    public void enterPictureInPictureMode(Activity activity){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            activity.enterPictureInPictureMode();
+        }
     }
 
 

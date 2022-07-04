@@ -105,7 +105,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/exo_ffwd"
-        tools:layout_editor_absoluteY="301dp" />
+        tools:layout_editor_absoluteY="301dp"
+        tools:ignore="MissingConstraints" />
 
     <FrameLayout
         android:id="@+id/full_screen_fl"

@@ -24,6 +24,7 @@
 
 package com.multitv.ott.multitvvideoplayer.fabbutton;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
@@ -73,6 +74,7 @@ public class FabButton extends FrameLayout implements CircleImageView.OnFabViewL
         super(context, attrs, defStyle);
         init(context, attrs, defStyle);
     }
+
 
     protected void init(Context context, AttributeSet attrs, int defStyle) {
         View v = View.inflate(context, R.layout.widget_fab_button, this);
