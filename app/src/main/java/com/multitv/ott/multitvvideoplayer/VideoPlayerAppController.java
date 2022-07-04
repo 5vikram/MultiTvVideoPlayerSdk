@@ -1,9 +1,10 @@
 package com.multitv.ott.multitvvideoplayer;
 
-import android.support.multidex.MultiDex;
-import android.support.multidex.MultiDexApplication;
+import androidx.multidex.MultiDex;
+import androidx.multidex.MultiDexApplication;
 import android.text.TextUtils;
 import android.util.Log;
+
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
