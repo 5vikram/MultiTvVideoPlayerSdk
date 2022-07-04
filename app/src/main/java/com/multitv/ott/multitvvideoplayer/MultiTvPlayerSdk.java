@@ -3,16 +3,15 @@ package com.multitv.ott.multitvvideoplayer;
 import static android.content.Context.TELEPHONY_SERVICE;
 
 import android.Manifest;
-import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.media.AudioManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
-import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,19 +21,13 @@ import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 
-import com.google.android.exoplayer2.C;
-import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.PlaybackException;
 import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
-import com.google.android.exoplayer2.RendererCapabilities;
-import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.Timeline;
-import com.google.android.exoplayer2.source.TrackGroup;
+import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
-import com.google.android.exoplayer2.trackselection.MappingTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.ui.StyledPlayerView;
 import com.multitv.ott.multitvvideoplayer.custom.CountDownTimerWithPause;
@@ -42,31 +35,31 @@ import com.multitv.ott.multitvvideoplayer.custom.ToastMessage;
 import com.multitv.ott.multitvvideoplayer.database.SharedPreferencePlayer;
 import com.multitv.ott.multitvvideoplayer.fabbutton.FabButton;
 import com.multitv.ott.multitvvideoplayer.listener.VideoPlayerSdkCallBackListener;
+import com.multitv.ott.multitvvideoplayer.popup.MyDialogFragment;
 import com.multitv.ott.multitvvideoplayer.utils.CommonUtils;
 import com.multitv.ott.multitvvideoplayer.utils.ContentType;
+import com.multitv.ott.multitvvideoplayer.utils.ExoUttils;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 
-public class MultiTvPlayerSdk extends FrameLayout {
+public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.ResolutionAudioSrtSelection {
 
     private Context context;
     private SharedPreferencePlayer sharedPreferencePlayer;
     private ContentType contentType;
-    private SimpleExoPlayer mMediaPlayer;
+    private ExoPlayer mMediaPlayer;
     private StyledPlayerView simpleExoPlayerView;
     private DefaultTrackSelector trackSelector;
     private VideoPlayerSdkCallBackListener videoPlayerSdkCallBackListener;
-
+    private boolean isPlayerReady;
 
     private long millisecondsForResume, adPlayedTimeInMillis, contentPlayedTimeInMillis, bufferingTimeInMillis;
     private int seekPlayerTo;
     private String mContentUrl;
-    private boolean isPlayerReady;
     private Handler bufferingTimeHandler;
     private CountDownTimerWithPause countDownTimer;
-
+    private final String TAG = "VikramExoVideoPlayer";
 
     private LinearLayout errorRetryLayout, bufferingProgressBarLayout, circularProgressLayout;
 
@@ -106,7 +99,7 @@ public class MultiTvPlayerSdk extends FrameLayout {
         errorRetryLayout = view.findViewById(R.id.errorRetryLayout);
         bufferingProgressBarLayout = view.findViewById(R.id.bufferingProgressBarLayout);
         circularProgressLayout = view.findViewById(R.id.circularProgressLayout);
-        simpleExoPlayerView = view.findViewById(R.id.videoPlayer);
+
         super.onFinishInflate();
     }
 
@@ -152,18 +145,18 @@ public class MultiTvPlayerSdk extends FrameLayout {
             if (state == TelephonyManager.CALL_STATE_RINGING) {
                 //INCOMING call
                 //do all necessary action to pause the audio
-                // pause();
+                pauseVideoPlayer();
 
             } else if (state == TelephonyManager.CALL_STATE_IDLE) {
                 //Not IN CALL
                 //do anything if the phone-state is idle
-            /*    if (!CommonUtils.isAppIsInBackground(context))
-                    resume();*/
+                if (!CommonUtils.isAppIsInBackground(context))
+                    resumeVideoPlayer();
             } else if (state == TelephonyManager.CALL_STATE_OFFHOOK) {
                 //A call is dialing, active or on hold
                 //do all necessary action to pause the audio
                 //do something here
-                // pause();
+                pauseVideoPlayer();
             }
             super.onCallStateChanged(state, incomingNumber);
         }
@@ -180,6 +173,9 @@ public class MultiTvPlayerSdk extends FrameLayout {
 
     // init view and view group here
     private void initViews() {
+        ToastMessage.showLogs(ToastMessage.LogType.ERROR, "Video Player:::", "initViews()");
+        simpleExoPlayerView = this.findViewById(R.id.videoPlayer);
+        // simpleExoPlayerView.set
         errorRetryLayout.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -187,6 +183,9 @@ public class MultiTvPlayerSdk extends FrameLayout {
                 initializeMainPlayer(mContentUrl, true);
             }
         });
+
+        if (videoPlayerSdkCallBackListener != null)
+            videoPlayerSdkCallBackListener.onPlayerReady(mContentUrl);
     }
 
 
@@ -237,10 +236,13 @@ public class MultiTvPlayerSdk extends FrameLayout {
 
     // start video player when player is ready state
     public void startVideoPlayer(boolean isNeedToPlayInstantly) {
-        if (isPlayerReady)
+        if (isPlayerReady) {
+            isPlayerReady = true;
             initializeMainPlayer(mContentUrl, isNeedToPlayInstantly);
-        else
+        } else
             Toast.makeText(context, "Please wait, Player is preparing...", Toast.LENGTH_LONG).show();
+
+
     }
 
     // resume video player
@@ -268,6 +270,29 @@ public class MultiTvPlayerSdk extends FrameLayout {
     }
 
     private void initializeMainPlayer(String videoUrl, boolean isNeedToPlayInstantly) {
+        ToastMessage.showLogs(ToastMessage.LogType.ERROR, "Video Player:::", "initializeMainPlayer");
+
+        if (mMediaPlayer != null) {
+            mMediaPlayer.release();
+            trackSelector = null;
+            mMediaPlayer = null;
+        }
+        videoPlayerSdkCallBackListener.prepareVideoPlayer();
+        ToastMessage.showLogs(ToastMessage.LogType.DEBUG, TAG, "Content url is " + videoUrl);
+        mMediaPlayer = new ExoPlayer.Builder(context).build();
+        if (mMediaPlayer != null) {
+            mMediaPlayer.addListener(stateChangeCallback1);
+            simpleExoPlayerView.setPlayer(mMediaPlayer);
+            MediaSource playerMediaSource = new ExoUttils().buildMediaSource(1, context, videoUrl);
+            mMediaPlayer.prepare(playerMediaSource);
+
+            if (isNeedToPlayInstantly) {
+                isPlayerReady = true;
+                mMediaPlayer.setPlayWhenReady(true);
+            }
+
+        }
+
 
     }
 
@@ -301,11 +326,8 @@ public class MultiTvPlayerSdk extends FrameLayout {
             switch (playbackState) {
                 case ExoPlayer.STATE_BUFFERING:
                     text += "buffering";
-
-                    if (playWhenReady && bufferingProgressBarLayout != null) {
-                        bufferingProgressBarLayout.bringToFront();
-                        bufferingProgressBarLayout.setVisibility(VISIBLE);
-                    }
+                    bufferingProgressBarLayout.bringToFront();
+                    bufferingProgressBarLayout.setVisibility(VISIBLE);
 
                     if (contentType == ContentType.LIVE)
                         startBufferingTimer();
@@ -313,38 +335,40 @@ public class MultiTvPlayerSdk extends FrameLayout {
                     break;
                 case ExoPlayer.STATE_ENDED:
                     text += "ended";
+                    if (isPlayerReady && contentType == ContentType.VOD) {
+                        if (mMediaPlayer != null)
+                            contentPlayedTimeInMillis = mMediaPlayer.getCurrentPosition();
 
-                    if (mMediaPlayer != null)
-                        contentPlayedTimeInMillis = mMediaPlayer.getCurrentPosition();
+                        releaseVideoPlayer();
 
-                    releaseVideoPlayer();
+                        final FabButton circularProgressRing = (FabButton) circularProgressLayout.findViewById(R.id.circular_progress_ring);
+                        circularProgressRing.showProgress(true);
+                        circularProgressRing.setProgress(0);
 
-                    final FabButton circularProgressRing = (FabButton) circularProgressLayout.findViewById(R.id.circular_progress_ring);
-                    circularProgressRing.showProgress(true);
-                    circularProgressRing.setProgress(0);
+                        circularProgressLayout.setVisibility(VISIBLE);
+                        circularProgressLayout.bringToFront();
 
-                    circularProgressLayout.setVisibility(VISIBLE);
-                    circularProgressLayout.bringToFront();
-
-                    final int totalDuration = 30000, tickDuration = 1000;
-                    countDownTimer = new CountDownTimerWithPause(totalDuration, tickDuration / 10, true) {
-                        public void onTick(long millisUntilFinished) {
-                            float progress = (float) millisUntilFinished / totalDuration;
-                            progress = progress * 100;
-                            progress = 100 - progress;
-                            circularProgressRing.setProgress(progress);
-                        }
-
-                        public void onFinish() {
-                            if (circularProgressLayout != null)
-                                circularProgressLayout.setVisibility(GONE);
-                            try {
-                                prepareVideoPlayer();
-                            } catch (Exception e) {
-                                e.printStackTrace();
+                        final int totalDuration = 30000, tickDuration = 1000;
+                        countDownTimer = new CountDownTimerWithPause(totalDuration, tickDuration / 10, true) {
+                            public void onTick(long millisUntilFinished) {
+                                float progress = (float) millisUntilFinished / totalDuration;
+                                progress = progress * 100;
+                                progress = 100 - progress;
+                                circularProgressRing.setProgress(progress);
                             }
-                        }
-                    }.create();
+
+                            public void onFinish() {
+                                if (circularProgressLayout != null)
+                                    circularProgressLayout.setVisibility(GONE);
+                                try {
+                                    prepareVideoPlayer();
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }.create();
+                    }
+
 
                     break;
                 case ExoPlayer.STATE_IDLE:
@@ -379,7 +403,7 @@ public class MultiTvPlayerSdk extends FrameLayout {
             }
 
             ToastMessage.showToastMsg(context, text, Toast.LENGTH_SHORT);
-            ToastMessage.showLogs(ToastMessage.LogType.DEBUG, "Video Player:::", text);
+            ToastMessage.showLogs(ToastMessage.LogType.ERROR, "Video Player:::", text);
 
         }
 
@@ -443,7 +467,7 @@ public class MultiTvPlayerSdk extends FrameLayout {
                 }
             }
             */
-/*}*//*
+    /*}*//*
 
 
             if (availableResolutionContainerList != null && !availableResolutionContainerList.isEmpty())
@@ -454,6 +478,7 @@ public class MultiTvPlayerSdk extends FrameLayout {
     }
 */
 
+/*
     private boolean haveTracks(int type) {
         if (mMediaPlayer == null || trackSelector == null || trackSelector.getCurrentMappedTrackInfo() == null)
             return false;
@@ -485,6 +510,7 @@ public class MultiTvPlayerSdk extends FrameLayout {
 
         return false;
     }
+*/
 
 
     private void startBufferingTimer() {
@@ -513,5 +539,144 @@ public class MultiTvPlayerSdk extends FrameLayout {
                 bufferingTimeHandler.postDelayed(this, 1000);
         }
     };
+
+
+    AlertDialog dialog = null;
+
+    public void hideSpeedDailog() {
+        if (dialog != null && dialog.isShowing())
+            dialog.dismiss();
+    }
+
+    public void showSpeedControlDailog() {
+        // setup the alert builder
+        if (dialog != null && dialog.isShowing())
+            dialog.dismiss();
+
+        int position = sharedPreferencePlayer.getPreferencesInt(context, "pos");
+
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Speed Control");
+
+// add a checkbox list
+        String[] animals = {"1x", "0.5x", "0.75x", "1.25x", "1.5x", "2x"};
+
+        builder.setSingleChoiceItems(animals, position, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                float speed = 1f;
+                float pitch = 1f;
+                switch (which) {
+                    case 1:
+                        speed = 0.5f;
+                        pitch = 0.5f;
+                        sharedPreferencePlayer.setPreferenceInt(context, "pos", 1);
+                        break;
+                    case 2:
+                        speed = 0.75f;
+                        pitch = 0.75f;
+                        sharedPreferencePlayer.setPreferenceInt(context, "pos", 2);
+                        break;
+                    case 0:
+                        speed = 1f;
+                        pitch = 1f;
+                        sharedPreferencePlayer.setPreferenceInt(context, "pos", 0);
+                        break;
+                    case 3:
+                        speed = 1.25f;
+                        pitch = 1.25f;
+                        sharedPreferencePlayer.setPreferenceInt(context, "pos", 3);
+                        break;
+
+                    case 4:
+                        speed = 1.5f;
+                        pitch = 1.5f;
+                        sharedPreferencePlayer.setPreferenceInt(context, "pos", 4);
+                        break;
+
+                    case 5:
+                        speed = 2f;
+                        pitch = 2f;
+                        sharedPreferencePlayer.setPreferenceInt(context, "pos", 5);
+                        break;
+                    default:
+                        speed = 1f;
+                        pitch = 1f;
+                        sharedPreferencePlayer.setPreferenceInt(context, "pos", 2);
+                        break;
+
+
+                }
+                PlaybackParameters param = new PlaybackParameters(speed, pitch);
+                mMediaPlayer.setPlaybackParameters(param);
+                dialog.dismiss();
+            }
+        });
+
+        dialog = builder.create();
+        dialog.show();
+    }
+
+
+    public void showMenuDailog() {
+        //new ResolutionDailog().showResolutionDailog(context, this);
+    }
+
+
+    @Override
+    public void onResolutionAudioSrtSelection(String index, int selectedItemPosition, int typeOfSelection) {
+/*
+        switch (typeOfSelection) {
+            case 0:
+                this.resolutionSelectedItemPosition = selectedItemPosition;
+                handleResolutionItemClick(selectedItemPosition);
+                break;
+            case 1:
+                this.audioSelectedItemPosition = selectedItemPosition;
+                handleAudioItemClick(selectedItemPosition);
+                break;
+            case 2:
+                this.srtSelectedItemPosition = selectedItemPosition;
+                handleSrtItemClick(selectedItemPosition);
+                break;
+        }
+*/
+    }
+
+/*
+    private void handleResolutionItemClick(int selectedItemPosition) {
+        if (mMediaPlayer == null || availableResolutionContainerList == null || availableResolutionContainerList.isEmpty()
+                || availableResolutionContainerMap == null || availableResolutionContainerMap.isEmpty()
+                || videoRendererIndex == -1 || videoTrackGroups == null
+                || selectedItemPosition == previousResolutionSelectedItemPosition) {
+            //Log.e("Naseeb", "All values are null & videoRendererIndex= " + String.valueOf(videoRendererIndex) + " & videoTrackGroups =" + String.valueOf(videoTrackGroups));
+
+            return;
+        }
+
+        String resolution = availableResolutionContainerList.get(selectedItemPosition);
+        //Log.e("Naseeb", "Selected resolution::::" + resolution);
+        MappingTrackSelector.SelectionOverride selectionOverride = null;
+        if (!resolution.equalsIgnoreCase("Auto") && !resolution.equalsIgnoreCase("Default")) {
+            int trackIndex = availableResolutionContainerMap.get(resolution);
+            //Log.e("Naseeb", "Selected trackIndex::::" + trackIndex);
+
+            selectionOverride = new MappingTrackSelector.SelectionOverride(fixedFactory, videoRendererIndex, trackIndex);
+        }
+
+        if (selectionOverride != null) {
+            //trackSelector.clearSelectionOverride(videoRendererIndex, videoTrackGroups);
+            trackSelector.setSelectionOverride(videoRendererIndex, videoTrackGroups, selectionOverride);
+            Log.e("Vikram ", "Resolution is set to " + resolution);
+        } else {
+            trackSelector.clearSelectionOverrides(videoRendererIndex);
+            Log.e("Vikram ", "Resolution is set to auto");
+        }
+
+        previousResolutionSelectedItemPosition = selectedItemPosition;
+    }
+*/
 
 }

@@ -6,7 +6,12 @@
         <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayer/app/src/main/res/drawable/ic_baseline_slow_motion_video_24.xml" value="0.1505" />
         <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayer/app/src/main/res/layout/activity_main.xml" value="0.19375" />
         <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayer/app/src/main/res/layout/exo_playback_control_view.xml" value="0.19375" />
+        <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayer/app/src/main/res/layout/expand_row.xml" value="0.22826086956521738" />
+        <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayer/app/src/main/res/layout/expand_row_resolution.xml" value="0.22826086956521738" />
+        <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayer/app/src/main/res/layout/menu_dialog.xml" value="0.22826086956521738" />
         <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayer/app/src/main/res/layout/player_layout.xml" value="0.19375" />
+        <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayer/app/src/main/res/layout/resolution_dialouge_fragment.xml" value="0.22826086956521738" />
+        <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayer/app/src/main/res/layout/resolution_item_layout.xml" value="0.22826086956521738" />
         <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayer/app/src/main/res/layout/widget_fab_button.xml" value="0.22826086956521738" />
       </map>
     </option>

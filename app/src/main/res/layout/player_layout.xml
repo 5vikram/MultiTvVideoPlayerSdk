@@ -65,7 +65,7 @@
 
         <com.multitv.ott.multitvvideoplayer.fabbutton.FabButton
             android:id="@+id/circular_progress_ring"
-            class="mbanje.kurt.fabbutton.FabButton"
+            class="com.multitv.ott.multitvvideoplayer.fabbutton.FabButton"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:clickable="true"

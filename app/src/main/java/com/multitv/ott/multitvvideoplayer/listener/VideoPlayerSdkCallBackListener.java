@@ -10,4 +10,6 @@ public interface VideoPlayerSdkCallBackListener {
     void onControllerVisibilityChanges(int isShown);
 
     void onPlayerError(String message);
+
+    void prepareVideoPlayer();
 }
