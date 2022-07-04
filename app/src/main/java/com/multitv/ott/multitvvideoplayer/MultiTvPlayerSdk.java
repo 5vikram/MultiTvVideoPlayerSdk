@@ -68,7 +68,7 @@ public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.Re
     private final String TAG = "VikramExoVideoPlayer";
 
     private LinearLayout errorRetryLayout, bufferingProgressBarLayout, circularProgressLayout;
-    private ImageView videoRotationButton;
+    private ImageView videoRotationButton, videoPerviousButton, videoNextButton, VideoRenuButton, VideoFarwardButton, videoPlayButton, VideoPauseButton;
 
 
     public ArrayList<String> availableResolutionContainerList, availableAudioTracksList,
