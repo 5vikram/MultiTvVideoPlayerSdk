@@ -28,10 +28,12 @@ import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 
+import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.PlaybackException;
 import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
+import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
@@ -67,13 +69,18 @@ public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.Re
     private CountDownTimerWithPause countDownTimer;
     private final String TAG = "VikramExoVideoPlayer";
 
-    private LinearLayout errorRetryLayout, bufferingProgressBarLayout, circularProgressLayout;
-    private ImageView videoRotationButton, videoPerviousButton, videoNextButton, VideoRenuButton, VideoFarwardButton, videoPlayButton, VideoPauseButton;
+    private LinearLayout errorRetryLayout, bufferingProgressBarLayout, circularProgressLayout, centerButtonLayout;
+    private ImageView videoRotationButton, videoPerviousButton, videoNextButton, VideoRenuButton, videoFarwardButton, videoPlayButton, videoPauseButton;
 
 
     public ArrayList<String> availableResolutionContainerList, availableAudioTracksList,
             availableSrtTracksList;
     private HashMap<String, Integer> availableResolutionContainerMap;
+
+
+    public static final int DEFAULT_FAST_FORWARD_MS = 10000;
+    public static final int DEFAULT_REWIND_MS = 10000;
+    public static final int DEFAULT_SHOW_TIMEOUT_MS = 5000;
 
 
     public MultiTvPlayerSdk(Context context, AttributeSet attrs) {
@@ -97,6 +104,7 @@ public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.Re
         } else {
             mgr.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
         }
+
     }
 
 
@@ -106,8 +114,90 @@ public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.Re
         errorRetryLayout = view.findViewById(R.id.errorRetryLayout);
         bufferingProgressBarLayout = view.findViewById(R.id.bufferingProgressBarLayout);
         circularProgressLayout = view.findViewById(R.id.circularProgressLayout);
+        centerButtonLayout = view.findViewById(R.id.centerButtonLayout);
+        videoPerviousButton = view.findViewById(R.id.exo_prev);
+        videoNextButton = view.findViewById(R.id.exo_next);
+        VideoRenuButton = view.findViewById(R.id.exo_rew);
+        videoFarwardButton = view.findViewById(R.id.exo_ffwd);
+        videoPlayButton = view.findViewById(R.id.exo_play);
+        videoPauseButton = view.findViewById(R.id.exo_pause);
+
+        videoNextButton.setVisibility(View.GONE);
+        videoPerviousButton.setVisibility(View.GONE);
+
+        VideoRenuButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                rewind();
+            }
+        });
+
+        videoFarwardButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                fastForward();
+            }
+        });
+
+        videoPlayButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mMediaPlayer != null) {
+                    mMediaPlayer.setPlayWhenReady(true);
+                    videoPlayButton.setVisibility(View.GONE);
+                    videoPauseButton.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+        videoPauseButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mMediaPlayer != null) {
+                    mMediaPlayer.setPlayWhenReady(false);
+                    videoPlayButton.setVisibility(View.VISIBLE);
+                    videoPauseButton.setVisibility(View.GONE);
+                }
+            }
+        });
 
         super.onFinishInflate();
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        updateAll();
+    }
+
+    private void updateAll() {
+        updatePlayPauseButton();
+    }
+
+    private void updatePlayPauseButton() {
+
+        boolean requestPlayPauseFocus = false;
+        boolean playing = mMediaPlayer != null && mMediaPlayer.getPlayWhenReady();
+        if (videoPlayButton != null) {
+            requestPlayPauseFocus |= playing && videoPlayButton.isFocused();
+            videoPlayButton.setVisibility(playing ? View.GONE : View.VISIBLE);
+        }
+        if (videoPauseButton != null) {
+            requestPlayPauseFocus |= !playing && videoPauseButton.isFocused();
+            videoPauseButton.setVisibility(!playing ? View.GONE : View.VISIBLE);
+        }
+        if (requestPlayPauseFocus) {
+            requestPlayPauseFocus();
+        }
+    }
+
+    private void requestPlayPauseFocus() {
+        boolean playing = mMediaPlayer != null && mMediaPlayer.getPlayWhenReady();
+        if (!playing && videoPlayButton != null) {
+            videoPlayButton.requestFocus();
+        } else if (playing && videoPauseButton != null) {
+            videoPauseButton.requestFocus();
+        }
     }
 
 
@@ -308,6 +398,8 @@ public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.Re
             trackSelector = null;
             mMediaPlayer = null;
         }
+        centerButtonLayout.setVisibility(View.GONE);
+
         videoPlayerSdkCallBackListener.prepareVideoPlayer();
         ToastMessage.showLogs(ToastMessage.LogType.DEBUG, TAG, "Content url is " + videoUrl);
         mMediaPlayer = new ExoPlayer.Builder(context).build();
@@ -353,11 +445,15 @@ public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.Re
         @Override
         public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
             String text = "Main player";
+
+            updatePlayPauseButton();
+
             switch (playbackState) {
                 case ExoPlayer.STATE_BUFFERING:
                     text += "buffering";
                     bufferingProgressBarLayout.bringToFront();
                     bufferingProgressBarLayout.setVisibility(VISIBLE);
+                    centerButtonLayout.setVisibility(View.GONE);
 
                     if (contentType == ContentType.LIVE)
                         startBufferingTimer();
@@ -410,6 +506,8 @@ public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.Re
                     if (bufferingProgressBarLayout != null)
                         bufferingProgressBarLayout.setVisibility(GONE);
 
+                    centerButtonLayout.setVisibility(View.VISIBLE);
+
                     if (mMediaPlayer != null) {
                         contentPlayedTimeInMillis = mMediaPlayer.getCurrentPosition();
                         if (contentType == ContentType.LIVE)
@@ -425,6 +523,10 @@ public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.Re
                 case ExoPlayer.STATE_READY:
                     text += "ready";
                     bufferingProgressBarLayout.setVisibility(GONE);
+                    centerButtonLayout.setVisibility(View.VISIBLE);
+
+                    videoNextButton.setVisibility(View.GONE);
+                    videoPerviousButton.setVisibility(View.GONE);
                     break;
                 default:
                     text += "unknown";
@@ -722,6 +824,19 @@ public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.Re
         View decorView = ((Activity) getContext()).getWindow().getDecorView();
         int uiOptions = View.SYSTEM_UI_FLAG_VISIBLE;
         decorView.setSystemUiVisibility(uiOptions);
+    }
+
+
+    private void rewind() {
+        seekTo(Math.max(mMediaPlayer.getCurrentPosition() - DEFAULT_REWIND_MS, 0));
+    }
+
+    private void fastForward() {
+        seekTo(Math.max(mMediaPlayer.getCurrentPosition() + DEFAULT_FAST_FORWARD_MS, 0));
+    }
+
+    private void seekTo(long positionMs) {
+        mMediaPlayer.seekTo(positionMs);
     }
 
 
