@@ -156,10 +156,10 @@
             android:textSize="14sp"
             tools:text="3.00"
             android:textStyle="bold"
-            android:layout_marginBottom="4dp"
+            android:layout_marginBottom="1mm"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            />
+            tools:ignore="InOrMmUsage" />
 
         <LinearLayout
             android:id="@id/video_progress_layout"
@@ -220,14 +220,14 @@
             android:includeFontPadding="false"
             android:paddingLeft="4dp"
             tools:text="3.00"
-            android:layout_marginBottom="4dp"
+            android:layout_marginBottom="1mm"
             android:paddingRight="4dp"
             android:textColor="#FFBEBEBE"
             android:textSize="14sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            />
+            tools:ignore="InOrMmUsage" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
