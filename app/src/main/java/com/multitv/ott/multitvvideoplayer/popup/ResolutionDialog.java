@@ -16,10 +16,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class ResolutionDailog {
+public class ResolutionDialog {
     AlertDialog dialog = null;
 
-    public void showResolutionDailog(Context context, MultiTvPlayerSdk multiTvPlayer) {
+    public void showResolutionDialog(Context context, MultiTvPlayerSdk multiTvPlayer) {
         try {
             if (multiTvPlayer == null)
                 return;

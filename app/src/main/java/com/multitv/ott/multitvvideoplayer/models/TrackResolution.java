@@ -2,29 +2,40 @@ package com.multitv.ott.multitvvideoplayer.models;
 
 public class TrackResolution {
 
-    private int width ;
 
-    private int height;
 
-    public int getWidth() {
-        return width;
+    private String heightStr;
+    private String widthStr;
+    private String selction;
+
+
+    public TrackResolution(String width, String height, String selction) {
+        this.widthStr = width;
+        this.heightStr = height;
+        this.selction = selction;
     }
 
-    public void setWidth(int width) {
-        this.width = width;
+    public String getHeightStr() {
+        return heightStr;
     }
 
-    public int getHeight() {
-        return height;
+    public void setHeightStr(String heightStr) {
+        this.heightStr = heightStr;
     }
 
-    public void setHeight(int height) {
-        this.height = height;
+    public String getWidthStr() {
+        return widthStr;
     }
 
+    public void setWidthStr(String widthStr) {
+        this.widthStr = widthStr;
+    }
 
-    public TrackResolution(int width, int height) {
-        this.width = width;
-        this.height = height;
+    public String getSelction() {
+        return selction;
+    }
+
+    public void setSelction(String selction) {
+        this.selction = selction;
     }
 }

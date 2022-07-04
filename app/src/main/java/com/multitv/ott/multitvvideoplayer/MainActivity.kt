@@ -47,6 +47,9 @@ class MainActivity : AppCompatActivity(), VideoPlayerSdkCallBackListener {
 
         vikramExoVideoPlayer?.setContentType(ContentType.VOD)
         vikramExoVideoPlayer?.setContentFilePath("http://dpvruylq68d5u.cloudfront.net/1048/1048_624c3ec915773/1048_624c3ec915773_master.m3u8")
+      //  vikramExoVideoPlayer?.setContentFilePath("http://d34i7be7c53ukk.cloudfront.net/1004/1004_62037beb3cadc/1004_62037beb3cadc_master.m3u8")
+
+
         /*vikramExoVideoPlayer?.setMultiTvPlayerListner(this)
         vikramExoVideoPlayer?.setMenuClickListener(this)
         */
