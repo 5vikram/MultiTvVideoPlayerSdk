@@ -57,6 +57,7 @@ import com.multitv.ott.multitvvideoplayer.database.SharedPreferencePlayer;
 import com.multitv.ott.multitvvideoplayer.fabbutton.FabButton;
 import com.multitv.ott.multitvvideoplayer.listener.OnTrackSelected;
 import com.multitv.ott.multitvvideoplayer.listener.VideoPlayerSdkCallBackListener;
+import com.multitv.ott.multitvvideoplayer.models.TempResolutionModel;
 import com.multitv.ott.multitvvideoplayer.models.TrackResolution;
 import com.multitv.ott.multitvvideoplayer.popup.MyDialogFragment;
 import com.multitv.ott.multitvvideoplayer.popup.TrackSelectionDialog;
@@ -76,7 +77,7 @@ import java.util.Locale;
 
 
 public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.ResolutionAudioSrtSelection, PreviewLoader, PreviewBar.OnScrubListener,
-                View.OnClickListener {
+        View.OnClickListener {
 
     private Activity context;
     private SharedPreferencePlayer sharedPreferencePlayer;
@@ -100,7 +101,6 @@ public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.Re
 
     private LinearLayout centerButtonLayout;
     private ImageView videoFarwardButton, videoPauseButton;
-
 
 
     public ArrayList<String> availableResolutionContainerList, availableAudioTracksList,
@@ -132,6 +132,7 @@ public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.Re
         formatBuilder = new StringBuilder();
         formatter = new Formatter(formatBuilder, Locale.getDefault());
         CommonUtils.setDefaultCookieManager();
+        trackResolutionsList = new ArrayList<>();
         TelephonyManager mgr = (TelephonyManager) context.getSystemService(TELEPHONY_SERVICE);
 //        if (mgr != null) {
 //            mgr.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
@@ -857,24 +858,52 @@ public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.Re
         //new ResolutionDailog().showResolutionDailog(context, this);
     }
 
-    public ArrayList<TrackResolution> getTrackResolution(){
-      trackResolutionsList = new ArrayList<>();
-      TracksInfo trackInfo = mMediaPlayer.getCurrentTracksInfo();
-      ImmutableList<TracksInfo.TrackGroupInfo> trackGroupInfo = trackInfo.getTrackGroupInfos();
+    public ArrayList<TrackResolution> getTrackResolution() {
 
-      if(trackGroupInfo.size() != 0) {
-          TracksInfo.TrackGroupInfo trackGroupResolution = trackGroupInfo.get(0);
-          TrackGroup trackGroup = trackGroupResolution.getTrackGroup();
+        if (trackResolutionsList != null && trackResolutionsList.size() != 0)
+            trackResolutionsList.clear();
 
-          for (int i = 0; i < trackGroup.length; i++) {
-              if (trackGroupResolution.isTrackSupported(i)) {
-                  trackResolutionsList.add(new TrackResolution(trackGroup.getFormat(i).width, trackGroup.getFormat(i).height));
-              }
-          }
-          Log.e("TrackGroup lenght", trackGroup.length + "");
-      }
+        ArrayList<TempResolutionModel> allTrackResolutionsList = new ArrayList<>();
+        TracksInfo trackInfo = mMediaPlayer.getCurrentTracksInfo();
+        ImmutableList<TracksInfo.TrackGroupInfo> trackGroupInfo = trackInfo.getTrackGroupInfos();
 
-      return trackResolutionsList;
+        if (trackGroupInfo.size() != 0) {
+            TracksInfo.TrackGroupInfo trackGroupResolution = trackGroupInfo.get(0);
+            TrackGroup trackGroup = trackGroupResolution.getTrackGroup();
+
+            for (int i = 0; i < trackGroup.length; i++) {
+                if (trackGroupResolution.isTrackSupported(i)) {
+                    allTrackResolutionsList.add(new TempResolutionModel(trackGroup.getFormat(i).width, trackGroup.getFormat(i).height));
+                }
+            }
+            Log.e("TrackGroup lenght", trackGroup.length + "");
+        }
+
+        if (allTrackResolutionsList != null && allTrackResolutionsList.size() != 0) {
+            trackResolutionsList.add(0, new TrackResolution(String.valueOf("Auto"), "Auto", "Auto"));
+            for (int i = 0; i < allTrackResolutionsList.size(); i++) {
+                String heightStr = String.valueOf(allTrackResolutionsList.get(i).getHeight());
+                String widthStr = String.valueOf(allTrackResolutionsList.get(i).getWidth());
+                if (trackResolutionsList != null && trackResolutionsList.size() <= 4)
+                    trackResolutionsList.add(new TrackResolution(String.valueOf(allTrackResolutionsList.get(i).getWidth()), String.valueOf(allTrackResolutionsList.get(i).getHeight()), ""));
+
+
+                for (int j = 0; j < trackResolutionsList.size(); j++) {
+                    if (heightStr != null && heightStr.contains("1080"))
+                        trackResolutionsList.remove(j);
+                }
+
+
+                if (heightStr != null && heightStr.contains("1080")) {
+                    if (trackResolutionsList != null)
+                        trackResolutionsList.add(trackResolutionsList.size() - 1, new TrackResolution(String.valueOf(widthStr), String.valueOf(heightStr), ""));
+                }
+
+            }
+        }
+
+
+        return trackResolutionsList;
     }
 
   /*  public void getSubTitle(){
@@ -906,16 +935,16 @@ public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.Re
 
     @Override
     public void onClick(View view) {
-       if(view == pause) mMediaPlayer.pause();
+        if (view == pause) mMediaPlayer.pause();
 
-       if(view == setting){
-           new TrackSelectionDialog().showTrackSelectionDialog(context, new OnTrackSelected() {
-               @Override
-               public void onTrackSelected(@NonNull TrackResolution trackResolution) {
+        if (view == setting) {
+            new TrackSelectionDialog().showTrackSelectionDialog(context, new OnTrackSelected() {
+                @Override
+                public void onTrackSelected(@NonNull TrackResolution trackResolution) {
 
-               }
-           },getTrackResolution());
-       }
+                }
+            }, getTrackResolution());
+        }
     }
 
 /*
