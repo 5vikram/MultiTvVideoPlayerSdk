@@ -1,13 +1,16 @@
 package com.multitv.ott.multitvvideoplayer;
 
 import static android.content.Context.TELEPHONY_SERVICE;
+import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
 
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.Handler;
@@ -16,6 +19,7 @@ import android.telephony.TelephonyManager;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -63,6 +67,7 @@ public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.Re
     private final String TAG = "VikramExoVideoPlayer";
 
     private LinearLayout errorRetryLayout, bufferingProgressBarLayout, circularProgressLayout;
+    private ImageView videoRotationButton;
 
 
     public ArrayList<String> availableResolutionContainerList, availableAudioTracksList,
@@ -188,6 +193,36 @@ public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.Re
     private void initViews() {
         ToastMessage.showLogs(ToastMessage.LogType.ERROR, "Video Player:::", "initViews()");
         simpleExoPlayerView = this.findViewById(R.id.videoPlayer);
+        videoRotationButton = this.findViewById(R.id.enter_full_screen);
+
+
+        videoRotationButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int orientation = getContext().getResources().getConfiguration().orientation;
+
+                if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                    ((Activity) getContext()).setRequestedOrientation(SCREEN_ORIENTATION_PORTRAIT);
+                    ((Activity) getContext()).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                    showSystemBar();
+                    videoRotationButton.setImageResource(R.drawable.rotate);
+
+                } else if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+                    ((Activity) getContext()).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                    ((Activity) getContext()).getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                    hideSystemBars();
+                    videoRotationButton.setImageResource(R.drawable.minimize);
+                }
+
+            }
+        });
+
+        this.findViewById(R.id.speed_btn).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showSpeedControlDailog();
+            }
+        });
         // simpleExoPlayerView.set
         errorRetryLayout.setOnClickListener(new OnClickListener() {
             @Override
@@ -346,7 +381,7 @@ public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.Re
                             contentPlayedTimeInMillis = mMediaPlayer.getCurrentPosition();
 
                         releaseVideoPlayer();
-
+                        bufferingProgressBarLayout.setVisibility(GONE);
                         final FabButton circularProgressRing = (FabButton) circularProgressLayout.findViewById(R.id.circular_progress_ring);
                         circularProgressRing.showProgress(true);
                         circularProgressRing.setProgress(0);
@@ -400,7 +435,7 @@ public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.Re
                     break;
                 case ExoPlayer.STATE_READY:
                     text += "ready";
-                    //videoPlayerSdkCallBackListener.onPlayerReady(mContentUrl);
+                    bufferingProgressBarLayout.setVisibility(GONE);
                     break;
                 default:
                     text += "unknown";
@@ -684,5 +719,21 @@ public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.Re
         previousResolutionSelectedItemPosition = selectedItemPosition;
     }
 */
+
+
+    private void hideSystemBars() {
+        final View decorView = ((Activity) getContext()).getWindow().getDecorView();
+        final int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);
+    }
+
+
+    private void showSystemBar() {
+        View decorView = ((Activity) getContext()).getWindow().getDecorView();
+        int uiOptions = View.SYSTEM_UI_FLAG_VISIBLE;
+        decorView.setSystemUiVisibility(uiOptions);
+    }
+
 
 }
