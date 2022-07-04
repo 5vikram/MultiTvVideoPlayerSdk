@@ -2,7 +2,7 @@ package com.multitv.ott.multitvvideoplayer.models;
 
 public class TrackResolution {
 
-    private int width ;
+    private int width;
 
     private int height;
 
@@ -27,4 +27,5 @@ public class TrackResolution {
         this.width = width;
         this.height = height;
     }
+
 }

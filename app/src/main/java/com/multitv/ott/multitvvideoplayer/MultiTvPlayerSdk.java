@@ -28,14 +28,18 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.core.widget.ImageViewCompat;
 
+import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.PlaybackException;
 import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.TracksInfo;
+
+import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.TrackGroup;
 import com.google.android.exoplayer2.source.TrackGroupArray;
@@ -47,9 +51,11 @@ import com.multitv.ott.multitvvideoplayer.custom.CountDownTimerWithPause;
 import com.multitv.ott.multitvvideoplayer.custom.ToastMessage;
 import com.multitv.ott.multitvvideoplayer.database.SharedPreferencePlayer;
 import com.multitv.ott.multitvvideoplayer.fabbutton.FabButton;
+import com.multitv.ott.multitvvideoplayer.listener.OnTrackSelected;
 import com.multitv.ott.multitvvideoplayer.listener.VideoPlayerSdkCallBackListener;
 import com.multitv.ott.multitvvideoplayer.models.TrackResolution;
 import com.multitv.ott.multitvvideoplayer.popup.MyDialogFragment;
+import com.multitv.ott.multitvvideoplayer.popup.TrackSelectionDialog;
 import com.multitv.ott.multitvvideoplayer.utils.CommonUtils;
 import com.multitv.ott.multitvvideoplayer.utils.ContentType;
 import com.multitv.ott.multitvvideoplayer.utils.ExoUttils;
@@ -59,7 +65,7 @@ import java.util.HashMap;
 
 public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.ResolutionAudioSrtSelection, View.OnClickListener {
 
-    private Context context;
+    private Activity context;
     private SharedPreferencePlayer sharedPreferencePlayer;
     private ContentType contentType;
     private ExoPlayer mMediaPlayer;
@@ -73,9 +79,15 @@ public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.Re
     private Handler bufferingTimeHandler;
     private CountDownTimerWithPause countDownTimer;
     private final String TAG = "VikramExoVideoPlayer";
+
     private ImageView setting, pause, play;
     private LinearLayout errorRetryLayout, bufferingProgressBarLayout, circularProgressLayout;
     private ImageView videoRotationButton, videoPerviousButton, videoNextButton, VideoRenuButton, VideoFarwardButton, videoPlayButton, VideoPauseButton;
+
+
+    private LinearLayout centerButtonLayout;
+    private ImageView videoFarwardButton, videoPauseButton;
+
 
 
     public ArrayList<String> availableResolutionContainerList, availableAudioTracksList,
@@ -85,11 +97,17 @@ public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.Re
     private HashMap<String, Integer> availableResolutionContainerMap;
 
 
+    public static final int DEFAULT_FAST_FORWARD_MS = 10000;
+    public static final int DEFAULT_REWIND_MS = 10000;
+    public static final int DEFAULT_SHOW_TIMEOUT_MS = 5000;
+    private ImageView pictureInPicture;
+
+
     public MultiTvPlayerSdk(Context context, AttributeSet attrs) {
-        this(context, attrs, 0);
+        this((Activity) context, attrs, 0);
     }
 
-    public MultiTvPlayerSdk(Context context, AttributeSet attrs, int defStyleAttr) {
+    public MultiTvPlayerSdk(Activity context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         this.context = context;
         CommonUtils.setDefaultCookieManager();
@@ -106,6 +124,7 @@ public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.Re
         } else {
             mgr.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
         }
+
     }
 
 
@@ -120,8 +139,100 @@ public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.Re
 
         pause = view.findViewById(R.id.exo_pause);
         pause.setOnClickListener(this);
+        centerButtonLayout = view.findViewById(R.id.centerButtonLayout);
+        videoPerviousButton = view.findViewById(R.id.exo_prev);
+        videoNextButton = view.findViewById(R.id.exo_next);
+        VideoRenuButton = view.findViewById(R.id.exo_rew);
+        videoFarwardButton = view.findViewById(R.id.exo_ffwd);
+        videoPlayButton = view.findViewById(R.id.exo_play);
+        videoPauseButton = view.findViewById(R.id.exo_pause);
+        pictureInPicture = view.findViewById(R.id.picture_in_picture);
+
+        videoNextButton.setVisibility(View.GONE);
+        videoPerviousButton.setVisibility(View.GONE);
+
+        pictureInPicture.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    context.enterPictureInPictureMode();
+                }
+            }
+        });
+
+        VideoRenuButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                rewind();
+            }
+        });
+
+        videoFarwardButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                fastForward();
+            }
+        });
+
+        videoPlayButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mMediaPlayer != null) {
+                    mMediaPlayer.setPlayWhenReady(true);
+                    videoPlayButton.setVisibility(View.GONE);
+                    videoPauseButton.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+        videoPauseButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mMediaPlayer != null) {
+                    mMediaPlayer.setPlayWhenReady(false);
+                    videoPlayButton.setVisibility(View.VISIBLE);
+                    videoPauseButton.setVisibility(View.GONE);
+                }
+            }
+        });
 
         super.onFinishInflate();
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        updateAll();
+    }
+
+    private void updateAll() {
+        updatePlayPauseButton();
+    }
+
+    private void updatePlayPauseButton() {
+
+        boolean requestPlayPauseFocus = false;
+        boolean playing = mMediaPlayer != null && mMediaPlayer.getPlayWhenReady();
+        if (videoPlayButton != null) {
+            requestPlayPauseFocus |= playing && videoPlayButton.isFocused();
+            videoPlayButton.setVisibility(playing ? View.GONE : View.VISIBLE);
+        }
+        if (videoPauseButton != null) {
+            requestPlayPauseFocus |= !playing && videoPauseButton.isFocused();
+            videoPauseButton.setVisibility(!playing ? View.GONE : View.VISIBLE);
+        }
+        if (requestPlayPauseFocus) {
+            requestPlayPauseFocus();
+        }
+    }
+
+    private void requestPlayPauseFocus() {
+        boolean playing = mMediaPlayer != null && mMediaPlayer.getPlayWhenReady();
+        if (!playing && videoPlayButton != null) {
+            videoPlayButton.requestFocus();
+        } else if (playing && videoPauseButton != null) {
+            videoPauseButton.requestFocus();
+        }
     }
 
 
@@ -320,6 +431,8 @@ public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.Re
             trackSelector = null;
             mMediaPlayer = null;
         }
+        centerButtonLayout.setVisibility(View.GONE);
+
         videoPlayerSdkCallBackListener.prepareVideoPlayer();
         ToastMessage.showLogs(ToastMessage.LogType.DEBUG, TAG, "Content url is " + videoUrl);
         mMediaPlayer = new ExoPlayer.Builder(context).build();
@@ -365,11 +478,15 @@ public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.Re
         @Override
         public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
             String text = "Main player";
+
+            updatePlayPauseButton();
+
             switch (playbackState) {
                 case ExoPlayer.STATE_BUFFERING:
                     text += "buffering";
                     bufferingProgressBarLayout.bringToFront();
                     bufferingProgressBarLayout.setVisibility(VISIBLE);
+                    centerButtonLayout.setVisibility(View.GONE);
 
                     if (contentType == ContentType.LIVE)
                         startBufferingTimer();
@@ -422,6 +539,8 @@ public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.Re
                     if (bufferingProgressBarLayout != null)
                         bufferingProgressBarLayout.setVisibility(GONE);
 
+                    centerButtonLayout.setVisibility(View.VISIBLE);
+
                     if (mMediaPlayer != null) {
                         contentPlayedTimeInMillis = mMediaPlayer.getCurrentPosition();
                         if (contentType == ContentType.LIVE)
@@ -437,6 +556,10 @@ public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.Re
                 case ExoPlayer.STATE_READY:
                     text += "ready";
                     bufferingProgressBarLayout.setVisibility(GONE);
+                    centerButtonLayout.setVisibility(View.VISIBLE);
+
+                    videoNextButton.setVisibility(View.GONE);
+                    videoPerviousButton.setVisibility(View.GONE);
                     break;
                 default:
                     text += "unknown";
@@ -662,7 +785,7 @@ public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.Re
         //new ResolutionDailog().showResolutionDailog(context, this);
     }
 
-    public void getTrackResolution(){
+    public ArrayList<TrackResolution> getTrackResolution(){
       trackResolutionsList = new ArrayList<>();
       TracksInfo trackInfo = mMediaPlayer.getCurrentTracksInfo();
       ImmutableList<TracksInfo.TrackGroupInfo> trackGroupInfo = trackInfo.getTrackGroupInfos();
@@ -679,13 +802,14 @@ public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.Re
           Log.e("TrackGroup lenght", trackGroup.length + "");
       }
 
+      return trackResolutionsList;
     }
 
-    public void getSubTitle(){
+  /*  public void getSubTitle(){
         TracksInfo trackInfo = mMediaPlayer.getCurrentTracksInfo();
         ImmutableList<TracksInfo.TrackGroupInfo> trackGroupInfo = trackInfo.getTrackGroupInfos();
         TracksInfo.TrackGroupInfo  trackGroupResolution = trackGroupInfo.get(1);
-    }
+    }*/
 
 
     @Override
@@ -713,7 +837,12 @@ public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.Re
        if(view == pause) mMediaPlayer.pause();
 
        if(view == setting){
-           getTrackResolution();
+           new TrackSelectionDialog().showTrackSelectionDialog(context, new OnTrackSelected() {
+               @Override
+               public void onTrackSelected(@NonNull TrackResolution trackResolution) {
+
+               }
+           },getTrackResolution());
        }
     }
 
@@ -764,6 +893,19 @@ public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.Re
         View decorView = ((Activity) getContext()).getWindow().getDecorView();
         int uiOptions = View.SYSTEM_UI_FLAG_VISIBLE;
         decorView.setSystemUiVisibility(uiOptions);
+    }
+
+
+    private void rewind() {
+        seekTo(Math.max(mMediaPlayer.getCurrentPosition() - DEFAULT_REWIND_MS, 0));
+    }
+
+    private void fastForward() {
+        seekTo(Math.max(mMediaPlayer.getCurrentPosition() + DEFAULT_FAST_FORWARD_MS, 0));
+    }
+
+    private void seekTo(long positionMs) {
+        mMediaPlayer.seekTo(positionMs);
     }
 
 
