@@ -44,6 +44,7 @@ import com.google.android.exoplayer2.TracksInfo;
 
 import com.google.android.exoplayer2.drm.DrmSessionManager;
 import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.source.MergingMediaSource;
 import com.google.android.exoplayer2.source.TrackGroup;
 import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
@@ -529,6 +530,10 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
                 mMediaPlayer.setMediaSource(playerMediaSource);
             } else {
                 if (subtitle != null && subtitle.uri != null) {
+                    /*MediaSource playerMediaSource = new ExoUttils().buildMediaSource(context, mediaItem, videoUrl, drmSessionManager);
+                    MediaSource mediaSource = new MergingMediaSource(mediaSources);
+                    mMediaPlayer.setMediaSource(mediaSource);*/
+
                     mediaItem = new MediaItem.Builder()
                             .setSubtitleConfigurations(ImmutableList.of(subtitle))
                             .setUri(videoUrl)
