@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".DrmDemoActivity">
 
-    <com.multitv.ott.multitvvideoplayer.MultiTvPlayerSdk
+    <com.multitv.ott.multitvvideoplayer.MultiTvDrmPlayerSdk
         android:id="@+id/vikramExoVideoPlayer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

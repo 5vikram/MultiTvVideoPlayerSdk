@@ -13,4 +13,12 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+
+
+    <style parent="ThemeOverlay.AppCompat.Dialog.Alert" name="TrackSelectionDialogThemeOverlay">
+
+        <item name="windowNoTitle">false</item>
+
+    </style>
+
 </resources>

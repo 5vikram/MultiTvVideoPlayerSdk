@@ -12,7 +12,6 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.media.AudioManager;
-import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Handler;
 import android.telephony.PhoneStateListener;
@@ -23,27 +22,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
-import androidx.core.widget.ImageViewCompat;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.Target;
-import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.PlaybackException;
 import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.TracksInfo;
 
-import com.google.android.exoplayer2.Timeline;
-import com.google.android.exoplayer2.drm.KeysExpiredException;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.TrackGroup;
 import com.google.android.exoplayer2.source.TrackGroupArray;
@@ -56,46 +50,36 @@ import com.multitv.ott.multitvvideoplayer.custom.CountDownTimerWithPause;
 import com.multitv.ott.multitvvideoplayer.custom.ToastMessage;
 import com.multitv.ott.multitvvideoplayer.database.SharedPreferencePlayer;
 import com.multitv.ott.multitvvideoplayer.fabbutton.FabButton;
-import com.multitv.ott.multitvvideoplayer.listener.OnTrackSelected;
 import com.multitv.ott.multitvvideoplayer.listener.VideoPlayerSdkCallBackListener;
 import com.multitv.ott.multitvvideoplayer.models.TempResolutionModel;
 import com.multitv.ott.multitvvideoplayer.models.TrackResolution;
-import com.multitv.ott.multitvvideoplayer.popup.MyDialogFragment;
-import com.multitv.ott.multitvvideoplayer.popup.TrackSelectionDialog;
 import com.multitv.ott.multitvvideoplayer.playerglide.GlideThumbnailTransformation;
-import com.multitv.ott.multitvvideoplayer.popup.MyDialogFragment;
+import com.multitv.ott.multitvvideoplayer.popup.TrackSelectionDialog;
 import com.multitv.ott.multitvvideoplayer.timebar.PreviewTimeBar;
 import com.multitv.ott.multitvvideoplayer.timebar.previewseekbar.PreviewBar;
 import com.multitv.ott.multitvvideoplayer.timebar.previewseekbar.PreviewLoader;
 import com.multitv.ott.multitvvideoplayer.utils.CommonUtils;
 import com.multitv.ott.multitvvideoplayer.utils.ContentType;
 import com.multitv.ott.multitvvideoplayer.utils.ExoUttils;
-import com.pallycon.widevinelibrary.DetectedDeviceTimeModifiedException;
-import com.pallycon.widevinelibrary.NetworkConnectedException;
-import com.pallycon.widevinelibrary.PallyconDownloadException;
-import com.pallycon.widevinelibrary.PallyconDownloadTask;
-import com.pallycon.widevinelibrary.PallyconDrmException;
-import com.pallycon.widevinelibrary.PallyconEncrypterException;
-import com.pallycon.widevinelibrary.PallyconServerResponseException;
-import com.pallycon.widevinelibrary.*;
 
 import java.util.ArrayList;
 import java.util.Formatter;
 import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 
 
-public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.ResolutionAudioSrtSelection, PreviewLoader, PreviewBar.OnScrubListener,
+public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, PreviewBar.OnScrubListener,
         View.OnClickListener {
 
-    private Activity context;
+    private AppCompatActivity context;
     private SharedPreferencePlayer sharedPreferencePlayer;
     private ContentType contentType;
     private ExoPlayer mMediaPlayer;
     private StyledPlayerView simpleExoPlayerView;
     private DefaultTrackSelector trackSelector;
     private VideoPlayerSdkCallBackListener videoPlayerSdkCallBackListener;
+    private boolean isShowingTrackSelectionDialog;
+
 
     private long millisecondsForResume, adPlayedTimeInMillis, contentPlayedTimeInMillis, bufferingTimeInMillis;
     private int seekPlayerTo;
@@ -134,12 +118,13 @@ public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.Re
 
 
     public MultiTvPlayerSdk(Context context, AttributeSet attrs) {
-        this((Activity) context, attrs, 0);
+        this((AppCompatActivity) context, attrs, 0);
     }
 
-    public MultiTvPlayerSdk(Activity context, AttributeSet attrs, int defStyleAttr) {
+    public MultiTvPlayerSdk(AppCompatActivity context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         this.context = context;
+        trackSelector = new DefaultTrackSelector(context);
         formatBuilder = new StringBuilder();
         formatter = new Formatter(formatBuilder, Locale.getDefault());
         CommonUtils.setDefaultCookieManager();
@@ -925,37 +910,24 @@ public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.Re
     }*/
 
 
-    @Override
-    public void onResolutionAudioSrtSelection(String index, int selectedItemPosition, int typeOfSelection) {
-/*
-        switch (typeOfSelection) {
-            case 0:
-                this.resolutionSelectedItemPosition = selectedItemPosition;
-                handleResolutionItemClick(selectedItemPosition);
-                break;
-            case 1:
-                this.audioSelectedItemPosition = selectedItemPosition;
-                handleAudioItemClick(selectedItemPosition);
-                break;
-            case 2:
-                this.srtSelectedItemPosition = selectedItemPosition;
-                handleSrtItemClick(selectedItemPosition);
-                break;
-        }
-*/
-    }
+
 
     @Override
     public void onClick(View view) {
         if (view == pause) mMediaPlayer.pause();
 
         if (view == setting) {
-            new TrackSelectionDialog().showTrackSelectionDialog(context, new OnTrackSelected() {
-                @Override
-                public void onTrackSelected(@NonNull TrackResolution trackResolution) {
-                    //mMediaPlayer.setTrackSelectionParameters(trackResolution);
-                }
-            }, getTrackResolution());
+
+            if (!isShowingTrackSelectionDialog
+                    && TrackSelectionDialog.willHaveContent(trackSelector)) {
+                isShowingTrackSelectionDialog = true;
+                TrackSelectionDialog trackSelectionDialog =
+                        TrackSelectionDialog.createForTrackSelector(
+                                trackSelector,
+                                /* onDismissListener= */ dismissedDialog -> isShowingTrackSelectionDialog = false);
+                trackSelectionDialog.show(context.getSupportFragmentManager(), /* tag= */ null);
+            }
+
         }
     }
 
@@ -1058,40 +1030,4 @@ public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.Re
                 .transform(new GlideThumbnailTransformation(currentPosition))
                 .into(previewImageView);
     }
-
-
-
-    // DRM work starts from here
-
-/*
-    private PallyconStreamingDrmSessionManager.PallyconEventListener eventListener = new PallyconStreamingDrmSessionManager.PallyconEventListener() {
-        @Override
-        public void onDrmKeysLoaded(Map<String, String> licenseInfo) {
-            // refer to API document
-        }
-
-        @Override
-        public void onDrmSessionManagerError(Exception e) {
-            // refer to API document
-            if (e instanceof NetworkConnectedException) {
-
-            } else if (e instanceof PallyconDrmException) {
-
-            } else if (e instanceof PallyconEncrypterException) {
-
-            } else if (e instanceof PallyconServerResponseException) {
-
-            } else if (e instanceof KeysExpiredException) {
-
-            } else if (e instanceof DetectedDeviceTimeModifiedException) {
-                // Important : content playback should be prohibited to prevent illegal use of content.
-            } else {
-
-            }
-        }
-    };
-*/
-
-
 }
-
