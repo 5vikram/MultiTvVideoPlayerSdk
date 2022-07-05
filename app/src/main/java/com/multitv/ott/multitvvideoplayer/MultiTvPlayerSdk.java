@@ -530,13 +530,11 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
             } else {
                 if (subtitle != null && subtitle.uri != null) {
                     mediaItem = new MediaItem.Builder()
-                            .setMimeType(MimeTypes.APPLICATION_SUBRIP)
                             .setSubtitleConfigurations(ImmutableList.of(subtitle))
                             .setUri(videoUrl)
                             .build();
                 } else {
                     mediaItem = new MediaItem.Builder()
-                            .setMimeType(MimeTypes.APPLICATION_SUBRIP)
                             .setUri(videoUrl)
                             .build();
                 }
