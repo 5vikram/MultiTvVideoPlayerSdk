@@ -15,6 +15,7 @@ public class VideoPlayerNukeSSLCerts {
 
     public static void nuke() {
         try {
+
             TrustManager[] trustAllCerts = new TrustManager[]{
                     new X509TrustManager() {
                         public X509Certificate[] getAcceptedIssuers() {
