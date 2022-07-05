@@ -12,6 +12,14 @@ import com.multitv.ott.multitvvideoplayer.listener.VideoPlayerSdkCallBackListene
 import com.multitv.ott.multitvvideoplayer.utils.CommonUtils
 import com.multitv.ott.multitvvideoplayer.utils.ContentType
 import com.multitv.ott.multitvvideoplayer.utils.ScreenUtils
+import android.provider.Settings.Global
+
+import com.pallycon.widevinelibrary.PallyconWVMSDKFactory
+
+import com.pallycon.widevinelibrary.PallyconWVMSDK
+
+
+
 
 class DrmDemoActivity : AppCompatActivity(), VideoPlayerSdkCallBackListener {
     private var vikramExoVideoPlayer: MultiTvPlayerSdk? = null

@@ -43,6 +43,7 @@ import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.TracksInfo;
 
 import com.google.android.exoplayer2.Timeline;
+import com.google.android.exoplayer2.drm.KeysExpiredException;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.TrackGroup;
 import com.google.android.exoplayer2.source.TrackGroupArray;
@@ -69,11 +70,20 @@ import com.multitv.ott.multitvvideoplayer.timebar.previewseekbar.PreviewLoader;
 import com.multitv.ott.multitvvideoplayer.utils.CommonUtils;
 import com.multitv.ott.multitvvideoplayer.utils.ContentType;
 import com.multitv.ott.multitvvideoplayer.utils.ExoUttils;
+import com.pallycon.widevinelibrary.DetectedDeviceTimeModifiedException;
+import com.pallycon.widevinelibrary.NetworkConnectedException;
+import com.pallycon.widevinelibrary.PallyconDownloadException;
+import com.pallycon.widevinelibrary.PallyconDownloadTask;
+import com.pallycon.widevinelibrary.PallyconDrmException;
+import com.pallycon.widevinelibrary.PallyconEncrypterException;
+import com.pallycon.widevinelibrary.PallyconServerResponseException;
+import com.pallycon.widevinelibrary.*;
 
 import java.util.ArrayList;
 import java.util.Formatter;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 
 public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.ResolutionAudioSrtSelection, PreviewLoader, PreviewBar.OnScrubListener,
@@ -1048,5 +1058,40 @@ public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.Re
                 .transform(new GlideThumbnailTransformation(currentPosition))
                 .into(previewImageView);
     }
+
+
+
+    // DRM work starts from here
+
+/*
+    private PallyconStreamingDrmSessionManager.PallyconEventListener eventListener = new PallyconStreamingDrmSessionManager.PallyconEventListener() {
+        @Override
+        public void onDrmKeysLoaded(Map<String, String> licenseInfo) {
+            // refer to API document
+        }
+
+        @Override
+        public void onDrmSessionManagerError(Exception e) {
+            // refer to API document
+            if (e instanceof NetworkConnectedException) {
+
+            } else if (e instanceof PallyconDrmException) {
+
+            } else if (e instanceof PallyconEncrypterException) {
+
+            } else if (e instanceof PallyconServerResponseException) {
+
+            } else if (e instanceof KeysExpiredException) {
+
+            } else if (e instanceof DetectedDeviceTimeModifiedException) {
+                // Important : content playback should be prohibited to prevent illegal use of content.
+            } else {
+
+            }
+        }
+    };
+*/
+
+
 }
 
