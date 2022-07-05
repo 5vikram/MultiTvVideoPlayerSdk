@@ -120,6 +120,7 @@ public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.Re
 
     private final StringBuilder formatBuilder;
     private final Formatter formatter;
+    private FrameLayout previewFrameLayout;
 
 
     public MultiTvPlayerSdk(Context context, AttributeSet attrs) {
@@ -157,6 +158,7 @@ public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.Re
         bufferingProgressBarLayout = view.findViewById(R.id.bufferingProgressBarLayout);
         circularProgressLayout = view.findViewById(R.id.circularProgressLayout);
         setting = view.findViewById(R.id.settings_btn);
+        previewFrameLayout = view.findViewById(R.id.previewFrameLayout);
         setting.setOnClickListener(this);
 
         pause = view.findViewById(R.id.exo_pause);
@@ -380,7 +382,7 @@ public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.Re
         ToastMessage.showLogs(ToastMessage.LogType.ERROR, "Video Player:::", "initViews()");
         simpleExoPlayerView = this.findViewById(R.id.videoPlayer);
         videoRotationButton = this.findViewById(R.id.enter_full_screen);
-
+        trackSelector = new DefaultTrackSelector(context);
 
         videoRotationButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -508,7 +510,7 @@ public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.Re
 
         videoPlayerSdkCallBackListener.prepareVideoPlayer();
         ToastMessage.showLogs(ToastMessage.LogType.DEBUG, TAG, "Content url is " + videoUrl);
-        mMediaPlayer = new ExoPlayer.Builder(context).build();
+        mMediaPlayer = new ExoPlayer.Builder(context).setTrackSelector(trackSelector).build();
         if (mMediaPlayer != null) {
             mMediaPlayer.addListener(stateChangeCallback1);
             simpleExoPlayerView.setPlayer(mMediaPlayer);
@@ -941,7 +943,7 @@ public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.Re
             new TrackSelectionDialog().showTrackSelectionDialog(context, new OnTrackSelected() {
                 @Override
                 public void onTrackSelected(@NonNull TrackResolution trackResolution) {
-
+                    //mMediaPlayer.setTrackSelectionParameters(trackResolution);
                 }
             }, getTrackResolution());
         }
@@ -1012,26 +1014,24 @@ public class MultiTvPlayerSdk extends FrameLayout implements MyDialogFragment.Re
 
     @Override
     public void onScrubStart(PreviewBar previewBar) {
-        previewImageView.setVisibility(View.VISIBLE);
-        Log.d("Scrub", "START");
         //findViewById(R.id.centerButtonLayout).setVisibility(View.GONE);
-        findViewById(R.id.previewFrameLayout).setVisibility(View.VISIBLE);
+        previewFrameLayout.setVisibility(View.VISIBLE);
         pauseVideoPlayer();
     }
 
     @Override
     public void onScrubMove(PreviewBar previewBar, int progress, boolean fromUser) {
         //findViewById(R.id.centerButtonLayout).setVisibility(View.GONE);
-        findViewById(R.id.previewFrameLayout).setVisibility(View.VISIBLE);
+        previewFrameLayout.setVisibility(View.VISIBLE);
         if (currentDurationPlayTv != null) {
             currentDurationPlayTv.setText(Util.getStringForTime(formatBuilder, formatter, progress));
         }
     }
 
+
     @Override
     public void onScrubStop(PreviewBar previewBar) {
-        previewImageView.setVisibility(View.GONE);
-        findViewById(R.id.previewFrameLayout).setVisibility(View.GONE);
+        previewFrameLayout.setVisibility(View.GONE);
         //findViewById(R.id.centerButtonLayout).setVisibility(View.VISIBLE);
         if (mMediaPlayer != null) {
             seekTo(previewBar.getProgress());

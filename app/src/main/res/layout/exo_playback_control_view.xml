@@ -173,8 +173,8 @@
 
             <FrameLayout
                 android:id="@+id/previewFrameLayout"
-                android:layout_width="120dp"
-                android:layout_height="70dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:visibility="gone"
                 android:background="@drawable/video_frame">
 
