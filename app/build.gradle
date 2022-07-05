@@ -41,6 +41,7 @@ dependencies {
     api "com.google.android.exoplayer:exoplayer-core:$exoplayer_version"
     api "com.google.android.exoplayer:exoplayer-ui:$exoplayer_version"
     api "com.google.android.exoplayer:exoplayer-hls:$exoplayer_version"
+    api "com.google.android.exoplayer:exoplayer-dash:$exoplayer_version"
     //api 'com.google.android.exoplayer:extension-ima:2.11.1'
 
     implementation 'com.github.bumptech.glide:glide:4.13.0'

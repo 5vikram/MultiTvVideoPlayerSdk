@@ -94,6 +94,9 @@ public final class TrackSelectionDialog extends DialogFragment {
         Assertions.checkNotNull(trackSelector.getCurrentMappedTrackInfo());
     TrackSelectionDialog trackSelectionDialog = new TrackSelectionDialog();
     DefaultTrackSelector.Parameters parameters = trackSelector.getParameters();
+
+
+
     trackSelectionDialog.init(
         /* titleId= */ R.string.track_selection_title,
         mappedTrackInfo,
@@ -123,20 +126,8 @@ public final class TrackSelectionDialog extends DialogFragment {
     return trackSelectionDialog;
   }
 
-  /**
-   * Creates a dialog for given {@link MappedTrackInfo} and {@link DefaultTrackSelector.Parameters}.
-   *
-   * @param titleId The resource id of the dialog title.
-   * @param mappedTrackInfo The {@link MappedTrackInfo} to display.
-   * @param initialParameters The {@link DefaultTrackSelector.Parameters} describing the initial
-   *     track selection.
-   * @param allowAdaptiveSelections Whether adaptive selections (consisting of more than one track)
-   *     can be made.
-   * @param allowMultipleOverrides Whether tracks from multiple track groups can be selected.
-   * @param onClickListener {@link DialogInterface.OnClickListener} called when tracks are selected.
-   * @param onDismissListener {@link DialogInterface.OnDismissListener} called when the dialog is
-   *     dismissed.
-   */
+
+/*
   public static TrackSelectionDialog createForMappedTrackInfoAndParameters(
       int titleId,
       MappedTrackInfo mappedTrackInfo,
@@ -156,6 +147,7 @@ public final class TrackSelectionDialog extends DialogFragment {
         onDismissListener);
     return trackSelectionDialog;
   }
+*/
 
   public TrackSelectionDialog() {
     tabFragments = new SparseArray<>();
@@ -301,7 +293,7 @@ public final class TrackSelectionDialog extends DialogFragment {
 
     @Override
     public int getCount() {
-      return 1;
+      return tabFragments.size();
     }
 
     @Override
@@ -350,13 +342,14 @@ public final class TrackSelectionDialog extends DialogFragment {
         LayoutInflater inflater,
         @Nullable ViewGroup container,
         @Nullable Bundle savedInstanceState) {
+
       View rootView =
           inflater.inflate(
               R.layout.exo_track_selection_dialog, container, /* attachToRoot= */ false);
       TrackSelectionView trackSelectionView = rootView.findViewById(R.id.exo_track_selection_view);
       trackSelectionView.setShowDisableOption(true);
       trackSelectionView.setAllowMultipleOverrides(allowMultipleOverrides);
-      trackSelectionView.setAllowAdaptiveSelections(allowAdaptiveSelections);
+      trackSelectionView.setAllowAdaptiveSelections(false);
       trackSelectionView.init(
           mappedTrackInfo,
           rendererIndex,

@@ -12,10 +12,12 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.media.AudioManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -32,18 +34,22 @@ import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.Target;
+import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.PlaybackException;
 import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.TracksInfo;
 
+import com.google.android.exoplayer2.drm.DrmSessionManager;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.TrackGroup;
 import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.ui.StyledPlayerView;
+import com.google.android.exoplayer2.util.MimeTypes;
 import com.google.common.collect.ImmutableList;
 import com.google.android.exoplayer2.util.Util;
 import com.multitv.ott.multitvvideoplayer.custom.CountDownTimerWithPause;
@@ -61,11 +67,18 @@ import com.multitv.ott.multitvvideoplayer.timebar.previewseekbar.PreviewLoader;
 import com.multitv.ott.multitvvideoplayer.utils.CommonUtils;
 import com.multitv.ott.multitvvideoplayer.utils.ContentType;
 import com.multitv.ott.multitvvideoplayer.utils.ExoUttils;
+import com.pallycon.widevinelibrary.PallyconDrmException;
+import com.pallycon.widevinelibrary.PallyconEventListener;
+import com.pallycon.widevinelibrary.PallyconWVMSDK;
+import com.pallycon.widevinelibrary.PallyconWVMSDKFactory;
+import com.pallycon.widevinelibrary.UnAuthorizedDeviceException;
 
 import java.util.ArrayList;
 import java.util.Formatter;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
+import java.util.UUID;
 
 
 public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, PreviewBar.OnScrubListener,
@@ -79,42 +92,31 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
     private DefaultTrackSelector trackSelector;
     private VideoPlayerSdkCallBackListener videoPlayerSdkCallBackListener;
     private boolean isShowingTrackSelectionDialog;
+    private PallyconWVMSDK WVMAgent = null;
 
 
     private long millisecondsForResume, adPlayedTimeInMillis, contentPlayedTimeInMillis, bufferingTimeInMillis;
     private int seekPlayerTo;
-    private String mContentUrl;
+    private String mContentUrl, subTitleUri;
     private Handler bufferingTimeHandler;
     private CountDownTimerWithPause countDownTimer;
     private final String TAG = "VikramExoVideoPlayer";
 
-    private ImageView setting, pause, play;
-    private LinearLayout errorRetryLayout, bufferingProgressBarLayout, circularProgressLayout;
-    private ImageView videoRotationButton, videoPerviousButton, videoNextButton, VideoRenuButton, VideoFarwardButton, videoPlayButton, VideoPauseButton;
-
-
-    private LinearLayout centerButtonLayout;
-    private ImageView videoFarwardButton, videoPauseButton;
-
-
-    public ArrayList<String> availableResolutionContainerList, availableAudioTracksList,
-            availableSrtTracksList;
-
-    public ArrayList<TrackResolution> trackResolutionsList;
-    private HashMap<String, Integer> availableResolutionContainerMap;
-
-    private ImageView previewImageView;
+    private LinearLayout errorRetryLayout, bufferingProgressBarLayout, circularProgressLayout, centerButtonLayout;
+    private ImageView pictureInPicture, previewImageView, setting, videoRotationButton, videoPerviousButton, videoNextButton, VideoRenuButton, videoFarwardButton, videoPlayButton, videoPauseButton;
     private PreviewTimeBar playerProgress;
     private TextView currentDurationPlayTv;
+    private FrameLayout previewFrameLayout;
+
 
     public static final int DEFAULT_FAST_FORWARD_MS = 10000;
     public static final int DEFAULT_REWIND_MS = 10000;
-    public static final int DEFAULT_SHOW_TIMEOUT_MS = 5000;
-    private ImageView pictureInPicture;
-
+    public static final int DEFAULT_TIMEOUT_MS = 5000;
     private final StringBuilder formatBuilder;
     private final Formatter formatter;
-    private FrameLayout previewFrameLayout;
+    private boolean isDrmContent;
+    private String drmContentToken, drmdrmLicenseUrl, siteId, siteKey;
+    private DrmSessionManager drmSessionManager = null;
 
 
     public MultiTvPlayerSdk(Context context, AttributeSet attrs) {
@@ -128,11 +130,8 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
         formatBuilder = new StringBuilder();
         formatter = new Formatter(formatBuilder, Locale.getDefault());
         CommonUtils.setDefaultCookieManager();
-        trackResolutionsList = new ArrayList<>();
+
         TelephonyManager mgr = (TelephonyManager) context.getSystemService(TELEPHONY_SERVICE);
-//        if (mgr != null) {
-//            mgr.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
-//        }
         sharedPreferencePlayer = new SharedPreferencePlayer();
         sharedPreferencePlayer.setPreferenceInt(context, "pos", 0);
         if (Build.VERSION.SDK_INT >= 31) {
@@ -156,8 +155,6 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
         previewFrameLayout = view.findViewById(R.id.previewFrameLayout);
         setting.setOnClickListener(this);
 
-        pause = view.findViewById(R.id.exo_pause);
-        pause.setOnClickListener(this);
         centerButtonLayout = view.findViewById(R.id.centerButtonLayout);
         videoPerviousButton = view.findViewById(R.id.exo_prev);
         videoNextButton = view.findViewById(R.id.exo_next);
@@ -233,38 +230,6 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
             }
         });
 
-
-/*
-        playerProgress.addOnScrubListener(new PreviewBar.OnScrubListener() {
-            @Override
-            public void onScrubStart(PreviewBar previewBar) {
-                Log.d("Scrub", "START");
-                findViewById(R.id.centerButtonLayout).setVisibility(View.GONE);
-                findViewById(R.id.previewFrameLayout).setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onScrubMove(PreviewBar previewBar, int progress, boolean fromUser) {
-                Log.e("Scrub", "MOVE to " + progress / 1000 + " FROM USER: " + fromUser);
-                findViewById(R.id.centerButtonLayout).setVisibility(View.GONE);
-                findViewById(R.id.previewFrameLayout).setVisibility(View.VISIBLE);
-                if (currentDurationPlayTv != null) {
-                    currentDurationPlayTv.setText(Util.getStringForTime(formatBuilder, formatter, progress));
-                }
-            }
-
-            @Override
-            public void onScrubStop(PreviewBar previewBar) {
-                Log.e("Scrub", "STOP and time progress:::" + previewBar.getProgress());
-                findViewById(R.id.previewFrameLayout).setVisibility(View.GONE);
-                findViewById(R.id.centerButtonLayout).setVisibility(View.VISIBLE);
-                if (mMediaPlayer != null) {
-                    seekTo(previewBar.getProgress());
-                }
-
-            }
-        });
-*/
 
         super.onFinishInflate();
     }
@@ -441,6 +406,19 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
         this.bufferingTimeInMillis = bufferingTimeInMillis;
     }
 
+    public void setSubtitleVideoUri(String subtitleUri) {
+        this.subTitleUri = subtitleUri;
+    }
+
+    public void setDrmEnabled(boolean drmContent, String siteId, String siteKey, String drmToekn, String drmLicenseUrl) {
+        this.isDrmContent = drmContent;
+        this.drmContentToken = drmToekn;
+        this.drmdrmLicenseUrl = drmLicenseUrl;
+        this.siteId = siteId;
+        this.siteKey = siteKey;
+
+    }
+
 
     // get play duration of video in milli second
     public long getContentPlayedTimeInMillis() {
@@ -498,7 +476,6 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
 
         if (mMediaPlayer != null) {
             mMediaPlayer.release();
-            trackSelector = null;
             mMediaPlayer = null;
         }
         centerButtonLayout.setVisibility(View.GONE);
@@ -507,11 +484,74 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
         ToastMessage.showLogs(ToastMessage.LogType.DEBUG, TAG, "Content url is " + videoUrl);
         mMediaPlayer = new ExoPlayer.Builder(context).setTrackSelector(trackSelector).build();
         if (mMediaPlayer != null) {
+
+            MediaItem mediaItem = null;
+            MediaItem.SubtitleConfiguration subtitle = null;
+
+            if (subTitleUri != null && !TextUtils.isEmpty(subTitleUri)) {
+                subtitle =
+                        new MediaItem.SubtitleConfiguration.Builder(Uri.parse(subTitleUri))
+                                .setMimeType(MimeTypes.APPLICATION_SUBRIP) // The correct MIME type (required).
+                                .setLanguage("en") // MUST, The subtitle language (optional).
+                                .setSelectionFlags(C.SELECTION_FLAG_DEFAULT) //MUST,  Selection flags for the track (optional).
+                                .build();
+            }
+
+
+            if (isDrmContent) {
+                try {
+                    WVMAgent = PallyconWVMSDKFactory.getInstance(context);
+                    WVMAgent.init(context, null, siteId, siteKey);
+                    WVMAgent.setPallyconEventListener(pallyconEventListener);
+                } catch (PallyconDrmException e) {
+                    e.printStackTrace();
+                } catch (UnAuthorizedDeviceException e) {
+                    e.printStackTrace();
+                }
+
+                mediaItem = new MediaItem.Builder().setUri(videoUrl).build();
+
+                UUID drmSchemeUuid = UUID.fromString((C.WIDEVINE_UUID).toString());
+                Uri uri = Uri.parse(videoUrl);
+
+
+                try {
+                    drmSessionManager = WVMAgent.createDrmSessionManagerByToken(
+                            drmSchemeUuid,
+                            drmdrmLicenseUrl,
+                            uri,
+                            drmContentToken);
+                } catch (PallyconDrmException e) {
+                    e.printStackTrace();
+                }
+
+                MediaSource playerMediaSource = new ExoUttils().buildMediaSource(context, mediaItem, videoUrl, drmSessionManager);
+                mMediaPlayer.setMediaSource(playerMediaSource);
+            } else {
+                if (subtitle != null && subtitle.uri != null) {
+                    mediaItem = new MediaItem.Builder()
+                            .setMimeType(MimeTypes.APPLICATION_SUBRIP)
+                            .setSubtitleConfigurations(ImmutableList.of(subtitle))
+                            .setUri(videoUrl)
+                            .build();
+                } else {
+                    mediaItem = new MediaItem.Builder()
+                            .setMimeType(MimeTypes.APPLICATION_SUBRIP)
+                            .setUri(videoUrl)
+                            .build();
+                }
+
+                mMediaPlayer.setMediaItem(mediaItem);
+
+            }
+
             mMediaPlayer.addListener(stateChangeCallback1);
             simpleExoPlayerView.setPlayer(mMediaPlayer);
-            MediaSource playerMediaSource = new ExoUttils().buildMediaSource(1, context, videoUrl);
-            mMediaPlayer.prepare(playerMediaSource);
-
+            simpleExoPlayerView.setControllerHideOnTouch(true);
+            simpleExoPlayerView.setControllerAutoShow(false);
+            simpleExoPlayerView.setControllerShowTimeoutMs(DEFAULT_TIMEOUT_MS);
+            simpleExoPlayerView.setControllerHideDuringAds(true);
+            mMediaPlayer.prepare();
             if (isNeedToPlayInstantly) {
                 mMediaPlayer.setPlayWhenReady(true);
             }
@@ -522,11 +562,11 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
     }
 
 
-    ExoPlayer.EventListener stateChangeCallback1 = new ExoPlayer.EventListener() {
+    Player.Listener stateChangeCallback1 = new ExoPlayer.Listener() {
 
         @Override
         public void onPlayerError(PlaybackException error) {
-            Player.EventListener.super.onPlayerError(error);
+            Player.Listener.super.onPlayerError(error);
             if (mMediaPlayer != null && mMediaPlayer.getCurrentPosition() != 0)
                 seekPlayerTo = (int) mMediaPlayer.getCurrentPosition() / 1000;
 
@@ -577,7 +617,7 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
                         circularProgressLayout.setVisibility(VISIBLE);
                         circularProgressLayout.bringToFront();
 
-                        final int totalDuration = 30000, tickDuration = 1000;
+                        final int totalDuration = 10000, tickDuration = 1000;
                         countDownTimer = new CountDownTimerWithPause(totalDuration, tickDuration / 10, true) {
                             public void onTick(long millisUntilFinished) {
                                 float progress = (float) millisUntilFinished / totalDuration;
@@ -593,6 +633,8 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
                                     prepareVideoPlayer();
                                 } catch (Exception e) {
                                     e.printStackTrace();
+                                    centerButtonLayout.setVisibility(View.VISIBLE);
+
                                 }
                             }
                         }.create();
@@ -792,7 +834,7 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
         builder.setTitle("Speed Control");
 
 // add a checkbox list
-        String[] animals = {"1x", "0.5x", "0.75x", "1.25x", "1.5x", "2x"};
+        String[] animals = {"0.25x", "0.5x", "Normal", "1.5x", "2x"};
 
         builder.setSingleChoiceItems(animals, position, new DialogInterface.OnClickListener() {
 
@@ -802,13 +844,13 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
                 float pitch = 1f;
                 switch (which) {
                     case 1:
-                        speed = 0.5f;
-                        pitch = 0.5f;
+                        speed = 0.25f;
+                        pitch = 0.25f;
                         sharedPreferencePlayer.setPreferenceInt(context, "pos", 1);
                         break;
                     case 2:
-                        speed = 0.75f;
-                        pitch = 0.75f;
+                        speed = 0.5f;
+                        pitch = 0.5f;
                         sharedPreferencePlayer.setPreferenceInt(context, "pos", 2);
                         break;
                     case 0:
@@ -817,18 +859,12 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
                         sharedPreferencePlayer.setPreferenceInt(context, "pos", 0);
                         break;
                     case 3:
-                        speed = 1.25f;
-                        pitch = 1.25f;
+                        speed = 5;
+                        pitch = 5;
                         sharedPreferencePlayer.setPreferenceInt(context, "pos", 3);
                         break;
 
                     case 4:
-                        speed = 1.5f;
-                        pitch = 1.5f;
-                        sharedPreferencePlayer.setPreferenceInt(context, "pos", 4);
-                        break;
-
-                    case 5:
                         speed = 2f;
                         pitch = 2f;
                         sharedPreferencePlayer.setPreferenceInt(context, "pos", 5);
@@ -851,11 +887,9 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
         dialog.show();
     }
 
-    public void showMenuDailog() {
-        //new ResolutionDailog().showResolutionDailog(context, this);
-    }
 
-    public ArrayList<TrackResolution> getTrackResolution() {
+
+/*    public ArrayList<TrackResolution> getTrackResolution() {
 
         if (trackResolutionsList != null && trackResolutionsList.size() != 0)
             trackResolutionsList.clear();
@@ -901,7 +935,7 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
 
 
         return trackResolutionsList;
-    }
+    }*/
 
   /*  public void getSubTitle(){
         TracksInfo trackInfo = mMediaPlayer.getCurrentTracksInfo();
@@ -910,12 +944,8 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
     }*/
 
 
-
-
     @Override
     public void onClick(View view) {
-        if (view == pause) mMediaPlayer.pause();
-
         if (view == setting) {
 
             if (!isShowingTrackSelectionDialog
@@ -930,40 +960,6 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
 
         }
     }
-
-/*
-    private void handleResolutionItemClick(int selectedItemPosition) {
-        if (mMediaPlayer == null || availableResolutionContainerList == null || availableResolutionContainerList.isEmpty()
-                || availableResolutionContainerMap == null || availableResolutionContainerMap.isEmpty()
-                || videoRendererIndex == -1 || videoTrackGroups == null
-                || selectedItemPosition == previousResolutionSelectedItemPosition) {
-            //Log.e("Naseeb", "All values are null & videoRendererIndex= " + String.valueOf(videoRendererIndex) + " & videoTrackGroups =" + String.valueOf(videoTrackGroups));
-
-            return;
-        }
-
-        String resolution = availableResolutionContainerList.get(selectedItemPosition);
-        //Log.e("Naseeb", "Selected resolution::::" + resolution);
-        MappingTrackSelector.SelectionOverride selectionOverride = null;
-        if (!resolution.equalsIgnoreCase("Auto") && !resolution.equalsIgnoreCase("Default")) {
-            int trackIndex = availableResolutionContainerMap.get(resolution);
-            //Log.e("Naseeb", "Selected trackIndex::::" + trackIndex);
-
-            selectionOverride = new MappingTrackSelector.SelectionOverride(fixedFactory, videoRendererIndex, trackIndex);
-        }
-
-        if (selectionOverride != null) {
-            //trackSelector.clearSelectionOverride(videoRendererIndex, videoTrackGroups);
-            trackSelector.setSelectionOverride(videoRendererIndex, videoTrackGroups, selectionOverride);
-            Log.e("Vikram ", "Resolution is set to " + resolution);
-        } else {
-            trackSelector.clearSelectionOverrides(videoRendererIndex);
-            Log.e("Vikram ", "Resolution is set to auto");
-        }
-
-        previousResolutionSelectedItemPosition = selectedItemPosition;
-    }
-*/
 
 
     private void hideSystemBars() {
@@ -1030,5 +1026,24 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
                 .transform(new GlideThumbnailTransformation(currentPosition))
                 .into(previewImageView);
     }
+
+    private PallyconEventListener pallyconEventListener = new PallyconEventListener() {
+        @Override
+        public void onDrmKeysLoaded(Map<String, String> licenseInfo) {
+        }
+
+        @Override
+        public void onDrmSessionManagerError(Exception e) {
+            Toast.makeText(context, /*e.getMessage()*/ "Error in DRM", Toast.LENGTH_LONG).show();
+        }
+
+        @Override
+        public void onDrmKeysRestored() {
+        }
+
+        @Override
+        public void onDrmKeysRemoved() {
+        }
+    };
 }
 
