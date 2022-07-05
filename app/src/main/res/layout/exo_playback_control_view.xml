@@ -137,11 +137,63 @@
     </LinearLayout>
 
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/linearLayout"
+    <LinearLayout
+        android:id="@id/video_progress_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/ll"
+        android:layout_marginBottom="8dp"
+        android:orientation="vertical">
+
+
+        <FrameLayout
+            android:id="@+id/previewFrameLayout"
+            android:layout_width="120dp"
+            android:layout_height="70dp"
+            android:background="@drawable/video_frame"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/previewImageView"
+                android:layout_width="120dp"
+                android:layout_height="70dp" />
+
+        </FrameLayout>
+
+        <com.multitv.ott.multitvvideoplayer.timebar.PreviewTimeBar
+            android:id="@+id/exo_progress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            app:previewAnimationEnabled="true"
+            app:previewFrameLayout="@id/previewFrameLayout" />
+
+        <!--
+                            <com.android.playersdk.customview.DefaultTimeBar
+                                android:id="@id/exo_progress"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                app:bar_height="3dp"
+                                app:buffered_color="#80FFFFFF"
+                                app:scrubber_enabled_size="15dp"
+                                app:scrubber_disabled_size="15dp"
+                                app:played_color="@android:color/white"
+                                app:scrubber_color="@android:color/white" />
+        -->
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/video_progress_layout"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:layout_marginStart="8dp"
         android:orientation="horizontal">
 
         <TextView
@@ -154,62 +206,20 @@
             android:paddingRight="4dp"
             android:textColor="#FFBEBEBE"
             android:textSize="14sp"
-            tools:text="3.00"
             android:textStyle="bold"
-            android:layout_marginBottom="1mm"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            tools:ignore="InOrMmUsage" />
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="3.00" />
 
-        <LinearLayout
-            android:id="@id/video_progress_layout"
-            android:layout_width="0dp"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintStart_toEndOf="@id/exo_position"
-            app:layout_constraintEnd_toStartOf="@id/exo_duration"
-            app:layout_constraintBottom_toBottomOf="parent">
-
-
-            <FrameLayout
-                android:id="@+id/previewFrameLayout"
-                android:layout_width="120dp"
-                android:layout_height="70dp"
-                android:visibility="gone"
-                android:background="@drawable/video_frame">
-
-                <ImageView
-                    android:id="@+id/previewImageView"
-                    android:layout_width="120dp"
-                    android:layout_height="70dp"
-                    />
-
-            </FrameLayout>
-
-            <com.multitv.ott.multitvvideoplayer.timebar.PreviewTimeBar
-                android:id="@+id/exo_progress"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                app:previewAnimationEnabled="true"
-                app:previewFrameLayout="@id/previewFrameLayout"/>
-
-            <!--
-                                <com.android.playersdk.customview.DefaultTimeBar
-                                    android:id="@id/exo_progress"
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    app:bar_height="3dp"
-                                    app:buffered_color="#80FFFFFF"
-                                    app:scrubber_enabled_size="15dp"
-                                    app:scrubber_disabled_size="15dp"
-                                    app:played_color="@android:color/white"
-                                    app:scrubber_color="@android:color/white" />
-            -->
-
-        </LinearLayout>
+            android:layout_gravity="center_vertical"
+            android:includeFontPadding="false"
+            android:text="/"
+            android:textColor="#FFBEBEBE"
+            android:textSize="14sp"
+            android:textStyle="bold" />
 
 
         <TextView
@@ -219,17 +229,14 @@
             android:layout_gravity="center_vertical"
             android:includeFontPadding="false"
             android:paddingLeft="4dp"
-            tools:text="3.00"
-            android:layout_marginBottom="1mm"
             android:paddingRight="4dp"
             android:textColor="#FFBEBEBE"
             android:textSize="14sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            tools:ignore="InOrMmUsage" />
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="3.00" />
 
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 
 </RelativeLayout>
