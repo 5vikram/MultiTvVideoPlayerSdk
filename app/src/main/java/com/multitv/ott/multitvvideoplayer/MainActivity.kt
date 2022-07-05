@@ -48,15 +48,15 @@ class MainActivity : AppCompatActivity(), VideoPlayerSdkCallBackListener {
             vikramExoVideoPlayer?.releaseVideoPlayer()
 
         vikramExoVideoPlayer?.setContentType(ContentType.VOD)
-        vikramExoVideoPlayer?.setDrmEnabled(
+      /*  vikramExoVideoPlayer?.setDrmEnabled(
             true, "JKJG",
             "GMdUs9dWqTIhju3mWeTsS9MRiX9WZ0hh", token,
             "https://license.pallycon.com/ri/licenseManager.do"
-        )
+        )*/
 
-        vikramExoVideoPlayer?.setContentFilePath("http://d34i7be7c53ukk.cloudfront.net/1004/1004_62ac86b418c6a/dash/stream.mpd")
-       // vikramExoVideoPlayer?.setContentFilePath("http://dpvruylq68d5u.cloudfront.net/1048/1048_624c3ec915773/1048_624c3ec915773_master.m3u8")
-       // vikramExoVideoPlayer?.setSubtitleVideoUri("https://multitvott.s3.ap-south-1.amazonaws.com/subtitle.srt")
+       // vikramExoVideoPlayer?.setContentFilePath("http://d34i7be7c53ukk.cloudfront.net/1004/1004_62ac86b418c6a/dash/stream.mpd")
+        vikramExoVideoPlayer?.setContentFilePath("http://dpvruylq68d5u.cloudfront.net/1048/1048_624c3ec915773/1048_624c3ec915773_master.m3u8")
+        vikramExoVideoPlayer?.setSubtitleVideoUri("https://multitvott.s3.ap-south-1.amazonaws.com/subtitle.srt")
         vikramExoVideoPlayer?.setMultiTvVideoPlayerSdkListener(this)
         vikramExoVideoPlayer?.prepareVideoPlayer()
     }
