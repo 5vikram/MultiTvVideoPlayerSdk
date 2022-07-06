@@ -43,13 +43,18 @@ import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.TracksInfo;
 
 import com.google.android.exoplayer2.drm.DrmSessionManager;
+import com.google.android.exoplayer2.ext.ima.ImaAdsLoader;
+import com.google.android.exoplayer2.source.DefaultMediaSourceFactory;
 import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.source.MediaSourceFactory;
 import com.google.android.exoplayer2.source.MergingMediaSource;
 import com.google.android.exoplayer2.source.TrackGroup;
 import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.ui.StyledPlayerView;
+import com.google.android.exoplayer2.upstream.DataSource;
+import com.google.android.exoplayer2.upstream.DefaultDataSource;
 import com.google.android.exoplayer2.util.MimeTypes;
 import com.google.common.collect.ImmutableList;
 import com.google.android.exoplayer2.util.Util;
@@ -119,6 +124,9 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
     private String drmContentToken, drmdrmLicenseUrl, siteId, siteKey;
     private DrmSessionManager drmSessionManager = null;
 
+
+    private ImaAdsLoader adsLoader;
+    private String adsUrl;
 
     public MultiTvPlayerSdk(Context context, AttributeSet attrs) {
         this((AppCompatActivity) context, attrs, 0);
@@ -398,6 +406,11 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
         this.contentType = type;
     }
 
+    public void setPreRollAdUrl(String adUrl) {
+        this.adsUrl = adUrl;
+
+    }
+
     // get buffer duration of video in milli second
     public long getBufferingTimeInMillis() {
         return bufferingTimeInMillis;
@@ -469,6 +482,8 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
         if (mMediaPlayer != null && simpleExoPlayerView != null) {
             simpleExoPlayerView.getPlayer().release();
             mMediaPlayer.release();
+            if (adsLoader != null)
+                adsLoader.setPlayer(null);
         }
     }
 
@@ -477,17 +492,42 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
 
         if (mMediaPlayer != null) {
             mMediaPlayer.release();
+            if (adsLoader != null)
+                adsLoader.setPlayer(null);
+
             mMediaPlayer = null;
         }
         centerButtonLayout.setVisibility(View.GONE);
 
         videoPlayerSdkCallBackListener.prepareVideoPlayer();
         ToastMessage.showLogs(ToastMessage.LogType.DEBUG, TAG, "Content url is " + videoUrl);
-        mMediaPlayer = new ExoPlayer.Builder(context).setTrackSelector(trackSelector).build();
+
+
+        if (adsUrl != null && !TextUtils.isEmpty(adsUrl)) {
+            DataSource.Factory dataSourceFactory = new DefaultDataSource.Factory(context);
+            MediaSourceFactory mediaSourceFactory =
+                    new DefaultMediaSourceFactory(dataSourceFactory)
+                            .setAdsLoaderProvider(unusedAdTagUri -> adsLoader)
+                            .setAdViewProvider(simpleExoPlayerView);
+            mMediaPlayer = new ExoPlayer.Builder(context).setMediaSourceFactory(mediaSourceFactory).setTrackSelector(trackSelector).build();
+            adsLoader = new ImaAdsLoader.Builder(/* context= */ context).build();
+        } else {
+            mMediaPlayer = new ExoPlayer.Builder(context).setTrackSelector(trackSelector).build();
+        }
+
+
         if (mMediaPlayer != null) {
+
+            mMediaPlayer.addListener(stateChangeCallback1);
+            simpleExoPlayerView.setPlayer(mMediaPlayer);
+            simpleExoPlayerView.setControllerHideOnTouch(true);
+            simpleExoPlayerView.setControllerAutoShow(false);
+            simpleExoPlayerView.setControllerShowTimeoutMs(DEFAULT_TIMEOUT_MS);
+            simpleExoPlayerView.setControllerHideDuringAds(true);
 
             MediaItem mediaItem = null;
             MediaItem.SubtitleConfiguration subtitle = null;
+
 
             if (subTitleUri != null && !TextUtils.isEmpty(subTitleUri)) {
                 subtitle =
@@ -534,26 +574,44 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
                     MediaSource mediaSource = new MergingMediaSource(mediaSources);
                     mMediaPlayer.setMediaSource(mediaSource);*/
 
-                    mediaItem = new MediaItem.Builder()
-                            .setSubtitleConfigurations(ImmutableList.of(subtitle))
-                            .setUri(videoUrl)
-                            .build();
+                    if (adsUrl != null && !TextUtils.isEmpty(adsUrl)) {
+                        adsLoader.setPlayer(mMediaPlayer);
+                        Uri adTagUri = Uri.parse(adsUrl);
+                        mediaItem = new MediaItem.Builder()
+                                /*.setSubtitleConfigurations(ImmutableList.of(subtitle))*/
+                                .setUri(videoUrl)
+                                .setAdsConfiguration(new MediaItem.AdsConfiguration.Builder(adTagUri).build())
+                                .build();
+                    } else {
+                        mediaItem = new MediaItem.Builder()
+                                .setSubtitleConfigurations(ImmutableList.of(subtitle))
+                                .setUri(videoUrl)
+                                .build();
+                    }
+
+
                 } else {
-                    mediaItem = new MediaItem.Builder()
-                            .setUri(videoUrl)
-                            .build();
+                    if (adsUrl != null && !TextUtils.isEmpty(adsUrl)) {
+                        adsLoader.setPlayer(mMediaPlayer);
+                        Uri adTagUri = Uri.parse(adsUrl);
+                        mediaItem = new MediaItem.Builder()
+                                .setSubtitleConfigurations(ImmutableList.of(subtitle))
+                                .setUri(videoUrl)
+                                .setAdsConfiguration(new MediaItem.AdsConfiguration.Builder(adTagUri).build())
+                                .build();
+                    } else {
+                        mediaItem = new MediaItem.Builder()
+                                .setUri(videoUrl)
+                                .build();
+                    }
+
                 }
 
                 mMediaPlayer.setMediaItem(mediaItem);
 
             }
 
-            mMediaPlayer.addListener(stateChangeCallback1);
-            simpleExoPlayerView.setPlayer(mMediaPlayer);
-            simpleExoPlayerView.setControllerHideOnTouch(true);
-            simpleExoPlayerView.setControllerAutoShow(false);
-            simpleExoPlayerView.setControllerShowTimeoutMs(DEFAULT_TIMEOUT_MS);
-            simpleExoPlayerView.setControllerHideDuringAds(true);
+
             mMediaPlayer.prepare();
             if (isNeedToPlayInstantly) {
                 mMediaPlayer.setPlayWhenReady(true);
