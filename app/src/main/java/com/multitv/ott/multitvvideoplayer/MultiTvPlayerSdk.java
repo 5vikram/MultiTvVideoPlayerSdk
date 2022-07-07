@@ -70,9 +70,11 @@ import com.multitv.ott.multitvvideoplayer.popup.TrackSelectionDialog;
 import com.multitv.ott.multitvvideoplayer.timebar.PreviewTimeBar;
 import com.multitv.ott.multitvvideoplayer.timebar.previewseekbar.PreviewBar;
 import com.multitv.ott.multitvvideoplayer.timebar.previewseekbar.PreviewLoader;
+import com.multitv.ott.multitvvideoplayer.utils.AppSessionUtil;
 import com.multitv.ott.multitvvideoplayer.utils.CommonUtils;
 import com.multitv.ott.multitvvideoplayer.utils.ContentType;
 import com.multitv.ott.multitvvideoplayer.utils.ExoUttils;
+import com.multitv.ott.multitvvideoplayer.utils.VideoPlayerTracer;
 import com.pallycon.widevinelibrary.PallyconDrmException;
 import com.pallycon.widevinelibrary.PallyconEventListener;
 import com.pallycon.widevinelibrary.PallyconWVMSDK;
@@ -99,6 +101,7 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
     private VideoPlayerSdkCallBackListener videoPlayerSdkCallBackListener;
     private boolean isShowingTrackSelectionDialog;
     private PallyconWVMSDK WVMAgent = null;
+    private String analaticsUrl, token, userId, contentTitle, contentId;
 
 
     private long millisecondsForResume, adPlayedTimeInMillis, contentPlayedTimeInMillis, bufferingTimeInMillis;
@@ -411,6 +414,27 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
 
     }
 
+
+    public void setAnalaticsUrl(String analaticsUrl) {
+        this.analaticsUrl = analaticsUrl;
+    }
+
+    public void setKeyToken(String token) {
+        this.token = token;
+    }
+
+    public void setAuthDetails(String id) {
+        this.userId = id;
+    }
+
+    public void setContentTitle(String title) {
+        this.contentTitle = title;
+    }
+
+    public void setContentId(String id) {
+        this.contentId = id;
+    }
+
     // get buffer duration of video in milli second
     public long getBufferingTimeInMillis() {
         return bufferingTimeInMillis;
@@ -480,6 +504,9 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
     // relase and destroy video player
     public void releaseVideoPlayer() {
         if (mMediaPlayer != null && simpleExoPlayerView != null) {
+
+            sendAnalaticsData(context, userId, contentId, contentTitle, contentTitle);
+
             simpleExoPlayerView.getPlayer().release();
             mMediaPlayer.release();
             if (adsLoader != null)
@@ -1097,4 +1124,43 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
         public void onDrmKeysRemoved() {
         }
     };
+
+    private void sendAnalaticsData(final AppCompatActivity activity, final String userId, String contentId, String contentTitle, String token) {
+        String finalAnalaticsUrl = analaticsUrl;
+        if (finalAnalaticsUrl == null || TextUtils.isEmpty(finalAnalaticsUrl))
+            return;
+
+        if (contentId != null && !TextUtils.isEmpty(contentId) && contentTitle != null && !TextUtils.isEmpty(contentTitle) && token != null && !TextUtils.isEmpty(token)) {
+            long totalDuration = getDuration();
+            long bufferDuration = getBufferingTimeInMillis();
+            long palyedDuration = getContentPlayedTimeInMillis();
+            new AppSessionUtil().sendHeartBeat(activity, userId, finalAnalaticsUrl, contentId, contentTitle, palyedDuration, bufferDuration, totalDuration, token);
+        } else {
+            VideoPlayerTracer.error("Analatics Error:::", "token or content id or content title is required field.");
+        }
+
+    }
+
+
+    public long getDuration() {
+        if (mMediaPlayer != null)
+            return mMediaPlayer.getDuration();
+        else
+            return 0;
+    }
+
+    public long getCurrentPosition() {
+        if (mMediaPlayer != null)
+            return mMediaPlayer.getCurrentPosition();
+        else
+            return 0;
+    }
+
+    public void resumeFromPosition(long millisecondsForResume) {
+        if (millisecondsForResume != 0) {
+            this.millisecondsForResume = millisecondsForResume;
+            //isResumeFromPreviousPosition = true;
+        }
+    }
+
 }
