@@ -71,11 +71,12 @@ public class SharedPreferencePlayer {
         editor.commit();
     }
 
-    public int getPreferencesInt(Context context, String key) {
+
+    public int getPreferencesInt(Context context, String key, int defaultValue) {
         if (context == null)
             return 0;
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        int position = prefs.getInt(key, 0);
+        int position = prefs.getInt(key, defaultValue);
         return position;
     }
 

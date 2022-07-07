@@ -348,7 +348,7 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
 
     // init view and view group here
     private void initViews() {
-        ToastMessage.showLogs(ToastMessage.LogType.ERROR, "Video Player:::", "initViews()");
+//        ToastMessage.showLogs(ToastMessage.LogType.ERROR, "Video Player:::", "initViews()");
         simpleExoPlayerView = this.findViewById(R.id.videoPlayer);
         videoRotationButton = this.findViewById(R.id.enter_full_screen);
         trackSelector = new DefaultTrackSelector(context);
@@ -488,7 +488,7 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
     }
 
     private void initializeMainPlayer(String videoUrl, boolean isNeedToPlayInstantly) {
-        ToastMessage.showLogs(ToastMessage.LogType.ERROR, "Video Player:::", "initializeMainPlayer");
+//        ToastMessage.showLogs(ToastMessage.LogType.ERROR, "Video Player:::", "initializeMainPlayer");
 
         if (mMediaPlayer != null) {
             mMediaPlayer.release();
@@ -500,7 +500,7 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
         centerButtonLayout.setVisibility(View.GONE);
 
         videoPlayerSdkCallBackListener.prepareVideoPlayer();
-        ToastMessage.showLogs(ToastMessage.LogType.DEBUG, TAG, "Content url is " + videoUrl);
+//        ToastMessage.showLogs(ToastMessage.LogType.DEBUG, TAG, "Content url is " + videoUrl);
 
 
         if (adsUrl != null && !TextUtils.isEmpty(adsUrl)) {
@@ -740,8 +740,8 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
 
             }
 
-            ToastMessage.showToastMsg(context, text, Toast.LENGTH_SHORT);
-            ToastMessage.showLogs(ToastMessage.LogType.ERROR, "Video Player:::", text);
+//            ToastMessage.showToastMsg(context, text, Toast.LENGTH_SHORT);
+//            ToastMessage.showLogs(ToastMessage.LogType.ERROR, "Video Player:::", text);
 
         }
 
@@ -888,13 +888,12 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
         if (dialog != null && dialog.isShowing())
             dialog.dismiss();
 
-        int position = sharedPreferencePlayer.getPreferencesInt(context, "pos");
+        int position = sharedPreferencePlayer.getPreferencesInt(context, "playback_position", 2);
 
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("Speed Control");
 
-// add a checkbox list
         String[] animals = {"0.25x", "0.5x", "Normal", "1.5x", "2x"};
 
         builder.setSingleChoiceItems(animals, position, new DialogInterface.OnClickListener() {
@@ -907,35 +906,29 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
                     case 1:
                         speed = 0.25f;
                         pitch = 0.25f;
-                        sharedPreferencePlayer.setPreferenceInt(context, "pos", 1);
+                        sharedPreferencePlayer.setPreferenceInt(context, "playback_position", 0);
                         break;
                     case 2:
                         speed = 0.5f;
                         pitch = 0.5f;
-                        sharedPreferencePlayer.setPreferenceInt(context, "pos", 2);
-                        break;
-                    case 0:
-                        speed = 1f;
-                        pitch = 1f;
-                        sharedPreferencePlayer.setPreferenceInt(context, "pos", 0);
+                        sharedPreferencePlayer.setPreferenceInt(context, "playback_position", 1);
                         break;
                     case 3:
                         speed = 5;
                         pitch = 5;
-                        sharedPreferencePlayer.setPreferenceInt(context, "pos", 3);
+                        sharedPreferencePlayer.setPreferenceInt(context, "playback_position", 3);
                         break;
                     case 4:
                         speed = 2f;
                         pitch = 2f;
-                        sharedPreferencePlayer.setPreferenceInt(context, "pos", 5);
+                        sharedPreferencePlayer.setPreferenceInt(context, "playback_position", 4);
                         break;
+                    case 0:
                     default:
                         speed = 1f;
                         pitch = 1f;
-                        sharedPreferencePlayer.setPreferenceInt(context, "pos", 2);
+                        sharedPreferencePlayer.setPreferenceInt(context, "playback_position", 2);
                         break;
-
-
                 }
                 PlaybackParameters param = new PlaybackParameters(speed, pitch);
                 mMediaPlayer.setPlaybackParameters(param);
@@ -1094,7 +1087,7 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
 
         @Override
         public void onDrmSessionManagerError(Exception e) {
-            Toast.makeText(context, /*e.getMessage()*/ "Error in DRM", Toast.LENGTH_LONG).show();
+//            Toast.makeText(context, /*e.getMessage()*/ "Error in DRM", Toast.LENGTH_LONG).show();
         }
 
         @Override
