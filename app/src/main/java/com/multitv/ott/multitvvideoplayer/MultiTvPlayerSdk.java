@@ -888,7 +888,7 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
         if (dialog != null && dialog.isShowing())
             dialog.dismiss();
 
-        int position = sharedPreferencePlayer.getPreferencesInt(context, "playback_position", 2);
+        int position = sharedPreferencePlayer.getPreferencesInt(context, "player_playback_position", 2);
 
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -903,31 +903,30 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
                 float speed = 1f;
                 float pitch = 1f;
                 switch (which) {
-                    case 1:
+                    case 0:
                         speed = 0.25f;
                         pitch = 0.25f;
-                        sharedPreferencePlayer.setPreferenceInt(context, "playback_position", 0);
+                        sharedPreferencePlayer.setPreferenceInt(context, "player_playback_position", 0);
                         break;
-                    case 2:
+                    case 1:
                         speed = 0.5f;
                         pitch = 0.5f;
-                        sharedPreferencePlayer.setPreferenceInt(context, "playback_position", 1);
+                        sharedPreferencePlayer.setPreferenceInt(context, "player_playback_position", 1);
+                        break;
+                    case 2:
+                        speed = 1f;
+                        pitch = 1f;
+                        sharedPreferencePlayer.setPreferenceInt(context, "player_playback_position", 2);
                         break;
                     case 3:
                         speed = 1.5f;
                         pitch = 1.5f;
-                        sharedPreferencePlayer.setPreferenceInt(context, "playback_position", 3);
+                        sharedPreferencePlayer.setPreferenceInt(context, "player_playback_position", 3);
                         break;
                     case 4:
                         speed = 2f;
                         pitch = 2f;
-                        sharedPreferencePlayer.setPreferenceInt(context, "playback_position", 4);
-                        break;
-                    case 0:
-                    default:
-                        speed = 1f;
-                        pitch = 1f;
-                        sharedPreferencePlayer.setPreferenceInt(context, "playback_position", 2);
+                        sharedPreferencePlayer.setPreferenceInt(context, "player_playback_position", 4);
                         break;
                 }
                 PlaybackParameters param = new PlaybackParameters(speed, pitch);
