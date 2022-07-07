@@ -914,8 +914,8 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
                         sharedPreferencePlayer.setPreferenceInt(context, "playback_position", 1);
                         break;
                     case 3:
-                        speed = 5;
-                        pitch = 5;
+                        speed = 1.5f;
+                        pitch = 1.5f;
                         sharedPreferencePlayer.setPreferenceInt(context, "playback_position", 3);
                         break;
                     case 4:
