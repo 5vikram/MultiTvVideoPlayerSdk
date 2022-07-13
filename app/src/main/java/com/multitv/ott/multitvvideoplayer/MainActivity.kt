@@ -31,6 +31,7 @@ class MainActivity : AppCompatActivity(), VideoPlayerSdkCallBackListener {
             )
         )
         startPlayer()
+
     }
 
     override fun onPictureInPictureModeChanged(
