@@ -3,6 +3,7 @@ pluginManagement {
         gradlePluginPortal()
         google()
         mavenCentral()
+        maven { url "https://plugins.gradle.org/m2/" }
     }
 }
 dependencyResolutionManagement {
@@ -15,3 +16,10 @@ dependencyResolutionManagement {
 }
 rootProject.name = "MultiTvVideoPlayer"
 include ':app'
+include ':drmsdk'
+
+/*includeBuild('../source') {
+    dependencySubstitution {
+        substitute module('com.github.kezong:fat-aar') using project(':')
+    }
+}*/

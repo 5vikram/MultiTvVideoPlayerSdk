@@ -1,7 +1,9 @@
 package com.multitv.ott.multitvvideoplayer;
 
-import androidx.multidex.MultiDex;
-import androidx.multidex.MultiDexApplication;
+
+
+
+import android.app.Application;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -12,7 +14,7 @@ import com.android.volley.toolbox.Volley;
 import com.multitv.ott.multitvvideoplayer.utils.VideoPlayerNukeSSLCerts;
 
 
-public class VideoPlayerAppController extends MultiDexApplication {
+public class VideoPlayerAppController extends Application {
     public static final String TAG = VideoPlayerAppController.class.getSimpleName();
     private RequestQueue mRequestQueue;
     private static VideoPlayerAppController mInstance;
@@ -20,10 +22,11 @@ public class VideoPlayerAppController extends MultiDexApplication {
 
     @Override
     public void onCreate() {
+       // MultiDex.install(this);
         super.onCreate();
 
         mInstance = this;
-        MultiDex.install(this);
+
         new VideoPlayerNukeSSLCerts().nuke();
 
     }

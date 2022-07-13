@@ -1,18 +1,19 @@
 plugins {
-    id 'com.android.application'
+    id 'com.android.library'
 }
+apply plugin: 'com.kezong.fat-aar'
 apply plugin: 'kotlin-android'
 
 android {
     compileSdk 32
 
     defaultConfig {
-        applicationId "com.multitv.ott.multitvvideoplayer"
+       // applicationId "com.multitv.ott.multitvvideoplayer"
         minSdk 21
         targetSdk 32
         versionCode 1
         versionName "1.0"
-        multiDexEnabled true
+        //multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -26,6 +27,19 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+   /* dexOptions {
+        jumboMode = true
+        incremental true
+        // here heap size give 4g i got this thing from https://groups.google.com/forum/#!topic/adt-dev/P_TLBTyFWVY
+
+        javaMaxHeapSize "4g"
+    }*/
+}
+repositories {
+    flatDir {
+        dirs 'libs/'
+    }
 }
 
 dependencies {
@@ -38,10 +52,10 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
     ext.exoplayer_version= "2.16.1"
-    api "com.google.android.exoplayer:exoplayer-core:$exoplayer_version"
-    api "com.google.android.exoplayer:exoplayer-ui:$exoplayer_version"
-    api "com.google.android.exoplayer:exoplayer-hls:$exoplayer_version"
-    api "com.google.android.exoplayer:exoplayer-dash:$exoplayer_version"
+    implementation "com.google.android.exoplayer:exoplayer-core:$exoplayer_version"
+    implementation "com.google.android.exoplayer:exoplayer-ui:$exoplayer_version"
+    implementation "com.google.android.exoplayer:exoplayer-hls:$exoplayer_version"
+    implementation "com.google.android.exoplayer:exoplayer-dash:$exoplayer_version"
     //api 'com.google.android.exoplayer:extension-ima:2.11.1'
     implementation 'com.google.android.exoplayer:extension-ima:2.16.1'
 
@@ -53,10 +67,13 @@ dependencies {
 
     implementation 'com.android.volley:volley:1.2.1'
     implementation 'org.jsoup:jsoup:1.10.3'
-    implementation 'androidx.multidex:multidex:2.0.0'
+   // implementation 'androidx.multidex:multidex:2.0.0'
 
     implementation 'com.github.bumptech.glide:glide:4.13.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.13.0'
 
-    api files('libs/PallyconWVMSDK.aar')
+    //api files('libs/PallyconWVMSDK.aar')
+
+    embed project(path: ':drmsdk', configuration: 'default')
+
 }

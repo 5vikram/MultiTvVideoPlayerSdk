@@ -84,7 +84,7 @@
     </declare-styleable>
 
     <declare-styleable name="DefaultTimeBar">
-        <attr name="bar_height" format="dimension" />
+        <attr name="bar_height_sdk" format="dimension" />
         <attr name="touch_target_height" format="dimension" />
         <attr name="ad_marker_width" format="dimension" />
         <attr name="scrubber_enabled_size" format="dimension" />
