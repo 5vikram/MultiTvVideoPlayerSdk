@@ -534,7 +534,7 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
 
 
         LoadControl customLoadControl = new DefaultLoadControl.Builder()
-                .setBufferDurationsMs(15000, 50000, 1, 1)
+                .setBufferDurationsMs(5000, 50000, 1, 1)
                 .setAllocator(new DefaultAllocator(true,32*1024))
                 .setTargetBufferBytes(C.LENGTH_UNSET)
                 .setPrioritizeTimeOverSizeThresholds(true)
