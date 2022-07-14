@@ -35,7 +35,9 @@ import androidx.core.content.ContextCompat;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.Target;
 import com.google.android.exoplayer2.C;
+import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.LoadControl;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.PlaybackException;
 import com.google.android.exoplayer2.PlaybackParameters;
@@ -54,6 +56,7 @@ import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.ui.StyledPlayerView;
 import com.google.android.exoplayer2.upstream.DataSource;
+import com.google.android.exoplayer2.upstream.DefaultAllocator;
 import com.google.android.exoplayer2.upstream.DefaultDataSource;
 import com.google.android.exoplayer2.util.MimeTypes;
 import com.google.common.collect.ImmutableList;
@@ -530,16 +533,25 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
 //        ToastMessage.showLogs(ToastMessage.LogType.DEBUG, TAG, "Content url is " + videoUrl);
 
 
+        LoadControl customLoadControl = new DefaultLoadControl.Builder()
+                .setBufferDurationsMs(15000, 50000, 1, 1)
+                .setAllocator(new DefaultAllocator(true,32*1024))
+                .setTargetBufferBytes(C.LENGTH_UNSET)
+                .setPrioritizeTimeOverSizeThresholds(true)
+                .setBackBuffer(0,false)
+                .build();
+
+
         if (adsUrl != null && !TextUtils.isEmpty(adsUrl)) {
             DataSource.Factory dataSourceFactory = new DefaultDataSource.Factory(context);
             MediaSourceFactory mediaSourceFactory =
                     new DefaultMediaSourceFactory(dataSourceFactory)
                             .setAdsLoaderProvider(unusedAdTagUri -> adsLoader)
                             .setAdViewProvider(simpleExoPlayerView);
-            mMediaPlayer = new ExoPlayer.Builder(context).setMediaSourceFactory(mediaSourceFactory).setTrackSelector(trackSelector).build();
+            mMediaPlayer = new ExoPlayer.Builder(context).setMediaSourceFactory(mediaSourceFactory).setTrackSelector(trackSelector).setLoadControl(customLoadControl).build();
             adsLoader = new ImaAdsLoader.Builder(/* context= */ context).build();
         } else {
-            mMediaPlayer = new ExoPlayer.Builder(context).setTrackSelector(trackSelector).build();
+            mMediaPlayer = new ExoPlayer.Builder(context).setTrackSelector(trackSelector).setLoadControl(customLoadControl).build();
         }
 
 
