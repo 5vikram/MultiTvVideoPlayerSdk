@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".VikramVideoPlayerTestActivity">
 
-    <com.multitv.ott.multitvvideoplayer.MultiTvPlayerSdk
+    <com.multitv.ott.multitvvideoplayer.ShortVideoPlayer
         android:id="@+id/vikramExoVideoPlayer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
