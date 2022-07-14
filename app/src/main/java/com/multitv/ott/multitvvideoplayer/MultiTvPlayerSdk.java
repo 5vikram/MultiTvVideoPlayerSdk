@@ -533,13 +533,13 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
 //        ToastMessage.showLogs(ToastMessage.LogType.DEBUG, TAG, "Content url is " + videoUrl);
 
 
-        LoadControl customLoadControl = new DefaultLoadControl.Builder()
+    /*    LoadControl customLoadControl = new DefaultLoadControl.Builder()
                 .setBufferDurationsMs(5000, 50000, 1, 1)
                 .setAllocator(new DefaultAllocator(true,32*1024))
                 .setTargetBufferBytes(C.LENGTH_UNSET)
                 .setPrioritizeTimeOverSizeThresholds(true)
                 .setBackBuffer(0,false)
-                .build();
+                .build();*/
 
 
         if (adsUrl != null && !TextUtils.isEmpty(adsUrl)) {
@@ -548,10 +548,10 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
                     new DefaultMediaSourceFactory(dataSourceFactory)
                             .setAdsLoaderProvider(unusedAdTagUri -> adsLoader)
                             .setAdViewProvider(simpleExoPlayerView);
-            mMediaPlayer = new ExoPlayer.Builder(context).setMediaSourceFactory(mediaSourceFactory).setTrackSelector(trackSelector).setLoadControl(customLoadControl).build();
+            mMediaPlayer = new ExoPlayer.Builder(context).setMediaSourceFactory(mediaSourceFactory).setTrackSelector(trackSelector).build();
             adsLoader = new ImaAdsLoader.Builder(/* context= */ context).build();
         } else {
-            mMediaPlayer = new ExoPlayer.Builder(context).setTrackSelector(trackSelector).setLoadControl(customLoadControl).build();
+            mMediaPlayer = new ExoPlayer.Builder(context).setTrackSelector(trackSelector).build();
         }
 
 
