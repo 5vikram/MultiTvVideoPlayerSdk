@@ -38,10 +38,12 @@ import com.google.android.exoplayer2.source.MediaSourceFactory;
 import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
+import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 import com.google.android.exoplayer2.ui.StyledPlayerView;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultDataSource;
 import com.google.android.exoplayer2.util.MimeTypes;
+import com.google.android.exoplayer2.video.VideoSize;
 import com.google.common.collect.ImmutableList;
 import com.multitv.ott.multitvvideoplayer.custom.CountDownTimerWithPause;
 import com.multitv.ott.multitvvideoplayer.database.SharedPreferencePlayer;
@@ -438,6 +440,7 @@ public class ShortVideoPlayer extends FrameLayout implements View.OnClickListene
             simpleExoPlayerView.setControllerShowTimeoutMs(DEFAULT_TIMEOUT_MS);
             simpleExoPlayerView.setControllerHideDuringAds(true);
 
+
             MediaItem mediaItem = null;
             MediaItem.SubtitleConfiguration subtitle = null;
 
@@ -635,6 +638,17 @@ public class ShortVideoPlayer extends FrameLayout implements View.OnClickListene
 
         @Override
         public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
+
+        }
+
+        @Override
+        public void onVideoSizeChanged(VideoSize videoSize) {
+            Player.Listener.super.onVideoSizeChanged(videoSize);
+
+            if (videoSize.width > videoSize.height)
+                simpleExoPlayerView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FIT);
+            else
+                simpleExoPlayerView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FILL);
 
         }
     };
