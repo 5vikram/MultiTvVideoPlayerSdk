@@ -633,10 +633,9 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
                 } else {
                     if (adsUrl != null && !TextUtils.isEmpty(adsUrl)) {
                         adsLoader.setPlayer(mMediaPlayer);
-                        adsLoader.focusSkipButton();
+                        //adsLoader.focusSkipButton();
                         Uri adTagUri = Uri.parse(adsUrl);
                         mediaItem = new MediaItem.Builder()
-                                .setSubtitleConfigurations(ImmutableList.of(subtitle))
                                 .setUri(videoUrl)
                                 .setAdsConfiguration(new MediaItem.AdsConfiguration.Builder(adTagUri).build())
                                 .build();
