@@ -508,7 +508,7 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
     public void releaseVideoPlayer() {
         if (mMediaPlayer != null && simpleExoPlayerView != null) {
 
-            sendAnalaticsData(context, userId, contentId, contentTitle, contentTitle);
+            sendAnalaticsData(context, userId, contentId, contentTitle, token);
 
             simpleExoPlayerView.getPlayer().release();
             mMediaPlayer.release();
@@ -535,10 +535,10 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
 
         LoadControl customLoadControl = new DefaultLoadControl.Builder()
                 .setBufferDurationsMs(1000, 50000, 1000, 1)
-                .setAllocator(new DefaultAllocator(true,32*1024))
+                .setAllocator(new DefaultAllocator(true, 32 * 1024))
                 .setTargetBufferBytes(C.LENGTH_UNSET)
                 .setPrioritizeTimeOverSizeThresholds(true)
-                .setBackBuffer(0,false)
+                .setBackBuffer(0, false)
                 .build();
 
 
@@ -550,6 +550,7 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
                             .setAdViewProvider(simpleExoPlayerView);
             mMediaPlayer = new ExoPlayer.Builder(context).setMediaSourceFactory(mediaSourceFactory).setTrackSelector(trackSelector).setLoadControl(customLoadControl).build();
             adsLoader = new ImaAdsLoader.Builder(/* context= */ context).build();
+
         } else {
             mMediaPlayer = new ExoPlayer.Builder(context).setTrackSelector(trackSelector).setLoadControl(customLoadControl).build();
         }
@@ -608,7 +609,7 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
                 MediaSource playerMediaSource = new ExoUttils().buildMediaSource(context, mediaItem, videoUrl, drmSessionManager);
                 mMediaPlayer.setMediaSource(playerMediaSource);
             } else {
-                if (subtitle != null && subtitle.uri != null) {
+                if (subtitle != null) {
                     /*MediaSource playerMediaSource = new ExoUttils().buildMediaSource(context, mediaItem, videoUrl, drmSessionManager);
                     MediaSource mediaSource = new MergingMediaSource(mediaSources);
                     mMediaPlayer.setMediaSource(mediaSource);*/
@@ -617,7 +618,7 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
                         adsLoader.setPlayer(mMediaPlayer);
                         Uri adTagUri = Uri.parse(adsUrl);
                         mediaItem = new MediaItem.Builder()
-                                /*.setSubtitleConfigurations(ImmutableList.of(subtitle))*/
+                                .setSubtitleConfigurations(ImmutableList.of(subtitle))
                                 .setUri(videoUrl)
                                 .setAdsConfiguration(new MediaItem.AdsConfiguration.Builder(adTagUri).build())
                                 .build();
@@ -632,6 +633,7 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
                 } else {
                     if (adsUrl != null && !TextUtils.isEmpty(adsUrl)) {
                         adsLoader.setPlayer(mMediaPlayer);
+                        adsLoader.focusSkipButton();
                         Uri adTagUri = Uri.parse(adsUrl);
                         mediaItem = new MediaItem.Builder()
                                 .setSubtitleConfigurations(ImmutableList.of(subtitle))
