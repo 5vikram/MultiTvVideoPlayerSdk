@@ -281,10 +281,9 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
         updateAll();
     }
 
-    @Override
-    protected void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        int orientation = getResources().getConfiguration().orientation;
+
+    public void onConfigrationChanged(Configuration newConfig) {
+        int orientation = newConfig.orientation;
         if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
             videoLockButton.setVisibility(View.GONE);
             videoUnLockButton.setVisibility(View.GONE);
@@ -299,6 +298,26 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
         }
     }
 
+    @Override
+    protected void onConfigurationChanged(Configuration newConfig) {
+
+        int orientation = getResources().getConfiguration().orientation;
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            videoLockButton.setVisibility(View.GONE);
+            videoUnLockButton.setVisibility(View.GONE);
+        } else if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+            if (isScreenLockEnable) {
+                videoLockButton.setVisibility(View.GONE);
+                videoUnLockButton.setVisibility(View.VISIBLE);
+            } else {
+                videoLockButton.setVisibility(View.VISIBLE);
+                videoUnLockButton.setVisibility(View.GONE);
+            }
+        }
+
+        super.onConfigurationChanged(newConfig);
+    }
+
     public void hideController() {
         centerButtonLayout.setVisibility(View.GONE);
         videoProgressLayout.setVisibility(View.GONE);
@@ -311,6 +330,7 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
         videoProgressLayout.setVisibility(View.VISIBLE);
         durationlayout.setVisibility(View.VISIBLE);
         videoMenuLayout.setVisibility(View.VISIBLE);
+
     }
 
     private void updateAll() {
@@ -427,12 +447,22 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
                     ((Activity) getContext()).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
                     showSystemBar();
                     videoRotationButton.setImageResource(R.drawable.rotate);
+                    videoLockButton.setVisibility(View.GONE);
+                    videoUnLockButton.setVisibility(View.GONE);
 
                 } else if (orientation == Configuration.ORIENTATION_PORTRAIT) {
                     ((Activity) getContext()).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
                     ((Activity) getContext()).getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
                     hideSystemBars();
                     videoRotationButton.setImageResource(R.drawable.minimize);
+
+                    if (isScreenLockEnable) {
+                        videoLockButton.setVisibility(View.GONE);
+                        videoUnLockButton.setVisibility(View.VISIBLE);
+                    } else {
+                        videoLockButton.setVisibility(View.VISIBLE);
+                        videoUnLockButton.setVisibility(View.GONE);
+                    }
                 }
 
             }
