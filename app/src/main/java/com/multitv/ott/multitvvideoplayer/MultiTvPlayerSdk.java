@@ -288,13 +288,7 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
             videoLockButton.setVisibility(View.GONE);
             videoUnLockButton.setVisibility(View.GONE);
         } else if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-            if (isScreenLockEnable) {
-                videoLockButton.setVisibility(View.GONE);
-                videoUnLockButton.setVisibility(View.VISIBLE);
-            } else {
-                videoLockButton.setVisibility(View.VISIBLE);
-                videoUnLockButton.setVisibility(View.GONE);
-            }
+            videoLockUnlockStatus();
         }
     }
 
@@ -430,6 +424,17 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
         initViews();
     }
 
+
+    private void videoLockUnlockStatus(){
+        if (isScreenLockEnable) {
+            videoLockButton.setVisibility(View.GONE);
+            videoUnLockButton.setVisibility(View.VISIBLE);
+        } else {
+            videoLockButton.setVisibility(View.VISIBLE);
+            videoUnLockButton.setVisibility(View.GONE);
+        }
+    }
+
     // init view and view group here
     private void initViews() {
 //        ToastMessage.showLogs(ToastMessage.LogType.ERROR, "Video Player:::", "initViews()");
@@ -455,14 +460,8 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
                     ((Activity) getContext()).getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
                     hideSystemBars();
                     videoRotationButton.setImageResource(R.drawable.minimize);
+                    videoLockUnlockStatus();
 
-                    if (isScreenLockEnable) {
-                        videoLockButton.setVisibility(View.GONE);
-                        videoUnLockButton.setVisibility(View.VISIBLE);
-                    } else {
-                        videoLockButton.setVisibility(View.VISIBLE);
-                        videoUnLockButton.setVisibility(View.GONE);
-                    }
                 }
 
             }
