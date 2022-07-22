@@ -15,6 +15,7 @@ import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
@@ -135,6 +136,9 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
     private ImaAdsLoader adsLoader;
     private String adsUrl;
     private boolean isScreenLockEnable;
+    private boolean isAttachedToWindow;
+    private long hideAtMs;
+
 
     public MultiTvPlayerSdk(Context context, AttributeSet attrs) {
         this((AppCompatActivity) context, attrs, 0);
@@ -279,8 +283,33 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
+        isAttachedToWindow = true;
         updateAll();
     }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        isAttachedToWindow = false;
+        removeCallbacks(hideAction);
+
+        if (hideAtMs != C.TIME_UNSET) {
+            long delayMs = hideAtMs - SystemClock.uptimeMillis();
+            if (delayMs <= 0) {
+                hideController();
+            } else {
+                postDelayed(hideAction, delayMs);
+            }
+        }
+    }
+
+
+    private final Runnable hideAction = new Runnable() {
+        @Override
+        public void run() {
+            hideController();
+        }
+    };
 
     @Override
     protected void onConfigurationChanged(Configuration newConfig) {
@@ -296,18 +325,39 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
         super.onConfigurationChanged(newConfig);
     }
 
+
+    private void hideAfterTimeout() {
+        removeCallbacks(hideAction);
+        if (5000 > 0) {
+            hideAtMs = SystemClock.uptimeMillis() + 5000;
+            if (isAttachedToWindow) {
+                postDelayed(hideAction, 5000);
+            }
+        } else {
+            hideAtMs = C.TIME_UNSET;
+        }
+    }
+
     public void hideController() {
         centerButtonLayout.setVisibility(View.GONE);
         videoProgressLayout.setVisibility(View.GONE);
         durationlayout.setVisibility(View.GONE);
         videoMenuLayout.setVisibility(View.GONE);
+
+        removeCallbacks(hideAction);
+        hideAtMs = C.TIME_UNSET;
     }
 
     public void showController() {
-        centerButtonLayout.setVisibility(View.VISIBLE);
-        videoProgressLayout.setVisibility(View.VISIBLE);
-        durationlayout.setVisibility(View.VISIBLE);
-        videoMenuLayout.setVisibility(View.VISIBLE);
+        if (!isScreenLockEnable) {
+            centerButtonLayout.setVisibility(View.VISIBLE);
+            videoProgressLayout.setVisibility(View.VISIBLE);
+            durationlayout.setVisibility(View.VISIBLE);
+            videoMenuLayout.setVisibility(View.VISIBLE);
+        }
+        updateAll();
+        requestPlayPauseFocus();
+        hideAfterTimeout();
 
     }
 
@@ -451,8 +501,18 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
             }
         });
 
-/*
         simpleExoPlayerView.setOnTouchListener(new OnSwipeTouchListener(context) {
+
+            @Override
+            public void onClick() {
+                super.onClick();
+                if (isDrmContent) {
+                    hideController();
+                } else {
+                    showController();
+                }
+            }
+
             @Override
             public void onSwipeLeft() {
                 VideoPlayerTracer.error("Swipe:::", "onSwipeLeft()");
@@ -477,7 +537,6 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
                 super.onSwipeUp();
             }
         });
-*/
 
         this.findViewById(R.id.speed_btn).setOnClickListener(new OnClickListener() {
             @Override
@@ -1186,6 +1245,7 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
         //findViewById(R.id.centerButtonLayout).setVisibility(View.GONE);
         previewFrameLayout.setVisibility(View.VISIBLE);
         pauseVideoPlayer();
+        removeCallbacks(hideAction);
     }
 
     @Override
