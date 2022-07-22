@@ -114,8 +114,8 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
     private CountDownTimerWithPause countDownTimer;
     private final String TAG = "VikramExoVideoPlayer";
 
-    private LinearLayout errorRetryLayout, bufferingProgressBarLayout, circularProgressLayout, centerButtonLayout;
-    private ImageView pictureInPicture, previewImageView, setting, videoRotationButton, videoPerviousButton, videoNextButton, VideoRenuButton, videoFarwardButton, videoPlayButton, videoPauseButton;
+    private LinearLayout errorRetryLayout, videoMenuLayout, durationlayout, videoProgressLayout, bufferingProgressBarLayout, circularProgressLayout, centerButtonLayout;
+    private ImageView pictureInPicture, previewImageView, videoLockButton, videoUnLockButton, setting, videoRotationButton, videoPerviousButton, videoNextButton, VideoRenuButton, videoFarwardButton, videoPlayButton, videoPauseButton;
     private PreviewTimeBar playerProgress;
     private TextView currentDurationPlayTv;
     private FrameLayout previewFrameLayout;
@@ -133,6 +133,7 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
 
     private ImaAdsLoader adsLoader;
     private String adsUrl;
+    private boolean isScreenLockEnable;
 
     public MultiTvPlayerSdk(Context context, AttributeSet attrs) {
         this((AppCompatActivity) context, attrs, 0);
@@ -164,8 +165,11 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
     protected void onFinishInflate() {
         View view = LayoutInflater.from(getContext()).inflate(R.layout.player_layout, this);
         errorRetryLayout = view.findViewById(R.id.errorRetryLayout);
+        durationlayout = view.findViewById(R.id.durationlayout);
+        videoMenuLayout = view.findViewById(R.id.videoMenuLayout);
         bufferingProgressBarLayout = view.findViewById(R.id.bufferingProgressBarLayout);
         circularProgressLayout = view.findViewById(R.id.circularProgressLayout);
+        videoProgressLayout = findViewById(R.id.video_progress_layout);
         setting = view.findViewById(R.id.settings_btn);
         previewFrameLayout = view.findViewById(R.id.previewFrameLayout);
         setting.setOnClickListener(this);
@@ -177,6 +181,8 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
         videoFarwardButton = view.findViewById(R.id.exo_ffwd);
         videoPlayButton = view.findViewById(R.id.exo_play);
         videoPauseButton = view.findViewById(R.id.exo_pause);
+        videoLockButton = view.findViewById(R.id.exo_lock);
+        videoUnLockButton = view.findViewById(R.id.exo_unlock);
 
         playerProgress = (PreviewTimeBar) findViewById(R.id.exo_progress);
         currentDurationPlayTv = view.findViewById(R.id.exo_position);
@@ -192,6 +198,26 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
 
         videoNextButton.setVisibility(View.GONE);
         videoPerviousButton.setVisibility(View.GONE);
+
+        videoUnLockButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                isScreenLockEnable = false;
+                videoUnLockButton.setVisibility(GONE);
+                videoLockButton.setVisibility(VISIBLE);
+                showController();
+            }
+        });
+
+        videoLockButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                isScreenLockEnable = true;
+                videoUnLockButton.setVisibility(VISIBLE);
+                videoLockButton.setVisibility(GONE);
+                hideController();
+            }
+        });
 
         pictureInPicture.setOnClickListener(new OnClickListener() {
             @Override
@@ -253,6 +279,37 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         updateAll();
+    }
+
+    @Override
+    protected void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        int orientation = getResources().getConfiguration().orientation;
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE && !isScreenLockEnable) {
+            ((Activity) getContext()).setRequestedOrientation(SCREEN_ORIENTATION_PORTRAIT);
+            ((Activity) getContext()).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            showSystemBar();
+            videoRotationButton.setImageResource(R.drawable.rotate);
+        } else if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+            ((Activity) getContext()).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+            ((Activity) getContext()).getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            hideSystemBars();
+            videoRotationButton.setImageResource(R.drawable.minimize);
+        }
+    }
+
+    public void hideController() {
+        centerButtonLayout.setVisibility(View.GONE);
+        videoProgressLayout.setVisibility(View.GONE);
+        durationlayout.setVisibility(View.GONE);
+        videoMenuLayout.setVisibility(View.GONE);
+    }
+
+    public void showController() {
+        centerButtonLayout.setVisibility(View.VISIBLE);
+        videoProgressLayout.setVisibility(View.VISIBLE);
+        durationlayout.setVisibility(View.VISIBLE);
+        videoMenuLayout.setVisibility(View.VISIBLE);
     }
 
     private void updateAll() {
