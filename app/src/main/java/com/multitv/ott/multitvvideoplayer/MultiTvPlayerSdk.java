@@ -451,6 +451,7 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
             }
         });
 
+/*
         simpleExoPlayerView.setOnTouchListener(new OnSwipeTouchListener(context) {
             @Override
             public void onSwipeLeft() {
@@ -476,6 +477,7 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
                 super.onSwipeUp();
             }
         });
+*/
 
         this.findViewById(R.id.speed_btn).setOnClickListener(new OnClickListener() {
             @Override
