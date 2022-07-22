@@ -73,6 +73,7 @@ import com.multitv.ott.multitvvideoplayer.popup.TrackSelectionDialog;
 import com.multitv.ott.multitvvideoplayer.timebar.PreviewTimeBar;
 import com.multitv.ott.multitvvideoplayer.timebar.previewseekbar.PreviewBar;
 import com.multitv.ott.multitvvideoplayer.timebar.previewseekbar.PreviewLoader;
+import com.multitv.ott.multitvvideoplayer.touchevent.OnSwipeTouchListener;
 import com.multitv.ott.multitvvideoplayer.utils.AppSessionUtil;
 import com.multitv.ott.multitvvideoplayer.utils.CommonUtils;
 import com.multitv.ott.multitvvideoplayer.utils.ContentType;
@@ -281,17 +282,6 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
         updateAll();
     }
 
-
-    public void onConfigrationChanged(Configuration newConfig) {
-        int orientation = newConfig.orientation;
-        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            videoLockUnlockStatus();
-        } else if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-            videoLockButton.setVisibility(View.GONE);
-            videoUnLockButton.setVisibility(View.GONE);
-        }
-    }
-
     @Override
     protected void onConfigurationChanged(Configuration newConfig) {
 
@@ -420,12 +410,12 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
 
 
     private void videoLockUnlockStatus() {
-        if (!isScreenLockEnable) {
-            videoLockButton.setVisibility(View.GONE);
-            videoUnLockButton.setVisibility(View.VISIBLE);
-        } else {
+        if (isScreenLockEnable) {
             videoLockButton.setVisibility(View.VISIBLE);
             videoUnLockButton.setVisibility(View.GONE);
+        } else {
+            videoLockButton.setVisibility(View.GONE);
+            videoUnLockButton.setVisibility(View.VISIBLE);
         }
     }
 
@@ -458,6 +448,32 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
 
                 }
 
+            }
+        });
+
+        simpleExoPlayerView.setOnTouchListener(new OnSwipeTouchListener(context) {
+            @Override
+            public void onSwipeLeft() {
+                VideoPlayerTracer.error("Swipe:::", "onSwipeLeft()");
+                super.onSwipeLeft();
+            }
+
+            @Override
+            public void onSwipeRight() {
+                VideoPlayerTracer.error("Swipe:::", "onSwipeRight()");
+                super.onSwipeRight();
+            }
+
+            @Override
+            public void onSwipeDown() {
+                VideoPlayerTracer.error("Swipe:::", "onSwipeDown()");
+                super.onSwipeDown();
+            }
+
+            @Override
+            public void onSwipeUp() {
+                VideoPlayerTracer.error("Swipe:::", "onSwipeUp()");
+                super.onSwipeUp();
             }
         });
 
