@@ -280,23 +280,24 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
         super.onAttachedToWindow();
         updateAll();
     }
-/*
+
     @Override
     protected void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         int orientation = getResources().getConfiguration().orientation;
-        if (orientation == Configuration.ORIENTATION_LANDSCAPE && !isScreenLockEnable) {
-            ((Activity) getContext()).setRequestedOrientation(SCREEN_ORIENTATION_PORTRAIT);
-            ((Activity) getContext()).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-            showSystemBar();
-            videoRotationButton.setImageResource(R.drawable.rotate);
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            videoLockButton.setVisibility(View.GONE);
+            videoUnLockButton.setVisibility(View.GONE);
         } else if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-            ((Activity) getContext()).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-            ((Activity) getContext()).getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-            hideSystemBars();
-            videoRotationButton.setImageResource(R.drawable.minimize);
+            if (isScreenLockEnable) {
+                videoLockButton.setVisibility(View.GONE);
+                videoUnLockButton.setVisibility(View.VISIBLE);
+            } else {
+                videoLockButton.setVisibility(View.VISIBLE);
+                videoUnLockButton.setVisibility(View.GONE);
+            }
         }
-    }*/
+    }
 
     public void hideController() {
         centerButtonLayout.setVisibility(View.GONE);
