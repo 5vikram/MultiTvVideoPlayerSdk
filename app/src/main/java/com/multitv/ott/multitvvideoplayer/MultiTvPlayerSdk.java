@@ -506,11 +506,12 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
             @Override
             public void onClick() {
                 super.onClick();
-                if (isDrmContent) {
+                if (isScreenLockEnable) {
                     hideController();
                 } else {
                     showController();
                 }
+                VideoPlayerTracer.error("Swipe:::", "onClick()");
             }
 
             @Override
