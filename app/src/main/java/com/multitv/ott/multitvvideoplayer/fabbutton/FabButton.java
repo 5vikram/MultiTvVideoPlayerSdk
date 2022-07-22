@@ -24,7 +24,6 @@
 
 package com.multitv.ott.multitvvideoplayer.fabbutton;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
@@ -100,7 +99,7 @@ public class FabButton extends FrameLayout implements CircleImageView.OnFabViewL
             animDuration = a.getInteger(R.styleable.CircleImageView_android_indeterminateDuration, animDuration);
             icon = a.getResourceId(R.styleable.CircleImageView_android_src, icon);
             ringWidthRatio = a.getFloat(R.styleable.CircleImageView_fbb_progressWidthRatio, ringWidthRatio);
-            endBitmapResource = a.getResourceId(R.styleable.CircleImageView_fbb_endBitmap, R.drawable.ic_fab_complete);
+            endBitmapResource = a.getResourceId(R.styleable.CircleImageView_fbb_endBitmap, R.drawable.fab_done);
             showEndBitmap = a.getBoolean(R.styleable.CircleImageView_fbb_showEndBitmap, false);
             hideProgressOnComplete = a.getBoolean(R.styleable.CircleImageView_fbb_hideProgressOnComplete, false);
             circle.setShowShadow(a.getBoolean(R.styleable.CircleImageView_fbb_showShadow, true));

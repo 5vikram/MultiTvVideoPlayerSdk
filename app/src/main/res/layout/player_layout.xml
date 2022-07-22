@@ -75,7 +75,7 @@
             android:max="100"
             android:src="@android:drawable/ic_media_play"
             app:fbb_autoStart="false"
-            app:fbb_endBitmap="@drawable/ic_fab_complete"
+            app:fbb_endBitmap="@drawable/fab_done"
             app:fbb_hideProgressOnComplete="false"
             app:fbb_progressColor="@android:color/white"
             app:fbb_progressWidthRatio="0.12"
