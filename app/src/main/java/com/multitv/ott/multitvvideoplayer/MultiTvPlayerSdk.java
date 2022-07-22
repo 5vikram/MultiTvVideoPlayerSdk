@@ -280,7 +280,7 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
         super.onAttachedToWindow();
         updateAll();
     }
-
+/*
     @Override
     protected void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
@@ -296,7 +296,7 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
             hideSystemBars();
             videoRotationButton.setImageResource(R.drawable.minimize);
         }
-    }
+    }*/
 
     public void hideController() {
         centerButtonLayout.setVisibility(View.GONE);
