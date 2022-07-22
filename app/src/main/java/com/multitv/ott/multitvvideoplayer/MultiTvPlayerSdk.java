@@ -195,6 +195,8 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
         videoNextButton.setVisibility(View.GONE);
         videoPerviousButton.setVisibility(View.GONE);
 
+        simpleExoPlayerView = view.findViewById(R.id.videoPlayer);
+        videoRotationButton = view.findViewById(R.id.enter_full_screen);
 
         playerProgress.addOnScrubListener(this);
         playerProgress.setPreviewLoader(this);
@@ -203,6 +205,86 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
 
         videoNextButton.setVisibility(View.GONE);
         videoPerviousButton.setVisibility(View.GONE);
+
+
+        videoRotationButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int orientation = getContext().getResources().getConfiguration().orientation;
+
+                if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                    ((Activity) getContext()).setRequestedOrientation(SCREEN_ORIENTATION_PORTRAIT);
+                    ((Activity) getContext()).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                    showSystemBar();
+                    videoRotationButton.setImageResource(R.drawable.rotate);
+                    videoLockButton.setVisibility(View.GONE);
+                    videoUnLockButton.setVisibility(View.GONE);
+
+                } else if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+                    ((Activity) getContext()).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                    ((Activity) getContext()).getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                    hideSystemBars();
+                    videoRotationButton.setImageResource(R.drawable.minimize);
+                    videoLockUnlockStatus();
+
+                }
+
+            }
+        });
+
+        simpleExoPlayerView.setOnTouchListener(new OnSwipeTouchListener(context) {
+
+            @Override
+            public void onClick() {
+                super.onClick();
+                if (isControllerShown)
+                    hideController();
+                else
+                    showController();
+
+                VideoPlayerTracer.error("Swipe:::", "onClick()");
+            }
+
+            @Override
+            public void onSwipeLeft() {
+                VideoPlayerTracer.error("Swipe:::", "onSwipeLeft()");
+                super.onSwipeLeft();
+            }
+
+            @Override
+            public void onSwipeRight() {
+                VideoPlayerTracer.error("Swipe:::", "onSwipeRight()");
+                super.onSwipeRight();
+            }
+
+            @Override
+            public void onSwipeDown() {
+                VideoPlayerTracer.error("Swipe:::", "onSwipeDown()");
+                super.onSwipeDown();
+            }
+
+            @Override
+            public void onSwipeUp() {
+                VideoPlayerTracer.error("Swipe:::", "onSwipeUp()");
+                super.onSwipeUp();
+            }
+        });
+
+        this.findViewById(R.id.speed_btn).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showSpeedControlDailog();
+            }
+        });
+        // simpleExoPlayerView.set
+        errorRetryLayout.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                errorRetryLayout.setVisibility(GONE);
+                initializeMainPlayer(mContentUrl, true);
+            }
+        });
+
 
         videoUnLockButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -284,7 +366,7 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         isAttachedToWindow = true;
-        updateAll();
+        updatePlayPauseButton();
     }
 
     @Override
@@ -356,16 +438,13 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
             durationlayout.setVisibility(View.VISIBLE);
             videoMenuLayout.setVisibility(View.VISIBLE);
         }
-        updateAll();
-        requestPlayPauseFocus();
+        updatePlayPauseButton();
         hideAfterTimeout();
         isControllerShown = true;
 
     }
 
-    private void updateAll() {
-        updatePlayPauseButton();
-    }
+
 
     private void updatePlayPauseButton() {
 
@@ -474,87 +553,9 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
     // init view and view group here
     private void initViews() {
 //        ToastMessage.showLogs(ToastMessage.LogType.ERROR, "Video Player:::", "initViews()");
-        simpleExoPlayerView = this.findViewById(R.id.videoPlayer);
-        videoRotationButton = this.findViewById(R.id.enter_full_screen);
+
         trackSelector = new DefaultTrackSelector(context);
 
-        videoRotationButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int orientation = getContext().getResources().getConfiguration().orientation;
-
-                if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                    ((Activity) getContext()).setRequestedOrientation(SCREEN_ORIENTATION_PORTRAIT);
-                    ((Activity) getContext()).getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-                    showSystemBar();
-                    videoRotationButton.setImageResource(R.drawable.rotate);
-                    videoLockButton.setVisibility(View.GONE);
-                    videoUnLockButton.setVisibility(View.GONE);
-
-                } else if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-                    ((Activity) getContext()).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-                    ((Activity) getContext()).getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-                    hideSystemBars();
-                    videoRotationButton.setImageResource(R.drawable.minimize);
-                    videoLockUnlockStatus();
-
-                }
-
-            }
-        });
-
-        simpleExoPlayerView.setOnTouchListener(new OnSwipeTouchListener(context) {
-
-            @Override
-            public void onClick() {
-                super.onClick();
-                if (isControllerShown)
-                    hideController();
-                else
-                    showController();
-
-                VideoPlayerTracer.error("Swipe:::", "onClick()");
-            }
-
-            @Override
-            public void onSwipeLeft() {
-                VideoPlayerTracer.error("Swipe:::", "onSwipeLeft()");
-                super.onSwipeLeft();
-            }
-
-            @Override
-            public void onSwipeRight() {
-                VideoPlayerTracer.error("Swipe:::", "onSwipeRight()");
-                super.onSwipeRight();
-            }
-
-            @Override
-            public void onSwipeDown() {
-                VideoPlayerTracer.error("Swipe:::", "onSwipeDown()");
-                super.onSwipeDown();
-            }
-
-            @Override
-            public void onSwipeUp() {
-                VideoPlayerTracer.error("Swipe:::", "onSwipeUp()");
-                super.onSwipeUp();
-            }
-        });
-
-        this.findViewById(R.id.speed_btn).setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showSpeedControlDailog();
-            }
-        });
-        // simpleExoPlayerView.set
-        errorRetryLayout.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                errorRetryLayout.setVisibility(GONE);
-                initializeMainPlayer(mContentUrl, true);
-            }
-        });
 
         if (videoPlayerSdkCallBackListener != null)
             videoPlayerSdkCallBackListener.onPlayerReady(mContentUrl);
