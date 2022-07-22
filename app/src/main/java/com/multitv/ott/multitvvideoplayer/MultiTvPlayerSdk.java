@@ -135,7 +135,7 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
 
     private ImaAdsLoader adsLoader;
     private String adsUrl;
-    private boolean isScreenLockEnable;
+    private boolean isScreenLockEnable, isControllerShown;
     private boolean isAttachedToWindow;
     private long hideAtMs;
 
@@ -346,6 +346,7 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
 
         removeCallbacks(hideAction);
         hideAtMs = C.TIME_UNSET;
+        isControllerShown = false;
     }
 
     public void showController() {
@@ -358,6 +359,7 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
         updateAll();
         requestPlayPauseFocus();
         hideAfterTimeout();
+        isControllerShown = true;
 
     }
 
@@ -506,11 +508,11 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
             @Override
             public void onClick() {
                 super.onClick();
-                if (isScreenLockEnable) {
+                if (isControllerShown)
                     hideController();
-                } else {
+                else
                     showController();
-                }
+
                 VideoPlayerTracer.error("Swipe:::", "onClick()");
             }
 
