@@ -285,10 +285,10 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
     public void onConfigrationChanged(Configuration newConfig) {
         int orientation = newConfig.orientation;
         if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            videoLockUnlockStatus();
+        } else if (orientation == Configuration.ORIENTATION_PORTRAIT) {
             videoLockButton.setVisibility(View.GONE);
             videoUnLockButton.setVisibility(View.GONE);
-        } else if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-            videoLockUnlockStatus();
         }
     }
 
@@ -297,16 +297,10 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
 
         int orientation = getResources().getConfiguration().orientation;
         if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            videoLockUnlockStatus();
+        } else if (orientation == Configuration.ORIENTATION_PORTRAIT) {
             videoLockButton.setVisibility(View.GONE);
             videoUnLockButton.setVisibility(View.GONE);
-        } else if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-            if (isScreenLockEnable) {
-                videoLockButton.setVisibility(View.GONE);
-                videoUnLockButton.setVisibility(View.VISIBLE);
-            } else {
-                videoLockButton.setVisibility(View.VISIBLE);
-                videoUnLockButton.setVisibility(View.GONE);
-            }
         }
 
         super.onConfigurationChanged(newConfig);
@@ -425,8 +419,8 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
     }
 
 
-    private void videoLockUnlockStatus(){
-        if (isScreenLockEnable) {
+    private void videoLockUnlockStatus() {
+        if (!isScreenLockEnable) {
             videoLockButton.setVisibility(View.GONE);
             videoUnLockButton.setVisibility(View.VISIBLE);
         } else {
