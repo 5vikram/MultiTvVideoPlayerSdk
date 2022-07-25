@@ -233,8 +233,8 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
         });
 
 
-        simpleExoPlayerView.setControllerAutoShow(false);
-        simpleExoPlayerView.setUseController(false);
+        //simpleExoPlayerView.setControllerAutoShow(false);
+        //simpleExoPlayerView.setUseController(false);
         simpleExoPlayerView.setOnTouchListener(new OnSwipeTouchListener(context) {
 
             @Override
