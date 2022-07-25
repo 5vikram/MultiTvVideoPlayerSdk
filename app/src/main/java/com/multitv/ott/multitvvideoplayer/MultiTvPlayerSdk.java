@@ -232,6 +232,7 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
             }
         });
 
+/*
         simpleExoPlayerView.setOnTouchListener(new OnSwipeTouchListener(context) {
 
             @Override
@@ -269,6 +270,7 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
                 super.onSwipeUp();
             }
         });
+*/
 
         this.findViewById(R.id.speed_btn).setOnClickListener(new OnClickListener() {
             @Override
@@ -505,6 +507,7 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
 //            Toast.makeText(context, "Other audio player did not stop. Can't play video",
 //                    Toast.LENGTH_LONG).show();
 //            pause();
+            pauseVideoPlayer();
             return false;
         }
     }
