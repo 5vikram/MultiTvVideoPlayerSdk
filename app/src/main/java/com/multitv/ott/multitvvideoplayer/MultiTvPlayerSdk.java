@@ -389,6 +389,7 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
     private final Runnable hideAction = new Runnable() {
         @Override
         public void run() {
+            VideoPlayerTracer.error("Controller Listener:::","Stop Timer");
             hideController();
         }
     };
@@ -415,7 +416,6 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
             hideAtMs = SystemClock.uptimeMillis() + 5000;
             if (isAttachedToWindow) {
                 postDelayed(hideAction, 5000);
-                VideoPlayerTracer.error("Controller Listener:::","Stop Timer");
             }
         } else {
             hideAtMs = C.TIME_UNSET;
