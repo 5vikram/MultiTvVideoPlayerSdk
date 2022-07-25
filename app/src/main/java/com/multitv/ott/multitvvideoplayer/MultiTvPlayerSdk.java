@@ -411,9 +411,11 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
     private void hideAfterTimeout() {
         removeCallbacks(hideAction);
         if (5000 > 0) {
+            VideoPlayerTracer.error("Controller Listener:::","Start Timer");
             hideAtMs = SystemClock.uptimeMillis() + 5000;
             if (isAttachedToWindow) {
                 postDelayed(hideAction, 5000);
+                VideoPlayerTracer.error("Controller Listener:::","Stop Timer");
             }
         } else {
             hideAtMs = C.TIME_UNSET;
