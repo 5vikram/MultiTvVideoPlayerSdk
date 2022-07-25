@@ -9,11 +9,14 @@ public class OnSwipeTouchListener implements View.OnTouchListener {
    protected OnSwipeTouchListener(Context c) {
       gestureDetector = new GestureDetector(c, new GestureListener());
    }
+
    public boolean onTouch(final View view, final MotionEvent motionEvent) {
       return gestureDetector.onTouchEvent(motionEvent);
    }
-   private final class GestureListener extends
-   GestureDetector.SimpleOnGestureListener {
+
+
+   private final class GestureListener extends GestureDetector.SimpleOnGestureListener {
+
       private static final int SWIPE_THRESHOLD = 100;
       private static final int SWIPE_VELOCITY_THRESHOLD = 100;
       @Override
