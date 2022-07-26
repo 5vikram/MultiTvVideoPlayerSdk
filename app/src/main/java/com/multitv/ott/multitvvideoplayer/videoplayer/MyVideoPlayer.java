@@ -25,8 +25,7 @@ public class MyVideoPlayer extends StyledPlayerView {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        return false;
-       /* switch (event.getAction()) {
+        switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 isTouching = true;
                 return true;
@@ -39,6 +38,6 @@ public class MyVideoPlayer extends StyledPlayerView {
                 return false;
             default:
                 return false;
-        }*/
+        }
     }
 }

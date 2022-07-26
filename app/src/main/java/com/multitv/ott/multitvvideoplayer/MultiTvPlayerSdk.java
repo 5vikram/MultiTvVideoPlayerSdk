@@ -23,6 +23,7 @@ import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
@@ -31,6 +32,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
@@ -166,7 +168,11 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
         }
 
     }
-
+/*
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        return super.onTouchEvent(event);
+    }*/
 
     @Override
     protected void onFinishInflate() {
@@ -237,9 +243,34 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
 
 
       //findViewById(R.id.frameLayout)
-        simpleExoPlayerView.setOnTouchListener(new OnSwipeTouchListener(context) {
+        findViewById(R.id.frameLayout).setOnTouchListener(new OnSwipeTouchListener(true) {
 
             @Override
+            public void onClick() {
+                VideoPlayerTracer.error("Swipe:::", "onClick()");
+            }
+
+            @Override
+            public void onBeforeMove(@NonNull Direction dir) {
+                VideoPlayerTracer.error("Swipe:::", "onBeforeMove()");
+            }
+
+            @Override
+            public void onAfterMove() {
+                VideoPlayerTracer.error("Swipe:::", "onAfterMove()");
+            }
+
+            @Override
+            public void onDoubleTap(@NonNull MotionEvent event) {
+                VideoPlayerTracer.error("Swipe:::", "onDoubleTap()");
+            }
+
+            @Override
+            public void onMove(@NonNull Direction dir, float diff) {
+                VideoPlayerTracer.error("Swipe:::", "onMove()");
+            }
+
+        /*    @Override
             public void onClick() {
                 super.onClick();
                 if (isControllerShown)
@@ -272,7 +303,7 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
             public void onSwipeUp() {
                 VideoPlayerTracer.error("Swipe:::", "onSwipeUp()");
                 super.onSwipeUp();
-            }
+            }*/
 
         });
 

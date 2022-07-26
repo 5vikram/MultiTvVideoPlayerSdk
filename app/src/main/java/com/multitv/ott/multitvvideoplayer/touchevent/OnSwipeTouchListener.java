@@ -1,3 +1,4 @@
+/*
 package com.multitv.ott.multitvvideoplayer.touchevent;
 
 import android.content.Context;
@@ -19,10 +20,12 @@ public class OnSwipeTouchListener implements View.OnTouchListener {
     public boolean onTouch(final View view, final MotionEvent motionEvent) {
         return gestureDetector.onTouchEvent(motionEvent);
 
-     /*   if (this.gestureDetector.onTouchEvent(motionEvent)) {
+     */
+/*   if (this.gestureDetector.onTouchEvent(motionEvent)) {
             return true;
         }
-        return super.onTouchEvent(motionEvent);*/
+        return super.onTouchEvent(motionEvent);*//*
+
     }
 
 
@@ -118,4 +121,4 @@ public class OnSwipeTouchListener implements View.OnTouchListener {
 
     public void onLongClick() {
     }
-}
+}*/
