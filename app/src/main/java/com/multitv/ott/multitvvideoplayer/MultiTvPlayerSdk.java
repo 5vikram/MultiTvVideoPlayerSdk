@@ -11,6 +11,7 @@ import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
@@ -205,7 +206,8 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
 
         videoNextButton.setVisibility(View.GONE);
         videoPerviousButton.setVisibility(View.GONE);
-
+        playerProgress.setAdMarkerColor(Color.argb(0x00, 0xFF, 0xFF, 0xFF));
+        playerProgress.setPlayedAdMarkerColor(Color.argb(0x98, 0xFF, 0xFF, 0xFF));
 
         videoRotationButton.setOnClickListener(new OnClickListener() {
             @Override
