@@ -81,6 +81,7 @@ import com.multitv.ott.multitvvideoplayer.utils.CommonUtils;
 import com.multitv.ott.multitvvideoplayer.utils.ContentType;
 import com.multitv.ott.multitvvideoplayer.utils.ExoUttils;
 import com.multitv.ott.multitvvideoplayer.utils.VideoPlayerTracer;
+import com.multitv.ott.multitvvideoplayer.videoplayer.MyVideoPlayer;
 import com.pallycon.widevinelibrary.PallyconDrmException;
 import com.pallycon.widevinelibrary.PallyconEventListener;
 import com.pallycon.widevinelibrary.PallyconWVMSDK;
@@ -102,7 +103,7 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
     private SharedPreferencePlayer sharedPreferencePlayer;
     private ContentType contentType;
     private ExoPlayer mMediaPlayer;
-    private StyledPlayerView simpleExoPlayerView;
+    private MyVideoPlayer simpleExoPlayerView;
     private DefaultTrackSelector trackSelector;
     private VideoPlayerSdkCallBackListener videoPlayerSdkCallBackListener;
     private boolean isShowingTrackSelectionDialog;
@@ -235,9 +236,8 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
         });
 
 
-        //simpleExoPlayerView.setControllerAutoShow(false);
-        //simpleExoPlayerView.setUseController(false);
-        findViewById(R.id.frameLayout).setOnTouchListener(new OnSwipeTouchListener(context) {
+
+        simpleExoPlayerView.setOnTouchListener(new OnSwipeTouchListener(context) {
 
             @Override
             public void onClick() {
@@ -273,6 +273,7 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
                 VideoPlayerTracer.error("Swipe:::", "onSwipeUp()");
                 super.onSwipeUp();
             }
+
         });
 
         this.findViewById(R.id.speed_btn).setOnClickListener(new OnClickListener() {

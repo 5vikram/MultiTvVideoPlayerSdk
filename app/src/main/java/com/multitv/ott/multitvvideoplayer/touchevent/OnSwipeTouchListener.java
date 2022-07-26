@@ -1,6 +1,7 @@
 package com.multitv.ott.multitvvideoplayer.touchevent;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -47,15 +48,25 @@ public class OnSwipeTouchListener implements View.OnTouchListener {
             super.onLongPress(e);
         }
 
+
+        @Override
+        public boolean onScroll(MotionEvent motionEvent, MotionEvent e2,
+                                float distanceX, float distanceY) {
+            Log.e("TAG", "onScroll: ");
+
+            return true;
+        }
+
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
             try {
                 float diffY = e2.getY() - e1.getY();
                 float diffX = e2.getX() - e1.getX();
                 VideoPlayerTracer.error("Distance:::", " y point::" + Math.abs(diffY));
-               VideoPlayerTracer.error("Distance:::", " x point::" + Math.abs(diffX));
-               VideoPlayerTracer.error("Distance:::", " x velocityX::" + Math.abs(velocityX));
-               VideoPlayerTracer.error("Distance:::", " x velocityY::" + Math.abs(velocityY));
+                VideoPlayerTracer.error("Distance:::", " x point::" + Math.abs(diffX));
+                VideoPlayerTracer.error("Distance:::", " x velocityX::" + Math.abs(velocityX));
+                VideoPlayerTracer.error("Distance:::", " x velocityY::" + Math.abs(velocityY));
+
                 if (Math.abs(diffX) > Math.abs(diffY)) {
                     if (Math.abs(diffX) > SWIPE_THRESHOLD && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
                         if (diffX > 0) {
