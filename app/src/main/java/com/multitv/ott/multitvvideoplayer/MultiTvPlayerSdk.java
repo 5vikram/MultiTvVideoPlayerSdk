@@ -237,7 +237,7 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
 
 
 
-        simpleExoPlayerView.setOnTouchListener(new OnSwipeTouchListener(context) {
+        findViewById(R.id.frameLayout).setOnTouchListener(new OnSwipeTouchListener(context) {
 
             @Override
             public void onClick() {
