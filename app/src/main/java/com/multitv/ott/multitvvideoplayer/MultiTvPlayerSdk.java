@@ -242,7 +242,7 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
         });
 
 
-      //findViewById(R.id.frameLayout)
+        //findViewById(R.id.frameLayout)
         findViewById(R.id.frameLayout).setOnTouchListener(new OnSwipeTouchListener(true) {
 
             @Override
@@ -252,7 +252,8 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
 
             @Override
             public void onBeforeMove(@NonNull Direction dir) {
-                VideoPlayerTracer.error("Swipe:::", "onBeforeMove()");
+
+                VideoPlayerTracer.error("Swipe:::", "onBeforeMove()  " + dir.name());
             }
 
             @Override
@@ -426,7 +427,7 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
     private final Runnable hideAction = new Runnable() {
         @Override
         public void run() {
-            VideoPlayerTracer.error("Controller Listener:::","Stop Timer");
+            VideoPlayerTracer.error("Controller Listener:::", "Stop Timer");
             hideController();
         }
     };
@@ -449,7 +450,7 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
     private void hideAfterTimeout() {
         removeCallbacks(hideAction);
         if (5000 > 0) {
-            VideoPlayerTracer.error("Controller Listener:::","Start Timer");
+            VideoPlayerTracer.error("Controller Listener:::", "Start Timer");
             hideAtMs = SystemClock.uptimeMillis() + 5000;
             if (isAttachedToWindow) {
                 postDelayed(hideAction, 5000);
@@ -482,7 +483,6 @@ public class MultiTvPlayerSdk extends FrameLayout implements PreviewLoader, Prev
         isControllerShown = true;
 
     }
-
 
 
     private void updatePlayPauseButton() {
