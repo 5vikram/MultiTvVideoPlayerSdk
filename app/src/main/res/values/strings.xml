@@ -14,4 +14,10 @@
     <string name="exo_track_unknown">Unknown</string>
 
     <string name="track_selection_title">Select Tracks</string>
+
+    <string name="bvp_right">RIGHT</string>
+    <string name="bvp_left">LEFT</string>
+    <string name="volume">Volume: %1$d</string>
+    <string name="brightness">Brightness: %1$d</string>
+    <string name="seconds">%1$d seconds</string>
 </resources>
