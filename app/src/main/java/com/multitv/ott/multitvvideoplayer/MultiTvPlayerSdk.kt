@@ -1231,65 +1231,69 @@ class MultiTvPlayerSdk(
 
         override fun onMove(dir: OnSwipeTouchListener.Direction, diff: Float) {
             // If swipe is not enabled, move should not be evaluated.
-            if (mGestureType != GestureType.SwipeGesture)
+            if (mGestureType != GestureType.SwipeGesture) {
+                VideoPlayerTracer.error("Gaustre:::","return function")
                 return
+            }
 
-            if (dir == OnSwipeTouchListener.Direction.LEFT || dir == OnSwipeTouchListener.Direction.RIGHT) {
+           /* if (dir == OnSwipeTouchListener.Direction.LEFT || dir == OnSwipeTouchListener.Direction.RIGHT) {
                 // seekbar progress
             } else {
-                finalTime = -1f
-                if (initialX >= mInitialTextureWidth / 2 || mWindow == null) {
-                    VideoPlayerTracer.error("Gaustre:::","if (initialX >= mInitialTextureWidth / 2)")
-                    var diffVolume: Float
-                    var finalVolume: Int
 
-                    diffVolume = maxVolume.toFloat() * diff / (mInitialTextureHeight.toFloat() / 2)
-                    if (dir == OnSwipeTouchListener.Direction.DOWN) {
-                        diffVolume = -diffVolume
-                    }
-                    finalVolume = startVolume + diffVolume.toInt()
-                    if (finalVolume < 0)
-                        finalVolume = 0
-                    else if (finalVolume > maxVolume)
-                        finalVolume = maxVolume
+            }*/
 
-                    /*val progressText = String.format(
-                        resources.getString(R.string.volume), finalVolume
-                    )*/
-                    // mPositionTextView.text = progressText
-                    audioManager?.setStreamVolume(AudioManager.STREAM_MUSIC, finalVolume, 0)
+            finalTime = -1f
+            if (initialX >= mInitialTextureWidth / 2 || mWindow == null) {
+                VideoPlayerTracer.error("Gaustre:::","if (initialX >= mInitialTextureWidth / 2)")
+                var diffVolume: Float
+                var finalVolume: Int
 
-                } else if (initialX < mInitialTextureWidth / 2) {
-                    VideoPlayerTracer.error("Gaustre:::","if (initialX < mInitialTextureWidth / 2)")
+                diffVolume = maxVolume.toFloat() * diff / (mInitialTextureHeight.toFloat() / 2)
+                if (dir == OnSwipeTouchListener.Direction.DOWN) {
+                    diffVolume = -diffVolume
+                }
+                finalVolume = startVolume + diffVolume.toInt()
+                if (finalVolume < 0)
+                    finalVolume = 0
+                else if (finalVolume > maxVolume)
+                    finalVolume = maxVolume
 
-                    var diffBrightness: Float
-                    var finalBrightness: Int
+                /*val progressText = String.format(
+                    resources.getString(R.string.volume), finalVolume
+                )*/
+                // mPositionTextView.text = progressText
+                audioManager?.setStreamVolume(AudioManager.STREAM_MUSIC, finalVolume, 0)
 
-                    diffBrightness =
-                        maxBrightness.toFloat() * diff / (mInitialTextureHeight.toFloat() / 2)
-                    if (dir == OnSwipeTouchListener.Direction.DOWN) {
-                        diffBrightness = -diffBrightness
-                    }
-                    finalBrightness = startBrightness + diffBrightness.toInt()
-                    if (finalBrightness < 0)
-                        finalBrightness = 0
-                    else if (finalBrightness > maxBrightness)
-                        finalBrightness = maxBrightness
+            } else if (initialX < mInitialTextureWidth / 2) {
+                VideoPlayerTracer.error("Gaustre:::","if (initialX < mInitialTextureWidth / 2)")
+
+                var diffBrightness: Float
+                var finalBrightness: Int
+
+                diffBrightness =
+                    maxBrightness.toFloat() * diff / (mInitialTextureHeight.toFloat() / 2)
+                if (dir == OnSwipeTouchListener.Direction.DOWN) {
+                    diffBrightness = -diffBrightness
+                }
+                finalBrightness = startBrightness + diffBrightness.toInt()
+                if (finalBrightness < 0)
+                    finalBrightness = 0
+                else if (finalBrightness > maxBrightness)
+                    finalBrightness = maxBrightness
 
 //                    val progressText = String.format(
 //                        resources.getString(R.string.brightness), finalBrightness
 //                    )
-                    //mPositionTextView.text = progressText
+                //mPositionTextView.text = progressText
 
-                    val layout = mWindow?.attributes
-                    layout?.screenBrightness = finalBrightness.toFloat() / 100
-                    mWindow?.attributes = layout
+                val layout = mWindow?.attributes
+                layout?.screenBrightness = finalBrightness.toFloat() / 100
+                mWindow?.attributes = layout
 
-                    /*PreferenceManager.getDefaultSharedPreferences(context)
-                        .edit()
-                        .putInt(BETTER_VIDEO_PLAYER_BRIGHTNESS, finalBrightness)
-                        .apply()*/
-                }
+                /*PreferenceManager.getDefaultSharedPreferences(context)
+                    .edit()
+                    .putInt(BETTER_VIDEO_PLAYER_BRIGHTNESS, finalBrightness)
+                    .apply()*/
             }
         }
 
