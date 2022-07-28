@@ -214,8 +214,9 @@ class MultiTvPlayerSdk(
             }
         })
 
-
+        findViewById<View>(R.id.frameLayout).setOnTouchListener(clickFrameSwipeListener)
         //findViewById(R.id.frameLayout)
+/*
         findViewById<View>(R.id.frameLayout).setOnTouchListener(object :
             OnSwipeTouchListener(true) {
             override fun onClick() {
@@ -236,7 +237,8 @@ class MultiTvPlayerSdk(
 
             override fun onMove(dir: Direction, diff: Float) {
                 VideoPlayerTracer.error("Swipe:::", "onMove()")
-            } /*    @Override
+            } */
+/*    @Override
             public void onClick() {
                 super.onClick();
                 if (isControllerShown)
@@ -269,8 +271,11 @@ class MultiTvPlayerSdk(
             public void onSwipeUp() {
                 VideoPlayerTracer.error("Swipe:::", "onSwipeUp()");
                 super.onSwipeUp();
-            }*/
+            }*//*
+
         })
+*/
+
         findViewById<View>(R.id.speed_btn)?.setOnClickListener { showSpeedControlDailog() }
         // simpleExoPlayerView.set
         errorRetryLayout?.setOnClickListener(OnClickListener {
