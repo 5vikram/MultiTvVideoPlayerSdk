@@ -1221,7 +1221,7 @@ class MultiTvPlayerSdk(
 
 
     private var clickFrameSwipeListener = object : OnSwipeTouchListener(true) {
-
+       // mGestureType=
         var diffTime = -1f
         var finalTime = -1f
         var startVolume: Int = 0
@@ -1231,10 +1231,10 @@ class MultiTvPlayerSdk(
 
         override fun onMove(dir: OnSwipeTouchListener.Direction, diff: Float) {
             // If swipe is not enabled, move should not be evaluated.
-            if (mGestureType != GestureType.SwipeGesture) {
+           /* if (mGestureType != GestureType.SwipeGesture) {
                 VideoPlayerTracer.error("Gaustre:::","return function")
                 return
-            }
+            }*/
 
            /* if (dir == OnSwipeTouchListener.Direction.LEFT || dir == OnSwipeTouchListener.Direction.RIGHT) {
                 // seekbar progress
