@@ -1050,7 +1050,6 @@ class MultiTvPlayerSdk(
     }
 
 
-
     companion object {
         const val DEFAULT_FAST_FORWARD_MS = 10000
         const val DEFAULT_REWIND_MS = 10000
@@ -1150,7 +1149,10 @@ class MultiTvPlayerSdk(
         }
 
         override fun onClick() {
-            //  toggleControls()
+            if (isControllerShown)
+                hideController()
+            else
+                showController()
         }
 
         override fun onDoubleTap(event: MotionEvent) {
