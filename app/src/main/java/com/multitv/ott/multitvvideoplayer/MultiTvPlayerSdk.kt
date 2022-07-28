@@ -436,7 +436,7 @@ class MultiTvPlayerSdk(
     private var audioManager: AudioManager? = null
 
     private fun checkForAudioFocus(): Boolean {
-        audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+
 
         // Request audio focus for playback
         val result = audioManager?.requestAudioFocus(
@@ -496,6 +496,8 @@ class MultiTvPlayerSdk(
     private fun initViews() {
 //        ToastMessage.showLogs(ToastMessage.LogType.ERROR, "Video Player:::", "initViews()");
         trackSelector = DefaultTrackSelector(context)
+        audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+
         if (videoPlayerSdkCallBackListener != null) videoPlayerSdkCallBackListener!!.onPlayerReady(
             mContentUrl
         )
@@ -836,97 +838,7 @@ class MultiTvPlayerSdk(
         override fun onPlaybackParametersChanged(playbackParameters: PlaybackParameters) {}
     }
 
-    /*
-    private void updateResolutionAudioSrtViewVisibility() {
-        boolean isNeedToShowResolutionSelector = haveTracks(C.TRACK_TYPE_VIDEO);
-        if (isNeedToShowResolutionSelector) {
-            //simpleExoPlayerView.enableResolutionSelection();
 
-            if (trackSelector == null || videoRendererIndex == -1)
-                return;
-            availableResolutionContainerList = new ArrayList<>();
-            availableResolutionContainerMap = new HashMap<>();
-
-            MappingTrackSelector.MappedTrackInfo mappedTrackInfo = trackSelector.getCurrentMappedTrackInfo();
-            if (mappedTrackInfo != null) {
-                videoTrackGroups = mappedTrackInfo.getTrackGroups(videoRendererIndex);
-                TrackGroup group = videoTrackGroups.get(videoRendererIndex);
-                if (group == null || group.length == 0)
-                    return;
-                boolean haveSupportedTracks = false;
-                for (int trackIndex = 0; trackIndex < group.length; trackIndex++) {
-                    String resolution = buildTrackName(group.getFormat(trackIndex));
-                    if (!TextUtils.isEmpty(resolution) && !resolution.trim().equalsIgnoreCase("unknown")
-                            && mappedTrackInfo.getTrackSupport(videoRendererIndex, videoRendererIndex, trackIndex)
-                            == RendererCapabilities.FORMAT_HANDLED) {
-                        haveSupportedTracks = true;
-
-                        availableResolutionContainerMap.put(resolution, trackIndex);
-                        availableResolutionContainerList.add(resolution);
-                    }
-                }
-
-                if (availableResolutionContainerList != null && availableResolutionContainerList.size() > 1) {
-                    if (haveSupportedTracks)
-                        availableResolutionContainerList.add(0, "Auto");
-                    else
-                        availableResolutionContainerList.add(0, "Default");
-
-                    Collections.sort(availableResolutionContainerList, Collections.<String>reverseOrder());
-
-                    if (availableResolutionContainerList.contains("1080p")) {
-                        availableResolutionContainerList.remove("1080p");
-                        if (availableResolutionContainerList.contains("Auto"))
-                            availableResolutionContainerList.add(1, "1080p");
-                        else
-                            availableResolutionContainerList.add(0, "1080p");
-                    }
-                }
-            }
-            */
-    /*}*/ /*
-
-
-            if (availableResolutionContainerList != null && !availableResolutionContainerList.isEmpty())
-                handleResolutionItemClick(resolutionSelectedItemPosition);
-        } else {
-            ToastMessage.showToastMsg(context, "No Tracks available.", 1000);
-        }
-    }
-*/
-    /*
-    private boolean haveTracks(int type) {
-        if (mMediaPlayer == null || trackSelector == null || trackSelector.getCurrentMappedTrackInfo() == null)
-            return false;
-
-        MappingTrackSelector.MappedTrackInfo mappedTrackInfo = trackSelector.getCurrentMappedTrackInfo();
-
-        for (int i = 0; i < mappedTrackInfo.length; i++) {
-            TrackGroupArray trackGroups = mappedTrackInfo.getTrackGroups(i);
-            if (trackGroups.length != 0) {
-                if (mMediaPlayer.getRendererType(i) == type) {
-                    switch (type) {
-                        case C.TRACK_TYPE_VIDEO:
-                            videoRendererIndex = i;
-                            break;
-                        case C.TRACK_TYPE_AUDIO:
-                            audioRendererIndex = i;
-                            break;
-                        case C.TRACK_TYPE_TEXT:
-                            srtRendererIndex = i;
-                            break;
-                        default:
-                            return false;
-                    }
-
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-*/
     private fun startBufferingTimer() {
         if (bufferingTimeHandler == null) {
             bufferingTimeHandler = Handler()
@@ -1003,58 +915,6 @@ class MultiTvPlayerSdk(
         dialog?.show()
     }
 
-    /*    public ArrayList<TrackResolution> getTrackResolution() {
-
-        if (trackResolutionsList != null && trackResolutionsList.size() != 0)
-            trackResolutionsList.clear();
-
-        ArrayList<TempResolutionModel> allTrackResolutionsList = new ArrayList<>();
-        TracksInfo trackInfo = mMediaPlayer.getCurrentTracksInfo();
-        ImmutableList<TracksInfo.TrackGroupInfo> trackGroupInfo = trackInfo.getTrackGroupInfos();
-
-        if (trackGroupInfo.size() != 0) {
-            TracksInfo.TrackGroupInfo trackGroupResolution = trackGroupInfo.get(0);
-            TrackGroup trackGroup = trackGroupResolution.getTrackGroup();
-
-            for (int i = 0; i < trackGroup.length; i++) {
-                if (trackGroupResolution.isTrackSupported(i)) {
-                    allTrackResolutionsList.add(new TempResolutionModel(trackGroup.getFormat(i).width, trackGroup.getFormat(i).height));
-                }
-            }
-            Log.e("TrackGroup lenght", trackGroup.length + "");
-        }
-
-        if (allTrackResolutionsList != null && allTrackResolutionsList.size() != 0) {
-            trackResolutionsList.add(0, new TrackResolution(String.valueOf("Auto"), "Auto", "Auto"));
-            for (int i = 0; i < allTrackResolutionsList.size(); i++) {
-                String heightStr = String.valueOf(allTrackResolutionsList.get(i).getHeight());
-                String widthStr = String.valueOf(allTrackResolutionsList.get(i).getWidth());
-                if (trackResolutionsList != null && trackResolutionsList.size() <= 4)
-                    trackResolutionsList.add(new TrackResolution(String.valueOf(allTrackResolutionsList.get(i).getWidth()), String.valueOf(allTrackResolutionsList.get(i).getHeight()), ""));
-
-
-                for (int j = 0; j < trackResolutionsList.size(); j++) {
-                    if (heightStr != null && heightStr.contains("1080"))
-                        trackResolutionsList.remove(j);
-                }
-
-
-                if (heightStr != null && heightStr.contains("1080")) {
-                    if (trackResolutionsList != null)
-                        trackResolutionsList.add(trackResolutionsList.size() - 1, new TrackResolution(String.valueOf(widthStr), String.valueOf(heightStr), ""));
-                }
-
-            }
-        }
-
-
-        return trackResolutionsList;
-    }*/
-    /*  public void getSubTitle(){
-        TracksInfo trackInfo = mMediaPlayer.getCurrentTracksInfo();
-        ImmutableList<TracksInfo.TrackGroupInfo> trackGroupInfo = trackInfo.getTrackGroupInfos();
-        TracksInfo.TrackGroupInfo  trackGroupResolution = trackGroupInfo.get(1);
-    }*/
     override fun onClick(view: View) {
         if (view === setting) {
             if (!isShowingTrackSelectionDialog
@@ -1093,6 +953,18 @@ class MultiTvPlayerSdk(
 
     private fun seekTo(positionMs: Long) {
         mMediaPlayer!!.seekTo(positionMs)
+    }
+
+    val duration: Long
+        get() = if (mMediaPlayer != null) mMediaPlayer!!.duration else 0
+    val currentPosition: Long
+        get() = if (mMediaPlayer != null) mMediaPlayer!!.currentPosition else 0
+
+    fun resumeFromPosition(millisecondsForResume: Long) {
+        if (millisecondsForResume != 0L) {
+            this.millisecondsForResume = millisecondsForResume
+            //isResumeFromPreviousPosition = true;
+        }
     }
 
     override fun onScrubStart(previewBar: PreviewBar) {
@@ -1177,17 +1049,7 @@ class MultiTvPlayerSdk(
         }
     }
 
-    val duration: Long
-        get() = if (mMediaPlayer != null) mMediaPlayer!!.duration else 0
-    val currentPosition: Long
-        get() = if (mMediaPlayer != null) mMediaPlayer!!.currentPosition else 0
 
-    fun resumeFromPosition(millisecondsForResume: Long) {
-        if (millisecondsForResume != 0L) {
-            this.millisecondsForResume = millisecondsForResume
-            //isResumeFromPreviousPosition = true;
-        }
-    }
 
     companion object {
         const val DEFAULT_FAST_FORWARD_MS = 10000
@@ -1215,13 +1077,11 @@ class MultiTvPlayerSdk(
             mgr.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE)
         }
 
-
-        // Log
     }
 
 
     private var clickFrameSwipeListener = object : OnSwipeTouchListener(true) {
-       // mGestureType=
+        // mGestureType=
         var diffTime = -1f
         var finalTime = -1f
         var startVolume: Int = 0
@@ -1230,21 +1090,12 @@ class MultiTvPlayerSdk(
         var maxBrightness: Int = 0
 
         override fun onMove(dir: OnSwipeTouchListener.Direction, diff: Float) {
-            // If swipe is not enabled, move should not be evaluated.
-           /* if (mGestureType != GestureType.SwipeGesture) {
-                VideoPlayerTracer.error("Gaustre:::","return function")
-                return
-            }*/
-
-           /* if (dir == OnSwipeTouchListener.Direction.LEFT || dir == OnSwipeTouchListener.Direction.RIGHT) {
-                // seekbar progress
-            } else {
-
-            }*/
-
             finalTime = -1f
+
             if (initialX >= mInitialTextureWidth / 2 || mWindow == null) {
-                VideoPlayerTracer.error("Gaustre:::","if (initialX >= mInitialTextureWidth / 2)")
+                // Right side swipe when up and down
+
+                VideoPlayerTracer.error("Gaustre:::", "if (initialX >= mInitialTextureWidth / 2)")
                 var diffVolume: Float
                 var finalVolume: Int
 
@@ -1265,7 +1116,8 @@ class MultiTvPlayerSdk(
                 audioManager?.setStreamVolume(AudioManager.STREAM_MUSIC, finalVolume, 0)
 
             } else if (initialX < mInitialTextureWidth / 2) {
-                VideoPlayerTracer.error("Gaustre:::","if (initialX < mInitialTextureWidth / 2)")
+                // Left side swipe when up and down
+                VideoPlayerTracer.error("Gaustre:::", "if (initialX < mInitialTextureWidth / 2)")
 
                 var diffBrightness: Float
                 var finalBrightness: Int
@@ -1298,7 +1150,7 @@ class MultiTvPlayerSdk(
         }
 
         override fun onClick() {
-          //  toggleControls()
+            //  toggleControls()
         }
 
         override fun onDoubleTap(event: MotionEvent) {
@@ -1333,7 +1185,7 @@ class MultiTvPlayerSdk(
                 seekTo(finalTime.toLong())
                 //if (mWasPlaying) mPlayer?.start()
             }
-          //  mPositionTextView.visibility = View.GONE
+            //  mPositionTextView.visibility = View.GONE
         }
 
         override fun onBeforeMove(dir: OnSwipeTouchListener.Direction) {
