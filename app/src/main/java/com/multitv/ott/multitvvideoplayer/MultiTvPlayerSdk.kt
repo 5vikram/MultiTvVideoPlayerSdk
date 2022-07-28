@@ -1202,7 +1202,7 @@ class MultiTvPlayerSdk(
                     pauseVideoPlayer()
             } else {
                 maxBrightness = 100
-                startBrightness = (mWindow?.attributes.screenBrightness * 100).toInt()
+                startBrightness = (mWindow?.attributes?.screenBrightness!! * 100).toInt()
                 maxVolume = audioManager?.getStreamMaxVolume(AudioManager.STREAM_MUSIC) ?: 100
                 startVolume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) ?: 100
 
