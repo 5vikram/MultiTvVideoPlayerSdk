@@ -214,7 +214,8 @@ class MultiTvPlayerSdk(
             }
         })
 
-        findViewById<View>(R.id.frameLayout).setOnTouchListener(clickFrameSwipeListener)
+        simpleExoPlayerView?.setOnTouchListener(clickFrameSwipeListener)
+        //findViewById<View>(R.id.frameLayout).setOnTouchListener(clickFrameSwipeListener)
         //findViewById(R.id.frameLayout)
 /*
         findViewById<View>(R.id.frameLayout).setOnTouchListener(object :
@@ -1183,29 +1184,29 @@ class MultiTvPlayerSdk(
         }
 
         override fun onAfterMove() {
-            if (finalTime >= 0 && mGestureType == GestureType.SwipeGesture) {
-                seekTo(finalTime.toLong())
-                //if (mWasPlaying) mPlayer?.start()
-            }
+            /* if (finalTime >= 0 && mGestureType == GestureType.SwipeGesture) {
+                 seekTo(finalTime.toLong())*/
+            //if (mWasPlaying) mPlayer?.start()
+            //  }
             //  mPositionTextView.visibility = View.GONE
+
+            resumeVideoPlayer()
         }
 
-        override fun onBeforeMove(dir: OnSwipeTouchListener.Direction) {
+        override fun onBeforeMove(dir: Direction) {
             if (mGestureType != GestureType.SwipeGesture)
                 return
-//            if (dir == OnSwipeTouchListener.Direction.LEFT || dir == OnSwipeTouchListener.Direction.RIGHT) {
-//                mWasPlaying = isPlaying()
-//                mPlayer?.pause()
-//                mPositionTextView.visibility = View.VISIBLE
-//            } else {
-//                maxBrightness = 100
-//                mWindow?.attributes?.let {
-//                    startBrightness = (it.screenBrightness * 100).toInt()
-//                }
-//                maxVolume = am?.getStreamMaxVolume(AudioManager.STREAM_MUSIC) ?: 100
-//                startVolume = am?.getStreamVolume(AudioManager.STREAM_MUSIC) ?: 100
-//                mPositionTextView.visibility = View.VISIBLE
-//            }
+            if (dir == Direction.LEFT || dir == Direction.RIGHT) {
+                val playing = mMediaPlayer != null && mMediaPlayer!!.playWhenReady
+                if (playing)
+                    pauseVideoPlayer()
+            } else {
+                maxBrightness = 100
+                startBrightness = (mWindow?.attributes.screenBrightness * 100).toInt()
+                maxVolume = audioManager?.getStreamMaxVolume(AudioManager.STREAM_MUSIC) ?: 100
+                startVolume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) ?: 100
+
+            }
         }
     }
 
