@@ -279,4 +279,28 @@
 
     </LinearLayout>
 
+
+    <FrameLayout
+        android:id="@+id/progress_bar_parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ProgressBar
+            android:id="@+id/brightness_progress_bar"
+            android:layout_width="12dp"
+            android:layout_height="300dp"
+            android:layout_gravity="center_vertical|start"
+            android:layout_marginStart="16dp"
+            style="@style/Widget.ProgressBar.Vertical"/>
+
+        <ProgressBar
+            android:id="@+id/volume_progress_bar"
+            android:layout_width="12dp"
+            android:layout_height="300dp"
+            android:layout_gravity="center_vertical|end"
+            android:layout_marginEnd="16dp"
+            style="@style/Widget.ProgressBar.Vertical"/>
+
+    </FrameLayout>
+
 </RelativeLayout>

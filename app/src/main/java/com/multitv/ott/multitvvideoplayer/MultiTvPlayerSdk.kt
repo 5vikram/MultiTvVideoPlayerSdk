@@ -2,7 +2,6 @@ package com.multitv.ott.multitvvideoplayer
 
 import android.Manifest
 import androidx.appcompat.app.AppCompatActivity
-import android.widget.FrameLayout
 import com.multitv.ott.multitvvideoplayer.timebar.previewseekbar.PreviewLoader
 import com.multitv.ott.multitvvideoplayer.timebar.previewseekbar.PreviewBar
 import com.multitv.ott.multitvvideoplayer.database.SharedPreferencePlayer
@@ -11,9 +10,7 @@ import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.multitv.ott.multitvvideoplayer.listener.VideoPlayerSdkCallBackListener
 import com.pallycon.widevinelibrary.PallyconWVMSDK
 import com.multitv.ott.multitvvideoplayer.custom.CountDownTimerWithPause
-import android.widget.LinearLayout
 import com.multitv.ott.multitvvideoplayer.timebar.PreviewTimeBar
-import android.widget.TextView
 import com.google.android.exoplayer2.drm.DrmSessionManager
 import com.google.android.exoplayer2.ext.ima.ImaAdsLoader
 import com.multitv.ott.multitvvideoplayer.R
@@ -60,7 +57,7 @@ import android.os.SystemClock
 import android.util.AttributeSet
 import android.util.Log
 import android.view.*
-import android.widget.ImageView
+import android.widget.*
 import com.bumptech.glide.request.target.Target
 import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.upstream.DataSource
@@ -147,6 +144,12 @@ class MultiTvPlayerSdk(
 
     private var mWindow: Window? = null
 
+    private lateinit var progressBarParent: FrameLayout
+    private lateinit var volumeProgressBar: ProgressBar
+    private lateinit var brightnessProgressBar: ProgressBar
+
+
+
     constructor(context: Context, attrs: AttributeSet?) : this(
         context as AppCompatActivity,
         attrs,
@@ -162,6 +165,9 @@ class MultiTvPlayerSdk(
     }*/
     override fun onFinishInflate() {
         val view = LayoutInflater.from(getContext()).inflate(R.layout.player_layout, this)
+        progressBarParent = view.findViewById(R.id.progress_bar_parent)
+        volumeProgressBar = view.findViewById(R.id.volume_progress_bar)
+        brightnessProgressBar = view.findViewById(R.id.brightness_progress_bar)
         errorRetryLayout = view.findViewById(R.id.errorRetryLayout)
         durationlayout = view.findViewById(R.id.durationlayout)
         videoMenuLayout = view.findViewById(R.id.videoMenuLayout)
@@ -1113,6 +1119,8 @@ class MultiTvPlayerSdk(
                     resources.getString(R.string.volume), finalVolume
                 )*/
                 // mPositionTextView.text = progressText
+                volumeProgressBar.visibility = View.VISIBLE
+                volumeProgressBar.progress = finalVolume
                 audioManager?.setStreamVolume(AudioManager.STREAM_MUSIC, finalVolume, 0)
 
             } else if (initialX < mInitialTextureWidth / 2) {
@@ -1141,6 +1149,10 @@ class MultiTvPlayerSdk(
                 val layout = mWindow?.attributes
                 layout?.screenBrightness = finalBrightness.toFloat() / 100
                 mWindow?.attributes = layout
+
+
+                brightnessProgressBar.visibility = View.VISIBLE
+                brightnessProgressBar.progress = finalBrightness
 
                 /*PreferenceManager.getDefaultSharedPreferences(context)
                     .edit()
@@ -1190,7 +1202,10 @@ class MultiTvPlayerSdk(
             //  }
             //  mPositionTextView.visibility = View.GONE
 
+            volumeProgressBar.visibility = View.GONE
+            brightnessProgressBar.visibility = View.GONE
             resumeVideoPlayer()
+
         }
 
         override fun onBeforeMove(dir: Direction) {
@@ -1205,6 +1220,11 @@ class MultiTvPlayerSdk(
                 startBrightness = (mWindow?.attributes?.screenBrightness!! * 100).toInt()
                 maxVolume = audioManager?.getStreamMaxVolume(AudioManager.STREAM_MUSIC) ?: 100
                 startVolume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) ?: 100
+
+                volumeProgressBar.max = maxVolume
+                brightnessProgressBar.max = maxBrightness
+
+
 
             }
         }
