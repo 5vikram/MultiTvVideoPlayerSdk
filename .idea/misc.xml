@@ -1,16 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="DesignSurface">
-    <option name="filePathToZoomLevelMap">
-      <map>
-        <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/layout/activity_main.xml" value="0.22826086956521738" />
-        <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/layout/exo_playback_control_view.xml" value="0.22826086956521738" />
-        <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/layout/player_layout.xml" value="0.22826086956521738" />
-        <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/layout/short_video_playback_control_view.xml" value="0.22826086956521738" />
-        <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/layout/short_video_player_layout.xml" value="0.22826086956521738" />
-      </map>
-    </option>
-  </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>

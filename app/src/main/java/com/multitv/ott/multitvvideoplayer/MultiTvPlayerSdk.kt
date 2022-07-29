@@ -214,7 +214,7 @@ class MultiTvPlayerSdk(
             }
         })
 
-        simpleExoPlayerView?.setOnTouchListener(clickFrameSwipeListener)
+        findViewById<View>(R.id.frameLayout)?.setOnTouchListener(clickFrameSwipeListener)
         //findViewById<View>(R.id.frameLayout).setOnTouchListener(clickFrameSwipeListener)
         //findViewById(R.id.frameLayout)
 /*
