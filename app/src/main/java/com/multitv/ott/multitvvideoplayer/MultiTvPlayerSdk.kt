@@ -1130,8 +1130,7 @@ class MultiTvPlayerSdk(
                 var diffBrightness: Float
                 var finalBrightness: Int
 
-                diffBrightness =
-                    maxBrightness.toFloat() * diff / (mInitialTextureHeight.toFloat() / 2)
+                diffBrightness = maxBrightness.toFloat() * diff / (mInitialTextureHeight.toFloat() / 2)
                 if (dir == OnSwipeTouchListener.Direction.DOWN) {
                     diffBrightness = -diffBrightness
                 }
@@ -1140,11 +1139,6 @@ class MultiTvPlayerSdk(
                     finalBrightness = 0
                 else if (finalBrightness > maxBrightness)
                     finalBrightness = maxBrightness
-
-//                    val progressText = String.format(
-//                        resources.getString(R.string.brightness), finalBrightness
-//                    )
-                //mPositionTextView.text = progressText
 
                 val layout = mWindow?.attributes
                 layout?.screenBrightness = finalBrightness.toFloat() / 100
