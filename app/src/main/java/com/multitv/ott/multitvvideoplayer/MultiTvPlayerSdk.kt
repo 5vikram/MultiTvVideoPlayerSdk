@@ -1221,24 +1221,30 @@ class MultiTvPlayerSdk(
         }
 
         override fun onBeforeMove(dir: Direction) {
-            if (mGestureType != GestureType.SwipeGesture)
-                return
-            if (dir == Direction.LEFT || dir == Direction.RIGHT) {
-                val playing = mMediaPlayer != null && mMediaPlayer!!.playWhenReady
-                if (playing)
-                    pauseVideoPlayer()
-            } else {
-                maxBrightness = 100
-                startBrightness = (mWindow?.attributes?.screenBrightness!! * 100).toInt()
-                maxVolume = audioManager?.getStreamMaxVolume(AudioManager.STREAM_MUSIC) ?: 100
-                startVolume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) ?: 100
+//            if (mGestureType != GestureType.SwipeGesture)
+//                return
+//            if (dir == Direction.LEFT || dir == Direction.RIGHT) {
+//                val playing = mMediaPlayer != null && mMediaPlayer!!.playWhenReady
+//                if (playing)
+//                    pauseVideoPlayer()
+//            } else {
+//                maxBrightness = 100
+//                startBrightness = (mWindow?.attributes?.screenBrightness!! * 100).toInt()
+//                maxVolume = audioManager?.getStreamMaxVolume(AudioManager.STREAM_MUSIC) ?: 100
+//                startVolume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) ?: 100
+//
+//                volumeProgressBar.max = maxVolume
+//                brightnessProgressBar.max = maxBrightness
+//            }
 
-                volumeProgressBar.max = maxVolume
-                brightnessProgressBar.max = maxBrightness
+            maxBrightness = 100
+            startBrightness = (mWindow?.attributes?.screenBrightness!! * 100).toInt()
+            maxVolume = audioManager?.getStreamMaxVolume(AudioManager.STREAM_MUSIC) ?: 100
+            startVolume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) ?: 100
 
+            volumeProgressBar.max = maxVolume
+            brightnessProgressBar.max = maxBrightness
 
-
-            }
         }
     }
 
