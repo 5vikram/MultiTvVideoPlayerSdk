@@ -290,6 +290,7 @@
             style="@style/Widget.ProgressBar.Vertical"
             android:layout_width="12dp"
             android:layout_height="100dp"
+            android:visibility="gone"
             android:layout_gravity="center_vertical|start"
             android:layout_marginStart="16dp" />
 
@@ -298,6 +299,7 @@
             style="@style/Widget.ProgressBar.Vertical"
             android:layout_width="12dp"
             android:layout_height="100dp"
+            android:visibility="gone"
             android:layout_gravity="center_vertical|end"
             android:layout_marginEnd="16dp" />
 
