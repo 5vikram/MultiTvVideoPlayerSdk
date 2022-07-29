@@ -1101,10 +1101,6 @@ class MultiTvPlayerSdk(
             if (initialX >= mInitialTextureWidth / 2 || mWindow == null) {
                 // Right side swipe when up and down
 
-
-                VideoPlayerTracer.error("Gaustre:::", "if (initialX >= mInitialTextureWidth / 2)")
-                VideoPlayerTracer.error("Gaustre:::", "Right side swipe up and down")
-
                 var diffVolume: Float
                 var finalVolume: Int
 
@@ -1118,23 +1114,15 @@ class MultiTvPlayerSdk(
                 else if (finalVolume > maxVolume)
                     finalVolume = maxVolume
 
-                VideoPlayerTracer.error("Gaustre:::", "finalVolume = $finalVolume")
-                VideoPlayerTracer.error("Gaustre:::", "diffVolume = $diffVolume")
-                VideoPlayerTracer.error("Gaustre:::", "diff = $diff")
-
-
                 /*val progressText = String.format(
                     resources.getString(R.string.volume), finalVolume
                 )*/
                 // mPositionTextView.text = progressText
-                volumeProgressBar.visibility = View.VISIBLE
                 volumeProgressBar.progress = finalVolume
                 audioManager?.setStreamVolume(AudioManager.STREAM_MUSIC, finalVolume, 0)
 
             } else if (initialX < mInitialTextureWidth / 2) {
                 // Left side swipe when up and down
-                VideoPlayerTracer.error("Gaustre:::", "if (initialX < mInitialTextureWidth / 2)")
-                VideoPlayerTracer.error("Gaustre:::", "Left side swipe up and down")
 
                 var diffBrightness: Float
                 var finalBrightness: Int
@@ -1149,18 +1137,12 @@ class MultiTvPlayerSdk(
                 else if (finalBrightness > maxBrightness)
                     finalBrightness = maxBrightness
 
-                VideoPlayerTracer.error("Gaustre:::", "finalBrightness = $finalBrightness")
-                VideoPlayerTracer.error("Gaustre:::", "diffBrightness = $diffBrightness")
-                VideoPlayerTracer.error("Gaustre:::", "diff = $diff")
 
-//                val layout = mWindow?.attributes
-//                layout?.screenBrightness = finalBrightness.toFloat() / 100
-//                mWindow?.attributes = layout
-
-                VideoPlayerTracer.error("Gaustre:::", "finalBrightness = " + finalBrightness)
+                val layout = mWindow?.attributes
+                layout?.screenBrightness = finalBrightness.toFloat() / 100
+                mWindow?.attributes = layout
 
 
-                brightnessProgressBar.visibility = View.VISIBLE
                 brightnessProgressBar.progress = finalBrightness
 
 
@@ -1217,6 +1199,7 @@ class MultiTvPlayerSdk(
             volumeProgressBar.visibility = View.GONE
             brightnessProgressBar.visibility = View.GONE
             resumeVideoPlayer()
+            hideController()
 
         }
 
@@ -1237,6 +1220,18 @@ class MultiTvPlayerSdk(
 //                brightnessProgressBar.max = maxBrightness
 //            }
 
+
+            if (initialX >= mInitialTextureWidth / 2 || mWindow == null) {
+                // Right side swipe when up and down
+                volumeProgressBar.visibility = View.VISIBLE
+                volumeProgressBar.progress = startVolume
+            } else if (initialX < mInitialTextureWidth / 2) {
+                // Left side swipe when up and down
+                brightnessProgressBar.visibility = View.VISIBLE
+                brightnessProgressBar.progress = startBrightness
+            }
+
+
             maxBrightness = 100
             startBrightness = (mWindow?.attributes?.screenBrightness!! * 100).toInt()
             maxVolume = audioManager?.getStreamMaxVolume(AudioManager.STREAM_MUSIC) ?: 100
@@ -1244,6 +1239,8 @@ class MultiTvPlayerSdk(
 
             volumeProgressBar.max = maxVolume
             brightnessProgressBar.max = maxBrightness
+
+            hideController()
 
         }
     }

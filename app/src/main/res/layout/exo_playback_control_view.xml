@@ -287,19 +287,19 @@
 
         <ProgressBar
             android:id="@+id/brightness_progress_bar"
+            style="@style/Widget.ProgressBar.Vertical"
             android:layout_width="12dp"
-            android:layout_height="300dp"
+            android:layout_height="100dp"
             android:layout_gravity="center_vertical|start"
-            android:layout_marginStart="16dp"
-            style="@style/Widget.ProgressBar.Vertical"/>
+            android:layout_marginStart="16dp" />
 
         <ProgressBar
             android:id="@+id/volume_progress_bar"
+            style="@style/Widget.ProgressBar.Vertical"
             android:layout_width="12dp"
-            android:layout_height="300dp"
+            android:layout_height="100dp"
             android:layout_gravity="center_vertical|end"
-            android:layout_marginEnd="16dp"
-            style="@style/Widget.ProgressBar.Vertical"/>
+            android:layout_marginEnd="16dp" />
 
     </FrameLayout>
 
