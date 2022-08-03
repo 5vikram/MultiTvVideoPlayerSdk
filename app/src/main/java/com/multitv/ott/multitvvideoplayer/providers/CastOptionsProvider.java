@@ -18,12 +18,11 @@ public class CastOptionsProvider implements OptionsProvider {
 
     @Override
     public CastOptions getCastOptions(Context context) {
-        return new CastOptions.Builder()
-                .setResumeSavedSession(false)
-                .setEnableReconnectionService(false)
+        CastOptions castOptions = new CastOptions.Builder()
                 .setReceiverApplicationId(APP_ID_DEFAULT_RECEIVER_WITH_DRM)
-                .setStopReceiverApplicationWhenEndingSession(true)
+//                .setSupportedNamespaces(supportedNamespaces)
                 .build();
+        return castOptions;
     }
 
     @Override
