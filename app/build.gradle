@@ -76,4 +76,9 @@ dependencies {
 
     embed project(path: ':drmsdk', configuration: 'default')
 
+
+    // GMS
+    api 'com.google.android.gms:play-services-cast-framework:21.0.1'
+
+
 }
