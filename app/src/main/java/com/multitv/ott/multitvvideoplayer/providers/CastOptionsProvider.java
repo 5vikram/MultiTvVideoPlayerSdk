@@ -10,20 +10,24 @@ import com.google.android.gms.cast.framework.OptionsProvider;
 import com.google.android.gms.cast.framework.SessionProvider;
 import com.multitv.ott.multitvvideoplayer.R;
 
+import java.util.Collections;
 import java.util.List;
 
 public class CastOptionsProvider implements OptionsProvider {
+    public static final String APP_ID_DEFAULT_RECEIVER_WITH_DRM = "A12D4273";
+
     @Override
-    public CastOptions getCastOptions(Context appContext) {
-        CastOptions castOptions = new CastOptions.Builder()
-//                .setReceiverApplicationId(appContext.getString(R.string.app_id))
+    public CastOptions getCastOptions(Context context) {
+        return new CastOptions.Builder()
+                .setResumeSavedSession(false)
+                .setEnableReconnectionService(false)
+                .setReceiverApplicationId(APP_ID_DEFAULT_RECEIVER_WITH_DRM)
+                .setStopReceiverApplicationWhenEndingSession(true)
                 .build();
-        return castOptions;
     }
 
-    @Nullable
     @Override
-    public List<SessionProvider> getAdditionalSessionProviders(@NonNull Context context) {
-        return null;
+    public List<SessionProvider> getAdditionalSessionProviders(Context context) {
+        return Collections.emptyList();
     }
 }
