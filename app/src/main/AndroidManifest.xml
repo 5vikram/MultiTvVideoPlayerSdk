@@ -5,8 +5,8 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
-    <meta-data android:name="com.google.android.gms.cast.framework.OPTIONS_PROVIDER_CLASS_NAME"
-        android:value="com.multitv.ott.multitvvideoplayer.providers.CastOptionsProvider"/>
+<!--    <meta-data android:name="com.google.android.gms.cast.framework.OPTIONS_PROVIDER_CLASS_NAME"-->
+<!--        android:value="com.multitv.ott.multitvvideoplayer.providers.CastOptionsProvider"/>-->
 
     <application
         android:name=".VideoPlayerAppController"
