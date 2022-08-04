@@ -613,9 +613,9 @@ class MultiTvPlayerSdk(
     // start video player when player is ready state
     fun startVideoPlayer(isNeedToPlayInstantly: Boolean) {
         if (mCastPlayer != null){
-            initializeMainPlayer(mContentUrl, true, if (mCastPlayer!!.isCastSessionAvailable) mCastPlayer else mMediaPlayer)
+            initializeMainPlayer(mContentUrl, isNeedToPlayInstantly, if (mCastPlayer!!.isCastSessionAvailable) mCastPlayer else mMediaPlayer)
         } else {
-            initializeMainPlayer(mContentUrl, true, mMediaPlayer)
+            initializeMainPlayer(mContentUrl, isNeedToPlayInstantly, mMediaPlayer)
         }
     }
 
