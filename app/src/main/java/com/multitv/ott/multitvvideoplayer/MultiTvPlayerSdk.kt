@@ -682,10 +682,7 @@ class MultiTvPlayerSdk(
             simpleExoPlayerView!!.defaultArtwork = null
         }
 
-        mMediaPlayer = currentPlayer as ExoPlayer
-
-        // end
-
+        //mMediaPlayer = currentPlayer
 
         if (adsUrl != null && !TextUtils.isEmpty(adsUrl)) {
             val dataSourceFactory: DataSource.Factory = DefaultDataSource.Factory(
