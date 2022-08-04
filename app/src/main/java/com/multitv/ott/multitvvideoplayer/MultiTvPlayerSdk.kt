@@ -73,7 +73,7 @@ class MultiTvPlayerSdk(
 ), PreviewLoader, PreviewBar.OnScrubListener, View.OnClickListener, SessionAvailabilityListener {
     private val sharedPreferencePlayer: SharedPreferencePlayer
     private var contentType: ContentType? = null
-    private var mMediaPlayer: ExoPlayer? = null
+    private var mMediaPlayer: Player? = null
     private var simpleExoPlayerView: MyVideoPlayer? = null
     private var trackSelector: DefaultTrackSelector
     private var videoPlayerSdkCallBackListener: VideoPlayerSdkCallBackListener? = null
@@ -645,6 +645,8 @@ class MultiTvPlayerSdk(
         }
     }
 
+
+
     private fun initializeMainPlayer(videoUrl: String?, isNeedToPlayInstantly: Boolean, currentPlayer: Player?) {
 //        ToastMessage.showLogs(ToastMessage.LogType.ERROR, "Video Player:::", "initializeMainPlayer");
         if (currentPlayer != null) {
@@ -682,7 +684,7 @@ class MultiTvPlayerSdk(
             simpleExoPlayerView!!.defaultArtwork = null
         }
 
-        //mMediaPlayer = currentPlayer
+        mMediaPlayer = currentPlayer
 
         if (adsUrl != null && !TextUtils.isEmpty(adsUrl)) {
             val dataSourceFactory: DataSource.Factory = DefaultDataSource.Factory(
@@ -702,7 +704,7 @@ class MultiTvPlayerSdk(
         }
         if (mMediaPlayer != null) {
             mMediaPlayer!!.addListener(stateChangeCallback1)
-            simpleExoPlayerView!!.player = mMediaPlayer
+//            simpleExoPlayerView!!.player = mMediaPlayer
             simpleExoPlayerView!!.controllerHideOnTouch = true
             simpleExoPlayerView!!.controllerAutoShow = false
             simpleExoPlayerView!!.controllerShowTimeoutMs = DEFAULT_TIMEOUT_MS
@@ -745,7 +747,7 @@ class MultiTvPlayerSdk(
                     videoUrl!!,
                     drmSessionManager!!
                 )
-                mMediaPlayer!!.setMediaSource(playerMediaSource!!)
+              //  mMediaPlayer!!.setMediaSource(playerMediaSource!!)
             } else {
                 mediaItem = if (subtitle != null) {
                     /*MediaSource playerMediaSource = new ExoUttils().buildMediaSource(context, mediaItem, videoUrl, drmSessionManager);
