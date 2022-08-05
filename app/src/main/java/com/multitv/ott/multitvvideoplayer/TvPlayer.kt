@@ -57,14 +57,13 @@ import com.multitv.ott.multitvvideoplayer.videoplayer.MyVideoPlayer
 import com.pallycon.widevinelibrary.*
 import java.util.*
 
-class TvPlayer (
-    private val context: AppCompatActivity,
-    attrs: AttributeSet?,
-    defStyleAttr: Int
-) : FrameLayout(
-    context, attrs, defStyleAttr
-), PreviewLoader, PreviewBar.OnScrubListener, View.OnClickListener, SessionAvailabilityListener {
+class TvPlayer  : FrameLayout, PreviewLoader, PreviewBar.OnScrubListener, View.OnClickListener, SessionAvailabilityListener {
+    private lateinit var context: AppCompatActivity
+    constructor(context: AppCompatActivity, attrs: AttributeSet, defStyle: Int) : super(context, attrs, defStyle) {
+        this.context=context;
+    }
 
+    constructor(context: AppCompatActivity, attrs: AttributeSet) : this(context, attrs, 0) {}
 
 
 
@@ -147,12 +146,7 @@ class TvPlayer (
     private var mCastPlayer: CastPlayer? = null
 //    private val listener: com.google.android.exoplayer2.castdemo.PlayerManager.Listener? = null
 
-    constructor(context: Context, attrs: AttributeSet?) : this(
-        context as AppCompatActivity,
-        attrs,
-        0
-    ) {
-    }
+
 
 
     /*

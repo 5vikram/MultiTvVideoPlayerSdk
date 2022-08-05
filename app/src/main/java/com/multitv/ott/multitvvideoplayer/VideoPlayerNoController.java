@@ -105,6 +105,7 @@ public class VideoPlayerNoController extends FrameLayout implements View.OnClick
     }
 
     public VideoPlayerNoController(AppCompatActivity context, AttributeSet attrs, int defStyleAttr) {
+
         super(context, attrs, defStyleAttr);
         this.context = context;
         trackSelector = new DefaultTrackSelector(context);
