@@ -73,7 +73,7 @@ class MultiTvPlayerSdk(
 ), PreviewLoader, PreviewBar.OnScrubListener, View.OnClickListener, SessionAvailabilityListener {
     private val sharedPreferencePlayer: SharedPreferencePlayer
     private var contentType: ContentType? = null
-    private var mMediaPlayer: Player? = null
+    private var mMediaPlayer: ExoPlayer? = null
     private var simpleExoPlayerView: MyVideoPlayer? = null
     private var trackSelector: DefaultTrackSelector
     private var videoPlayerSdkCallBackListener: VideoPlayerSdkCallBackListener? = null
@@ -286,11 +286,7 @@ class MultiTvPlayerSdk(
         // simpleExoPlayerView.set
         errorRetryLayout?.setOnClickListener(OnClickListener {
             errorRetryLayout?.setVisibility(GONE)
-            if (mCastPlayer != null){
-                initializeMainPlayer(mContentUrl, true, if (mCastPlayer!!.isCastSessionAvailable) mCastPlayer else mMediaPlayer)
-            } else {
-                initializeMainPlayer(mContentUrl, true, mMediaPlayer)
-            }
+            initializeMainPlayer(mContentUrl, true, mMediaPlayer)
         })
         videoUnLockButton?.setOnClickListener(OnClickListener {
             isScreenLockEnable = false
@@ -612,11 +608,7 @@ class MultiTvPlayerSdk(
 
     // start video player when player is ready state
     fun startVideoPlayer(isNeedToPlayInstantly: Boolean) {
-        if (mCastPlayer != null){
-            initializeMainPlayer(mContentUrl, isNeedToPlayInstantly, if (mCastPlayer!!.isCastSessionAvailable) mCastPlayer else mMediaPlayer)
-        } else {
-            initializeMainPlayer(mContentUrl, isNeedToPlayInstantly, mMediaPlayer)
-        }
+        initializeMainPlayer(mContentUrl, true, mMediaPlayer)
     }
 
     // resume video player
@@ -668,23 +660,23 @@ class MultiTvPlayerSdk(
 
         // start
 
-        simpleExoPlayerView!!.player = currentPlayer
-        simpleExoPlayerView!!.controllerHideOnTouch = currentPlayer === mMediaPlayer
+//        simpleExoPlayerView!!.player = currentPlayer
+//        simpleExoPlayerView!!.controllerHideOnTouch = currentPlayer === mMediaPlayer
+//
+//        if (currentPlayer === mCastPlayer && mCastPlayer != null) {
+//            simpleExoPlayerView!!.controllerShowTimeoutMs = 0
+//            simpleExoPlayerView!!.showController()
+//            simpleExoPlayerView!!.defaultArtwork = ResourcesCompat.getDrawable(
+//                context.resources,
+//                R.drawable.ic_baseline_cast_24,  /* theme= */
+//                null
+//            )
+//        } else { // currentPlayer == localPlayer
+//            simpleExoPlayerView!!.controllerShowTimeoutMs = StyledPlayerControlView.DEFAULT_SHOW_TIMEOUT_MS
+//            simpleExoPlayerView!!.defaultArtwork = null
+//        }
 
-        if (currentPlayer === mCastPlayer && mCastPlayer != null) {
-            simpleExoPlayerView!!.controllerShowTimeoutMs = 0
-            simpleExoPlayerView!!.showController()
-            simpleExoPlayerView!!.defaultArtwork = ResourcesCompat.getDrawable(
-                context.resources,
-                R.drawable.ic_baseline_cast_24,  /* theme= */
-                null
-            )
-        } else { // currentPlayer == localPlayer
-            simpleExoPlayerView!!.controllerShowTimeoutMs = StyledPlayerControlView.DEFAULT_SHOW_TIMEOUT_MS
-            simpleExoPlayerView!!.defaultArtwork = null
-        }
-
-        mMediaPlayer = currentPlayer
+//        mMediaPlayer = currentPlayer
 
         if (adsUrl != null && !TextUtils.isEmpty(adsUrl)) {
             val dataSourceFactory: DataSource.Factory = DefaultDataSource.Factory(
@@ -704,7 +696,7 @@ class MultiTvPlayerSdk(
         }
         if (mMediaPlayer != null) {
             mMediaPlayer!!.addListener(stateChangeCallback1)
-//            simpleExoPlayerView!!.player = mMediaPlayer
+            simpleExoPlayerView!!.player = mMediaPlayer
             simpleExoPlayerView!!.controllerHideOnTouch = true
             simpleExoPlayerView!!.controllerAutoShow = false
             simpleExoPlayerView!!.controllerShowTimeoutMs = DEFAULT_TIMEOUT_MS
@@ -747,7 +739,7 @@ class MultiTvPlayerSdk(
                     videoUrl!!,
                     drmSessionManager!!
                 )
-              //  mMediaPlayer!!.setMediaSource(playerMediaSource!!)
+                mMediaPlayer!!.setMediaSource(playerMediaSource!!)
             } else {
                 mediaItem = if (subtitle != null) {
                     /*MediaSource playerMediaSource = new ExoUttils().buildMediaSource(context, mediaItem, videoUrl, drmSessionManager);
