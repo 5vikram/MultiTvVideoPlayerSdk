@@ -63,7 +63,7 @@ import com.multitv.ott.multitvvideoplayer.videoplayer.MyVideoPlayer
 import com.pallycon.widevinelibrary.*
 import java.util.*
 
-class MultiTvPlayerSdk(
+ class MultiTvPlayerSdk(
     private val context: AppCompatActivity,
     attrs: AttributeSet?,
     defStyleAttr: Int

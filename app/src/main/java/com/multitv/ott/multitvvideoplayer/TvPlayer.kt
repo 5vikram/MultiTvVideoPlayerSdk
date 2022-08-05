@@ -64,6 +64,11 @@ class TvPlayer (
 ) : FrameLayout(
     context, attrs, defStyleAttr
 ), PreviewLoader, PreviewBar.OnScrubListener, View.OnClickListener, SessionAvailabilityListener {
+
+
+
+
+
     private val sharedPreferencePlayer: SharedPreferencePlayer
     private var contentType: ContentType? = null
     private var mMediaPlayer: ExoPlayer? = null
