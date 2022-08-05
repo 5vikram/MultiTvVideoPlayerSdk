@@ -1,73 +1,67 @@
 package com.multitv.ott.multitvvideoplayer
 
 import android.Manifest
-import androidx.appcompat.app.AppCompatActivity
-import android.widget.FrameLayout
-import com.multitv.ott.multitvvideoplayer.timebar.previewseekbar.PreviewLoader
-import com.multitv.ott.multitvvideoplayer.timebar.previewseekbar.PreviewBar
-import com.multitv.ott.multitvvideoplayer.database.SharedPreferencePlayer
-import com.multitv.ott.multitvvideoplayer.videoplayer.MyVideoPlayer
-import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
-import com.multitv.ott.multitvvideoplayer.listener.VideoPlayerSdkCallBackListener
-import com.pallycon.widevinelibrary.PallyconWVMSDK
-import com.multitv.ott.multitvvideoplayer.custom.CountDownTimerWithPause
-import android.widget.LinearLayout
-import com.multitv.ott.multitvvideoplayer.timebar.PreviewTimeBar
-import android.widget.TextView
-import com.google.android.exoplayer2.drm.DrmSessionManager
-import com.google.android.exoplayer2.ext.ima.ImaAdsLoader
-import com.multitv.ott.multitvvideoplayer.R
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
-import android.content.pm.ActivityInfo
-import com.multitv.ott.multitvvideoplayer.touchevent.OnSwipeTouchListener
-import android.os.Build
-import com.multitv.ott.multitvvideoplayer.timebar.previewseekbar.PreviewBar.OnPreviewVisibilityListener
-import android.media.AudioManager.OnAudioFocusChangeListener
-import android.media.AudioManager
-import android.telephony.PhoneStateListener
-import android.telephony.TelephonyManager
-import com.google.android.exoplayer2.upstream.DefaultAllocator
-import android.text.TextUtils
-import com.google.android.exoplayer2.upstream.DefaultDataSource
-import com.google.android.exoplayer2.source.MediaSourceFactory
-import com.google.android.exoplayer2.source.DefaultMediaSourceFactory
-import com.google.android.exoplayer2.source.DefaultMediaSourceFactory.AdsLoaderProvider
-import com.google.android.exoplayer2.MediaItem.AdsConfiguration
-import com.multitv.ott.multitvvideoplayer.MultiTvPlayerSdk
-import com.google.android.exoplayer2.MediaItem.SubtitleConfiguration
-import com.google.android.exoplayer2.util.MimeTypes
-import com.pallycon.widevinelibrary.PallyconWVMSDKFactory
-import com.pallycon.widevinelibrary.PallyconDrmException
-import com.pallycon.widevinelibrary.UnAuthorizedDeviceException
-import com.google.android.exoplayer2.source.MediaSource
-import com.google.android.exoplayer2.source.TrackGroupArray
-import com.google.android.exoplayer2.trackselection.TrackSelectionArray
-import com.multitv.ott.multitvvideoplayer.fabbutton.FabButton
 import android.content.DialogInterface
-import com.multitv.ott.multitvvideoplayer.popup.TrackSelectionDialog
-import com.bumptech.glide.Glide
-import com.multitv.ott.multitvvideoplayer.playerglide.GlideThumbnailTransformation
-import com.pallycon.widevinelibrary.PallyconEventListener
-import androidx.core.content.ContextCompat
+import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.Color
+import android.media.AudioManager
+import android.media.AudioManager.OnAudioFocusChangeListener
 import android.net.Uri
+import android.os.Build
 import android.os.Handler
 import android.os.SystemClock
+import android.telephony.PhoneStateListener
+import android.telephony.TelephonyManager
+import android.text.TextUtils
 import android.util.AttributeSet
 import android.util.Log
 import android.view.*
-import android.widget.ImageView
+import android.view.View.OnClickListener
+import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
+import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.Target
 import com.google.android.exoplayer2.*
+import com.google.android.exoplayer2.MediaItem.AdsConfiguration
+import com.google.android.exoplayer2.MediaItem.SubtitleConfiguration
+import com.google.android.exoplayer2.drm.DrmSessionManager
+import com.google.android.exoplayer2.ext.ima.ImaAdsLoader
+import com.google.android.exoplayer2.source.DefaultMediaSourceFactory
+import com.google.android.exoplayer2.source.MediaSourceFactory
+import com.google.android.exoplayer2.source.TrackGroupArray
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
+import com.google.android.exoplayer2.trackselection.TrackSelectionArray
+import com.google.android.exoplayer2.ui.StyledPlayerControlView
 import com.google.android.exoplayer2.upstream.DataSource
+import com.google.android.exoplayer2.upstream.DefaultAllocator
+import com.google.android.exoplayer2.upstream.DefaultDataSource
+import com.google.android.exoplayer2.util.MimeTypes
 import com.google.android.exoplayer2.util.Util
 import com.google.android.exoplayer2.video.VideoSize
+import com.google.android.gms.cast.framework.CastContext
 import com.google.common.collect.ImmutableList
+import com.multitv.ott.multitvvideoplayer.cast.CastPlayer
+import com.multitv.ott.multitvvideoplayer.cast.SessionAvailabilityListener
+import com.multitv.ott.multitvvideoplayer.custom.CountDownTimerWithPause
+import com.multitv.ott.multitvvideoplayer.database.SharedPreferencePlayer
+import com.multitv.ott.multitvvideoplayer.fabbutton.FabButton
+import com.multitv.ott.multitvvideoplayer.listener.VideoPlayerSdkCallBackListener
+import com.multitv.ott.multitvvideoplayer.playerglide.GlideThumbnailTransformation
+import com.multitv.ott.multitvvideoplayer.popup.TrackSelectionDialog
+import com.multitv.ott.multitvvideoplayer.timebar.PreviewTimeBar
+import com.multitv.ott.multitvvideoplayer.timebar.previewseekbar.PreviewBar
+import com.multitv.ott.multitvvideoplayer.timebar.previewseekbar.PreviewLoader
+import com.multitv.ott.multitvvideoplayer.touchevent.OnSwipeTouchListener
 import com.multitv.ott.multitvvideoplayer.utils.*
+import com.multitv.ott.multitvvideoplayer.videoplayer.MyVideoPlayer
+import com.pallycon.widevinelibrary.*
 import java.util.*
 
 class MultiTvPlayerSdk(
@@ -76,7 +70,7 @@ class MultiTvPlayerSdk(
     defStyleAttr: Int
 ) : FrameLayout(
     context, attrs, defStyleAttr
-), PreviewLoader, PreviewBar.OnScrubListener, View.OnClickListener {
+), PreviewLoader, PreviewBar.OnScrubListener, View.OnClickListener, SessionAvailabilityListener {
     private val sharedPreferencePlayer: SharedPreferencePlayer
     private var contentType: ContentType? = null
     private var mMediaPlayer: ExoPlayer? = null
@@ -147,6 +141,14 @@ class MultiTvPlayerSdk(
 
     private var mWindow: Window? = null
 
+    private lateinit var progressBarParent: FrameLayout
+    private lateinit var volumeProgressBar: ProgressBar
+    private lateinit var brightnessProgressBar: ProgressBar
+
+//    private val context: Context? = null
+    private var mCastPlayer: CastPlayer? = null
+//    private val listener: com.google.android.exoplayer2.castdemo.PlayerManager.Listener? = null
+
     constructor(context: Context, attrs: AttributeSet?) : this(
         context as AppCompatActivity,
         attrs,
@@ -162,6 +164,9 @@ class MultiTvPlayerSdk(
     }*/
     override fun onFinishInflate() {
         val view = LayoutInflater.from(getContext()).inflate(R.layout.player_layout, this)
+        progressBarParent = view.findViewById(R.id.progress_bar_parent)
+        volumeProgressBar = view.findViewById(R.id.volume_progress_bar)
+        brightnessProgressBar = view.findViewById(R.id.brightness_progress_bar)
         errorRetryLayout = view.findViewById(R.id.errorRetryLayout)
         durationlayout = view.findViewById(R.id.durationlayout)
         videoMenuLayout = view.findViewById(R.id.videoMenuLayout)
@@ -214,7 +219,7 @@ class MultiTvPlayerSdk(
             }
         })
 
-        simpleExoPlayerView?.setOnTouchListener(clickFrameSwipeListener)
+        findViewById<View>(R.id.frameLayout)?.setOnTouchListener(clickFrameSwipeListener)
         //findViewById<View>(R.id.frameLayout).setOnTouchListener(clickFrameSwipeListener)
         //findViewById(R.id.frameLayout)
 /*
@@ -281,7 +286,7 @@ class MultiTvPlayerSdk(
         // simpleExoPlayerView.set
         errorRetryLayout?.setOnClickListener(OnClickListener {
             errorRetryLayout?.setVisibility(GONE)
-            initializeMainPlayer(mContentUrl, true)
+            initializeMainPlayer(mContentUrl, true, mMediaPlayer)
         })
         videoUnLockButton?.setOnClickListener(OnClickListener {
             isScreenLockEnable = false
@@ -322,8 +327,30 @@ class MultiTvPlayerSdk(
                 isPreviewShowing.toString()
             )
         }
+
+//        castContext = CastContext.getSharedInstance(this);
+
+//        val castContext = CastContext.getSharedInstance(context)
+//
+//        castPlayer = CastPlayer(castContext)
+////        castPlayer!!.addListener(this)
+//        castPlayer!!.setSessionAvailabilityListener(this)
+
         super.onFinishInflate()
     }
+
+    fun setCastSessionAvailabilityListener(sessionAvailabilityListener: SessionAvailabilityListener){
+        if (mCastPlayer != null){
+            mCastPlayer!!.setSessionAvailabilityListener(sessionAvailabilityListener)
+        }
+    }
+
+    fun setCastPlayer(castPlayer: CastPlayer){
+        if (mCastPlayer == null){
+            mCastPlayer = castPlayer
+        }
+    }
+
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
@@ -581,7 +608,7 @@ class MultiTvPlayerSdk(
 
     // start video player when player is ready state
     fun startVideoPlayer(isNeedToPlayInstantly: Boolean) {
-        initializeMainPlayer(mContentUrl, isNeedToPlayInstantly)
+        initializeMainPlayer(mContentUrl, true, mMediaPlayer)
     }
 
     // resume video player
@@ -610,12 +637,14 @@ class MultiTvPlayerSdk(
         }
     }
 
-    private fun initializeMainPlayer(videoUrl: String?, isNeedToPlayInstantly: Boolean) {
+
+
+    private fun initializeMainPlayer(videoUrl: String?, isNeedToPlayInstantly: Boolean, currentPlayer: Player?) {
 //        ToastMessage.showLogs(ToastMessage.LogType.ERROR, "Video Player:::", "initializeMainPlayer");
-        if (mMediaPlayer != null) {
-            mMediaPlayer!!.release()
+        if (currentPlayer != null) {
+            currentPlayer!!.release()
             if (adsLoader != null) adsLoader!!.setPlayer(null)
-            mMediaPlayer = null
+//            mMediaPlayer = null
         }
         centerButtonLayout!!.visibility = GONE
         videoPlayerSdkCallBackListener!!.prepareVideoPlayer()
@@ -627,6 +656,28 @@ class MultiTvPlayerSdk(
             .setPrioritizeTimeOverSizeThresholds(true)
             .setBackBuffer(0, false)
             .build()
+
+
+        // start
+
+//        simpleExoPlayerView!!.player = currentPlayer
+//        simpleExoPlayerView!!.controllerHideOnTouch = currentPlayer === mMediaPlayer
+//
+//        if (currentPlayer === mCastPlayer && mCastPlayer != null) {
+//            simpleExoPlayerView!!.controllerShowTimeoutMs = 0
+//            simpleExoPlayerView!!.showController()
+//            simpleExoPlayerView!!.defaultArtwork = ResourcesCompat.getDrawable(
+//                context.resources,
+//                R.drawable.ic_baseline_cast_24,  /* theme= */
+//                null
+//            )
+//        } else { // currentPlayer == localPlayer
+//            simpleExoPlayerView!!.controllerShowTimeoutMs = StyledPlayerControlView.DEFAULT_SHOW_TIMEOUT_MS
+//            simpleExoPlayerView!!.defaultArtwork = null
+//        }
+
+//        mMediaPlayer = currentPlayer
+
         if (adsUrl != null && !TextUtils.isEmpty(adsUrl)) {
             val dataSourceFactory: DataSource.Factory = DefaultDataSource.Factory(
                 context
@@ -635,6 +686,7 @@ class MultiTvPlayerSdk(
                 DefaultMediaSourceFactory(dataSourceFactory)
                     .setAdsLoaderProvider { unusedAdTagUri: AdsConfiguration? -> adsLoader }
                     .setAdViewProvider(simpleExoPlayerView)
+
             mMediaPlayer = ExoPlayer.Builder(context).setMediaSourceFactory(mediaSourceFactory)
                 .setTrackSelector(trackSelector).setLoadControl(customLoadControl).build()
             adsLoader = ImaAdsLoader.Builder( /* context= */context).build()
@@ -1095,7 +1147,6 @@ class MultiTvPlayerSdk(
             if (initialX >= mInitialTextureWidth / 2 || mWindow == null) {
                 // Right side swipe when up and down
 
-                VideoPlayerTracer.error("Gaustre:::", "if (initialX >= mInitialTextureWidth / 2)")
                 var diffVolume: Float
                 var finalVolume: Int
 
@@ -1113,17 +1164,16 @@ class MultiTvPlayerSdk(
                     resources.getString(R.string.volume), finalVolume
                 )*/
                 // mPositionTextView.text = progressText
+                volumeProgressBar.progress = finalVolume
                 audioManager?.setStreamVolume(AudioManager.STREAM_MUSIC, finalVolume, 0)
 
             } else if (initialX < mInitialTextureWidth / 2) {
                 // Left side swipe when up and down
-                VideoPlayerTracer.error("Gaustre:::", "if (initialX < mInitialTextureWidth / 2)")
 
                 var diffBrightness: Float
                 var finalBrightness: Int
 
-                diffBrightness =
-                    maxBrightness.toFloat() * diff / (mInitialTextureHeight.toFloat() / 2)
+                diffBrightness = maxBrightness.toFloat() * diff / (mInitialTextureHeight.toFloat() / 2)
                 if (dir == OnSwipeTouchListener.Direction.DOWN) {
                     diffBrightness = -diffBrightness
                 }
@@ -1133,14 +1183,16 @@ class MultiTvPlayerSdk(
                 else if (finalBrightness > maxBrightness)
                     finalBrightness = maxBrightness
 
-//                    val progressText = String.format(
-//                        resources.getString(R.string.brightness), finalBrightness
-//                    )
-                //mPositionTextView.text = progressText
 
                 val layout = mWindow?.attributes
                 layout?.screenBrightness = finalBrightness.toFloat() / 100
                 mWindow?.attributes = layout
+
+
+                brightnessProgressBar.progress = finalBrightness
+
+
+
 
                 /*PreferenceManager.getDefaultSharedPreferences(context)
                     .edit()
@@ -1190,28 +1242,65 @@ class MultiTvPlayerSdk(
             //  }
             //  mPositionTextView.visibility = View.GONE
 
+            volumeProgressBar.visibility = View.GONE
+            brightnessProgressBar.visibility = View.GONE
             resumeVideoPlayer()
+            hideController()
+
         }
 
         override fun onBeforeMove(dir: Direction) {
-            if (mGestureType != GestureType.SwipeGesture)
-                return
-            if (dir == Direction.LEFT || dir == Direction.RIGHT) {
-                val playing = mMediaPlayer != null && mMediaPlayer!!.playWhenReady
-                if (playing)
-                    pauseVideoPlayer()
-            } else {
-                maxBrightness = 100
-                startBrightness = (mWindow?.attributes?.screenBrightness!! * 100).toInt()
-                maxVolume = audioManager?.getStreamMaxVolume(AudioManager.STREAM_MUSIC) ?: 100
-                startVolume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) ?: 100
+//            if (mGestureType != GestureType.SwipeGesture)
+//                return
+//            if (dir == Direction.LEFT || dir == Direction.RIGHT) {
+//                val playing = mMediaPlayer != null && mMediaPlayer!!.playWhenReady
+//                if (playing)
+//                    pauseVideoPlayer()
+//            } else {
+//                maxBrightness = 100
+//                startBrightness = (mWindow?.attributes?.screenBrightness!! * 100).toInt()
+//                maxVolume = audioManager?.getStreamMaxVolume(AudioManager.STREAM_MUSIC) ?: 100
+//                startVolume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) ?: 100
+//
+//                volumeProgressBar.max = maxVolume
+//                brightnessProgressBar.max = maxBrightness
+//            }
 
+
+            if (initialX >= mInitialTextureWidth / 2 || mWindow == null) {
+                // Right side swipe when up and down
+                volumeProgressBar.visibility = View.VISIBLE
+                volumeProgressBar.progress = startVolume
+            } else if (initialX < mInitialTextureWidth / 2) {
+                // Left side swipe when up and down
+                brightnessProgressBar.visibility = View.VISIBLE
+                brightnessProgressBar.progress = startBrightness
             }
+
+
+            maxBrightness = 100
+            startBrightness = (mWindow?.attributes?.screenBrightness!! * 100).toInt()
+            maxVolume = audioManager?.getStreamMaxVolume(AudioManager.STREAM_MUSIC) ?: 100
+            startVolume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) ?: 100
+
+            volumeProgressBar.max = maxVolume
+            brightnessProgressBar.max = maxBrightness
+
+            hideController()
+
         }
     }
 
     enum class GestureType {
         NoGesture, SwipeGesture, DoubleTapGesture
+    }
+
+    override fun onCastSessionAvailable() {
+
+    }
+
+    override fun onCastSessionUnavailable() {
+
     }
 
 }
