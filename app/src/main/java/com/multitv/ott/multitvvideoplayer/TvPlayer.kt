@@ -59,6 +59,7 @@ import java.util.*
 
 class TvPlayer  : FrameLayout, PreviewLoader, PreviewBar.OnScrubListener, View.OnClickListener, SessionAvailabilityListener {
     private lateinit var context: AppCompatActivity
+
     constructor(context: AppCompatActivity, attrs: AttributeSet, defStyle: Int) : super(context, attrs, defStyle) {
         this.context=context;
     }
