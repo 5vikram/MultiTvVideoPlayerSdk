@@ -10,7 +10,6 @@ import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.Color
 import android.media.AudioManager
-import android.media.AudioManager.OnAudioFocusChangeListener
 import android.net.Uri
 import android.os.Build
 import android.os.Handler
@@ -21,16 +20,12 @@ import android.text.TextUtils
 import android.util.AttributeSet
 import android.util.Log
 import android.view.*
-import android.view.View.OnClickListener
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.content.res.ResourcesCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.Target
 import com.google.android.exoplayer2.*
-import com.google.android.exoplayer2.MediaItem.AdsConfiguration
-import com.google.android.exoplayer2.MediaItem.SubtitleConfiguration
 import com.google.android.exoplayer2.drm.DrmSessionManager
 import com.google.android.exoplayer2.ext.ima.ImaAdsLoader
 import com.google.android.exoplayer2.source.DefaultMediaSourceFactory
@@ -38,7 +33,6 @@ import com.google.android.exoplayer2.source.MediaSourceFactory
 import com.google.android.exoplayer2.source.TrackGroupArray
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray
-import com.google.android.exoplayer2.ui.StyledPlayerControlView
 import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.DefaultAllocator
 import com.google.android.exoplayer2.upstream.DefaultDataSource
@@ -63,7 +57,7 @@ import com.multitv.ott.multitvvideoplayer.videoplayer.MyVideoPlayer
 import com.pallycon.widevinelibrary.*
 import java.util.*
 
-class MultiTvPlayerSdk(
+class TvPlayer (
     private val context: AppCompatActivity,
     attrs: AttributeSet?,
     defStyleAttr: Int
@@ -144,7 +138,7 @@ class MultiTvPlayerSdk(
     private lateinit var volumeProgressBar: ProgressBar
     private lateinit var brightnessProgressBar: ProgressBar
 
-//    private val context: Context? = null
+    //    private val context: Context? = null
     private var mCastPlayer: CastPlayer? = null
 //    private val listener: com.google.android.exoplayer2.castdemo.PlayerManager.Listener? = null
 
@@ -187,8 +181,6 @@ class MultiTvPlayerSdk(
         playerProgress = findViewById<View>(R.id.exo_progress) as PreviewTimeBar
         currentDurationPlayTv = view.findViewById(R.id.exo_position)
         previewImageView = view.findViewById(R.id.previewImageView)
-        videoNextButton?.setVisibility(GONE)
-        videoPerviousButton?.setVisibility(GONE)
         simpleExoPlayerView = view.findViewById(R.id.videoPlayer)
         videoRotationButton = view.findViewById(R.id.enter_full_screen)
         playerProgress!!.addOnScrubListener(this)
@@ -196,6 +188,11 @@ class MultiTvPlayerSdk(
         pictureInPicture = view.findViewById(R.id.picture_in_picture)
         videoNextButton?.setVisibility(GONE)
         videoPerviousButton?.setVisibility(GONE)
+        pictureInPicture?.setVisibility(GONE)
+        videoRotationButton?.setVisibility(GONE)
+
+
+
         playerProgress!!.setAdMarkerColor(Color.argb(0x00, 0xFF, 0xFF, 0xFF))
         playerProgress!!.setPlayedAdMarkerColor(Color.argb(0x98, 0xFF, 0xFF, 0xFF))
         videoRotationButton?.setOnClickListener(OnClickListener {
@@ -451,7 +448,7 @@ class MultiTvPlayerSdk(
         }
     }
 
-    val audioFocusChangeListener = OnAudioFocusChangeListener { focusChange ->
+    val audioFocusChangeListener = AudioManager.OnAudioFocusChangeListener { focusChange ->
         if (focusChange == AudioManager.AUDIOFOCUS_LOSS) {
             if (mMediaPlayer != null && mMediaPlayer!!.playWhenReady) {
                 checkForAudioFocus()
@@ -683,7 +680,7 @@ class MultiTvPlayerSdk(
             )
             val mediaSourceFactory: MediaSourceFactory =
                 DefaultMediaSourceFactory(dataSourceFactory)
-                    .setAdsLoaderProvider { unusedAdTagUri: AdsConfiguration? -> adsLoader }
+                    .setAdsLoaderProvider { unusedAdTagUri: MediaItem.AdsConfiguration? -> adsLoader }
                     .setAdViewProvider(simpleExoPlayerView)
 
             mMediaPlayer = ExoPlayer.Builder(context).setMediaSourceFactory(mediaSourceFactory)
@@ -701,9 +698,9 @@ class MultiTvPlayerSdk(
             simpleExoPlayerView!!.controllerShowTimeoutMs = DEFAULT_TIMEOUT_MS
             simpleExoPlayerView!!.setControllerHideDuringAds(true)
             var mediaItem: MediaItem? = null
-            var subtitle: SubtitleConfiguration? = null
+            var subtitle: MediaItem.SubtitleConfiguration? = null
             if (subTitleUri != null && !TextUtils.isEmpty(subTitleUri)) {
-                subtitle = SubtitleConfiguration.Builder(Uri.parse(subTitleUri))
+                subtitle = MediaItem.SubtitleConfiguration.Builder(Uri.parse(subTitleUri))
                     .setMimeType(MimeTypes.APPLICATION_SUBRIP) // The correct MIME type (required).
                     .setLanguage("en") // MUST, The subtitle language (optional).
                     .setSelectionFlags(C.SELECTION_FLAG_DEFAULT) //MUST,  Selection flags for the track (optional).
@@ -750,7 +747,7 @@ class MultiTvPlayerSdk(
                         MediaItem.Builder()
                             .setSubtitleConfigurations(ImmutableList.of(subtitle))
                             .setUri(videoUrl)
-                            .setAdsConfiguration(AdsConfiguration.Builder(adTagUri).build())
+                            .setAdsConfiguration(MediaItem.AdsConfiguration.Builder(adTagUri).build())
                             .build()
                     } else {
                         MediaItem.Builder()
@@ -765,7 +762,7 @@ class MultiTvPlayerSdk(
                         val adTagUri = Uri.parse(adsUrl)
                         MediaItem.Builder()
                             .setUri(videoUrl)
-                            .setAdsConfiguration(AdsConfiguration.Builder(adTagUri).build())
+                            .setAdsConfiguration(MediaItem.AdsConfiguration.Builder(adTagUri).build())
                             .build()
                     } else {
                         MediaItem.Builder()
