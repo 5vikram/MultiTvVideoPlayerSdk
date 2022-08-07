@@ -127,7 +127,7 @@ public class VideoTvPlayer extends FrameLayout implements View.OnClickListener, 
         this((AppCompatActivity) context, attrs, 0);
     }
 
-    public VideoTvPlayer(AppCompatActivity context1,AttributeSet attrs, int defStyleAttr) {
+    public VideoTvPlayer(AppCompatActivity context1, AttributeSet attrs, int defStyleAttr) {
         super(context1, attrs, defStyleAttr);
         this.context = context1;
         trackSelector = new DefaultTrackSelector(context);
@@ -317,13 +317,13 @@ public class VideoTvPlayer extends FrameLayout implements View.OnClickListener, 
         }
     }
 
-    public  void setCastSessionAvailabilityListener(SessionAvailabilityListener sessionAvailabilityListener) {
+    public void setCastSessionAvailabilityListener(SessionAvailabilityListener sessionAvailabilityListener) {
         if (mCastPlayer != null) {
             mCastPlayer.setSessionAvailabilityListener(sessionAvailabilityListener);
         }
     }
 
-    public  void setCastPlayer(CastPlayer castPlayer) {
+    public void setCastPlayer(CastPlayer castPlayer) {
         if (mCastPlayer == null) {
             mCastPlayer = castPlayer;
         }
@@ -469,7 +469,7 @@ public class VideoTvPlayer extends FrameLayout implements View.OnClickListener, 
     };
 
 
-    public  void prepareVideoPlayer() {
+    public void prepareVideoPlayer() {
         if (mContentUrl == null)
             return;
 
@@ -486,11 +486,11 @@ public class VideoTvPlayer extends FrameLayout implements View.OnClickListener, 
         }
     }
 
-    public  void setMultiTvVideoPlayerSdkListener(VideoPlayerSdkCallBackListener videoPlayerSdkCallBackListener) {
+    public void setMultiTvVideoPlayerSdkListener(VideoPlayerSdkCallBackListener videoPlayerSdkCallBackListener) {
         this.videoPlayerSdkCallBackListener = videoPlayerSdkCallBackListener;
     }
 
-    public  void setContentFilePath(String path) {
+    public void setContentFilePath(String path) {
         mContentUrl = path;
     }
 
@@ -502,11 +502,11 @@ public class VideoTvPlayer extends FrameLayout implements View.OnClickListener, 
         adsUrl = adUrl;
     }
 
-    public  void setAnalaticsUrl(String analaticsUrl) {
+    public void setAnalaticsUrl(String analaticsUrl) {
         this.analaticsUrl = analaticsUrl;
     }
 
-    public  void setKeyToken(String token) {
+    public void setKeyToken(String token) {
         this.token = token;
     }
 
@@ -518,11 +518,11 @@ public class VideoTvPlayer extends FrameLayout implements View.OnClickListener, 
         contentTitle = title;
     }
 
-    public   void setContentId(String id) {
+    public void setContentId(String id) {
         contentId = id;
     }
 
-    public  void setSubtitleVideoUri(String subtitleUri) {
+    public void setSubtitleVideoUri(String subtitleUri) {
         subTitleUri = subtitleUri;
     }
 
@@ -714,12 +714,12 @@ public class VideoTvPlayer extends FrameLayout implements View.OnClickListener, 
                         adsLoader.setPlayer(mMediaPlayer);
                         //adsLoader.focusSkipButton();
                         Uri adTagUri = Uri.parse(adsUrl);
-                        new MediaItem.Builder()
+                        mediaItem = new MediaItem.Builder()
                                 .setUri(videoUrl)
                                 .setAdsConfiguration(new MediaItem.AdsConfiguration.Builder(adTagUri).build())
                                 .build();
                     } else {
-                        new MediaItem.Builder()
+                        mediaItem = new MediaItem.Builder()
                                 .setUri(videoUrl)
                                 .build();
                     }
