@@ -225,68 +225,6 @@ class TvPlayer :FrameLayout, PreviewLoader, PreviewBar.OnScrubListener, View.OnC
         })
 
         findViewById<View>(R.id.frameLayout)?.setOnTouchListener(clickFrameSwipeListener)
-        //findViewById<View>(R.id.frameLayout).setOnTouchListener(clickFrameSwipeListener)
-        //findViewById(R.id.frameLayout)
-/*
-        findViewById<View>(R.id.frameLayout).setOnTouchListener(object :
-            OnSwipeTouchListener(true) {
-            override fun onClick() {
-                VideoPlayerTracer.error("Swipe:::", "onClick()")
-            }
-
-            override fun onBeforeMove(dir: Direction) {
-                VideoPlayerTracer.error("Swipe:::", "onBeforeMove()  " + dir.name)
-            }
-
-            override fun onAfterMove() {
-                VideoPlayerTracer.error("Swipe:::", "onAfterMove()")
-            }
-
-            override fun onDoubleTap(event: MotionEvent) {
-                VideoPlayerTracer.error("Swipe:::", "onDoubleTap()")
-            }
-
-            override fun onMove(dir: Direction, diff: Float) {
-                VideoPlayerTracer.error("Swipe:::", "onMove()")
-            } */
-/*    @Override
-            public void onClick() {
-                super.onClick();
-                if (isControllerShown)
-                    hideController();
-                else
-                    showController();
-
-                VideoPlayerTracer.error("Swipe:::", "onClick()");
-            }
-
-            @Override
-            public void onSwipeLeft() {
-                VideoPlayerTracer.error("Swipe:::", "onSwipeLeft()");
-                super.onSwipeLeft();
-            }
-
-            @Override
-            public void onSwipeRight() {
-                VideoPlayerTracer.error("Swipe:::", "onSwipeRight()");
-                super.onSwipeRight();
-            }
-
-            @Override
-            public void onSwipeDown() {
-                VideoPlayerTracer.error("Swipe:::", "onSwipeDown()");
-                super.onSwipeDown();
-            }
-
-            @Override
-            public void onSwipeUp() {
-                VideoPlayerTracer.error("Swipe:::", "onSwipeUp()");
-                super.onSwipeUp();
-            }*//*
-
-        })
-*/
-
         findViewById<View>(R.id.speed_btn)?.setOnClickListener { showSpeedControlDailog() }
         // simpleExoPlayerView.set
         errorRetryLayout?.setOnClickListener(OnClickListener {
@@ -689,8 +627,11 @@ class TvPlayer :FrameLayout, PreviewLoader, PreviewBar.OnScrubListener, View.OnC
             )
             val mediaSourceFactory: MediaSourceFactory =
                 DefaultMediaSourceFactory(dataSourceFactory)
-                    .setAdsLoaderProvider { unusedAdTagUri: MediaItem.AdsConfiguration? -> adsLoader }
+                    .setAdsLoaderProvider {
+                            unusedAdTagUri: MediaItem.AdsConfiguration? -> adsLoader
+                    }
                     .setAdViewProvider(simpleExoPlayerView)
+
 
             mMediaPlayer = ExoPlayer.Builder(context).setMediaSourceFactory(mediaSourceFactory)
                 .setTrackSelector(trackSelector).setLoadControl(customLoadControl).build()
@@ -895,6 +836,13 @@ class TvPlayer :FrameLayout, PreviewLoader, PreviewBar.OnScrubListener, View.OnC
         override fun onRepeatModeChanged(repeatMode: Int) {}
         override fun onPlaybackParametersChanged(playbackParameters: PlaybackParameters) {}
     }
+
+
+
+
+
+
+
 
 
     private fun startBufferingTimer() {

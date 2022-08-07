@@ -16,13 +16,13 @@ internal abstract class OnSwipeTouchListener(
     // 0: uninitialized
     // 1: horizontal
     // 2: vertical
-    private var initialGesture: Int = 0
+     var initialGesture: Int = 0
 
-    protected var initialX: Float = 0.toFloat()
-    protected var initialY: Float = 0.toFloat()
-    private var decidedX: Float = 0.toFloat()
-    private var decidedY: Float = 0.toFloat()
-    private var lastClick: Long = 0
+     var initialX: Float = 0.toFloat()
+     var initialY: Float = 0.toFloat()
+     var decidedX: Float = 0.toFloat()
+     var decidedY: Float = 0.toFloat()
+     var lastClick: Long = 0
 
     internal enum class Direction {
         LEFT, RIGHT, UP, DOWN
