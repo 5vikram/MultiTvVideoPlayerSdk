@@ -123,17 +123,13 @@ public class VideoTvPlayer extends FrameLayout implements View.OnClickListener, 
     private int mInitialTextureHeight = 0;
 
 
-    public VideoTvPlayer(@NonNull Context context) {
-        super(context);
+    public VideoTvPlayer(Context context, AttributeSet attrs) {
+        this((AppCompatActivity) context, attrs, 0);
     }
 
-    public VideoTvPlayer(@NonNull Context context, @Nullable AttributeSet attrs) {
-        super(context, attrs);
-    }
-
-    public VideoTvPlayer(@NonNull AppCompatActivity context, @Nullable AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-        this.context = context;
+    public VideoTvPlayer(AppCompatActivity context1,AttributeSet attrs, int defStyleAttr) {
+        super(context1, attrs, defStyleAttr);
+        this.context = context1;
         trackSelector = new DefaultTrackSelector(context);
         formatBuilder = new StringBuilder();
         formatter = new Formatter(formatBuilder, Locale.getDefault());
@@ -151,9 +147,6 @@ public class VideoTvPlayer extends FrameLayout implements View.OnClickListener, 
         }
     }
 
-    public VideoTvPlayer(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-    }
 
     @Override
     protected void onFinishInflate() {
