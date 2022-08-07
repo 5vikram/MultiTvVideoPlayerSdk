@@ -57,15 +57,19 @@ import com.multitv.ott.multitvvideoplayer.videoplayer.MyVideoPlayer
 import com.pallycon.widevinelibrary.*
 import java.util.*
 
-class TvPlayer  : FrameLayout, PreviewLoader, PreviewBar.OnScrubListener, View.OnClickListener, SessionAvailabilityListener {
+class TvPlayer  @JvmOverloads constructor(
+    context: AppCompatActivity,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : FrameLayout(context, attrs, defStyleAttr), PreviewLoader, PreviewBar.OnScrubListener, View.OnClickListener, SessionAvailabilityListener {
     private lateinit var context: AppCompatActivity
 
-    constructor(context: AppCompatActivity, attrs: AttributeSet, defStyle: Int) : super(context, attrs, defStyle) {
+ /*   constructor(context: AppCompatActivity, attrs: AttributeSet, defStyle: Int) : super(context, attrs, defStyle) {
         this.context=context;
     }
 
     constructor(context: AppCompatActivity, attrs: AttributeSet) : this(context, attrs, 0) {}
-
+*/
 
 
 
