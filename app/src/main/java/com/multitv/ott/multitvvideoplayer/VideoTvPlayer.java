@@ -67,7 +67,7 @@ import com.pallycon.widevinelibrary.*;
 
 import java.util.*;
 
-public class VideoTvPlayer extends FrameLayout implements View.OnClickListener, PreviewLoader, PreviewBar.OnScrubListener {
+public class VideoTvPlayer extends FrameLayout implements View.OnClickListener, PreviewLoader, PreviewBar.OnScrubListener, SessionAvailabilityListener {
 
     private AppCompatActivity context;
     private SharedPreferencePlayer sharedPreferencePlayer;
@@ -324,13 +324,13 @@ public class VideoTvPlayer extends FrameLayout implements View.OnClickListener, 
         }
     }
 
-    void setCastSessionAvailabilityListener(SessionAvailabilityListener sessionAvailabilityListener) {
+    public  void setCastSessionAvailabilityListener(SessionAvailabilityListener sessionAvailabilityListener) {
         if (mCastPlayer != null) {
             mCastPlayer.setSessionAvailabilityListener(sessionAvailabilityListener);
         }
     }
 
-    void setCastPlayer(CastPlayer castPlayer) {
+    public  void setCastPlayer(CastPlayer castPlayer) {
         if (mCastPlayer == null) {
             mCastPlayer = castPlayer;
         }
@@ -476,7 +476,7 @@ public class VideoTvPlayer extends FrameLayout implements View.OnClickListener, 
     };
 
 
-    void prepareVideoPlayer() {
+    public  void prepareVideoPlayer() {
         if (mContentUrl == null)
             return;
 
@@ -493,47 +493,47 @@ public class VideoTvPlayer extends FrameLayout implements View.OnClickListener, 
         }
     }
 
-    void setMultiTvVideoPlayerSdkListener(VideoPlayerSdkCallBackListener videoPlayerSdkCallBackListener) {
+    public  void setMultiTvVideoPlayerSdkListener(VideoPlayerSdkCallBackListener videoPlayerSdkCallBackListener) {
         this.videoPlayerSdkCallBackListener = videoPlayerSdkCallBackListener;
     }
 
-    void setContentFilePath(String path) {
+    public  void setContentFilePath(String path) {
         mContentUrl = path;
     }
 
-    void setContentType(ContentType type) {
+    public void setContentType(ContentType type) {
         contentType = type;
     }
 
-    void setPreRollAdUrl(String adUrl) {
+    public void setPreRollAdUrl(String adUrl) {
         adsUrl = adUrl;
     }
 
-    void setAnalaticsUrl(String analaticsUrl) {
+    public  void setAnalaticsUrl(String analaticsUrl) {
         this.analaticsUrl = analaticsUrl;
     }
 
-    void setKeyToken(String token) {
+    public  void setKeyToken(String token) {
         this.token = token;
     }
 
-    void setAuthDetails(String id) {
+    public void setAuthDetails(String id) {
         userId = id;
     }
 
-    void setContentTitle(String title) {
+    public void setContentTitle(String title) {
         contentTitle = title;
     }
 
-    void setContentId(String id) {
+    public   void setContentId(String id) {
         contentId = id;
     }
 
-    void setSubtitleVideoUri(String subtitleUri) {
+    public  void setSubtitleVideoUri(String subtitleUri) {
         subTitleUri = subtitleUri;
     }
 
-    void setDrmEnabled(
+    public void setDrmEnabled(
             boolean drmContent,
             String siteId,
             String siteKey,
@@ -548,7 +548,7 @@ public class VideoTvPlayer extends FrameLayout implements View.OnClickListener, 
     }
 
     // get play duration of video in milli second
-    Long getContentPlayedTimeInMillis() {
+    public Long getContentPlayedTimeInMillis() {
         // contentPlayedTimeInMillis = 0;
         if (contentPlayedTimeInMillis == 0L) {
             if (seekPlayerTo != 0) contentPlayedTimeInMillis = seekPlayerTo;
@@ -563,17 +563,17 @@ public class VideoTvPlayer extends FrameLayout implements View.OnClickListener, 
         return contentPlayedTimeInMillis;
     }
 
-    void setContentPlayedTimeInMillis(long contentPlayedTimeInMillis) {
+    public void setContentPlayedTimeInMillis(long contentPlayedTimeInMillis) {
         this.contentPlayedTimeInMillis = contentPlayedTimeInMillis;
     }
 
     // start video player when player is ready state
-    void startVideoPlayer(boolean isNeedToPlayInstantly) {
+    public void startVideoPlayer(boolean isNeedToPlayInstantly) {
         initializeMainPlayer(mContentUrl, true, mMediaPlayer);
     }
 
     // resume video player
-    void resumeVideoPlayer() {
+    public void resumeVideoPlayer() {
         if (mMediaPlayer != null && simpleExoPlayerView != null) {
             simpleExoPlayerView.onResume();
             mMediaPlayer.setPlayWhenReady(true);
@@ -581,7 +581,7 @@ public class VideoTvPlayer extends FrameLayout implements View.OnClickListener, 
     }
 
     // pause video player
-    void pauseVideoPlayer() {
+    public void pauseVideoPlayer() {
         if (mMediaPlayer != null && simpleExoPlayerView != null) {
             simpleExoPlayerView.onPause();
             mMediaPlayer.setPlayWhenReady(true);
@@ -589,7 +589,7 @@ public class VideoTvPlayer extends FrameLayout implements View.OnClickListener, 
     }
 
     // relase and destroy video player
-    void releaseVideoPlayer() {
+    public void releaseVideoPlayer() {
         if (mMediaPlayer != null && simpleExoPlayerView != null) {
             sendAnalaticsData(context, userId, contentId, contentTitle, token);
             simpleExoPlayerView.getPlayer().release();
@@ -876,7 +876,7 @@ public class VideoTvPlayer extends FrameLayout implements View.OnClickListener, 
 
     private AlertDialog dialog = null;
 
-    void hideSpeedDailog() {
+    public void hideSpeedDailog() {
         new SpeedControllUttils().hideSpeedDailog();
     }
 
@@ -1027,4 +1027,13 @@ public class VideoTvPlayer extends FrameLayout implements View.OnClickListener, 
     }
 
 
+    @Override
+    public void onCastSessionAvailable() {
+
+    }
+
+    @Override
+    public void onCastSessionUnavailable() {
+
+    }
 }
