@@ -57,7 +57,7 @@ import com.multitv.ott.multitvvideoplayer.videoplayer.MyVideoPlayer
 import com.pallycon.widevinelibrary.*
 import java.util.*
 
-class TvPlayer  @JvmOverloads constructor(
+class TvPlayer @JvmOverloads constructor(
     context: AppCompatActivity,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
