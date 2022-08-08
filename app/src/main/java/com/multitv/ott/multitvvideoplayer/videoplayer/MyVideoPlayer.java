@@ -3,6 +3,7 @@ package com.multitv.ott.multitvvideoplayer.videoplayer;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 
 import com.google.android.exoplayer2.ui.StyledPlayerView;
@@ -22,6 +23,8 @@ public class MyVideoPlayer extends StyledPlayerView {
     public MyVideoPlayer(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
+
+
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {

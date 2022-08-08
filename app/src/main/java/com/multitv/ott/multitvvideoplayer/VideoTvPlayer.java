@@ -591,6 +591,28 @@ public class VideoTvPlayer extends FrameLayout implements View.OnClickListener, 
         }
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_DPAD_CENTER:
+                if (isControllerShown)
+                    hideController();
+                 else
+                    showController();
+
+                break;
+
+            case KeyEvent.KEYCODE_FOCUS:
+                if (isControllerShown)
+                    hideController();
+                else
+                    showController();
+
+                break;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
 
     private void initializeMainPlayer(String videoUrl, boolean isNeedToPlayInstantly, Player currentPlayer) {
 //        ToastMessage.showLogs(ToastMessage.LogType.ERROR, "Video Player:::", "initializeMainPlayer");
