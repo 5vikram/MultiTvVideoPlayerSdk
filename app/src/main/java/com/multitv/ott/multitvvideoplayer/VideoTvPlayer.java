@@ -89,8 +89,8 @@ public class VideoTvPlayer extends FrameLayout implements View.OnClickListener, 
     private final String TAG = "VikramExoVideoPlayer";
 
     private LinearLayout errorRetryLayout, durationlayout, circularProgressLayout, bufferingProgressBarLayout, centerButtonLayout, videoMenuLayout, videoProgressLayout;
-    private ImageView videoPlayButton, videoPauseButton, pictureInPicture, previewImageView, videoLockButton, setting, videoRotationButton,
-            videoPerviousButton, videoNextButton, VideoRenuButton, videoFarwardButton, videoUnLockButton;
+    private ImageView videoPlayButton, videoPauseButton, pictureInPicture, previewImageView, setting, videoRotationButton,
+            videoPerviousButton, videoNextButton, VideoRenuButton, videoFarwardButton;
     private PreviewTimeBar playerProgress;
     private TextView currentDurationPlayTv;
     private ProgressBar volumeProgressBar, brightnessProgressBar;
@@ -110,7 +110,6 @@ public class VideoTvPlayer extends FrameLayout implements View.OnClickListener, 
     private ImaAdsLoader adsLoader;
     private String adsUrl;
 
-    private boolean isScreenLockEnable = false;
     private boolean isControllerShown = false;
     private boolean isAttachedToWindowStatus = false;
     private boolean isAttachedToWindow = false;
@@ -150,7 +149,7 @@ public class VideoTvPlayer extends FrameLayout implements View.OnClickListener, 
 
     @Override
     protected void onFinishInflate() {
-        View view = LayoutInflater.from(getContext()).inflate(R.layout.player_layout, this);
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.tv_player_layout, this);
         progressBarParent = view.findViewById(R.id.progress_bar_parent);
         volumeProgressBar = view.findViewById(R.id.volume_progress_bar);
         brightnessProgressBar = view.findViewById(R.id.brightness_progress_bar);
@@ -170,8 +169,6 @@ public class VideoTvPlayer extends FrameLayout implements View.OnClickListener, 
         videoFarwardButton = view.findViewById(R.id.exo_ffwd);
         videoPlayButton = view.findViewById(R.id.exo_play);
         videoPauseButton = view.findViewById(R.id.exo_pause);
-        videoLockButton = view.findViewById(R.id.exo_lock);
-        videoUnLockButton = view.findViewById(R.id.exo_unlock);
         playerProgress = view.findViewById(R.id.exo_progress);
         currentDurationPlayTv = view.findViewById(R.id.exo_position);
         previewImageView = view.findViewById(R.id.previewImageView);
@@ -205,25 +202,6 @@ public class VideoTvPlayer extends FrameLayout implements View.OnClickListener, 
             }
         });
 
-        videoUnLockButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                isScreenLockEnable = false;
-                videoUnLockButton.setVisibility(GONE);
-                videoLockButton.setVisibility(VISIBLE);
-                showController();
-            }
-        });
-
-        videoLockButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                isScreenLockEnable = true;
-                videoUnLockButton.setVisibility(VISIBLE);
-                videoLockButton.setVisibility(GONE);
-                hideController();
-            }
-        });
 
         VideoRenuButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -287,13 +265,6 @@ public class VideoTvPlayer extends FrameLayout implements View.OnClickListener, 
         mWindow = context.getWindow();
     }
 
-    private final Runnable hideAction = new Runnable() {
-        @Override
-        public void run() {
-            VideoPlayerTracer.error("Controller Listener:::", "Stop Timer");
-            hideController();
-        }
-    };
 
     @Override
     protected void onAttachedToWindow() {
@@ -306,15 +277,6 @@ public class VideoTvPlayer extends FrameLayout implements View.OnClickListener, 
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         isAttachedToWindowStatus = false;
-        removeCallbacks(hideAction);
-        if (hideAtMs != C.TIME_UNSET) {
-            long delayMs = hideAtMs - SystemClock.uptimeMillis();
-            if (delayMs <= 0) {
-                hideController();
-            } else {
-                postDelayed(hideAction, delayMs);
-            }
-        }
     }
 
     public void setCastSessionAvailabilityListener(SessionAvailabilityListener sessionAvailabilityListener) {
@@ -327,53 +289,6 @@ public class VideoTvPlayer extends FrameLayout implements View.OnClickListener, 
         if (mCastPlayer == null) {
             mCastPlayer = castPlayer;
         }
-    }
-
-    private void hideAfterTimeout() {
-        removeCallbacks(hideAction);
-        if (5000 > 0) {
-            VideoPlayerTracer.error("Controller Listener:::", "Start Timer");
-            hideAtMs = SystemClock.uptimeMillis() + 5000;
-            if (isAttachedToWindow) {
-                postDelayed(hideAction, 5000);
-            }
-        } else {
-            hideAtMs = C.TIME_UNSET;
-        }
-    }
-
-    @Override
-    protected void onConfigurationChanged(Configuration newConfig) {
-        int orientation = getResources().getConfiguration().orientation;
-        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            videoLockUnlockStatus();
-        } else if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-            videoLockButton.setVisibility(View.GONE);
-            videoUnLockButton.setVisibility(View.GONE);
-        }
-        super.onConfigurationChanged(newConfig);
-    }
-
-    private void hideController() {
-        centerButtonLayout.setVisibility(View.GONE);
-        videoProgressLayout.setVisibility(View.GONE);
-        durationlayout.setVisibility(View.GONE);
-        videoMenuLayout.setVisibility(View.GONE);
-        removeCallbacks(hideAction);
-        hideAtMs = C.TIME_UNSET;
-        isControllerShown = false;
-    }
-
-    private void showController() {
-        if (!isScreenLockEnable) {
-            centerButtonLayout.setVisibility(View.VISIBLE);
-            videoProgressLayout.setVisibility(View.VISIBLE);
-            durationlayout.setVisibility(View.VISIBLE);
-            videoMenuLayout.setVisibility(View.VISIBLE);
-        }
-        updatePlayPauseButton();
-        hideAfterTimeout();
-        isControllerShown = true;
     }
 
 
@@ -476,15 +391,6 @@ public class VideoTvPlayer extends FrameLayout implements View.OnClickListener, 
         initViews();
     }
 
-    private void videoLockUnlockStatus() {
-        if (isScreenLockEnable) {
-            videoLockButton.setVisibility(View.VISIBLE);
-            videoUnLockButton.setVisibility(View.GONE);
-        } else {
-            videoLockButton.setVisibility(View.GONE);
-            videoUnLockButton.setVisibility(View.VISIBLE);
-        }
-    }
 
     public void setMultiTvVideoPlayerSdkListener(VideoPlayerSdkCallBackListener videoPlayerSdkCallBackListener) {
         this.videoPlayerSdkCallBackListener = videoPlayerSdkCallBackListener;
@@ -589,28 +495,6 @@ public class VideoTvPlayer extends FrameLayout implements View.OnClickListener, 
             mMediaPlayer.release();
             if (adsLoader != null) adsLoader.setPlayer(null);
         }
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        switch (keyCode) {
-            case KeyEvent.KEYCODE_DPAD_CENTER:
-                if (isControllerShown)
-                    hideController();
-                 else
-                    showController();
-
-                break;
-
-            case KeyEvent.KEYCODE_FOCUS:
-                if (isControllerShown)
-                    hideController();
-                else
-                    showController();
-
-                break;
-        }
-        return super.onKeyDown(keyCode, event);
     }
 
 
@@ -1006,7 +890,6 @@ public class VideoTvPlayer extends FrameLayout implements View.OnClickListener, 
     public void onScrubStart(PreviewBar previewBar) {
         previewFrameLayout.setVisibility(View.VISIBLE);
         pauseVideoPlayer();
-        removeCallbacks(hideAction);
     }
 
     @Override
