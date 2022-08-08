@@ -167,8 +167,8 @@ public class VideoTvPlayer extends FrameLayout implements View.OnClickListener, 
         videoNextButton = view.findViewById(R.id.exo_next);
         VideoRenuButton = view.findViewById(R.id.exo_rew);
         videoFarwardButton = view.findViewById(R.id.exo_ffwd);
-        videoPlayButton = view.findViewById(R.id.play);
-        videoPauseButton = view.findViewById(R.id.pause);
+        videoPlayButton = view.findViewById(R.id.exo_play);
+        videoPauseButton = view.findViewById(R.id.exo_pause);
         playerProgress = view.findViewById(R.id.exo_progress);
         currentDurationPlayTv = view.findViewById(R.id.exo_position);
         previewImageView = view.findViewById(R.id.previewImageView);
