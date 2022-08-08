@@ -11,10 +11,11 @@
         android:id="@+id/videoPlayer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:use_controller="true"
         app:show_timeout="5000"
         app:controller_layout_id="@layout/exo_playback_control_view"
-        app:resize_mode="fill" />
+        app:resize_mode="fill" >
+
+    </com.google.android.exoplayer2.ui.StyledPlayerView>
 
     <LinearLayout
         android:id="@+id/errorRetryLayout"

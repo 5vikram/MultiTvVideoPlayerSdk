@@ -639,6 +639,13 @@ public class VideoTvPlayer extends FrameLayout implements View.OnClickListener, 
         }
     }
 
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        // this sends them to the playerView but also to the activity - whoever wants it first
+        return simpleExoPlayerView.dispatchKeyEvent(event) || super.dispatchKeyEvent(event);
+    }
+
+
     Player.EventListener stateChangeCallback1 = new Player.Listener() {
         @Override
         public void onPlayerError(PlaybackException error) {
@@ -712,7 +719,7 @@ public class VideoTvPlayer extends FrameLayout implements View.OnClickListener, 
                         circularProgressRing.setProgress(0f);
                         circularProgressLayout.setVisibility(View.VISIBLE);
                         circularProgressLayout.bringToFront();
-                        long totalDuration = 10000;
+                        long totalDuration = 3000;
                         long tickDuration = 1000;
 
 
