@@ -28,7 +28,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:alpha=".6"
-        android:background="#CC212121"/>
+        android:background="@android:color/transparent"/>
 
     <LinearLayout
         android:layout_width="match_parent"
