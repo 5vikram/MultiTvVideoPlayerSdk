@@ -95,6 +95,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="15dp"
                 android:focusable="true"
+                style="@style/ExoMediaButton.Play"
                 android:background="@drawable/button_selector"
                 android:src="@drawable/pause" />
 
@@ -105,6 +106,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="15dp"
                 android:focusable="true"
+                style="@style/ExoMediaButton.Pause"
                 android:background="@drawable/button_selector"
                 android:src="@drawable/play" />
 
