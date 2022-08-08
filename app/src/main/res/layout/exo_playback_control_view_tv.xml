@@ -96,7 +96,7 @@
                 android:layout_marginRight="15dp"
                 android:focusable="true"
                 android:background="@drawable/button_selector"
-                android:src="@drawable/play" />
+                android:src="@drawable/pause" />
 
             <ImageView
                 android:id="@id/exo_pause"
@@ -106,7 +106,7 @@
                 android:layout_marginRight="15dp"
                 android:focusable="true"
                 android:background="@drawable/button_selector"
-                android:src="@drawable/pause" />
+                android:src="@drawable/play" />
 
             <ImageView
                 android:id="@id/exo_ffwd"

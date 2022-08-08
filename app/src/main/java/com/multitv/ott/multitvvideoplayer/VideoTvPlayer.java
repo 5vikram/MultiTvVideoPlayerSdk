@@ -228,11 +228,11 @@ public class VideoTvPlayer extends FrameLayout implements View.OnClickListener, 
             }
         });
 
-        VideoRenuButton.setOnClickListener(new OnClickListener() {
+        videoPauseButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (mMediaPlayer != null) {
-                    mMediaPlayer.setPlayWhenReady(false);
+                    mMediaPlayer.setPlayWhenReady(true);
                     videoPlayButton.setVisibility(VISIBLE);
                     videoPauseButton.setVisibility(GONE);
                 }
