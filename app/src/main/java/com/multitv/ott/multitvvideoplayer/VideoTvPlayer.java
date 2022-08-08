@@ -719,7 +719,7 @@ public class VideoTvPlayer extends FrameLayout implements View.OnClickListener, 
                         circularProgressRing.setProgress(0f);
                         circularProgressLayout.setVisibility(View.VISIBLE);
                         circularProgressLayout.bringToFront();
-                        long totalDuration = 3000;
+                        long totalDuration = 5000;
                         long tickDuration = 1000;
 
 
