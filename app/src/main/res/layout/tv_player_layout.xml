@@ -12,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:show_timeout="5000"
+        android:focusable="true"
         app:controller_layout_id="@layout/exo_playback_control_view_tv"
         app:resize_mode="fill" >
 
