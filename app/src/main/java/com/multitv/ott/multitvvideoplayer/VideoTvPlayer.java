@@ -555,7 +555,7 @@ public class VideoTvPlayer extends FrameLayout implements View.OnClickListener, 
         if (mMediaPlayer != null) {
             mMediaPlayer.addListener(stateChangeCallback1);
             simpleExoPlayerView.setPlayer(mMediaPlayer);
-          //  simpleExoPlayerView.setControllerHideOnTouch(true);
+            simpleExoPlayerView.setControllerHideOnTouch(true);
            // simpleExoPlayerView.setControllerAutoShow(true);
             simpleExoPlayerView.setControllerShowTimeoutMs(DEFAULT_TIMEOUT_MS);
            // simpleExoPlayerView.setControllerHideDuringAds(true);
