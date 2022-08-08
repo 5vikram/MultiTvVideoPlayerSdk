@@ -75,7 +75,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:clickable="true"
-            android:color="#F20007"
+            android:color="@color/elv_unselected_text"
             android:indeterminate="false"
             android:max="100"
             android:src="@android:drawable/ic_media_play"
