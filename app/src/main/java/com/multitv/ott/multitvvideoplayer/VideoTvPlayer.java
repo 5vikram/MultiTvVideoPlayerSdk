@@ -722,6 +722,20 @@ public class VideoTvPlayer extends FrameLayout implements View.OnClickListener, 
                         long totalDuration = 5000;
                         long tickDuration = 1000;
 
+                        circularProgressLayout.setOnClickListener(new OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                if (circularProgressLayout != null)
+                                    circularProgressLayout.setVisibility(View.GONE);
+                                try {
+                                    prepareVideoPlayer();
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    centerButtonLayout.setVisibility(View.VISIBLE);
+                                }
+                            }
+                        });
+
 
                         countDownTimer = new CountDownTimerWithPause(totalDuration, tickDuration / 10, true) {
                             public void onTick(long millisUntilFinished) {
