@@ -89,24 +89,22 @@
                 android:src="@drawable/backward" />
 
             <ImageView
-                android:id="@id/exo_play"
+                android:id="@+id/play"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="15dp"
                 android:focusable="true"
-                style="@style/ExoMediaButton.Play"
                 android:background="@drawable/button_selector"
                 android:src="@drawable/pause" />
 
             <ImageView
-                android:id="@id/exo_pause"
+                android:id="@+id/pause"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="15dp"
                 android:focusable="true"
-                style="@style/ExoMediaButton.Pause"
                 android:background="@drawable/button_selector"
                 android:src="@drawable/play" />
 
