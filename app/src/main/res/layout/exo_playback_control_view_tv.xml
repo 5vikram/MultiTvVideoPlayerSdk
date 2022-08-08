@@ -84,7 +84,8 @@
                 android:layout_height="32dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="15dp"
-                android:background="@android:color/transparent"
+                android:focusable="true"
+                android:background="@drawable/button_selector"
                 android:src="@drawable/backward" />
 
             <ImageView
@@ -93,6 +94,8 @@
                 android:layout_height="32dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="15dp"
+                android:focusable="true"
+                android:background="@drawable/button_selector"
                 android:src="@drawable/play" />
 
             <ImageView
@@ -101,6 +104,8 @@
                 android:layout_height="32dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="15dp"
+                android:focusable="true"
+                android:background="@drawable/button_selector"
                 android:src="@drawable/pause" />
 
             <ImageView
@@ -109,6 +114,8 @@
                 android:layout_height="32dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="10dp"
+                android:focusable="true"
+                android:background="@drawable/button_selector"
                 android:src="@drawable/forward" />
 
             <ImageView
@@ -144,7 +151,8 @@
             android:layout_height="25dp"
             android:layout_gravity="center"
             android:layout_marginRight="10dp"
-            android:background="@android:color/transparent"
+            android:focusable="true"
+            android:background="@drawable/button_selector"
             android:src="@drawable/speed" />
 
         <ImageView
@@ -153,7 +161,8 @@
             android:layout_height="25dp"
             android:layout_gravity="center"
             android:layout_marginRight="10dp"
-            android:background="@android:color/transparent"
+            android:focusable="true"
+            android:background="@drawable/button_selector"
             android:src="@drawable/menu" />
 
         <ImageView
@@ -208,6 +217,8 @@
             android:layout_marginStart="8dp"
             android:layout_marginEnd="5dp"
             app:previewAnimationEnabled="true"
+            android:focusable="true"
+            android:background="@drawable/button_selector"
             app:previewFrameLayout="@id/previewFrameLayout" />
 
         <!--
