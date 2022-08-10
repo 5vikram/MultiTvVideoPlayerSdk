@@ -140,6 +140,8 @@ import java.util.*
 
     private var mWindow: Window? = null
 
+
+
     private lateinit var progressBarParent: FrameLayout
     private lateinit var volumeProgressBar: ProgressBar
     private lateinit var brightnessProgressBar: ProgressBar
