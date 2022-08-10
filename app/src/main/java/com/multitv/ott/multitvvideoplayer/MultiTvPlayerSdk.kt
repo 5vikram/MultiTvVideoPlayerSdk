@@ -40,6 +40,7 @@ import com.google.android.exoplayer2.source.TrackGroupArray
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray
 import com.google.android.exoplayer2.ui.StyledPlayerControlView
+import com.google.android.exoplayer2.ui.StyledPlayerView
 import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.DefaultAllocator
 import com.google.android.exoplayer2.upstream.DefaultDataSource
@@ -74,7 +75,7 @@ class MultiTvPlayerSdk(
     private val sharedPreferencePlayer: SharedPreferencePlayer
     private var contentType: ContentType? = null
     private var mMediaPlayer: ExoPlayer? = null
-    private var simpleExoPlayerView: MyVideoPlayer? = null
+    private var simpleExoPlayerView: StyledPlayerView? = null
     private var trackSelector: DefaultTrackSelector
     private var videoPlayerSdkCallBackListener: VideoPlayerSdkCallBackListener? = null
     private var isShowingTrackSelectionDialog = false
@@ -140,6 +141,8 @@ class MultiTvPlayerSdk(
     private var mGestureType = GestureType.NoGesture
 
     private var mWindow: Window? = null
+
+
 
     private lateinit var progressBarParent: FrameLayout
     private lateinit var volumeProgressBar: ProgressBar
