@@ -508,15 +508,9 @@ public class VideoTvPlayer extends FrameLayout implements View.OnClickListener, 
         centerButtonLayout.setVisibility(View.GONE);
         videoPlayerSdkCallBackListener.prepareVideoPlayer();
         //        ToastMessage.showLogs(ToastMessage.LogType.DEBUG, TAG, "Content url is " + videoUrl);
-/*
         LoadControl customLoadControl = new DefaultLoadControl.Builder()
-                .setBufferDurationsMs(1000, 50000, 1000, 1)
-                .setAllocator(new DefaultAllocator(true, 32 * 1024))
-                .setTargetBufferBytes(C.LENGTH_UNSET)
-                .setPrioritizeTimeOverSizeThresholds(true)
-                .setBackBuffer(0, false)
+                .setBufferDurationsMs(32 * 1024, 64 * 1024, 1024, 1024)
                 .build();
-*/
 
 
         // start
@@ -547,20 +541,20 @@ public class VideoTvPlayer extends FrameLayout implements View.OnClickListener, 
                     .setAdsLoaderProvider(adsConfiguration -> adsLoader).setAdViewProvider(simpleExoPlayerView);
 
 
-            mMediaPlayer = new ExoPlayer.Builder(context).setMediaSourceFactory(mediaSourceFactory)
+            mMediaPlayer = new ExoPlayer.Builder(context).setMediaSourceFactory(mediaSourceFactory).setLoadControl(customLoadControl)
                     .setTrackSelector(trackSelector).build();
             adsLoader = new ImaAdsLoader.Builder( /* context= */context).build();
         } else {
-            mMediaPlayer = new ExoPlayer.Builder(context).setTrackSelector(trackSelector)
+            mMediaPlayer = new ExoPlayer.Builder(context).setTrackSelector(trackSelector).setLoadControl(customLoadControl)
                     .build();
         }
         if (mMediaPlayer != null) {
             mMediaPlayer.addListener(stateChangeCallback1);
             simpleExoPlayerView.setPlayer(mMediaPlayer);
             simpleExoPlayerView.setControllerHideOnTouch(true);
-           // simpleExoPlayerView.setControllerAutoShow(true);
+            // simpleExoPlayerView.setControllerAutoShow(true);
             simpleExoPlayerView.setControllerShowTimeoutMs(DEFAULT_TIMEOUT_MS);
-           // simpleExoPlayerView.setControllerHideDuringAds(true);
+            // simpleExoPlayerView.setControllerHideDuringAds(true);
             MediaItem mediaItem = null;
             MediaItem.SubtitleConfiguration subtitle = null;
 
