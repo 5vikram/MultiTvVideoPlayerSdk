@@ -508,6 +508,7 @@ public class VideoTvPlayer extends FrameLayout implements View.OnClickListener, 
         centerButtonLayout.setVisibility(View.GONE);
         videoPlayerSdkCallBackListener.prepareVideoPlayer();
         //        ToastMessage.showLogs(ToastMessage.LogType.DEBUG, TAG, "Content url is " + videoUrl);
+/*
         LoadControl customLoadControl = new DefaultLoadControl.Builder()
                 .setBufferDurationsMs(1000, 50000, 1000, 1)
                 .setAllocator(new DefaultAllocator(true, 32 * 1024))
@@ -515,6 +516,7 @@ public class VideoTvPlayer extends FrameLayout implements View.OnClickListener, 
                 .setPrioritizeTimeOverSizeThresholds(true)
                 .setBackBuffer(0, false)
                 .build();
+*/
 
 
         // start
@@ -546,11 +548,11 @@ public class VideoTvPlayer extends FrameLayout implements View.OnClickListener, 
 
 
             mMediaPlayer = new ExoPlayer.Builder(context).setMediaSourceFactory(mediaSourceFactory)
-                    .setTrackSelector(trackSelector).setLoadControl(customLoadControl).build();
+                    .setTrackSelector(trackSelector).build();
             adsLoader = new ImaAdsLoader.Builder( /* context= */context).build();
         } else {
             mMediaPlayer = new ExoPlayer.Builder(context).setTrackSelector(trackSelector)
-                    .setLoadControl(customLoadControl).build();
+                    .build();
         }
         if (mMediaPlayer != null) {
             mMediaPlayer.addListener(stateChangeCallback1);
