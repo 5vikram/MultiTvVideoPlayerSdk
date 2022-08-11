@@ -1,6 +1,7 @@
 package com.multitv.ott.multitvvideoplayer
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
@@ -60,8 +61,6 @@ import com.multitv.ott.multitvvideoplayer.touchevent.OnSwipeTouchListener
 import com.multitv.ott.multitvvideoplayer.utils.*
 import com.pallycon.widevinelibrary.*
 import java.util.*
-
-
 class MultiTvPlayerSdk(
     private val context: AppCompatActivity,
     attrs: AttributeSet?,
@@ -145,7 +144,7 @@ class MultiTvPlayerSdk(
     private lateinit var volumeProgressBar: ProgressBar
     private lateinit var brightnessProgressBar: ProgressBar
 
-//    private val context: Context? = null
+    //    private val context: Context? = null
     private var mCastPlayer: CastPlayer? = null
 //    private val listener: com.google.android.exoplayer2.castdemo.PlayerManager.Listener? = null
 
@@ -339,14 +338,14 @@ class MultiTvPlayerSdk(
         super.onFinishInflate()
     }
 
-    fun setCastSessionAvailabilityListener(sessionAvailabilityListener: SessionAvailabilityListener){
-        if (mCastPlayer != null){
+    fun setCastSessionAvailabilityListener(sessionAvailabilityListener: SessionAvailabilityListener) {
+        if (mCastPlayer != null) {
             mCastPlayer!!.setSessionAvailabilityListener(sessionAvailabilityListener)
         }
     }
 
-    fun setCastPlayer(castPlayer: CastPlayer){
-        if (mCastPlayer == null){
+    fun setCastPlayer(castPlayer: CastPlayer) {
+        if (mCastPlayer == null) {
             mCastPlayer = castPlayer
         }
     }
@@ -636,7 +635,6 @@ class MultiTvPlayerSdk(
             if (adsLoader != null) adsLoader!!.setPlayer(null)
         }
     }
-
 
 
     private fun initializeMainPlayer(videoUrl: String?, isNeedToPlayInstantly: Boolean, currentPlayer: ExoPlayer?) {
@@ -997,6 +995,18 @@ class MultiTvPlayerSdk(
         decorView.systemUiVisibility = uiOptions
     }
 
+    @SuppressLint("InlinedApi")
+    private fun hideSystemUiFullScreen() {
+
+        simpleExoPlayerView!!.systemUiVisibility = (View.SYSTEM_UI_FLAG_LOW_PROFILE
+                or View.SYSTEM_UI_FLAG_FULLSCREEN
+                or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
+    }
+
+
     private fun rewind() {
         seekTo(Math.max(mMediaPlayer!!.currentPosition - DEFAULT_REWIND_MS, 0))
     }
@@ -1174,7 +1184,8 @@ class MultiTvPlayerSdk(
                 var diffBrightness: Float
                 var finalBrightness: Int
 
-                diffBrightness = maxBrightness.toFloat() * diff / (mInitialTextureHeight.toFloat() / 2)
+                diffBrightness =
+                    maxBrightness.toFloat() * diff / (mInitialTextureHeight.toFloat() / 2)
                 if (dir == OnSwipeTouchListener.Direction.DOWN) {
                     diffBrightness = -diffBrightness
                 }
@@ -1191,8 +1202,6 @@ class MultiTvPlayerSdk(
 
 
                 brightnessProgressBar.progress = finalBrightness
-
-
 
 
                 /*PreferenceManager.getDefaultSharedPreferences(context)
