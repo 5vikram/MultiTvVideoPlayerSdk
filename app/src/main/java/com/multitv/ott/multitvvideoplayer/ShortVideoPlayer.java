@@ -101,6 +101,7 @@ public class ShortVideoPlayer extends FrameLayout implements View.OnClickListene
 
     private ImaAdsLoader adsLoader;
     private String adsUrl;
+    private ExoPlayer inputPlayer;
 
     public ShortVideoPlayer(Context context, AttributeSet attrs) {
         this((AppCompatActivity) context, attrs, 0);
@@ -260,15 +261,16 @@ public class ShortVideoPlayer extends FrameLayout implements View.OnClickListene
     };
 
     // prepare video player and init views and view group here
-    public void prepareVideoPlayer() throws Exception {
+    public void prepareVideoPlayer(ExoPlayer player) throws Exception {
         if (contentType == null || mContentUrl == null)
             throw new Exception("Content type must not be null");
 
-        initViews();
+        initViews(player);
+        inputPlayer = player;
     }
 
     // init view and view group here
-    private void initViews() {
+    private void initViews(ExoPlayer player) {
         simpleExoPlayerView = this.findViewById(R.id.videoPlayer);
         trackSelector = new DefaultTrackSelector(context);
 
@@ -276,7 +278,7 @@ public class ShortVideoPlayer extends FrameLayout implements View.OnClickListene
             @Override
             public void onClick(View view) {
                 errorRetryLayout.setVisibility(GONE);
-                initializeMainPlayer(mContentUrl, true);
+                initializeMainPlayer(mContentUrl, true, player);
             }
         });
 
@@ -370,7 +372,7 @@ public class ShortVideoPlayer extends FrameLayout implements View.OnClickListene
 
     // start video player when player is ready state
     public void startVideoPlayer(boolean isNeedToPlayInstantly) {
-        initializeMainPlayer(mContentUrl, isNeedToPlayInstantly);
+        initializeMainPlayer(mContentUrl, isNeedToPlayInstantly, inputPlayer);
     }
 
     // resume video player
@@ -402,7 +404,7 @@ public class ShortVideoPlayer extends FrameLayout implements View.OnClickListene
         }
     }
 
-    private void initializeMainPlayer(String videoUrl, boolean isNeedToPlayInstantly) {
+    private void initializeMainPlayer(String videoUrl, boolean isNeedToPlayInstantly, ExoPlayer player) {
 //        ToastMessage.showLogs(ToastMessage.LogType.ERROR, "Video Player:::", "initializeMainPlayer");
 
         if (mMediaPlayer != null) {
