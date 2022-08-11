@@ -623,7 +623,7 @@ class MultiTvPlayerSdk(
     private fun initializeMainPlayer(videoUrl: String?, isNeedToPlayInstantly: Boolean) {
 //        ToastMessage.showLogs(ToastMessage.LogType.ERROR, "Video Player:::", "initializeMainPlayer");
         if (mMediaPlayer != null) {
-            mMediaPlayer!!.release()
+//            mMediaPlayer!!.release()
             if (adsLoader != null) adsLoader!!.setPlayer(null)
 //            mMediaPlayer = null
         }
