@@ -145,11 +145,7 @@ class MultiTvPlayerSdk(
     private lateinit var volumeProgressBar: ProgressBar
     private lateinit var brightnessProgressBar: ProgressBar
 
-    //    private val context: Context? = null
-    private var mCastPlayer: CastPlayer? = null
-//    private val listener: com.google.android.exoplayer2.castdemo.PlayerManager.Listener? = null
 
-    private var inputPlayer: ExoPlayer? = null
 
     constructor(context: Context, attrs: AttributeSet?) : this(
         context as AppCompatActivity,
@@ -288,7 +284,7 @@ class MultiTvPlayerSdk(
         // simpleExoPlayerView.set
         errorRetryLayout?.setOnClickListener(OnClickListener {
             errorRetryLayout?.setVisibility(GONE)
-            initializeMainPlayer(mContentUrl, true, mMediaPlayer)
+            initializeMainPlayer(mContentUrl, true)
         })
         videoUnLockButton?.setOnClickListener(OnClickListener {
             isScreenLockEnable = false
@@ -330,28 +326,12 @@ class MultiTvPlayerSdk(
             )
         }
 
-//        castContext = CastContext.getSharedInstance(this);
-
-//        val castContext = CastContext.getSharedInstance(context)
-//
-//        castPlayer = CastPlayer(castContext)
-////        castPlayer!!.addListener(this)
-//        castPlayer!!.setSessionAvailabilityListener(this)
 
         super.onFinishInflate()
     }
 
-    fun setCastSessionAvailabilityListener(sessionAvailabilityListener: SessionAvailabilityListener) {
-        if (mCastPlayer != null) {
-            mCastPlayer!!.setSessionAvailabilityListener(sessionAvailabilityListener)
-        }
-    }
 
-    fun setCastPlayer(castPlayer: CastPlayer) {
-        if (mCastPlayer == null) {
-            mCastPlayer = castPlayer
-        }
-    }
+
 
 
     override fun onAttachedToWindow() {
@@ -507,10 +487,9 @@ class MultiTvPlayerSdk(
     }
 
 
-    fun prepareVideoPlayer(player: ExoPlayer) {
+    fun prepareVideoPlayer() {
         if (contentType == null || mContentUrl == null) throw Exception("Content type must not be null")
-        initViews(player)
-        inputPlayer = player
+        initViews()
     }
 
     private fun videoLockUnlockStatus() {
@@ -524,7 +503,7 @@ class MultiTvPlayerSdk(
     }
 
     // init view and view group here
-    private fun initViews(player: ExoPlayer) {
+    private fun initViews() {
 //        ToastMessage.showLogs(ToastMessage.LogType.ERROR, "Video Player:::", "initViews()");
         trackSelector = DefaultTrackSelector(context)
         audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
@@ -611,7 +590,7 @@ class MultiTvPlayerSdk(
 
     // start video player when player is ready state
     fun startVideoPlayer(isNeedToPlayInstantly: Boolean) {
-        initializeMainPlayer(mContentUrl, true, inputPlayer)
+        initializeMainPlayer(mContentUrl, true)
     }
 
     // resume video player
@@ -641,10 +620,10 @@ class MultiTvPlayerSdk(
     }
 
 
-    private fun initializeMainPlayer(videoUrl: String?, isNeedToPlayInstantly: Boolean, currentPlayer: ExoPlayer?) {
+    private fun initializeMainPlayer(videoUrl: String?, isNeedToPlayInstantly: Boolean) {
 //        ToastMessage.showLogs(ToastMessage.LogType.ERROR, "Video Player:::", "initializeMainPlayer");
-        if (currentPlayer != null) {
-            currentPlayer!!.release()
+        if (mMediaPlayer != null) {
+            mMediaPlayer!!.release()
             if (adsLoader != null) adsLoader!!.setPlayer(null)
 //            mMediaPlayer = null
         }
@@ -659,26 +638,6 @@ class MultiTvPlayerSdk(
             .setBackBuffer(0, false)
             .build()
 
-
-        // start
-
-        simpleExoPlayerView!!.player = currentPlayer
-        simpleExoPlayerView!!.controllerHideOnTouch = currentPlayer === mMediaPlayer
-
-        if (/*currentPlayer === mCastPlayer &&*/ mCastPlayer != null) {
-            simpleExoPlayerView!!.controllerShowTimeoutMs = 0
-            simpleExoPlayerView!!.showController()
-            simpleExoPlayerView!!.defaultArtwork = ResourcesCompat.getDrawable(
-                context.resources,
-                R.drawable.ic_baseline_cast_24,  /* theme= */
-                null
-            )
-        } else { // currentPlayer == localPlayer
-            simpleExoPlayerView!!.controllerShowTimeoutMs = StyledPlayerControlView.DEFAULT_SHOW_TIMEOUT_MS
-            simpleExoPlayerView!!.defaultArtwork = null
-        }
-
-        mMediaPlayer = currentPlayer
 
         if (adsUrl != null && !TextUtils.isEmpty(adsUrl)) {
             val dataSourceFactory: DataSource.Factory = DefaultDataSource.Factory(
@@ -853,7 +812,7 @@ class MultiTvPlayerSdk(
                                 if (circularProgressLayout != null) circularProgressLayout!!.visibility =
                                     GONE
                                 try {
-                                    prepareVideoPlayer(inputPlayer!!)
+                                    prepareVideoPlayer()
                                 } catch (e: Exception) {
                                     e.printStackTrace()
                                     centerButtonLayout!!.visibility = VISIBLE
