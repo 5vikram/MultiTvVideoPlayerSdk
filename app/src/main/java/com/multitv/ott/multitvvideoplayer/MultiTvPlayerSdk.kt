@@ -33,9 +33,7 @@ import com.google.android.exoplayer2.MediaItem.AdsConfiguration
 import com.google.android.exoplayer2.MediaItem.SubtitleConfiguration
 import com.google.android.exoplayer2.drm.DrmSessionManager
 import com.google.android.exoplayer2.ext.ima.ImaAdsLoader
-import com.google.android.exoplayer2.source.DefaultMediaSourceFactory
-import com.google.android.exoplayer2.source.MediaSourceFactory
-import com.google.android.exoplayer2.source.TrackGroupArray
+import com.google.android.exoplayer2.source.*
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray
 import com.google.android.exoplayer2.ui.StyledPlayerControlView
@@ -60,11 +58,11 @@ import com.multitv.ott.multitvvideoplayer.timebar.previewseekbar.PreviewBar
 import com.multitv.ott.multitvvideoplayer.timebar.previewseekbar.PreviewLoader
 import com.multitv.ott.multitvvideoplayer.touchevent.OnSwipeTouchListener
 import com.multitv.ott.multitvvideoplayer.utils.*
-import com.multitv.ott.multitvvideoplayer.videoplayer.MyVideoPlayer
 import com.pallycon.widevinelibrary.*
 import java.util.*
 
- class MultiTvPlayerSdk(
+
+class MultiTvPlayerSdk(
     private val context: AppCompatActivity,
     attrs: AttributeSet?,
     defStyleAttr: Int
@@ -641,7 +639,7 @@ import java.util.*
 
 
 
-    private fun initializeMainPlayer(videoUrl: String?, isNeedToPlayInstantly: Boolean, currentPlayer: Player?) {
+    private fun initializeMainPlayer(videoUrl: String?, isNeedToPlayInstantly: Boolean, currentPlayer: ExoPlayer?) {
 //        ToastMessage.showLogs(ToastMessage.LogType.ERROR, "Video Player:::", "initializeMainPlayer");
         if (currentPlayer != null) {
             currentPlayer!!.release()
@@ -662,23 +660,23 @@ import java.util.*
 
         // start
 
-//        simpleExoPlayerView!!.player = currentPlayer
-//        simpleExoPlayerView!!.controllerHideOnTouch = currentPlayer === mMediaPlayer
-//
-//        if (currentPlayer === mCastPlayer && mCastPlayer != null) {
-//            simpleExoPlayerView!!.controllerShowTimeoutMs = 0
-//            simpleExoPlayerView!!.showController()
-//            simpleExoPlayerView!!.defaultArtwork = ResourcesCompat.getDrawable(
-//                context.resources,
-//                R.drawable.ic_baseline_cast_24,  /* theme= */
-//                null
-//            )
-//        } else { // currentPlayer == localPlayer
-//            simpleExoPlayerView!!.controllerShowTimeoutMs = StyledPlayerControlView.DEFAULT_SHOW_TIMEOUT_MS
-//            simpleExoPlayerView!!.defaultArtwork = null
-//        }
+        simpleExoPlayerView!!.player = currentPlayer
+        simpleExoPlayerView!!.controllerHideOnTouch = currentPlayer === mMediaPlayer
 
-//        mMediaPlayer = currentPlayer
+        if (/*currentPlayer === mCastPlayer &&*/ mCastPlayer != null) {
+            simpleExoPlayerView!!.controllerShowTimeoutMs = 0
+            simpleExoPlayerView!!.showController()
+            simpleExoPlayerView!!.defaultArtwork = ResourcesCompat.getDrawable(
+                context.resources,
+                R.drawable.ic_baseline_cast_24,  /* theme= */
+                null
+            )
+        } else { // currentPlayer == localPlayer
+            simpleExoPlayerView!!.controllerShowTimeoutMs = StyledPlayerControlView.DEFAULT_SHOW_TIMEOUT_MS
+            simpleExoPlayerView!!.defaultArtwork = null
+        }
+
+        mMediaPlayer = currentPlayer
 
         if (adsUrl != null && !TextUtils.isEmpty(adsUrl)) {
             val dataSourceFactory: DataSource.Factory = DefaultDataSource.Factory(
@@ -712,6 +710,7 @@ import java.util.*
                     .setSelectionFlags(C.SELECTION_FLAG_DEFAULT) //MUST,  Selection flags for the track (optional).
                     .build()
             }
+
             if (isDrmContent) {
                 try {
                     WVMAgent = PallyconWVMSDKFactory.getInstance(context)

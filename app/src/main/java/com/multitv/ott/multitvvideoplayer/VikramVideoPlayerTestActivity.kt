@@ -59,6 +59,7 @@ class VikramVideoPlayerTestActivity : AppCompatActivity(), VideoPlayerSdkCallBac
         vikramExoVideoPlayer?.setContentFilePath("http://dpvruylq68d5u.cloudfront.net/1048/1048_624c3ec915773/1048_624c3ec915773_master.m3u8")
         // vikramExoVideoPlayer?.setSubtitleVideoUri("https://multitvott.s3.ap-south-1.amazonaws.com/subtitle.srt")
         // vikramExoVideoPlayer?.setPreRollAdUrl("https://pubads.g.doubleclick.net/gampad/ads?iu=/21775744923/external/single_ad_samples&sz=640x480&cust_params=sample_ct%3Dlinear&ciu_szs=300x250%2C728x90&gdfp_req=1&output=vast&unviewed_position_start=1&env=vp&impl=s&correlator=")
+
         vikramExoVideoPlayer?.setMultiTvVideoPlayerSdkListener(this)
         vikramExoVideoPlayer?.prepareVideoPlayer()
     }
