@@ -35,6 +35,7 @@ import com.google.android.exoplayer2.MediaItem.SubtitleConfiguration
 import com.google.android.exoplayer2.drm.DrmSessionManager
 import com.google.android.exoplayer2.ext.ima.ImaAdsLoader
 import com.google.android.exoplayer2.source.*
+import com.google.android.exoplayer2.text.ExoplayerCuesDecoder
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray
 import com.google.android.exoplayer2.ui.StyledPlayerControlView
@@ -147,6 +148,8 @@ class MultiTvPlayerSdk(
     //    private val context: Context? = null
     private var mCastPlayer: CastPlayer? = null
 //    private val listener: com.google.android.exoplayer2.castdemo.PlayerManager.Listener? = null
+
+    private var inputPlayer: ExoPlayer? = null
 
     constructor(context: Context, attrs: AttributeSet?) : this(
         context as AppCompatActivity,
@@ -504,9 +507,10 @@ class MultiTvPlayerSdk(
     }
 
 
-    fun prepareVideoPlayer() {
+    fun prepareVideoPlayer(player: ExoPlayer) {
         if (contentType == null || mContentUrl == null) throw Exception("Content type must not be null")
-        initViews()
+        initViews(player)
+        inputPlayer = player
     }
 
     private fun videoLockUnlockStatus() {
@@ -520,7 +524,7 @@ class MultiTvPlayerSdk(
     }
 
     // init view and view group here
-    private fun initViews() {
+    private fun initViews(player: ExoPlayer) {
 //        ToastMessage.showLogs(ToastMessage.LogType.ERROR, "Video Player:::", "initViews()");
         trackSelector = DefaultTrackSelector(context)
         audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
@@ -607,7 +611,7 @@ class MultiTvPlayerSdk(
 
     // start video player when player is ready state
     fun startVideoPlayer(isNeedToPlayInstantly: Boolean) {
-        initializeMainPlayer(mContentUrl, true, mMediaPlayer)
+        initializeMainPlayer(mContentUrl, true, inputPlayer)
     }
 
     // resume video player
@@ -849,7 +853,7 @@ class MultiTvPlayerSdk(
                                 if (circularProgressLayout != null) circularProgressLayout!!.visibility =
                                     GONE
                                 try {
-                                    prepareVideoPlayer()
+                                    prepareVideoPlayer(inputPlayer!!)
                                 } catch (e: Exception) {
                                     e.printStackTrace()
                                     centerButtonLayout!!.visibility = VISIBLE
