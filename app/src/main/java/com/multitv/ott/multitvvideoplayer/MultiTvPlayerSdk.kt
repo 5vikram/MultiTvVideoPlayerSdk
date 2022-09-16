@@ -26,7 +26,6 @@ import android.view.View.OnClickListener
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.content.res.ResourcesCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.Target
 import com.google.android.exoplayer2.*
@@ -34,11 +33,11 @@ import com.google.android.exoplayer2.MediaItem.AdsConfiguration
 import com.google.android.exoplayer2.MediaItem.SubtitleConfiguration
 import com.google.android.exoplayer2.drm.DrmSessionManager
 import com.google.android.exoplayer2.ext.ima.ImaAdsLoader
-import com.google.android.exoplayer2.source.*
-import com.google.android.exoplayer2.text.ExoplayerCuesDecoder
+import com.google.android.exoplayer2.source.DefaultMediaSourceFactory
+import com.google.android.exoplayer2.source.MediaSourceFactory
+import com.google.android.exoplayer2.source.TrackGroupArray
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray
-import com.google.android.exoplayer2.ui.StyledPlayerControlView
 import com.google.android.exoplayer2.ui.StyledPlayerView
 import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.DefaultAllocator
@@ -47,7 +46,6 @@ import com.google.android.exoplayer2.util.MimeTypes
 import com.google.android.exoplayer2.util.Util
 import com.google.android.exoplayer2.video.VideoSize
 import com.google.common.collect.ImmutableList
-import com.multitv.ott.multitvvideoplayer.cast.CastPlayer
 import com.multitv.ott.multitvvideoplayer.cast.SessionAvailabilityListener
 import com.multitv.ott.multitvvideoplayer.custom.CountDownTimerWithPause
 import com.multitv.ott.multitvvideoplayer.database.SharedPreferencePlayer
@@ -62,6 +60,7 @@ import com.multitv.ott.multitvvideoplayer.touchevent.OnSwipeTouchListener
 import com.multitv.ott.multitvvideoplayer.utils.*
 import com.pallycon.widevinelibrary.*
 import java.util.*
+
 class MultiTvPlayerSdk(
     private val context: AppCompatActivity,
     attrs: AttributeSet?,
@@ -871,6 +870,9 @@ class MultiTvPlayerSdk(
         }
     }
 
+
+
+
     private val bufferingTimeRunnable: Runnable? = object : Runnable {
         override fun run() {
             bufferingTimeInMillis = bufferingTimeInMillis + 1000
@@ -982,8 +984,11 @@ class MultiTvPlayerSdk(
         mMediaPlayer!!.seekTo(positionMs)
     }
 
-    val duration: Long
-        get() = if (mMediaPlayer != null) mMediaPlayer!!.duration else 0
+
+    fun getDuration(): Long {
+        return if (mMediaPlayer != null) mMediaPlayer!!.duration else 0
+    }
+
     val currentPosition: Long
         get() = if (mMediaPlayer != null) mMediaPlayer!!.currentPosition else 0
 
