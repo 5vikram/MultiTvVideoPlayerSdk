@@ -989,6 +989,11 @@ class MultiTvPlayerSdk(
         return if (mMediaPlayer != null) mMediaPlayer!!.duration else 0
     }
 
+    fun getDurationFromPlayer(): Long {
+        return if (mMediaPlayer != null) mMediaPlayer!!.duration else 0
+    }
+
+
     val currentPosition: Long
         get() = if (mMediaPlayer != null) mMediaPlayer!!.currentPosition else 0
 
