@@ -1064,7 +1064,7 @@ class MultiTvPlayerSdk(
                 contentTitle
             ) && token != null && !TextUtils.isEmpty(token)
         ) {
-            val totalDuration = duration
+            val totalDuration = getDuration()
             val bufferDuration = bufferingTimeInMillis
             val palyedDuration = getContentPlayedTimeInMillis()
             AppSessionUtil.sendHeartBeat(
