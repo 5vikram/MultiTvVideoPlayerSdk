@@ -18,6 +18,7 @@ class SpeedControllUttils {
         trackSelector: DefaultTrackSelector,
         isShowingTrackSelectionDialog: Boolean
     ): Boolean {
+
         this.isTrackSelectionDialog = isShowingTrackSelectionDialog;
         val trackSelectionDialog = TrackSelectionDialog.createForTrackSelector(
             trackSelector

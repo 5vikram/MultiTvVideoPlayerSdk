@@ -803,14 +803,19 @@ public class VideoTvPlayer extends FrameLayout implements View.OnClickListener, 
 
     @Override
     public void onClick(View view) {
+
+
         if (view == setting) {
+            new SpeedControllUttils().showTraksDailog(context, trackSelector, isShowingTrackSelectionDialog);
+        }
+      /*  if (view == setting) {
             if (!isShowingTrackSelectionDialog
                     && TrackSelectionDialog.willHaveContent(trackSelector)
             ) {
                 isShowingTrackSelectionDialog = true;
                 isShowingTrackSelectionDialog = new SpeedControllUttils().showTraksDailog(context, trackSelector, isShowingTrackSelectionDialog);
             }
-        }
+        }*/
     }
 
     private void hideSystemBars() {
