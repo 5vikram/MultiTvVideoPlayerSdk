@@ -33,7 +33,7 @@
         android:orientation="horizontal"
         android:layout_centerInParent="true">
 
-        <ImageButton
+        <ImageView
             android:id="@+id/exo_lock"
             android:layout_width="32dp"
             android:layout_height="32dp"

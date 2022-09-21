@@ -139,11 +139,9 @@ class MultiTvPlayerSdk(
     private var mWindow: Window? = null
 
 
-
     private lateinit var progressBarParent: FrameLayout
     private lateinit var volumeProgressBar: ProgressBar
     private lateinit var brightnessProgressBar: ProgressBar
-
 
 
     constructor(context: Context, attrs: AttributeSet?) : this(
@@ -285,18 +283,18 @@ class MultiTvPlayerSdk(
             errorRetryLayout?.setVisibility(GONE)
             initializeMainPlayer(mContentUrl, true)
         })
-        videoUnLockButton?.setOnClickListener(OnClickListener {
+     /*   videoUnLockButton?.setOnClickListener(OnClickListener {
             isScreenLockEnable = false
             videoUnLockButton?.setVisibility(GONE)
-            videoLockButton?.setVisibility(VISIBLE)
+          //  videoLockButton?.setVisibility(VISIBLE)
             showController()
         })
         videoLockButton?.setOnClickListener(OnClickListener {
             isScreenLockEnable = true
             videoUnLockButton?.setVisibility(VISIBLE)
-            videoLockButton?.setVisibility(GONE)
+           // videoLockButton?.setVisibility(GONE)
             hideController()
-        })
+        })*/
         pictureInPicture?.setOnClickListener(OnClickListener {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 context.enterPictureInPictureMode()
@@ -330,9 +328,6 @@ class MultiTvPlayerSdk(
     }
 
 
-
-
-
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
         isAttachedToWindowStatus = true
@@ -360,12 +355,12 @@ class MultiTvPlayerSdk(
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         val orientation = resources.configuration.orientation
-        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+        /*if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
             videoLockUnlockStatus()
         } else if (orientation == Configuration.ORIENTATION_PORTRAIT) {
             videoLockButton!!.visibility = GONE
             videoUnLockButton!!.visibility = GONE
-        }
+        }*/
         super.onConfigurationChanged(newConfig)
     }
 
@@ -487,11 +482,12 @@ class MultiTvPlayerSdk(
 
 
     fun prepareVideoPlayer() {
-        if (contentType == null || mContentUrl == null) throw Exception("Content type must not be null")
+        if (mContentUrl == null) throw Exception("Content type must not be null")
         initViews()
     }
 
     private fun videoLockUnlockStatus() {
+/*
         if (isScreenLockEnable) {
             videoLockButton!!.visibility = VISIBLE
             videoUnLockButton!!.visibility = GONE
@@ -499,13 +495,22 @@ class MultiTvPlayerSdk(
             videoLockButton!!.visibility = GONE
             videoUnLockButton!!.visibility = VISIBLE
         }
+*/
     }
 
     // init view and view group here
     private fun initViews() {
 //        ToastMessage.showLogs(ToastMessage.LogType.ERROR, "Video Player:::", "initViews()");
+
+        if (mMediaPlayer != null && simpleExoPlayerView != null) {
+            simpleExoPlayerView!!.player!!.release()
+            mMediaPlayer!!.release()
+            if (adsLoader != null) adsLoader!!.setPlayer(null)
+        }
+
         trackSelector = DefaultTrackSelector(context)
         audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+
 
         if (videoPlayerSdkCallBackListener != null) videoPlayerSdkCallBackListener!!.onPlayerReady(
             mContentUrl
@@ -624,7 +629,7 @@ class MultiTvPlayerSdk(
         if (mMediaPlayer != null) {
             mMediaPlayer!!.release()
             if (adsLoader != null) adsLoader!!.setPlayer(null)
-//            mMediaPlayer = null
+            mMediaPlayer = null
         }
         centerButtonLayout!!.visibility = GONE
         videoPlayerSdkCallBackListener!!.prepareVideoPlayer()
@@ -793,7 +798,7 @@ class MultiTvPlayerSdk(
                         circularProgressRing.setProgress(0f)
                         circularProgressLayout!!.visibility = VISIBLE
                         circularProgressLayout!!.bringToFront()
-                        val totalDuration = 10000
+                        val totalDuration = 5000
                         val tickDuration = 1000
                         countDownTimer = object : CountDownTimerWithPause(
                             totalDuration.toLong(),
@@ -811,6 +816,10 @@ class MultiTvPlayerSdk(
                                 if (circularProgressLayout != null) circularProgressLayout!!.visibility =
                                     GONE
                                 try {
+                                    if (mMediaPlayer != null) {
+                                        mMediaPlayer?.release()
+                                        mMediaPlayer = null
+                                    }
                                     prepareVideoPlayer()
                                 } catch (e: Exception) {
                                     e.printStackTrace()
@@ -869,8 +878,6 @@ class MultiTvPlayerSdk(
             bufferingTimeHandler!!.removeCallbacksAndMessages(null)
         }
     }
-
-
 
 
     private val bufferingTimeRunnable: Runnable? = object : Runnable {
