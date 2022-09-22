@@ -139,6 +139,9 @@ class MultiTvPlayerSdk(
     private var mWindow: Window? = null
 
 
+    private var spriteImageUrl = ""
+
+
     private lateinit var progressBarParent: FrameLayout
     private lateinit var volumeProgressBar: ProgressBar
     private lateinit var brightnessProgressBar: ProgressBar
@@ -364,6 +367,11 @@ class MultiTvPlayerSdk(
 
     fun disablePipMode(isPipModeOn: Boolean) {
         this.isPipModeOn = isPipModeOn;
+    }
+
+
+    fun setSpriteImageUrl(url: String) {
+        this.spriteImageUrl = url;
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
@@ -1054,11 +1062,21 @@ class MultiTvPlayerSdk(
 
     override fun loadPreview(currentPosition: Long, max: Long) {
         pauseVideoPlayer()
-        Glide.with(previewImageView!!)
-            .load("http://103.253.175.13/rahuls/output-160x90-thumb-001.jpg")
-            .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
-            .transform(GlideThumbnailTransformation(currentPosition))
-            .into(previewImageView!!)
+
+        if (spriteImageUrl != null && !TextUtils.isEmpty(spriteImageUrl)) {
+            Glide.with(previewImageView!!)
+                .load(spriteImageUrl)
+                .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
+                .transform(GlideThumbnailTransformation(currentPosition))
+                .into(previewImageView!!)
+        } else {
+            Glide.with(previewImageView!!)
+                .load("https://d2i2fx2s3ubjwq.cloudfront.net/converted_demo/SAW4TRAILERY2007M_4500/sprite.png")
+                .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
+                .transform(GlideThumbnailTransformation(currentPosition))
+                .into(previewImageView!!)
+        }
+
     }
 
     private val pallyconEventListener: PallyconEventListener = object : PallyconEventListener {
