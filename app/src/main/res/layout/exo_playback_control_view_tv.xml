@@ -218,7 +218,7 @@
             android:layout_marginEnd="5dp"
             app:previewAnimationEnabled="true"
             android:focusable="true"
-            android:background="@drawable/button_selector"
+            android:background="@drawable/seek_bar_focus"
             app:previewFrameLayout="@id/previewFrameLayout" />
 
         <!--
