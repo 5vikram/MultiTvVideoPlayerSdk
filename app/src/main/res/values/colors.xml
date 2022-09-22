@@ -11,7 +11,8 @@
     <color name="purple_700">#FF3700B3</color>
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
+    <color name="app_background_color_two">#FFFFFF</color>
 
     <color name="white">#FFFFFFFF</color>
-    <color name="faste_red">#E31000</color>
+    <color name="faste_red">#4d1e2327</color>
 </resources>

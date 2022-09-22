@@ -143,6 +143,8 @@ class MultiTvPlayerSdk(
     private lateinit var volumeProgressBar: ProgressBar
     private lateinit var brightnessProgressBar: ProgressBar
 
+    private var isPipModeOn = false
+
 
     constructor(context: Context, attrs: AttributeSet?) : this(
         context as AppCompatActivity,
@@ -283,21 +285,23 @@ class MultiTvPlayerSdk(
             errorRetryLayout?.setVisibility(GONE)
             initializeMainPlayer(mContentUrl, true)
         })
-     /*   videoUnLockButton?.setOnClickListener(OnClickListener {
-            isScreenLockEnable = false
-            videoUnLockButton?.setVisibility(GONE)
-          //  videoLockButton?.setVisibility(VISIBLE)
-            showController()
-        })
-        videoLockButton?.setOnClickListener(OnClickListener {
-            isScreenLockEnable = true
-            videoUnLockButton?.setVisibility(VISIBLE)
-           // videoLockButton?.setVisibility(GONE)
-            hideController()
-        })*/
+        /*   videoUnLockButton?.setOnClickListener(OnClickListener {
+               isScreenLockEnable = false
+               videoUnLockButton?.setVisibility(GONE)
+             //  videoLockButton?.setVisibility(VISIBLE)
+               showController()
+           })
+           videoLockButton?.setOnClickListener(OnClickListener {
+               isScreenLockEnable = true
+               videoUnLockButton?.setVisibility(VISIBLE)
+              // videoLockButton?.setVisibility(GONE)
+               hideController()
+           })*/
         pictureInPicture?.setOnClickListener(OnClickListener {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                hideController()
                 context.enterPictureInPictureMode()
+                isPipModeOn = true
             }
         })
         VideoRenuButton?.setOnClickListener(OnClickListener { rewind() })
@@ -351,6 +355,15 @@ class MultiTvPlayerSdk(
     private val hideAction = Runnable {
         VideoPlayerTracer.error("Controller Listener:::", "Stop Timer")
         hideController()
+    }
+
+
+    fun isNeedVideoPlayerPause(): Boolean {
+        return isPipModeOn;
+    }
+
+    fun disablePipMode(isPipModeOn: Boolean) {
+        this.isPipModeOn = isPipModeOn;
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
