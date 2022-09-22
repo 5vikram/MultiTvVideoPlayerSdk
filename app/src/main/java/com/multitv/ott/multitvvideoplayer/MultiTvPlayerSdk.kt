@@ -834,18 +834,7 @@ class MultiTvPlayerSdk(
                             }
 
                             override fun onFinish() {
-                                if (circularProgressLayout != null) circularProgressLayout!!.visibility =
-                                    GONE
-                                try {
-                                    if (mMediaPlayer != null) {
-                                        mMediaPlayer?.release()
-                                        mMediaPlayer = null
-                                    }
-                                    prepareVideoPlayer()
-                                } catch (e: Exception) {
-                                    e.printStackTrace()
-                                    centerButtonLayout!!.visibility = VISIBLE
-                                }
+
                             }
                         }.create()
                     }
