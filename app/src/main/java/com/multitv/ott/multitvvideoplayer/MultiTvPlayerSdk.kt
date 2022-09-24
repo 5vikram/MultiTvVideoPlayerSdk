@@ -504,6 +504,7 @@ class MultiTvPlayerSdk(
 
     fun prepareVideoPlayer() {
         if (mContentUrl == null) throw Exception("Content type must not be null")
+
         initViews()
     }
 
@@ -819,8 +820,8 @@ class MultiTvPlayerSdk(
                         circularProgressRing.setProgress(0f)
                         circularProgressLayout!!.visibility = VISIBLE
                         circularProgressLayout!!.bringToFront()
-                        val totalDuration = 5000
-                        val tickDuration = 1000
+                        val totalDuration = 2000
+                        val tickDuration = 500
                         countDownTimer = object : CountDownTimerWithPause(
                             totalDuration.toLong(),
                             (tickDuration / 10).toLong(),
@@ -834,7 +835,7 @@ class MultiTvPlayerSdk(
                             }
 
                             override fun onFinish() {
-
+                                prepareVideoPlayer()
                             }
                         }.create()
                     }

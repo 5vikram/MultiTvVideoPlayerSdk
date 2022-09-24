@@ -20,20 +20,20 @@
 
 
         <ImageView
-            android:id="@id/exo_play"
+            android:id="@+id/unmute"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginRight="15dp"
-            android:src="@drawable/play" />
+            android:src="@drawable/ic_vol_mute" />
 
         <ImageView
-            android:id="@id/exo_pause"
+            android:id="@+id/mute"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginRight="15dp"
-            android:src="@drawable/pause" />
+            android:src="@drawable/ic_vol_unmute" />
 
 
 
