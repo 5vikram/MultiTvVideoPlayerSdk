@@ -139,6 +139,7 @@ public class VideoPlayerNoController extends FrameLayout implements View.OnClick
         findViewById(R.id.unmute).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 mMediaPlayer.getAudioComponent().setVolume(mMediaPlayer.getAudioComponent().getVolume());
                 findViewById(R.id.unmute).setVisibility(View.GONE);
                 findViewById(R.id.mute).setVisibility(View.VISIBLE);
@@ -148,6 +149,7 @@ public class VideoPlayerNoController extends FrameLayout implements View.OnClick
         findViewById(R.id.mute).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 mMediaPlayer.getAudioComponent().setVolume(0f);
                 findViewById(R.id.unmute).setVisibility(View.VISIBLE);
                 findViewById(R.id.mute).setVisibility(View.GONE);
