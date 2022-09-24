@@ -6,12 +6,14 @@ public interface VideoPlayerSdkCallBackListener {
     void onPlayNextVideo();
 
     void onPlayClick();
+    void onPlayClick(int status);
 
     void onControllerVisibilityChanges(int isShown);
 
     void onPlayerError(String message);
 
     void prepareVideoPlayer();
+
 
     //void showSpeedControllMenu();
 }

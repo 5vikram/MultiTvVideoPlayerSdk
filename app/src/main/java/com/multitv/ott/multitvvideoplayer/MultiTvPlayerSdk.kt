@@ -314,6 +314,7 @@ class MultiTvPlayerSdk(
                 mMediaPlayer!!.playWhenReady = true
                 videoPlayButton?.setVisibility(GONE)
                 videoPauseButton?.setVisibility(VISIBLE)
+                videoPlayerSdkCallBackListener?.onPlayClick(1)
             }
         })
         videoPauseButton?.setOnClickListener(OnClickListener {
@@ -321,6 +322,7 @@ class MultiTvPlayerSdk(
                 mMediaPlayer!!.playWhenReady = false
                 videoPlayButton?.setVisibility(VISIBLE)
                 videoPauseButton?.setVisibility(GONE)
+                videoPlayerSdkCallBackListener?.onPlayClick(0)
             }
         })
         playerProgress!!.addOnPreviewVisibilityListener { previewBar, isPreviewShowing ->

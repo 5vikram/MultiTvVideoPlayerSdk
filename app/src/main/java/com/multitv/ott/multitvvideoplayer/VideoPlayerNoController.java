@@ -84,7 +84,7 @@ public class VideoPlayerNoController extends FrameLayout implements View.OnClick
     private final String TAG = "VikramExoVideoPlayer";
 
     private LinearLayout errorRetryLayout, bufferingProgressBarLayout, centerButtonLayout;
-    private ImageView videoPlayButton, videoPauseButton;
+
 
 
     public static final int DEFAULT_FAST_FORWARD_MS = 10000;
@@ -135,8 +135,6 @@ public class VideoPlayerNoController extends FrameLayout implements View.OnClick
         centerButtonLayout = view.findViewById(R.id.centerButtonLayout);
         centerButtonLayout.setVisibility(View.GONE);
 
-        videoPlayButton = view.findViewById(R.id.exo_play);
-        videoPauseButton = view.findViewById(R.id.exo_pause);
 
         findViewById(R.id.unmute).setOnClickListener(new OnClickListener() {
             @Override
@@ -157,27 +155,6 @@ public class VideoPlayerNoController extends FrameLayout implements View.OnClick
         });
 
 
-        videoPlayButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mMediaPlayer != null) {
-                    mMediaPlayer.setPlayWhenReady(true);
-                    videoPlayButton.setVisibility(View.GONE);
-                    videoPauseButton.setVisibility(View.VISIBLE);
-                }
-            }
-        });
-
-        videoPauseButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mMediaPlayer != null) {
-                    mMediaPlayer.setPlayWhenReady(false);
-                    videoPlayButton.setVisibility(View.VISIBLE);
-                    videoPauseButton.setVisibility(View.GONE);
-                }
-            }
-        });
 
         super.onFinishInflate();
     }
@@ -196,14 +173,7 @@ public class VideoPlayerNoController extends FrameLayout implements View.OnClick
 
         boolean requestPlayPauseFocus = false;
         boolean playing = mMediaPlayer != null && mMediaPlayer.getPlayWhenReady();
-        if (videoPlayButton != null) {
-            requestPlayPauseFocus |= playing && videoPlayButton.isFocused();
-            videoPlayButton.setVisibility(playing ? View.GONE : View.VISIBLE);
-        }
-        if (videoPauseButton != null) {
-            requestPlayPauseFocus |= !playing && videoPauseButton.isFocused();
-            videoPauseButton.setVisibility(!playing ? View.GONE : View.VISIBLE);
-        }
+
         if (requestPlayPauseFocus) {
             requestPlayPauseFocus();
         }
@@ -211,11 +181,7 @@ public class VideoPlayerNoController extends FrameLayout implements View.OnClick
 
     private void requestPlayPauseFocus() {
         boolean playing = mMediaPlayer != null && mMediaPlayer.getPlayWhenReady();
-        if (!playing && videoPlayButton != null) {
-            videoPlayButton.requestFocus();
-        } else if (playing && videoPauseButton != null) {
-            videoPauseButton.requestFocus();
-        }
+
     }
 
 
