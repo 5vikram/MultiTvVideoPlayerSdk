@@ -379,7 +379,7 @@ public class VideoPlayerNoController extends FrameLayout implements View.OnClick
     public void releaseVideoPlayer() {
         if (mMediaPlayer != null && simpleExoPlayerView != null) {
 
-            sendAnalaticsData(context, userId, contentId, contentTitle, contentTitle);
+           // sendAnalaticsData(context, userId, contentId, contentTitle, contentTitle);
 
             simpleExoPlayerView.getPlayer().release();
             mMediaPlayer.release();
@@ -556,8 +556,8 @@ public class VideoPlayerNoController extends FrameLayout implements View.OnClick
             switch (playbackState) {
                 case ExoPlayer.STATE_BUFFERING:
                     text += "buffering";
-                    bufferingProgressBarLayout.bringToFront();
-                    bufferingProgressBarLayout.setVisibility(VISIBLE);
+                    /*bufferingProgressBarLayout.bringToFront();
+                    bufferingProgressBarLayout.setVisibility(VISIBLE);*/
                     centerButtonLayout.setVisibility(View.GONE);
 
                     if (contentType == ContentType.LIVE)
@@ -571,7 +571,7 @@ public class VideoPlayerNoController extends FrameLayout implements View.OnClick
                             contentPlayedTimeInMillis = mMediaPlayer.getCurrentPosition();
 
                         releaseVideoPlayer();
-                        bufferingProgressBarLayout.setVisibility(GONE);
+                        /*bufferingProgressBarLayout.setVisibility(GONE);*/
 
                     }
 
