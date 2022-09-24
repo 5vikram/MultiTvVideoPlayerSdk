@@ -571,6 +571,7 @@ public class VideoPlayerNoController extends FrameLayout implements View.OnClick
                             contentPlayedTimeInMillis = mMediaPlayer.getCurrentPosition();
 
                         releaseVideoPlayer();
+                        videoPlayerSdkCallBackListener.onPlayNextVideo();
                         /*bufferingProgressBarLayout.setVisibility(GONE);*/
 
                     }
