@@ -136,7 +136,7 @@ public class VideoPlayerNoController extends FrameLayout implements View.OnClick
         centerButtonLayout.setVisibility(View.GONE);
 
 
-        findViewById(R.id.unmute).setOnClickListener(new OnClickListener() {
+      /*  findViewById(R.id.unmute).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -154,11 +154,19 @@ public class VideoPlayerNoController extends FrameLayout implements View.OnClick
                 findViewById(R.id.unmute).setVisibility(View.VISIBLE);
                 findViewById(R.id.mute).setVisibility(View.GONE);
             }
-        });
+        });*/
 
 
 
         super.onFinishInflate();
+    }
+
+    public void unmuteVideo(){
+        mMediaPlayer.getAudioComponent().setVolume(mMediaPlayer.getAudioComponent().getVolume());
+    }
+
+    public void muteVideo(){
+        mMediaPlayer.getAudioComponent().setVolume(0f);
     }
 
     @Override
