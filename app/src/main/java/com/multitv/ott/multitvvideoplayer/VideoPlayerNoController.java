@@ -136,6 +136,9 @@ public class VideoPlayerNoController extends FrameLayout implements View.OnClick
         centerButtonLayout.setVisibility(View.GONE);
 
 
+
+        findViewById(R.id.mute).requestFocus();
+
         findViewById(R.id.unmute).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -143,13 +146,14 @@ public class VideoPlayerNoController extends FrameLayout implements View.OnClick
                 mMediaPlayer.getAudioComponent().setVolume(mMediaPlayer.getAudioComponent().getVolume());
                 findViewById(R.id.unmute).setVisibility(View.GONE);
                 findViewById(R.id.mute).setVisibility(View.VISIBLE);
+                findViewById(R.id.mute).requestFocus();
             }
         });
 
         findViewById(R.id.mute).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                findViewById(R.id.unmute).requestFocus();
                 mMediaPlayer.getAudioComponent().setVolume(0f);
                 findViewById(R.id.unmute).setVisibility(View.VISIBLE);
                 findViewById(R.id.mute).setVisibility(View.GONE);
