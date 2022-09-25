@@ -13,7 +13,7 @@
         android:background="@color/black"
         android:clickable="true"
         android:focusable="true"
-        app:use_controller="false"
+        app:controller_layout_id="@layout/short_video_playback_control_view"
         app:resize_mode="fill" >
 
 

@@ -136,7 +136,7 @@ public class VideoPlayerNoController extends FrameLayout implements View.OnClick
         centerButtonLayout.setVisibility(View.GONE);
 
 
-      /*  findViewById(R.id.unmute).setOnClickListener(new OnClickListener() {
+        findViewById(R.id.unmute).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -154,7 +154,7 @@ public class VideoPlayerNoController extends FrameLayout implements View.OnClick
                 findViewById(R.id.unmute).setVisibility(View.VISIBLE);
                 findViewById(R.id.mute).setVisibility(View.GONE);
             }
-        });*/
+        });
 
 
 
@@ -265,7 +265,8 @@ public class VideoPlayerNoController extends FrameLayout implements View.OnClick
     private void initViews() {
         simpleExoPlayerView = this.findViewById(R.id.videoPlayer);
         trackSelector = new DefaultTrackSelector(context);
-
+        simpleExoPlayerView.setControllerShowTimeoutMs(5000);
+        simpleExoPlayerView.setControllerHideOnTouch(true);
         errorRetryLayout.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
