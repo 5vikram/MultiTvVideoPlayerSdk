@@ -766,6 +766,7 @@ class MultiTvPlayerSdk(
                 }
                 mMediaPlayer!!.setMediaItem(mediaItem)
             }
+            mMediaPlayer!!.audioComponent!!.volume = mMediaPlayer!!.audioComponent!!.volume
             mMediaPlayer!!.prepare()
             if (isNeedToPlayInstantly) {
                 mMediaPlayer!!.playWhenReady = true
@@ -837,6 +838,7 @@ class MultiTvPlayerSdk(
                             }
 
                             override fun onFinish() {
+                                circularProgressLayout?.visibility = View.GONE
                                 prepareVideoPlayer()
                             }
                         }.create()
