@@ -14,7 +14,7 @@
         android:clickable="true"
         android:focusable="true"
         app:controller_layout_id="@layout/exo_playback_control_view"
-        app:resize_mode="fill" />
+        app:resize_mode="fit" />
 
     <LinearLayout
         android:id="@+id/errorRetryLayout"
