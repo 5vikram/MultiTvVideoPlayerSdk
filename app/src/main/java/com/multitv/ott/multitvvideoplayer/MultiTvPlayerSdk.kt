@@ -894,6 +894,10 @@ class MultiTvPlayerSdk(
         }
     }
 
+    fun getVideoUrl(): Uri {
+        return mMediaPlayer?.currentMediaItem?.playbackProperties?.uri!!
+    }
+
 
     private val bufferingTimeRunnable: Runnable? = object : Runnable {
         override fun run() {
