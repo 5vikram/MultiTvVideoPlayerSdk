@@ -1084,6 +1084,7 @@ class MultiTvPlayerSdk(
         if (spriteImageUrl != null && !TextUtils.isEmpty(spriteImageUrl)) {
             Glide.with(previewImageView!!)
                 .load(spriteImageUrl)
+                .transform(GlideThumbnailTransformation(currentPosition))
                 .into(previewImageView!!)
         } else {
             Glide.with(previewImageView!!)
