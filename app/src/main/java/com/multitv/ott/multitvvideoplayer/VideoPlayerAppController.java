@@ -1,31 +1,25 @@
 package com.multitv.ott.multitvvideoplayer;
-
-
-
-
 import android.app.Application;
 import android.text.TextUtils;
 import android.util.Log;
-
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+import com.google.android.exoplayer2.util.Util;
 import com.multitv.ott.multitvvideoplayer.utils.VideoPlayerNukeSSLCerts;
-
 
 public class VideoPlayerAppController extends Application {
     public static final String TAG = VideoPlayerAppController.class.getSimpleName();
     private RequestQueue mRequestQueue;
     private static VideoPlayerAppController mInstance;
-
+    protected String userAgent = "";
 
     @Override
     public void onCreate() {
-       // MultiDex.install(this);
-        super.onCreate();
 
+        super.onCreate();
         mInstance = this;
+        userAgent = Util.getUserAgent(this, "AdaptiveExoplayer");
 
         new VideoPlayerNukeSSLCerts().nuke();
 
@@ -59,5 +53,9 @@ public class VideoPlayerAppController extends Application {
             mRequestQueue.cancelAll(tag);
         }
     }
+
+
+
+
 
 }

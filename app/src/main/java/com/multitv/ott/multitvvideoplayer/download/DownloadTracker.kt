@@ -1,5 +1,4 @@
-package com.multitv.ott.multitvvideoplayer.exodownload
-
+package io.github.yoobi.downloadvideo.common
 
 import android.content.Context
 import android.net.Uri
@@ -23,11 +22,12 @@ import com.google.android.exoplayer2.util.Log
 import com.google.android.exoplayer2.util.MimeTypes
 import com.google.android.exoplayer2.util.Util
 import com.multitv.ott.multitvvideoplayer.R
-import java.io.IOException
-import java.util.*
+
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import java.io.IOException
+import java.util.*
 import java.util.concurrent.CopyOnWriteArraySet
 
 private const val TAG = "DownloadTracker"
@@ -67,11 +67,11 @@ class DownloadTracker(context: Context, private val httpDataSourceFactory: HttpD
     }
 
     fun isDownloaded(mediaItem: MediaItem): Boolean {
-        val download = downloads[mediaItem.playbackProperties?.uri!!]
+        val download = downloads[mediaItem.playbackProperties?.uri]
         return download != null && download.state == Download.STATE_COMPLETED
     }
 
-    fun hasDownload(uri: Uri?): Boolean = downloads.keys.contains(uri!!)
+    fun hasDownload(uri: Uri?): Boolean = downloads.keys.contains(uri)
 
     fun getDownloadRequest(uri: Uri?): DownloadRequest? {
         uri ?: return null
@@ -126,7 +126,7 @@ class DownloadTracker(context: Context, private val httpDataSourceFactory: HttpD
     }
 
     fun removeDownload(uri: Uri?) {
-        val download = downloads[uri!!]
+        val download = downloads[uri]
         download?.let {
             DownloadService.sendRemoveDownload(applicationContext, MyDownloadService::class.java, download.request.id,  false)
         }

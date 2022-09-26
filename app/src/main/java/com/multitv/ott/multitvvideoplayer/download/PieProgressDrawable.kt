@@ -1,8 +1,10 @@
-package com.multitv.ott.multitvvideoplayer.exodownload
+package com.multitv.ott.multitvvideoplayer.download
 
 import android.graphics.*
 import android.graphics.drawable.Drawable
 import android.util.DisplayMetrics
+import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 
 
 /**
@@ -11,7 +13,6 @@ import android.util.DisplayMetrics
  * [Circular Progress Bar Android](http://stackoverflow.com/questions/12458476/how-to-create-circular-progress-barpie-chart-like-indicator-android)
  */
 private const val START_ANGLE = 0f
-
 class PieProgressDrawable : Drawable() {
 
     private var mPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply { strokeWidth = 5f }

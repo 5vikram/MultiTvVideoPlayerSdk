@@ -1,4 +1,6 @@
-package com.multitv.ott.multitvvideoplayer.exodownload
+package io.github.yoobi.downloadvideo.common
+
+
 import android.content.Context
 import com.google.android.exoplayer2.database.DatabaseProvider
 import com.google.android.exoplayer2.database.ExoDatabaseProvider

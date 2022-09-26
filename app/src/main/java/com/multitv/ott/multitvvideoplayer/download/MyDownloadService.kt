@@ -1,4 +1,4 @@
-package com.multitv.ott.multitvvideoplayer.exodownload
+package com.multitv.ott.multitvvideoplayer.download
 
 import android.app.Notification
 import android.content.Context
@@ -10,7 +10,9 @@ import com.google.android.exoplayer2.ui.DownloadNotificationHelper
 import com.google.android.exoplayer2.util.NotificationUtil
 import com.google.android.exoplayer2.util.Util
 import com.multitv.ott.multitvvideoplayer.R
-import com.multitv.ott.multitvvideoplayer.exodownload.DownloadUtil.DOWNLOAD_NOTIFICATION_CHANNEL_ID
+import io.github.yoobi.downloadvideo.common.DownloadUtil
+
+import io.github.yoobi.downloadvideo.common.DownloadUtil.DOWNLOAD_NOTIFICATION_CHANNEL_ID
 
 private const val JOB_ID = 8888
 private const val FOREGROUND_NOTIFICATION_ID = 8989
@@ -53,6 +55,12 @@ class MyDownloadService: DownloadService(
             )
     }
 
+   /* override fun getForegroundNotification(downloads: MutableList<Download>): Notification {
+        return DownloadUtil.getDownloadNotificationHelper(this)
+            .buildProgressNotification(
+                this, R.drawable.ic_download, null, null, downloads
+            )
+    }*/
 
     /**
      * Creates and displays notifications for downloads when they complete or fail.

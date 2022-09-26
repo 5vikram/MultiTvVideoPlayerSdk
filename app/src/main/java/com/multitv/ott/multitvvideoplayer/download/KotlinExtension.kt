@@ -1,4 +1,5 @@
-package com.multitv.ott.multitvvideoplayer.exodownload
+package io.github.yoobi.downloadvideo.common
+
 import java.text.DecimalFormat
 
 fun Long.formatFileSize(): String {
