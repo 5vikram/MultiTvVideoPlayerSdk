@@ -34,14 +34,14 @@ public class ExoVideoDownloadHelper implements DownloadTracker.Listener {
     }
 
     private MediaItem getMediaItem(String uri, String title) {
-        mediaItem = new MediaItem.Builder()
+        return new MediaItem.Builder()
                 .setUri(uri)
                 .setMimeType(MimeTypes.APPLICATION_M3U8)
                 .setMediaMetadata(new MediaMetadata.Builder().setTitle(title).build())
                 .setTag(new MediaItemTag(-1, title))
                 .build();
 
-        return mediaItem;
+
     }
 
     public void downloadVideo(String url, String videoTitle, Long videoDurationInSeconds, ImageView imageView) {
@@ -74,8 +74,8 @@ public class ExoVideoDownloadHelper implements DownloadTracker.Listener {
                 break;
 
             case Download.STATE_COMPLETED:
-                Log.e("Download Uri:::", "" + mediaItem.mediaMetadata.mediaUri);
-                downloadVideoListener.downloadCompleted();
+                Log.e("Download Uri:::", "" + download.request.uri);
+                downloadVideoListener.downloadCompleted(download.request.uri);
                 break;
 
             case Download.STATE_REMOVING:
