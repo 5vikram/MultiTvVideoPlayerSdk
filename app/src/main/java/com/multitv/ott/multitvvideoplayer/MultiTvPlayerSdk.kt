@@ -33,6 +33,8 @@ import com.google.android.exoplayer2.MediaItem.AdsConfiguration
 import com.google.android.exoplayer2.MediaItem.SubtitleConfiguration
 import com.google.android.exoplayer2.drm.DrmSessionManager
 import com.google.android.exoplayer2.ext.ima.ImaAdsLoader
+import com.google.android.exoplayer2.offline.DownloadHelper
+import com.google.android.exoplayer2.offline.DownloadRequest
 import com.google.android.exoplayer2.source.DefaultMediaSourceFactory
 import com.google.android.exoplayer2.source.MediaSourceFactory
 import com.google.android.exoplayer2.source.TrackGroupArray
@@ -59,6 +61,7 @@ import com.multitv.ott.multitvvideoplayer.timebar.previewseekbar.PreviewLoader
 import com.multitv.ott.multitvvideoplayer.touchevent.OnSwipeTouchListener
 import com.multitv.ott.multitvvideoplayer.utils.*
 import com.pallycon.widevinelibrary.*
+import io.github.yoobi.downloadvideo.common.DownloadUtil
 import java.util.*
 
 class MultiTvPlayerSdk(
@@ -122,6 +125,7 @@ class MultiTvPlayerSdk(
     private val formatBuilder: StringBuilder
     private val formatter: Formatter
     private var isDrmContent = false
+    private var isOfflineContent = false
     private var drmContentToken: String? = null
     private var drmdrmLicenseUrl: String? = null
     private var siteId: String? = null
@@ -597,6 +601,11 @@ class MultiTvPlayerSdk(
         this.siteKey = siteKey
     }
 
+
+    fun setOfflineContentData(isOfflineContent: Boolean) {
+        this.isOfflineContent = isOfflineContent
+    }
+
     // get play duration of video in milli second
     fun getContentPlayedTimeInMillis(): Long {
         // contentPlayedTimeInMillis = 0;
@@ -667,6 +676,8 @@ class MultiTvPlayerSdk(
             .build()
 
 
+
+
         if (adsUrl != null && !TextUtils.isEmpty(adsUrl)) {
             val dataSourceFactory: DataSource.Factory = DefaultDataSource.Factory(
                 context
@@ -730,6 +741,15 @@ class MultiTvPlayerSdk(
                     drmSessionManager!!
                 )
                 mMediaPlayer!!.setMediaSource(playerMediaSource!!)
+            } else if (isOfflineContent) {
+                mediaItem = MediaItem.Builder().setUri(videoUrl).build()
+                val downloadRequest: DownloadRequest? =
+                    DownloadUtil.getDownloadTracker(context).getDownloadRequest(mediaItem.playbackProperties?.uri)
+
+                val mediaSource= DownloadHelper.createMediaSource(downloadRequest!!, DownloadUtil.getReadOnlyDataSourceFactory(context))
+
+                mMediaPlayer!!.setMediaSource(mediaSource!!)
+
             } else {
                 mediaItem = if (subtitle != null) {
                     /*MediaSource playerMediaSource = new ExoUttils().buildMediaSource(context, mediaItem, videoUrl, drmSessionManager);

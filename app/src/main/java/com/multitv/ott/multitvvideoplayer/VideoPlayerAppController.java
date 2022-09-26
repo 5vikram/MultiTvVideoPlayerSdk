@@ -2,6 +2,9 @@ package com.multitv.ott.multitvvideoplayer;
 import android.app.Application;
 import android.text.TextUtils;
 import android.util.Log;
+
+import androidx.appcompat.app.AppCompatDelegate;
+
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
@@ -20,7 +23,7 @@ public class VideoPlayerAppController extends Application {
         super.onCreate();
         mInstance = this;
         userAgent = Util.getUserAgent(this, "AdaptiveExoplayer");
-
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         new VideoPlayerNukeSSLCerts().nuke();
 
     }
