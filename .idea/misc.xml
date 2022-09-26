@@ -5,6 +5,7 @@
       <map>
         <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/drawable/button_focus_background.xml" value="0.1125" />
         <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/drawable/button_selector.xml" value="0.1125" />
+        <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/drawable/ic_check.xml" value="0.1975" />
         <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/drawable/seek_bar_focus.xml" value="0.138" />
         <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/drawable/seek_focus_background.xml" value="0.138" />
         <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/layout/exo_playback_control_view.xml" value="0.128" />
@@ -13,6 +14,7 @@
         <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/layout/short_video_playback_control_view.xml" value="0.1" />
         <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/layout/short_video_player_layout.xml" value="0.152" />
         <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/layout/tv_player_layout.xml" value="0.12" />
+        <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/menu/popup_menu.xml" value="0.1923899102180419" />
         <entry key="..\:/Users/mtv/StudioProjects/MultiTvVideoPlayerSdk/app/src/main/res/drawable/vertical_progress_bar.xml" value="0.161" />
         <entry key="..\:/Users/mtv/StudioProjects/MultiTvVideoPlayerSdk/app/src/main/res/layout/exo_playback_control_view.xml" value="0.23229166666666667" />
         <entry key="..\:/Users/mtv/StudioProjects/MultiTvVideoPlayerSdk/app/src/main/res/layout/player_layout.xml" value="0.21822916666666667" />
