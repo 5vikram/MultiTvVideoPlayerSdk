@@ -745,7 +745,7 @@ class MultiTvPlayerSdk(
                 mediaItem = MediaItem.Builder().setUri(videoUrl).build()
                 val downloadRequest: DownloadRequest? =
                     DownloadUtil.getDownloadTracker(context).getDownloadRequest(mediaItem.playbackProperties?.uri)
-
+                VideoPlayerTracer.error("Offline Video Url:::",""+mediaItem.playbackProperties?.uri)
                 val mediaSource= DownloadHelper.createMediaSource(downloadRequest!!, DownloadUtil.getReadOnlyDataSourceFactory(context))
 
                 mMediaPlayer!!.setMediaSource(mediaSource!!)
