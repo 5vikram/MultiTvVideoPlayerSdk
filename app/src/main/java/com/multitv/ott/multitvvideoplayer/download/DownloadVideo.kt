@@ -2,6 +2,7 @@ package com.multitv.ott.multitvvideoplayer.download
 
 import android.content.Context
 import android.media.Image
+import android.net.Uri
 import android.widget.ImageView
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.MediaMetadata
@@ -12,8 +13,12 @@ import java.time.Duration
 class DownloadVideo(private val context: Context) {
 
     fun downloadVideo(mediaItem: MediaItem, progressDrawable: ImageView, duration: Long) {
+
         val item = mediaItem.buildUpon()
-            .setTag((mediaItem.playbackProperties?.tag as MediaItemTag).copy(duration))
+            .setTag(
+                (mediaItem.playbackProperties?.tag as MediaItemTag)
+                    .copy(duration = duration)
+            )
             .build()
         if (!DownloadUtil.getDownloadTracker(context)
                 .hasDownload(item.playbackProperties?.uri)
@@ -25,7 +30,6 @@ class DownloadVideo(private val context: Context) {
                 .toggleDownloadPopupMenu(context, progressDrawable, item.playbackProperties?.uri)
         }
     }
-
 
 
 }
