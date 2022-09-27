@@ -51,6 +51,7 @@ import com.google.common.collect.ImmutableList
 import com.multitv.ott.multitvvideoplayer.cast.SessionAvailabilityListener
 import com.multitv.ott.multitvvideoplayer.custom.CountDownTimerWithPause
 import com.multitv.ott.multitvvideoplayer.database.SharedPreferencePlayer
+import com.multitv.ott.multitvvideoplayer.download.DownloadUtil
 import com.multitv.ott.multitvvideoplayer.fabbutton.FabButton
 import com.multitv.ott.multitvvideoplayer.listener.VideoPlayerSdkCallBackListener
 import com.multitv.ott.multitvvideoplayer.playerglide.GlideThumbnailTransformation
@@ -61,7 +62,6 @@ import com.multitv.ott.multitvvideoplayer.timebar.previewseekbar.PreviewLoader
 import com.multitv.ott.multitvvideoplayer.touchevent.OnSwipeTouchListener
 import com.multitv.ott.multitvvideoplayer.utils.*
 import com.pallycon.widevinelibrary.*
-import io.github.yoobi.downloadvideo.common.DownloadUtil
 import java.util.*
 
 class MultiTvPlayerSdk(
@@ -656,6 +656,10 @@ class MultiTvPlayerSdk(
         }
     }
 
+    fun getTrackSelector(): DefaultTrackSelector {
+        return trackSelector
+    }
+
 
     private fun initializeMainPlayer(videoUrl: String?, isNeedToPlayInstantly: Boolean) {
 //        ToastMessage.showLogs(ToastMessage.LogType.ERROR, "Video Player:::", "initializeMainPlayer");
@@ -744,9 +748,16 @@ class MultiTvPlayerSdk(
             } else if (isOfflineContent) {
                 mediaItem = MediaItem.Builder().setUri(videoUrl).build()
                 val downloadRequest: DownloadRequest? =
-                    DownloadUtil.getDownloadTracker(context).getDownloadRequest(mediaItem.playbackProperties?.uri)
-                VideoPlayerTracer.error("Offline Video Url:::",""+mediaItem.playbackProperties?.uri)
-                val mediaSource= DownloadHelper.createMediaSource(downloadRequest!!, DownloadUtil.getReadOnlyDataSourceFactory(context))
+                    DownloadUtil.getDownloadTracker(context)
+                        .getDownloadRequest(mediaItem.playbackProperties?.uri)
+                VideoPlayerTracer.error(
+                    "Offline Video Url:::",
+                    "" + mediaItem.playbackProperties?.uri
+                )
+                val mediaSource = DownloadHelper.createMediaSource(
+                    downloadRequest!!,
+                    DownloadUtil.getReadOnlyDataSourceFactory(context)
+                )
 
                 mMediaPlayer!!.setMediaSource(mediaSource!!)
 

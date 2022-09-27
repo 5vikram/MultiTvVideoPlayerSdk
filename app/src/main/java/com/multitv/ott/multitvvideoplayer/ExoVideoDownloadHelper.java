@@ -12,12 +12,12 @@ import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.MediaMetadata;
 import com.google.android.exoplayer2.offline.Download;
 import com.google.android.exoplayer2.util.MimeTypes;
+import com.multitv.ott.multitvvideoplayer.download.DownloadTracker;
+import com.multitv.ott.multitvvideoplayer.download.DownloadUtil;
 import com.multitv.ott.multitvvideoplayer.download.DownloadVideo;
 import com.multitv.ott.multitvvideoplayer.download.DownloadVideoListener;
+import com.multitv.ott.multitvvideoplayer.download.MediaItemTag;
 
-import io.github.yoobi.downloadvideo.common.DownloadTracker;
-import io.github.yoobi.downloadvideo.common.DownloadUtil;
-import io.github.yoobi.downloadvideo.common.MediaItemTag;
 
 public class ExoVideoDownloadHelper implements DownloadTracker.Listener {
     private AppCompatActivity context;

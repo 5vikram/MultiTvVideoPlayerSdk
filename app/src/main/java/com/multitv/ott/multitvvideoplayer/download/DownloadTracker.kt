@@ -277,17 +277,6 @@ class DownloadTracker(
 
             val dialogBuilder: AlertDialog.Builder = AlertDialog.Builder(context)
 
-            val progressBar = ProgressBar(context)
-            val lp = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-            )
-            progressBar.layoutParams = lp
-            dialogBuilder.setView(progressBar)
-            progressBar.visibility = View.VISIBLE
-
-            trackSelectionDialog = dialogBuilder.create().apply { show() }
-
             val formatDownloadable: MutableList<Format> = mutableListOf()
             var qualitySelected: DefaultTrackSelector.Parameters
             val mappedTrackInfo = downloadHelper.getMappedTrackInfo(0)
@@ -329,7 +318,7 @@ class DownloadTracker(
                 .setMaxVideoBitrate(formatDownloadable[0].bitrate)
                 .build()
 
-            progressBar.visibility = View.GONE
+
 
             dialogBuilder.setTitle("Select Download Format")
                 .setSingleChoiceItems(optionsDownload.toTypedArray(), 0) { _, which ->
@@ -368,6 +357,7 @@ class DownloadTracker(
                     downloadHelper.release()
                     dismissCallback?.invoke()
                 }
+            trackSelectionDialog = dialogBuilder.create().apply { show() }
 
         }
 
