@@ -44,6 +44,9 @@ public class ExoVideoDownloadHelper implements DownloadTracker.Listener {
 
     }
 
+
+
+
     public void downloadVideo(String url, String videoTitle, Long videoDurationInSeconds, ImageView imageView) {
         mediaItem = getMediaItem(url, videoTitle);
         if (DownloadUtil.INSTANCE.getDownloadTracker(context).isDownloaded(getMediaItem(url, videoTitle))) {

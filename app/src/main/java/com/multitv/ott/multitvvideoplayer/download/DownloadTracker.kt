@@ -4,7 +4,9 @@ import android.content.Context
 import android.net.Uri
 import android.os.StatFs
 import android.view.View
+import android.widget.LinearLayout
 import android.widget.PopupMenu
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.google.android.exoplayer2.C
@@ -23,7 +25,6 @@ import com.google.android.exoplayer2.util.MimeTypes
 import com.google.android.exoplayer2.util.Util
 import com.multitv.ott.multitvvideoplayer.R
 import com.multitv.ott.multitvvideoplayer.download.MyDownloadService
-
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -31,9 +32,15 @@ import java.io.IOException
 import java.util.*
 import java.util.concurrent.CopyOnWriteArraySet
 
+
 private const val TAG = "DownloadTracker"
+
 /** Tracks media that has been downloaded.  */
-class DownloadTracker(context: Context, private val httpDataSourceFactory: HttpDataSource.Factory, private val downloadManager: DownloadManager) {
+class DownloadTracker(
+    context: Context,
+    private val httpDataSourceFactory: HttpDataSource.Factory,
+    private val downloadManager: DownloadManager
+) {
     /**
      * Listens for changes in the tracked downloads.
      */
@@ -49,7 +56,8 @@ class DownloadTracker(context: Context, private val httpDataSourceFactory: HttpD
     private val listeners: CopyOnWriteArraySet<Listener> = CopyOnWriteArraySet()
     private val downloadIndex: DownloadIndex = downloadManager.downloadIndex
     private var startDownloadDialogHelper: StartDownloadDialogHelper? = null
-    private var availableBytesLeft: Long = StatFs(DownloadUtil.getDownloadDirectory(context).path).availableBytes
+    private var availableBytesLeft: Long =
+        StatFs(DownloadUtil.getDownloadDirectory(context).path).availableBytes
 
     val downloads: HashMap<Uri, Download> = HashMap()
 
@@ -80,11 +88,19 @@ class DownloadTracker(context: Context, private val httpDataSourceFactory: HttpD
         return if (download != null && download.state != Download.STATE_FAILED) download.request else null
     }
 
-    fun toggleDownloadDialogHelper(context: Context, mediaItem: MediaItem,
-                                   positiveCallback: (() -> Unit)? = null, dismissCallback: (() -> Unit)? = null) {
+    fun toggleDownloadDialogHelper(
+        context: Context, mediaItem: MediaItem,
+        positiveCallback: (() -> Unit)? = null, dismissCallback: (() -> Unit)? = null
+    ) {
         startDownloadDialogHelper?.release()
         startDownloadDialogHelper =
-            StartDownloadDialogHelper(context, getDownloadHelper(mediaItem), mediaItem, positiveCallback, dismissCallback)
+            StartDownloadDialogHelper(
+                context,
+                getDownloadHelper(mediaItem),
+                mediaItem,
+                positiveCallback,
+                dismissCallback
+            )
     }
 
     fun toggleDownloadPopupMenu(context: Context, anchor: View, uri: Uri?) {
@@ -94,17 +110,24 @@ class DownloadTracker(context: Context, private val httpDataSourceFactory: HttpD
 
         popupMenu.menu.apply {
             findItem(R.id.cancel_download).isVisible =
-                listOf(Download.STATE_DOWNLOADING, Download.STATE_STOPPED, Download.STATE_QUEUED, Download.STATE_FAILED).contains(download.state)
+                listOf(
+                    Download.STATE_DOWNLOADING,
+                    Download.STATE_STOPPED,
+                    Download.STATE_QUEUED,
+                    Download.STATE_FAILED
+                ).contains(download.state)
             findItem(R.id.delete_download).isVisible = download.state == Download.STATE_COMPLETED
-            findItem(R.id.resume_download).isVisible = listOf(Download.STATE_STOPPED, Download.STATE_FAILED).contains(download.state)
+            findItem(R.id.resume_download).isVisible =
+                listOf(Download.STATE_STOPPED, Download.STATE_FAILED).contains(download.state)
             findItem(R.id.pause_download).isVisible = download.state == Download.STATE_DOWNLOADING
         }
 
         popupMenu.setOnMenuItemClickListener {
-            when(it.itemId) {
+            when (it.itemId) {
                 R.id.cancel_download, R.id.delete_download -> removeDownload(download.request.uri)
                 R.id.resume_download -> {
-                    DownloadService.sendSetStopReason(context,
+                    DownloadService.sendSetStopReason(
+                        context,
                         MyDownloadService::class.java,
                         download.request.id,
                         Download.STOP_REASON_NONE,
@@ -129,7 +152,12 @@ class DownloadTracker(context: Context, private val httpDataSourceFactory: HttpD
     fun removeDownload(uri: Uri?) {
         val download = downloads[uri]
         download?.let {
-            DownloadService.sendRemoveDownload(applicationContext, MyDownloadService::class.java, download.request.id,  false)
+            DownloadService.sendRemoveDownload(
+                applicationContext,
+                MyDownloadService::class.java,
+                download.request.id,
+                false
+            )
         }
     }
 
@@ -148,7 +176,7 @@ class DownloadTracker(context: Context, private val httpDataSourceFactory: HttpD
 
     @ExperimentalCoroutinesApi
     suspend fun getAllDownloadProgressFlow(): Flow<List<Download>> = callbackFlow {
-        while(coroutineContext.isActive) {
+        while (coroutineContext.isActive) {
             offer(downloads.values.toList())
             delay(1000)
         }
@@ -156,10 +184,12 @@ class DownloadTracker(context: Context, private val httpDataSourceFactory: HttpD
 
     @ExperimentalCoroutinesApi
     suspend fun getCurrentProgressDownload(uri: Uri?): Flow<Float?> {
-        var percent: Float? = downloadManager.currentDownloads.find { it.request.uri == uri }?.percentDownloaded
+        var percent: Float? =
+            downloadManager.currentDownloads.find { it.request.uri == uri }?.percentDownloaded
         return callbackFlow {
-            while(percent != null) {
-                percent = downloadManager.currentDownloads.find { it.request.uri == uri }?.percentDownloaded
+            while (percent != null) {
+                percent =
+                    downloadManager.currentDownloads.find { it.request.uri == uri }?.percentDownloaded
                 offer(percent)
                 withContext(Dispatchers.IO) {
                     delay(1000)
@@ -184,14 +214,19 @@ class DownloadTracker(context: Context, private val httpDataSourceFactory: HttpD
     }
 
     private inner class DownloadManagerListener : DownloadManager.Listener {
-        override fun onDownloadChanged(downloadManager: DownloadManager, download: Download, finalException: Exception?) {
+        override fun onDownloadChanged(
+            downloadManager: DownloadManager,
+            download: Download,
+            finalException: Exception?
+        ) {
             downloads[download.request.uri] = download
             for (listener in listeners) {
                 listener.onDownloadsChanged(download)
             }
-            if(download.state == Download.STATE_COMPLETED) {
+            if (download.state == Download.STATE_COMPLETED) {
                 // Add delta between estimation and reality to have a better availableBytesLeft
-                availableBytesLeft += Util.fromUtf8Bytes(download.request.data).toLong() - download.bytesDownloaded
+                availableBytesLeft += Util.fromUtf8Bytes(download.request.data)
+                    .toLong() - download.bytesDownloaded
             }
         }
 
@@ -202,7 +237,7 @@ class DownloadTracker(context: Context, private val httpDataSourceFactory: HttpD
             }
 
             // Add the estimated or downloaded bytes to the availableBytes
-            availableBytesLeft += if(download.percentDownloaded == 100f) {
+            availableBytesLeft += if (download.percentDownloaded == 100f) {
                 download.bytesDownloaded
             } else {
                 Util.fromUtf8Bytes(download.request.data).toLong()
@@ -218,7 +253,7 @@ class DownloadTracker(context: Context, private val httpDataSourceFactory: HttpD
         private val mediaItem: MediaItem,
         private val positiveCallback: (() -> Unit)? = null,
         private val dismissCallback: (() -> Unit)? = null
-    ): DownloadHelper.Callback {
+    ) : DownloadHelper.Callback {
 
         private var trackSelectionDialog: AlertDialog? = null
 
@@ -241,12 +276,24 @@ class DownloadTracker(context: Context, private val httpDataSourceFactory: HttpD
             }
 
             val dialogBuilder: AlertDialog.Builder = AlertDialog.Builder(context)
+
+            val progressBar = ProgressBar(context)
+            val lp = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+            progressBar.layoutParams = lp
+            dialogBuilder.setView(progressBar)
+            progressBar.visibility = View.VISIBLE
+
+            trackSelectionDialog = dialogBuilder.create().apply { show() }
+
             val formatDownloadable: MutableList<Format> = mutableListOf()
             var qualitySelected: DefaultTrackSelector.Parameters
             val mappedTrackInfo = downloadHelper.getMappedTrackInfo(0)
 
             for (i in 0 until mappedTrackInfo.rendererCount) {
-                if(C.TRACK_TYPE_VIDEO == mappedTrackInfo.getRendererType(i)) {
+                if (C.TRACK_TYPE_VIDEO == mappedTrackInfo.getRendererType(i)) {
                     val trackGroups: TrackGroupArray = mappedTrackInfo.getTrackGroups(i)
                     for (j in 0 until trackGroups.length) {
                         val trackGroup: TrackGroup = trackGroups[j]
@@ -257,7 +304,7 @@ class DownloadTracker(context: Context, private val httpDataSourceFactory: HttpD
                 }
             }
 
-            if(formatDownloadable.isEmpty()) {
+            if (formatDownloadable.isEmpty()) {
                 dialogBuilder.setTitle("An error occurred")
                     .setPositiveButton("OK", null)
                     .show()
@@ -282,6 +329,8 @@ class DownloadTracker(context: Context, private val httpDataSourceFactory: HttpD
                 .setMaxVideoBitrate(formatDownloadable[0].bitrate)
                 .build()
 
+            progressBar.visibility = View.GONE
+
             dialogBuilder.setTitle("Select Download Format")
                 .setSingleChoiceItems(optionsDownload.toTypedArray(), 0) { _, which ->
                     val format = formatDownloadable[which]
@@ -296,8 +345,9 @@ class DownloadTracker(context: Context, private val httpDataSourceFactory: HttpD
                     helper.clearTrackSelections(0)
                     helper.addTrackSelection(0, qualitySelected)
                     val estimatedContentLength: Long =
-                        (qualitySelected.maxVideoBitrate * mediaItemTag.duration).div(C.MILLIS_PER_SECOND).div(C.BITS_PER_BYTE)
-                    if(availableBytesLeft > estimatedContentLength) {
+                        (qualitySelected.maxVideoBitrate * mediaItemTag.duration).div(C.MILLIS_PER_SECOND)
+                            .div(C.BITS_PER_BYTE)
+                    if (availableBytesLeft > estimatedContentLength) {
                         val downloadRequest: DownloadRequest = downloadHelper.getDownloadRequest(
                             (mediaItem.playbackProperties?.tag as MediaItemTag).title,
                             Util.getUtf8Bytes(estimatedContentLength.toString())
@@ -306,7 +356,11 @@ class DownloadTracker(context: Context, private val httpDataSourceFactory: HttpD
                         availableBytesLeft -= estimatedContentLength
                         Log.e(TAG, "availableBytesLeft after calculation: $availableBytesLeft")
                     } else {
-                        Toast.makeText(context, "Not enough space to download this file", Toast.LENGTH_LONG).show()
+                        Toast.makeText(
+                            context,
+                            "Not enough space to download this file",
+                            Toast.LENGTH_LONG
+                        ).show()
                     }
                     positiveCallback?.invoke()
                 }.setOnDismissListener {
@@ -314,11 +368,12 @@ class DownloadTracker(context: Context, private val httpDataSourceFactory: HttpD
                     downloadHelper.release()
                     dismissCallback?.invoke()
                 }
-            trackSelectionDialog = dialogBuilder.create().apply { show() }
+
         }
 
         override fun onPrepareError(helper: DownloadHelper, e: IOException) {
-            Toast.makeText(applicationContext, R.string.download_start_error, Toast.LENGTH_LONG).show()
+            Toast.makeText(applicationContext, R.string.download_start_error, Toast.LENGTH_LONG)
+                .show()
             Log.e(
                 TAG,
                 if (e is LiveContentUnsupportedException) "Downloading live content unsupported" else "Failed to start download",
@@ -328,7 +383,12 @@ class DownloadTracker(context: Context, private val httpDataSourceFactory: HttpD
 
         // Internal methods.
         private fun startDownload(downloadRequest: DownloadRequest = buildDownloadRequest()) {
-            DownloadService.sendAddDownload(applicationContext, MyDownloadService::class.java, downloadRequest, true)
+            DownloadService.sendAddDownload(
+                applicationContext,
+                MyDownloadService::class.java,
+                downloadRequest,
+                true
+            )
         }
 
         private fun buildDownloadRequest(): DownloadRequest {
