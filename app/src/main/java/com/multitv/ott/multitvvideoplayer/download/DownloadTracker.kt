@@ -61,6 +61,8 @@ class DownloadTracker(
 
     val downloads: HashMap<Uri, Download> = HashMap()
 
+    private var isTrackDailogShowing = false
+
     init {
         downloadManager.addListener(DownloadManagerListener())
         loadDownloads()
@@ -101,6 +103,15 @@ class DownloadTracker(
                 positiveCallback,
                 dismissCallback
             )
+    }
+
+
+    fun getTrackDailogStatus(): Boolean {
+        return isTrackDailogShowing
+    }
+
+    fun setTrackDailogStatus(isTrackDailogShowing: Boolean) {
+        this.isTrackDailogShowing = isTrackDailogShowing
     }
 
     fun toggleDownloadPopupMenu(context: Context, anchor: View, uri: Uri?) {
@@ -245,6 +256,7 @@ class DownloadTracker(
         }
     }
 
+
     // Can't use applicationContext because it'll result in a crash, instead
     // Use context of the activity calling for the AlertDialog
     private inner class StartDownloadDialogHelper(
@@ -264,6 +276,7 @@ class DownloadTracker(
         fun release() {
             downloadHelper.release()
             trackSelectionDialog?.dismiss()
+            setTrackDailogStatus(false)
         }
 
         // DownloadHelper.Callback implementation.
@@ -272,11 +285,12 @@ class DownloadTracker(
                 Log.d(TAG, "No periods found. Downloading entire stream.")
 //                startDownload()
                 downloadHelper.release()
+                setTrackDailogStatus(false)
                 return
             }
-
+            setTrackDailogStatus(true)
             val dialogBuilder: AlertDialog.Builder = AlertDialog.Builder(context)
-
+            dialogBuilder.setCancelable(false)
             val formatDownloadable: MutableList<Format> = mutableListOf()
             var qualitySelected: DefaultTrackSelector.Parameters
             val mappedTrackInfo = downloadHelper.getMappedTrackInfo(0)
@@ -354,6 +368,7 @@ class DownloadTracker(
                     positiveCallback?.invoke()
                 }.setOnDismissListener {
                     trackSelectionDialog = null
+                    setTrackDailogStatus(false)
                     downloadHelper.release()
                     dismissCallback?.invoke()
                 }
@@ -362,6 +377,7 @@ class DownloadTracker(
         }
 
         override fun onPrepareError(helper: DownloadHelper, e: IOException) {
+            setTrackDailogStatus(false)
             Toast.makeText(applicationContext, R.string.download_start_error, Toast.LENGTH_LONG)
                 .show()
             Log.e(
@@ -379,6 +395,7 @@ class DownloadTracker(
                 downloadRequest,
                 true
             )
+            setTrackDailogStatus(false)
         }
 
         private fun buildDownloadRequest(): DownloadRequest {

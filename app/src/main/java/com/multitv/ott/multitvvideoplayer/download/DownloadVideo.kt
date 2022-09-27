@@ -6,7 +6,7 @@ import com.google.android.exoplayer2.MediaItem
 
 class DownloadVideo(private val context: Context) {
 
-    fun downloadVideo(mediaItem: MediaItem, progressDrawable: ImageView, duration: Long) {
+    fun downloadVideo(mediaItem: MediaItem, progressDrawable: ImageView, duration: Long): Boolean {
 
         val item = mediaItem.buildUpon()
             .setTag(
@@ -19,13 +19,14 @@ class DownloadVideo(private val context: Context) {
         ) {
             DownloadUtil.getDownloadTracker(context)
                 .toggleDownloadDialogHelper(context, item)
+            return DownloadUtil.getDownloadTracker(context).getTrackDailogStatus()
         } else {
             DownloadUtil.getDownloadTracker(context)
                 .toggleDownloadPopupMenu(context, progressDrawable, item.playbackProperties?.uri)
+
+            return DownloadUtil.getDownloadTracker(context).getTrackDailogStatus()
         }
     }
-
-
 
 
 }

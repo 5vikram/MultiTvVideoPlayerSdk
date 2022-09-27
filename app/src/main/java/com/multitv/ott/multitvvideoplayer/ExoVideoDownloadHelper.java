@@ -23,6 +23,7 @@ public class ExoVideoDownloadHelper implements DownloadTracker.Listener {
     private AppCompatActivity context;
     private DownloadVideoListener downloadVideoListener;
     private MediaItem mediaItem;
+    private boolean trackDailogStatus = false;
 
     public ExoVideoDownloadHelper(AppCompatActivity context) {
         this.context = context;
@@ -45,15 +46,16 @@ public class ExoVideoDownloadHelper implements DownloadTracker.Listener {
     }
 
 
-
-
-    public void downloadVideo(String url, String videoTitle, Long videoDurationInSeconds, ImageView imageView) {
+    public boolean downloadVideo(String url, String videoTitle, Long videoDurationInSeconds, ImageView imageView) {
         mediaItem = getMediaItem(url, videoTitle);
         if (DownloadUtil.INSTANCE.getDownloadTracker(context).isDownloaded(getMediaItem(url, videoTitle))) {
-            Toast.makeText(context, "Video already downloaded.", Toast.LENGTH_SHORT).show();
+            DownloadUtil.INSTANCE.getDownloadTracker(context)
+                    .toggleDownloadPopupMenu(context, imageView, mediaItem.playbackProperties.uri);
         } else {
-            new DownloadVideo(context).downloadVideo(mediaItem, imageView, videoDurationInSeconds);
+            trackDailogStatus = new DownloadVideo(context).downloadVideo(mediaItem, imageView, videoDurationInSeconds);
+
         }
+        return true;
     }
 
     /* public void downloadVideo(String url, String videoTitle, Long videoDurationInSeconds, ImageView imageView) {
@@ -86,7 +88,7 @@ public class ExoVideoDownloadHelper implements DownloadTracker.Listener {
                 break;
 
 
-                /* download*/
+            /* download*/
 
             case Download.STATE_COMPLETED:
                 downloadVideoListener.downloadCompleted(download.request.uri);
