@@ -73,6 +73,9 @@ public class ExoVideoDownloadHelper implements DownloadTracker.Listener {
                 downloadVideoListener.pauseDownload();
                 break;
 
+
+                /* download*/
+
             case Download.STATE_COMPLETED:
                 downloadVideoListener.downloadCompleted(download.request.uri);
                 break;
