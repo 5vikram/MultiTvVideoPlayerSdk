@@ -53,6 +53,15 @@ public class ExoVideoDownloadHelper implements DownloadTracker.Listener {
         }
     }
 
+    /* public void downloadVideo(String url, String videoTitle, Long videoDurationInSeconds, ImageView imageView) {
+        mediaItem = getMediaItem(url, videoTitle);
+        if (DownloadUtil.INSTANCE.getDownloadTracker(context).isDownloaded(getMediaItem(url, videoTitle))) {
+            Toast.makeText(context, "Video already downloaded.", Toast.LENGTH_SHORT).show();
+        } else {
+            new DownloadVideo(context).downloadVideo(mediaItem, imageView, videoDurationInSeconds);
+        }
+    }*/
+
 
     public void removeDownload() {
         DownloadUtil.INSTANCE.getDownloadTracker(context).removeListener(this);
