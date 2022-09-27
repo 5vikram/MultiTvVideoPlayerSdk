@@ -10,9 +10,8 @@ import com.google.android.exoplayer2.ui.DownloadNotificationHelper
 import com.google.android.exoplayer2.util.NotificationUtil
 import com.google.android.exoplayer2.util.Util
 import com.multitv.ott.multitvvideoplayer.R
-import io.github.yoobi.downloadvideo.common.DownloadUtil
+import com.multitv.ott.multitvvideoplayer.download.DownloadUtil.DOWNLOAD_NOTIFICATION_CHANNEL_ID
 
-import io.github.yoobi.downloadvideo.common.DownloadUtil.DOWNLOAD_NOTIFICATION_CHANNEL_ID
 
 private const val JOB_ID = 8888
 private const val FOREGROUND_NOTIFICATION_ID = 8989

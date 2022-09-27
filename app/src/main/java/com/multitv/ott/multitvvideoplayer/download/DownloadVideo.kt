@@ -1,14 +1,8 @@
 package com.multitv.ott.multitvvideoplayer.download
 
 import android.content.Context
-import android.media.Image
-import android.net.Uri
 import android.widget.ImageView
 import com.google.android.exoplayer2.MediaItem
-import com.google.android.exoplayer2.MediaMetadata
-import io.github.yoobi.downloadvideo.common.DownloadUtil
-import io.github.yoobi.downloadvideo.common.MediaItemTag
-import java.time.Duration
 
 class DownloadVideo(private val context: Context) {
 

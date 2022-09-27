@@ -1,4 +1,4 @@
-package io.github.yoobi.downloadvideo.common
+package com.multitv.ott.multitvvideoplayer.download
 
 import android.content.Context
 import android.net.Uri
