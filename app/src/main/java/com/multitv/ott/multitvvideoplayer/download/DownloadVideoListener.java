@@ -7,7 +7,7 @@ import com.google.android.exoplayer2.offline.Download;
 public interface DownloadVideoListener {
     void Downloading(Uri videouri);
 
-    void pauseDownload();
+
 
     void downloadCompleted(Uri videouri);
 
@@ -16,4 +16,6 @@ public interface DownloadVideoListener {
     void downloadFail();
 
     void startDownloadInit();
+
+    void pauseDownload();
 }
