@@ -51,8 +51,6 @@ public class ExoVideoDownloadHelper implements DownloadTracker.Listener {
         } else {
             new DownloadVideo(context).downloadVideo(mediaItem, imageView, videoDurationInSeconds);
         }
-
-       // Toast.makeText(context, "Video already downloaded.", Toast.LENGTH_SHORT);
     }
 
 
