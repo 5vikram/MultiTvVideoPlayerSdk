@@ -91,7 +91,7 @@ class DownloadTracker(
     }
 
     fun toggleDownloadDialogHelper(
-        context: Context, mediaItem: MediaItem,
+        context: Context, mediaItem: MediaItem, dailogCallbackListener: DailogCallbackListener,
         positiveCallback: (() -> Unit)? = null, dismissCallback: (() -> Unit)? = null
     ) {
         startDownloadDialogHelper?.release()
@@ -101,7 +101,7 @@ class DownloadTracker(
                 getDownloadHelper(mediaItem),
                 mediaItem,
                 positiveCallback,
-                dismissCallback
+                dismissCallback, dailogCallbackListener
             )
     }
 
@@ -264,7 +264,8 @@ class DownloadTracker(
         private val downloadHelper: DownloadHelper,
         private val mediaItem: MediaItem,
         private val positiveCallback: (() -> Unit)? = null,
-        private val dismissCallback: (() -> Unit)? = null
+        private val dismissCallback: (() -> Unit)? = null,
+        private val dailogCallbackListener: DailogCallbackListener
     ) : DownloadHelper.Callback {
 
         private var trackSelectionDialog: AlertDialog? = null
@@ -277,6 +278,7 @@ class DownloadTracker(
             downloadHelper.release()
             trackSelectionDialog?.dismiss()
             setTrackDailogStatus(false)
+            dailogCallbackListener.trackDailogStatus(false)
         }
 
         // DownloadHelper.Callback implementation.
@@ -288,6 +290,7 @@ class DownloadTracker(
                 setTrackDailogStatus(false)
                 return
             }
+            dailogCallbackListener.trackDailogStatus(true)
             setTrackDailogStatus(true)
             val dialogBuilder: AlertDialog.Builder = AlertDialog.Builder(context)
             dialogBuilder.setCancelable(false)
@@ -365,12 +368,20 @@ class DownloadTracker(
                             Toast.LENGTH_LONG
                         ).show()
                     }
+                    dailogCallbackListener.trackDailogStatus(false)
                     positiveCallback?.invoke()
                 }.setOnDismissListener {
                     trackSelectionDialog = null
                     setTrackDailogStatus(false)
                     downloadHelper.release()
                     dismissCallback?.invoke()
+                    dailogCallbackListener.trackDailogStatus(false)
+                }.setNegativeButton("Cancel") { _, _ ->
+                    trackSelectionDialog = null
+                    setTrackDailogStatus(false)
+                    downloadHelper.release()
+                    dismissCallback?.invoke()
+                    dailogCallbackListener.trackDailogStatus(false)
                 }
             trackSelectionDialog = dialogBuilder.create().apply { show() }
 
@@ -378,6 +389,7 @@ class DownloadTracker(
 
         override fun onPrepareError(helper: DownloadHelper, e: IOException) {
             setTrackDailogStatus(false)
+            dailogCallbackListener.trackDailogStatus(false)
             Toast.makeText(applicationContext, R.string.download_start_error, Toast.LENGTH_LONG)
                 .show()
             Log.e(
@@ -395,7 +407,7 @@ class DownloadTracker(
                 downloadRequest,
                 true
             )
-            setTrackDailogStatus(false)
+
         }
 
         private fun buildDownloadRequest(): DownloadRequest {

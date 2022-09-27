@@ -4,7 +4,11 @@ import android.content.Context
 import android.widget.ImageView
 import com.google.android.exoplayer2.MediaItem
 
-class DownloadVideo(private val context: Context) {
+class DownloadVideo(
+    private val context: Context,
+    private val downloadVideoListener: SdkPopCallbackListner
+) : DailogCallbackListener {
+    private var dailogShown = false;
 
     fun downloadVideo(mediaItem: MediaItem, progressDrawable: ImageView, duration: Long): Boolean {
 
@@ -18,7 +22,7 @@ class DownloadVideo(private val context: Context) {
                 .hasDownload(item.playbackProperties?.uri)
         ) {
             DownloadUtil.getDownloadTracker(context)
-                .toggleDownloadDialogHelper(context, item)
+                .toggleDownloadDialogHelper(context, item, this)
             return DownloadUtil.getDownloadTracker(context).getTrackDailogStatus()
         } else {
             DownloadUtil.getDownloadTracker(context)
@@ -26,6 +30,11 @@ class DownloadVideo(private val context: Context) {
 
             return DownloadUtil.getDownloadTracker(context).getTrackDailogStatus()
         }
+    }
+
+    override fun trackDailogStatus(shown: Boolean) {
+        dailogShown = shown;
+        downloadVideoListener.dismissEvent()
     }
 
 

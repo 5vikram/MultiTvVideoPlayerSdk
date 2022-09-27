@@ -17,9 +17,10 @@ import com.multitv.ott.multitvvideoplayer.download.DownloadUtil;
 import com.multitv.ott.multitvvideoplayer.download.DownloadVideo;
 import com.multitv.ott.multitvvideoplayer.download.DownloadVideoListener;
 import com.multitv.ott.multitvvideoplayer.download.MediaItemTag;
+import com.multitv.ott.multitvvideoplayer.download.SdkPopCallbackListner;
 
 
-public class ExoVideoDownloadHelper implements DownloadTracker.Listener {
+public class ExoVideoDownloadHelper implements DownloadTracker.Listener, SdkPopCallbackListner {
     private AppCompatActivity context;
     private DownloadVideoListener downloadVideoListener;
     private MediaItem mediaItem;
@@ -46,16 +47,14 @@ public class ExoVideoDownloadHelper implements DownloadTracker.Listener {
     }
 
 
-    public boolean downloadVideo(String url, String videoTitle, Long videoDurationInSeconds, ImageView imageView) {
+    public void downloadVideo(String url, String videoTitle, Long videoDurationInSeconds, ImageView imageView) {
         mediaItem = getMediaItem(url, videoTitle);
         if (DownloadUtil.INSTANCE.getDownloadTracker(context).isDownloaded(getMediaItem(url, videoTitle))) {
             DownloadUtil.INSTANCE.getDownloadTracker(context)
                     .toggleDownloadPopupMenu(context, imageView, mediaItem.playbackProperties.uri);
         } else {
-            trackDailogStatus = new DownloadVideo(context).downloadVideo(mediaItem, imageView, videoDurationInSeconds);
-
+            new DownloadVideo(context, this).downloadVideo(mediaItem, imageView, videoDurationInSeconds);
         }
-        return true;
     }
 
     /* public void downloadVideo(String url, String videoTitle, Long videoDurationInSeconds, ImageView imageView) {
@@ -102,5 +101,10 @@ public class ExoVideoDownloadHelper implements DownloadTracker.Listener {
                 downloadVideoListener.downloadFail();
                 break;
         }
+    }
+
+    @Override
+    public void dismissEvent() {
+        downloadVideoListener.dailogDismissEvent(true);
     }
 }
