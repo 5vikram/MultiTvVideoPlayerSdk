@@ -62,27 +62,27 @@ public class ExoVideoDownloadHelper implements DownloadTracker.Listener {
     public void onDownloadsChanged(@NonNull Download download) {
         switch (download.state) {
             case Download.STATE_DOWNLOADING:
-                downloadVideoListener.Downloading(download);
+                downloadVideoListener.Downloading(download.request.uri);
                 Log.e("Download Uri:::", "" + download.getPercentDownloaded());
                 break;
             case Download.STATE_QUEUED:
-                downloadVideoListener.pauseDownload(download);
+                downloadVideoListener.pauseDownload();
                 break;
 
             case Download.STATE_STOPPED:
-                downloadVideoListener.pauseDownload(download);
+                downloadVideoListener.pauseDownload();
                 break;
 
             case Download.STATE_COMPLETED:
-                downloadVideoListener.downloadCompleted(download,download.request.uri);
+                downloadVideoListener.downloadCompleted(download.request.uri);
                 break;
 
             case Download.STATE_REMOVING:
-                downloadVideoListener.startDownloadInit(download);
+                downloadVideoListener.startDownloadInit();
                 break;
 
             case Download.STATE_FAILED:
-                downloadVideoListener.downloadFail(download);
+                downloadVideoListener.downloadFail();
                 break;
         }
     }

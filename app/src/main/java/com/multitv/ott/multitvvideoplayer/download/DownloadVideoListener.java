@@ -5,15 +5,15 @@ import android.net.Uri;
 import com.google.android.exoplayer2.offline.Download;
 
 public interface DownloadVideoListener {
-    void Downloading(Download download);
+    void Downloading(Uri videouri);
 
-    void pauseDownload(Download download);
+    void pauseDownload();
 
-    void downloadCompleted(Download download,Uri videouri);
+    void downloadCompleted(Uri videouri);
 
-    void removeDownload(Download download);
+    void removeDownload();
 
-    void downloadFail(Download download);
+    void downloadFail();
 
-    void startDownloadInit(Download download);
+    void startDownloadInit();
 }
