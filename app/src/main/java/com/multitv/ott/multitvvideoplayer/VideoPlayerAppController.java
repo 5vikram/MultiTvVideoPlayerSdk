@@ -1,4 +1,5 @@
 package com.multitv.ott.multitvvideoplayer;
+
 import android.app.Application;
 import android.text.TextUtils;
 import android.util.Log;
@@ -8,7 +9,9 @@ import androidx.appcompat.app.AppCompatDelegate;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+import com.google.android.exoplayer2.offline.DownloadService;
 import com.google.android.exoplayer2.util.Util;
+import com.multitv.ott.multitvvideoplayer.download.MyDownloadService;
 import com.multitv.ott.multitvvideoplayer.utils.VideoPlayerNukeSSLCerts;
 
 public class VideoPlayerAppController extends Application {
@@ -23,6 +26,14 @@ public class VideoPlayerAppController extends Application {
         super.onCreate();
         mInstance = this;
         userAgent = Util.getUserAgent(this, "AdaptiveExoplayer");
+
+
+        try {
+            DownloadService.start(this, MyDownloadService.class);
+        } catch (IllegalStateException e) {
+            DownloadService.startForeground(mInstance, MyDownloadService.class);
+        }
+
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         new VideoPlayerNukeSSLCerts().nuke();
 
@@ -56,9 +67,6 @@ public class VideoPlayerAppController extends Application {
             mRequestQueue.cancelAll(tag);
         }
     }
-
-
-
 
 
 }

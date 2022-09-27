@@ -47,7 +47,7 @@ public class ExoVideoDownloadHelper implements DownloadTracker.Listener {
     public void downloadVideo(String url, String videoTitle, Long videoDurationInSeconds, ImageView imageView) {
         mediaItem = getMediaItem(url, videoTitle);
         if (DownloadUtil.INSTANCE.getDownloadTracker(context).isDownloaded(getMediaItem(url, videoTitle))) {
-            Toast.makeText(context, "Video already download.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Video already downloaded.", Toast.LENGTH_SHORT).show();
         } else {
             new DownloadVideo(context).downloadVideo(mediaItem, imageView, videoDurationInSeconds);
         }
@@ -62,28 +62,27 @@ public class ExoVideoDownloadHelper implements DownloadTracker.Listener {
     public void onDownloadsChanged(@NonNull Download download) {
         switch (download.state) {
             case Download.STATE_DOWNLOADING:
-                downloadVideoListener.Downloading();
+                downloadVideoListener.Downloading(download);
                 Log.e("Download Uri:::", "" + download.getPercentDownloaded());
                 break;
             case Download.STATE_QUEUED:
-                downloadVideoListener.pauseDownload();
+                downloadVideoListener.pauseDownload(download);
                 break;
 
             case Download.STATE_STOPPED:
-                downloadVideoListener.pauseDownload();
+                downloadVideoListener.pauseDownload(download);
                 break;
 
             case Download.STATE_COMPLETED:
-                Log.e("Download Uri:::", "" + download.request.uri);
-                downloadVideoListener.downloadCompleted(download.request.uri);
+                downloadVideoListener.downloadCompleted(download,download.request.uri);
                 break;
 
             case Download.STATE_REMOVING:
-                downloadVideoListener.startDownloadInit();
+                downloadVideoListener.startDownloadInit(download);
                 break;
 
             case Download.STATE_FAILED:
-                downloadVideoListener.downloadFail();
+                downloadVideoListener.downloadFail(download);
                 break;
         }
     }
