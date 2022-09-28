@@ -381,7 +381,7 @@ class DownloadTracker(
                 }
             trackSelectionDialog = dialogBuilder.create().apply { show() }
 
-            dailogCallbackListener.trackDailogStatus(true)
+            //dailogCallbackListener.trackDailogStatus(true)
 
         }
 
