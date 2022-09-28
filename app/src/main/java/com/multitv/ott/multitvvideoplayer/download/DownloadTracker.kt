@@ -277,7 +277,6 @@ class DownloadTracker(
         fun release() {
             downloadHelper.release()
             trackSelectionDialog?.dismiss()
-            setTrackDailogStatus(false)
             dailogCallbackListener.trackDailogStatus(false)
         }
 
@@ -285,12 +284,10 @@ class DownloadTracker(
         override fun onPrepared(helper: DownloadHelper) {
             if (helper.periodCount == 0) {
                 Log.d(TAG, "No periods found. Downloading entire stream.")
-//                startDownload()
                 downloadHelper.release()
-                setTrackDailogStatus(false)
                 return
             }
-            dailogCallbackListener.trackDailogStatus(true)
+
             setTrackDailogStatus(true)
             val dialogBuilder: AlertDialog.Builder = AlertDialog.Builder(context)
             dialogBuilder.setCancelable(false)
@@ -372,23 +369,23 @@ class DownloadTracker(
                     positiveCallback?.invoke()
                 }.setOnDismissListener {
                     trackSelectionDialog = null
-                    setTrackDailogStatus(false)
+
                     downloadHelper.release()
                     dismissCallback?.invoke()
                     dailogCallbackListener.trackDailogStatus(false)
                 }.setNegativeButton("Cancel") { _, _ ->
                     trackSelectionDialog = null
-                    setTrackDailogStatus(false)
                     downloadHelper.release()
                     dismissCallback?.invoke()
                     dailogCallbackListener.trackDailogStatus(false)
                 }
             trackSelectionDialog = dialogBuilder.create().apply { show() }
 
+            dailogCallbackListener.trackDailogStatus(true)
+
         }
 
         override fun onPrepareError(helper: DownloadHelper, e: IOException) {
-            setTrackDailogStatus(false)
             dailogCallbackListener.trackDailogStatus(false)
             Toast.makeText(applicationContext, R.string.download_start_error, Toast.LENGTH_LONG)
                 .show()
