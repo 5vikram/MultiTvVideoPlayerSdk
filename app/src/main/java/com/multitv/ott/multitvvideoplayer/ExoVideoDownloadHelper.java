@@ -50,7 +50,7 @@ public class ExoVideoDownloadHelper implements DownloadTracker.Listener, SdkPopC
     public void downloadVideo(String url, String videoTitle, Long videoDurationInSeconds, ImageView imageView) {
         mediaItem = getMediaItem(url, videoTitle);
         if (DownloadUtil.INSTANCE.getDownloadTracker(context).isDownloaded(getMediaItem(url, videoTitle))) {
-           // DownloadUtil.INSTANCE.getDownloadTracker(context).removeDownload(mediaItem.playbackProperties.uri);
+            // DownloadUtil.INSTANCE.getDownloadTracker(context).removeDownload(mediaItem.playbackProperties.uri);
             new DownloadVideo(context, this).downloadVideo(mediaItem, imageView, videoDurationInSeconds);
         } else {
             new DownloadVideo(context, this).downloadVideo(mediaItem, imageView, videoDurationInSeconds);
@@ -75,36 +75,43 @@ public class ExoVideoDownloadHelper implements DownloadTracker.Listener, SdkPopC
     public void onDownloadsChanged(@NonNull Download download) {
         switch (download.state) {
             case Download.STATE_DOWNLOADING:
-                downloadVideoListener.Downloading(download.request.uri);
+                if (downloadVideoListener != null)
+                    downloadVideoListener.Downloading(download.request.uri);
                 Log.e("Download Uri:::", "" + download.getPercentDownloaded());
                 break;
             case Download.STATE_QUEUED:
-                downloadVideoListener.pauseDownload();
+                if (downloadVideoListener != null)
+                    downloadVideoListener.pauseDownload();
                 break;
 
             case Download.STATE_STOPPED:
-                downloadVideoListener.pauseDownload();
+                if (downloadVideoListener != null)
+                    downloadVideoListener.pauseDownload();
                 break;
 
 
             /* download*/
 
             case Download.STATE_COMPLETED:
-                downloadVideoListener.downloadCompleted(download.request.uri);
+                if (downloadVideoListener != null)
+                    downloadVideoListener.downloadCompleted(download.request.uri);
                 break;
 
             case Download.STATE_REMOVING:
-                downloadVideoListener.startDownloadInit();
+                if (downloadVideoListener != null)
+                    downloadVideoListener.startDownloadInit();
                 break;
 
             case Download.STATE_FAILED:
-                downloadVideoListener.downloadFail();
+                if (downloadVideoListener != null)
+                    downloadVideoListener.downloadFail();
                 break;
         }
     }
 
     @Override
     public void dismissEvent() {
-        downloadVideoListener.dailogDismissEvent(true);
+        if (downloadVideoListener != null)
+            downloadVideoListener.dailogDismissEvent(true);
     }
 }
