@@ -71,6 +71,10 @@ public class ExoVideoDownloadHelper implements DownloadTracker.Listener, SdkPopC
         DownloadUtil.INSTANCE.getDownloadTracker(context).removeListener(this);
     }
 
+    public void removeVideoFromStorage(Uri uri) {
+        new DownloadVideo(context, this).removeVideoFromDownload(uri);
+    }
+
     @Override
     public void onDownloadsChanged(@NonNull Download download) {
         switch (download.state) {
