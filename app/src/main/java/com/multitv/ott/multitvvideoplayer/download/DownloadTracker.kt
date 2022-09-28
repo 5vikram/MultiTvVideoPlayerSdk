@@ -277,7 +277,7 @@ class DownloadTracker(
         fun release() {
             downloadHelper.release()
             trackSelectionDialog?.dismiss()
-            dailogCallbackListener.trackDailogStatus(false)
+          //  dailogCallbackListener.trackDailogStatus(false)
         }
 
         // DownloadHelper.Callback implementation.
@@ -365,14 +365,14 @@ class DownloadTracker(
                             Toast.LENGTH_LONG
                         ).show()
                     }
-                    dailogCallbackListener.trackDailogStatus(false)
+                   // dailogCallbackListener.trackDailogStatus(false)
                     positiveCallback?.invoke()
                 }.setOnDismissListener {
                     trackSelectionDialog = null
 
                     downloadHelper.release()
                     dismissCallback?.invoke()
-                    dailogCallbackListener.trackDailogStatus(false)
+                   // dailogCallbackListener.trackDailogStatus(false)
                 }.setNegativeButton("Cancel") { _, _ ->
                     trackSelectionDialog = null
                     downloadHelper.release()
