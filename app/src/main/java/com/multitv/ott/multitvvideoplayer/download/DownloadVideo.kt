@@ -1,6 +1,7 @@
 package com.multitv.ott.multitvvideoplayer.download
 
 import android.content.Context
+import android.net.Uri
 import android.widget.ImageView
 import com.google.android.exoplayer2.MediaItem
 
@@ -18,6 +19,13 @@ class DownloadVideo(
                     .copy(duration = duration)
             )
             .build()
+
+
+        DownloadUtil.getDownloadTracker(context)
+            .toggleDownloadDialogHelper(context, item, this)
+        return DownloadUtil.getDownloadTracker(context).getTrackDailogStatus()
+
+/*
         if (!DownloadUtil.getDownloadTracker(context)
                 .hasDownload(item.playbackProperties?.uri)
         ) {
@@ -30,6 +38,11 @@ class DownloadVideo(
 
             return DownloadUtil.getDownloadTracker(context).getTrackDailogStatus()
         }
+*/
+    }
+
+    fun removeVideoFromDownload(url: Uri) {
+        DownloadUtil.getDownloadTracker(context).removeDownload(url)
     }
 
     override fun trackDailogStatus(shown: Boolean) {
