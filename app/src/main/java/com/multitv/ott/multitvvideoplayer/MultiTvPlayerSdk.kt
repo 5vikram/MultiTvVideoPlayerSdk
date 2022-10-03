@@ -4,6 +4,8 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
+import android.app.PictureInPictureParams
+import android.app.RemoteAction
 import android.content.Context
 import android.content.DialogInterface
 import android.content.pm.ActivityInfo
@@ -21,9 +23,11 @@ import android.telephony.TelephonyManager
 import android.text.TextUtils
 import android.util.AttributeSet
 import android.util.Log
+import android.util.Rational
 import android.view.*
 import android.view.View.OnClickListener
 import android.widget.*
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
@@ -145,6 +149,8 @@ class MultiTvPlayerSdk(
     private var mWindow: Window? = null
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    private val mPictureInPictureParamsBuilder = PictureInPictureParams.Builder()
     private var spriteImageUrl = ""
 
 
@@ -326,7 +332,18 @@ class MultiTvPlayerSdk(
         pictureInPicture?.setOnClickListener(OnClickListener {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 hideController()
-                context.enterPictureInPictureMode()
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    val aspectRatio = Rational(16, 9)
+                    val actions: ArrayList<RemoteAction> = ArrayList()
+                    //actions.add(remoteAction)
+                    mPictureInPictureParamsBuilder.setAspectRatio(aspectRatio).setActions(actions)
+                        .build()
+                    context.enterPictureInPictureMode(mPictureInPictureParamsBuilder.build())
+                } else {
+                    context.enterPictureInPictureMode()
+                }
+
                 isPipModeOn = true
             }
         })
