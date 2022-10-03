@@ -61,6 +61,7 @@ import com.multitv.ott.multitvvideoplayer.timebar.previewseekbar.PreviewBar
 import com.multitv.ott.multitvvideoplayer.timebar.previewseekbar.PreviewLoader
 import com.multitv.ott.multitvvideoplayer.touchevent.OnSwipeTouchListener
 import com.multitv.ott.multitvvideoplayer.utils.*
+import com.multitv.ott.multitvvideoplayer.videoplayer.MyVideoPlayer
 import com.pallycon.widevinelibrary.*
 import java.util.*
 
@@ -74,7 +75,7 @@ class MultiTvPlayerSdk(
     private val sharedPreferencePlayer: SharedPreferencePlayer
     private var contentType: ContentType? = null
     private var mMediaPlayer: ExoPlayer? = null
-    private var simpleExoPlayerView: StyledPlayerView? = null
+    private var simpleExoPlayerView: MyVideoPlayer? = null
     private var trackSelector: DefaultTrackSelector
     private var videoPlayerSdkCallBackListener: VideoPlayerSdkCallBackListener? = null
     private var isShowingTrackSelectionDialog = false
@@ -111,6 +112,7 @@ class MultiTvPlayerSdk(
     private var previewImageView: ImageView? = null
     private var videoLockButton: ImageView? = null
     private var videoUnLockButton: ImageView? = null
+    private var closeVideoPlayerButton: ImageView? = null
     private var setting: ImageView? = null
     private var videoRotationButton: ImageView? = null
     private var videoPerviousButton: ImageView? = null
@@ -196,6 +198,7 @@ class MultiTvPlayerSdk(
         videoPerviousButton?.setVisibility(GONE)
         simpleExoPlayerView = view.findViewById(R.id.videoPlayer)
         videoRotationButton = view.findViewById(R.id.enter_full_screen)
+        closeVideoPlayerButton = view.findViewById(R.id.closeButton);
         playerProgress!!.addOnScrubListener(this)
         playerProgress!!.setPreviewLoader(this)
         pictureInPicture = view.findViewById(R.id.picture_in_picture)
@@ -222,6 +225,22 @@ class MultiTvPlayerSdk(
                 videoLockUnlockStatus()
             }
         })
+
+
+
+        closeVideoPlayerButton?.setOnClickListener {
+            val orientation = getContext().resources.configuration.orientation
+
+            if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                (getContext() as Activity).requestedOrientation =
+                    ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+                (getContext() as Activity).window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
+                showSystemBar()
+                videoRotationButton?.setImageResource(R.drawable.rotate)
+            } else {
+                context.finish()
+            }
+        }
 
         findViewById<View>(R.id.frameLayout)?.setOnTouchListener(clickFrameSwipeListener)
         //findViewById<View>(R.id.frameLayout).setOnTouchListener(clickFrameSwipeListener)
@@ -338,6 +357,17 @@ class MultiTvPlayerSdk(
 
 
         super.onFinishInflate()
+    }
+
+
+    fun showBackButton() {
+        if (closeVideoPlayerButton != null)
+            closeVideoPlayerButton?.visibility = View.VISIBLE
+    }
+
+    fun hideBackButton() {
+        if (closeVideoPlayerButton != null)
+            closeVideoPlayerButton?.visibility = View.GONE
     }
 
 
