@@ -18,6 +18,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Handler
 import android.os.SystemClock
+import android.support.v4.media.session.MediaSessionCompat
 import android.telephony.PhoneStateListener
 import android.telephony.TelephonyManager
 import android.text.TextUtils
@@ -37,6 +38,7 @@ import com.google.android.exoplayer2.MediaItem.AdsConfiguration
 import com.google.android.exoplayer2.MediaItem.SubtitleConfiguration
 import com.google.android.exoplayer2.drm.DrmSessionManager
 import com.google.android.exoplayer2.ext.ima.ImaAdsLoader
+import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector
 import com.google.android.exoplayer2.offline.DownloadHelper
 import com.google.android.exoplayer2.offline.DownloadRequest
 import com.google.android.exoplayer2.source.DefaultMediaSourceFactory
@@ -857,6 +859,11 @@ class MultiTvPlayerSdk(
             if (isNeedToPlayInstantly) {
                 mMediaPlayer!!.playWhenReady = true
             }
+
+            val mediaSession = MediaSessionCompat(context, "com.multitv.ott.lionsgateplay")
+            val mediaSessionConnector = MediaSessionConnector(mediaSession)
+            mediaSessionConnector.setPlayer(mMediaPlayer)
+            mediaSession.isActive = true
         }
     }
 
