@@ -1,6 +1,7 @@
 package com.multitv.ott.multitvvideoplayer;
 
 import android.net.Uri;
+import android.os.Handler;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -25,6 +26,7 @@ public class ExoVideoDownloadHelper implements DownloadTracker.Listener, SdkPopC
     private DownloadVideoListener downloadVideoListener;
     private MediaItem mediaItem;
     private boolean trackDailogStatus = false;
+    private Handler handler = new Handler();
 
     public ExoVideoDownloadHelper(AppCompatActivity context) {
         this.context = context;
@@ -74,7 +76,18 @@ public class ExoVideoDownloadHelper implements DownloadTracker.Listener, SdkPopC
             case Download.STATE_DOWNLOADING:
                 if (downloadVideoListener != null)
                     downloadVideoListener.Downloading(download.request.uri);
-                Log.e("Download Uri:::", "" + download.getPercentDownloaded());
+
+
+                final Runnable r = new Runnable() {
+                    public void run() {
+                        Log.e("Download Uri:::", ":::::" + download.getPercentDownloaded());
+                        Log.e("Download Uri:::", "Byte::::" + download.getBytesDownloaded());
+                        handler.postDelayed(this, 1000);
+                    }
+                };
+
+                handler.postDelayed(r, 1000);
+
                 break;
             case Download.STATE_QUEUED:
                 if (downloadVideoListener != null)
