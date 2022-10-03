@@ -242,7 +242,7 @@ class MultiTvPlayerSdk(
             }
         }
 
-        findViewById<View>(R.id.frameLayout)?.setOnTouchListener(clickFrameSwipeListener)
+      //  findViewById<View>(R.id.frameLayout)?.setOnTouchListener(clickFrameSwipeListener)
         //findViewById<View>(R.id.frameLayout).setOnTouchListener(clickFrameSwipeListener)
         //findViewById(R.id.frameLayout)
 /*
@@ -423,11 +423,11 @@ class MultiTvPlayerSdk(
 
     private fun hideAfterTimeout() {
         removeCallbacks(hideAction)
-        if (5000 > 0) {
+        if (3000 > 0) {
             VideoPlayerTracer.error("Controller Listener:::", "Start Timer")
-            hideAtMs = SystemClock.uptimeMillis() + 5000
+            hideAtMs = SystemClock.uptimeMillis() + 3000
             if (isAttachedToWindow) {
-                postDelayed(hideAction, 5000)
+                postDelayed(hideAction, 3000)
             }
         } else {
             hideAtMs = C.TIME_UNSET
