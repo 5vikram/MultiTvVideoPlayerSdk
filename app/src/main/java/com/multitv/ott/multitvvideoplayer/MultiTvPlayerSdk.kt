@@ -242,7 +242,7 @@ class MultiTvPlayerSdk(
             }
         }
 
-      //  findViewById<View>(R.id.frameLayout)?.setOnTouchListener(clickFrameSwipeListener)
+        //  findViewById<View>(R.id.frameLayout)?.setOnTouchListener(clickFrameSwipeListener)
         //findViewById<View>(R.id.frameLayout).setOnTouchListener(clickFrameSwipeListener)
         //findViewById(R.id.frameLayout)
 /*
@@ -357,6 +357,14 @@ class MultiTvPlayerSdk(
 
 
         super.onFinishInflate()
+    }
+
+    fun showRotateButton() {
+        videoRotationButton?.visibility = View.VISIBLE
+    }
+
+    fun hideRotateButton() {
+        videoRotationButton?.visibility = View.GONE
     }
 
 
