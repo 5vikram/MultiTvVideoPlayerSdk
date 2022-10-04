@@ -74,16 +74,29 @@ public class ExoVideoDownloadHelper implements DownloadTracker.Listener, SdkPopC
         new DownloadVideo(context, this).removeVideoFromDownload(uri);
     }
 
+    private Runnable r = null;
+
+
     @Override
     public void onDownloadsChanged(@NonNull Download download) {
         switch (download.state) {
             case Download.STATE_DOWNLOADING:
 
-                final Runnable r = new Runnable() {
+                 r = new Runnable() {
                     public void run() {
-                        if (downloadVideoListener != null)
-                            downloadVideoListener.Downloading(download.getPercentDownloaded());
-                        handler.postDelayed(this, 1000);
+
+                        if (download.getPercentDownloaded() < 99) {
+                            if (downloadVideoListener != null)
+                                downloadVideoListener.Downloading(download.getPercentDownloaded());
+                            handler.postDelayed(this, 1000);
+                        } else {
+                            if (handler != null && handler != null) {
+                                handler.removeCallbacks(r);
+                                handler.removeCallbacksAndMessages(null);
+                            }
+                        }
+
+
                     }
                 };
 
