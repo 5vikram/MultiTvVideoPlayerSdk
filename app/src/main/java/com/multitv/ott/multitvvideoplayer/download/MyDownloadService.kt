@@ -83,6 +83,7 @@ class MyDownloadService: DownloadService(
             finalException: Exception?
         ) {
             val notification: Notification = when (download.state) {
+
                 Download.STATE_COMPLETED -> {
                     notificationHelper.buildDownloadCompletedNotification(
                         context,

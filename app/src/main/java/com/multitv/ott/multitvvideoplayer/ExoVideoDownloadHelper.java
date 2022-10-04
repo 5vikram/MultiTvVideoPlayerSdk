@@ -25,7 +25,6 @@ public class ExoVideoDownloadHelper implements DownloadTracker.Listener, SdkPopC
     private AppCompatActivity context;
     private DownloadVideoListener downloadVideoListener;
     private MediaItem mediaItem;
-    private boolean trackDailogStatus = false;
     private Handler handler = new Handler();
 
     public ExoVideoDownloadHelper(AppCompatActivity context) {
