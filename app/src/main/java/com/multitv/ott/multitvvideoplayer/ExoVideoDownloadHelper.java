@@ -82,7 +82,7 @@ public class ExoVideoDownloadHelper implements DownloadTracker.Listener, SdkPopC
         switch (download.state) {
             case Download.STATE_DOWNLOADING:
 
-                 r = new Runnable() {
+                r = new Runnable() {
                     public void run() {
 
                         if (download.getPercentDownloaded() < 99) {
