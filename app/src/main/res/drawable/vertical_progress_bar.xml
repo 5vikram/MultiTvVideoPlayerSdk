@@ -10,7 +10,7 @@
         <clip android:clipOrientation="vertical" android:gravity="bottom">
             <shape>
                 <corners android:radius="16dp" />
-                <solid android:color="#ffffd300"/>
+                <solid android:color="#FFFFFF"/>
             </shape>
         </clip>
     </item>
@@ -18,7 +18,7 @@
         <clip android:clipOrientation="vertical" android:gravity="bottom">
             <shape>
                 <corners android:radius="16dp" />
-                <solid android:color="#ffffd300"/>
+                <solid android:color="#FFFFFF"/>
             </shape>
         </clip>
     </item>
