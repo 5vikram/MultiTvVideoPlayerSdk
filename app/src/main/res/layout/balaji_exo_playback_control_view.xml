@@ -92,7 +92,7 @@
 
 
 
-            <androidx.appcompat.widget.LinearLayoutCompat
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -115,7 +115,7 @@
                     android:textColor="@color/white"
                     android:textSize="12sp"/>
 
-            </androidx.appcompat.widget.LinearLayoutCompat>
+            </LinearLayout>
 
 
 
@@ -138,7 +138,7 @@
 
 
 
-            <androidx.appcompat.widget.LinearLayoutCompat
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -162,7 +162,7 @@
                     android:src="@drawable/ic_balaji_farward_10_sec" />
 
 
-            </androidx.appcompat.widget.LinearLayoutCompat>
+            </LinearLayout>
 
 
 
@@ -181,7 +181,7 @@
     </LinearLayout>
 
 
-    <androidx.appcompat.widget.LinearLayoutCompat
+    <LinearLayout
         android:id="@+id/videoMenuLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -284,7 +284,7 @@
         </LinearLayout>
 
 
-    </androidx.appcompat.widget.LinearLayoutCompat>
+    </LinearLayout>
 
 
     <LinearLayout
@@ -312,7 +312,7 @@
         </FrameLayout>
 
 
-        <androidx.appcompat.widget.LinearLayoutCompat
+        <LinearLayout
             android:id="@+id/durationlayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -384,7 +384,7 @@
             </LinearLayout>
 
 
-        </androidx.appcompat.widget.LinearLayoutCompat>
+        </LinearLayout>
 
 
     </LinearLayout>
