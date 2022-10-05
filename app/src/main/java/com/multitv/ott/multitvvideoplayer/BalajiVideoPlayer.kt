@@ -235,7 +235,7 @@ class BalajiVideoPlayer(
                     ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
                 (getContext() as Activity).window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
                 hideSystemBars()
-                videoRotationButton?.setImageResource(R.drawable.minimize)
+              //  videoRotationButton?.setImageResource(R.drawable.minimize)
                 videoLockUnlockStatus()
             }
         })
@@ -513,12 +513,10 @@ class BalajiVideoPlayer(
     }
 
     fun showController() {
-        if (!isScreenLockEnable) {
-            centerButtonLayout!!.visibility = VISIBLE
-            videoProgressLayout!!.visibility = VISIBLE
-            durationlayout!!.visibility = VISIBLE
-            videoMenuLayout!!.visibility = VISIBLE
-        }
+        centerButtonLayout!!.visibility = VISIBLE
+        videoProgressLayout!!.visibility = VISIBLE
+        durationlayout!!.visibility = VISIBLE
+        videoMenuLayout!!.visibility = VISIBLE
         updatePlayPauseButton()
         hideAfterTimeout()
         isControllerShown = true
@@ -1124,6 +1122,7 @@ class BalajiVideoPlayer(
         val decorView = (getContext() as Activity).window.decorView
         val uiOptions = SYSTEM_UI_FLAG_VISIBLE
         decorView.systemUiVisibility = uiOptions
+        //hideSystemUiFullScreen()
     }
 
     @SuppressLint("InlinedApi")
@@ -1305,6 +1304,7 @@ class BalajiVideoPlayer(
     }
 
 
+/*
     private var clickFrameSwipeListener = object : OnSwipeTouchListener(true) {
         // mGestureType=
         var diffTime = -1f
@@ -1333,9 +1333,11 @@ class BalajiVideoPlayer(
                 else if (finalVolume > maxVolume)
                     finalVolume = maxVolume
 
-                /*val progressText = String.format(
+                */
+/*val progressText = String.format(
                     resources.getString(R.string.volume), finalVolume
-                )*/
+                )*//*
+
                 // mPositionTextView.text = progressText
                 volumeProgressBar.progress = finalVolume
                 audioManager?.setStreamVolume(AudioManager.STREAM_MUSIC, finalVolume, 0)
@@ -1366,10 +1368,12 @@ class BalajiVideoPlayer(
                 brightnessProgressBar.progress = finalBrightness
 
 
-                /*PreferenceManager.getDefaultSharedPreferences(context)
+                */
+/*PreferenceManager.getDefaultSharedPreferences(context)
                     .edit()
                     .putInt(BETTER_VIDEO_PLAYER_BRIGHTNESS, finalBrightness)
-                    .apply()*/
+                    .apply()*//*
+
             }
         }
 
@@ -1381,6 +1385,7 @@ class BalajiVideoPlayer(
         }
 
         override fun onDoubleTap(event: MotionEvent) {
+*/
 /*
             if (mGestureType == GestureType.DoubleTapGesture) {
                 val seekSec = mDoubleTapSeekDuration / 1000
@@ -1404,12 +1409,15 @@ class BalajiVideoPlayer(
                     seekTo(getCurrentPosition() - mDoubleTapSeekDuration)
                 }
             }
-*/
+*//*
+
         }
 
         override fun onAfterMove() {
-            /* if (finalTime >= 0 && mGestureType == GestureType.SwipeGesture) {
-                 seekTo(finalTime.toLong())*/
+            */
+/* if (finalTime >= 0 && mGestureType == GestureType.SwipeGesture) {
+                 seekTo(finalTime.toLong())*//*
+
             //if (mWasPlaying) mPlayer?.start()
             //  }
             //  mPositionTextView.visibility = View.GONE
@@ -1462,6 +1470,7 @@ class BalajiVideoPlayer(
 
         }
     }
+*/
 
 
     enum class GestureType {
