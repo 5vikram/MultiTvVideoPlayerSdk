@@ -122,16 +122,15 @@
 
             <ImageView
                 android:id="@id/exo_play"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginRight="15dp"
                 android:src="@drawable/ic_balaji_pause" />
 
             <ImageView
                 android:id="@id/exo_pause"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:src="@drawable/ic_balaji_play" />
 
@@ -216,8 +215,8 @@
                 android:src="@drawable/ic_balaji_volume_on" />
 
             <SeekBar
-                android:id="@+id/volumeProgressBar"
-                style="@style/Widget.ProgressBar.Vertical"
+                android:id="@+id/exo_volume_progress"
+                style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="160dp"
                 android:layout_height="5dp"
                 android:layout_gravity="center_vertical"
@@ -225,8 +224,7 @@
                 android:layout_marginRight="40dp"
                 android:progressDrawable="@drawable/progress"
                 android:thumb="@drawable/thumb"
-                android:layout_weight="1"
-                android:progress="5" />
+                android:layout_weight="1" />
 
         </LinearLayout>
 

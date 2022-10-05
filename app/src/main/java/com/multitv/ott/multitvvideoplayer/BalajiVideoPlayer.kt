@@ -182,7 +182,7 @@ class BalajiVideoPlayer(
             LayoutInflater.from(getContext()).inflate(R.layout.balaji_video_player_layout, this)
         volumeMuteAndUnMuteButton = view.findViewById(R.id.volumeMuteAndUnMuteButton)
         progressBarParent = view.findViewById(R.id.progress_bar_parent)
-        volumeProgressBar = view.findViewById(R.id.volumeProgressBar)
+        volumeProgressBar = view.findViewById(R.id.exo_volume_progress)
         brightnessProgressBar = view.findViewById(R.id.brightness_progress_bar)
         errorRetryLayout = view.findViewById(R.id.errorRetryLayout)
         durationlayout = view.findViewById(R.id.durationlayout)
@@ -491,11 +491,11 @@ class BalajiVideoPlayer(
 
     private fun hideAfterTimeout() {
         removeCallbacks(hideAction)
-        if (3000 > 0) {
+        if (5000 > 0) {
             VideoPlayerTracer.error("Controller Listener:::", "Start Timer")
-            hideAtMs = SystemClock.uptimeMillis() + 3000
+            hideAtMs = SystemClock.uptimeMillis() + 5000
             if (isAttachedToWindow) {
-                postDelayed(hideAction, 3000)
+                postDelayed(hideAction, 5000)
             }
         } else {
             hideAtMs = C.TIME_UNSET
@@ -1463,34 +1463,6 @@ class BalajiVideoPlayer(
         }
     }
 
-    private fun volumeProgressBarSetUp() {
-        var diffTime = -1f
-        var finalTime = -1f
-        var startVolume: Int = 0
-        var maxVolume: Int = 0
-        var startBrightness: Int = 0
-        var maxBrightness: Int = 0
-        maxVolume = audioManager?.getStreamMaxVolume(AudioManager.STREAM_MUSIC) ?: 100
-        startVolume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) ?: 100
-        volumeProgressBar.progress = startVolume
-        volumeProgressBar.max = maxVolume
-        volumeProgressBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
-                audioManager?.setStreamVolume(AudioManager.STREAM_MUSIC, p1, 0)
-
-                Log.e("Volume::::", "" + p1)
-            }
-
-            override fun onStartTrackingTouch(p0: SeekBar?) {
-
-            }
-
-            override fun onStopTrackingTouch(p0: SeekBar?) {
-                volumeProgressBar.progress = p0?.progress!!
-            }
-
-        })
-    }
 
     enum class GestureType {
         NoGesture, SwipeGesture, DoubleTapGesture
@@ -1502,6 +1474,17 @@ class BalajiVideoPlayer(
 
     override fun onCastSessionUnavailable() {
 
+    }
+
+
+    fun onKeyDownEvent() {
+        if (volumeProgressBar != null)
+            volumeProgressBar.setProgress(audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC)!!)
+    }
+
+    fun onKeyUpEvent() {
+        if (volumeProgressBar != null)
+            volumeProgressBar.setProgress(audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC)!!)
     }
 
 
@@ -1527,5 +1510,31 @@ class BalajiVideoPlayer(
 
         return super.onKeyUp(keyCode, event)
     }
+
+    private fun volumeProgressBarSetUp() {
+        var startVolume: Int = 0
+        var maxVolume: Int = 0
+        maxVolume = audioManager?.getStreamMaxVolume(AudioManager.STREAM_MUSIC) ?: 100
+        startVolume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) ?: 100
+        volumeProgressBar.progress = startVolume
+        volumeProgressBar.max = maxVolume
+        volumeProgressBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
+                audioManager?.setStreamVolume(AudioManager.STREAM_MUSIC, p1, 0)
+
+                Log.e("Volume::::", "" + p1)
+            }
+
+            override fun onStartTrackingTouch(p0: SeekBar?) {
+
+            }
+
+            override fun onStopTrackingTouch(p0: SeekBar?) {
+                // volumeProgressBar.progress = p0?.progress!!
+            }
+
+        })
+    }
+
 
 }
