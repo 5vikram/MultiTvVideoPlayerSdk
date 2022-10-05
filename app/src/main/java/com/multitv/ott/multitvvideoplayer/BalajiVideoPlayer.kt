@@ -105,7 +105,7 @@ class BalajiVideoPlayer(
     private var countDownTimer: CountDownTimerWithPause? = null
     private val TAG = "VikramExoVideoPlayer"
     private var errorRetryLayout: LinearLayout? = null
-    private var videoMenuLayout: LinearLayout? = null
+    private var videoMenuLayout: RelativeLayout? = null
     private var durationlayout: LinearLayout? = null
     private var volumeLayout: LinearLayout? = null
     private var videoProgressLayout: LinearLayout? = null
