@@ -117,6 +117,7 @@ class BalajiVideoPlayer(
     private var videoLockButton: ImageView? = null
     private var videoUnLockButton: ImageView? = null
     private var volumeMuteAndUnMuteButton: ImageView? = null
+    private var volumeUnMuteButton: ImageView? = null
     private var closeVideoPlayerButton: ImageView? = null
     private var setting: ImageView? = null
     private var videoRotationButton: ImageView? = null
@@ -185,6 +186,7 @@ class BalajiVideoPlayer(
         errorRetryLayout = view.findViewById(R.id.errorRetryLayout)
         durationlayout = view.findViewById(R.id.durationlayout)
         videoMenuLayout = view.findViewById(R.id.videoMenuLayout)
+        volumeUnMuteButton = view.findViewById(R.id.volumeUnMuteButton)
         bufferingProgressBarLayout = view.findViewById(R.id.bufferingProgressBarLayout)
         circularProgressLayout = view.findViewById(R.id.circularProgressLayout)
         videoProgressLayout = findViewById(R.id.video_progress_layout)
@@ -237,17 +239,19 @@ class BalajiVideoPlayer(
         })
 
 
-        volumeMuteAndUnMuteButton?.setOnClickListener {
-            var volume = mMediaPlayer?.audioComponent?.volume!!
+        volumeUnMuteButton?.setOnClickListener {
+            mMediaPlayer?.audioComponent?.volume = mMediaPlayer?.audioComponent?.volume!!
+            mMediaPlayer?.audioComponent?.volume = 2f
+            volumeMuteAndUnMuteButton?.visibility = View.VISIBLE
+            volumeUnMuteButton?.visibility = View.GONE
+        }
 
-            if (volume > 1) {
-                volumeMuteAndUnMuteButton?.setImageResource(R.drawable.ic_balaji_volume_off)
-                mMediaPlayer?.audioComponent?.volume = 0f
-            } else {
-                mMediaPlayer?.audioComponent?.volume = mMediaPlayer?.audioComponent?.volume!!
-                mMediaPlayer?.audioComponent?.volume = 2f
-                volumeMuteAndUnMuteButton?.setImageResource(R.drawable.ic_balaji_volume_on)
-            }
+
+        volumeMuteAndUnMuteButton?.setOnClickListener {
+            mMediaPlayer?.audioComponent?.volume = 0f
+            volumeMuteAndUnMuteButton?.visibility = View.GONE
+            volumeUnMuteButton?.visibility = View.VISIBLE
+
         }
 
 
@@ -1468,11 +1472,11 @@ class BalajiVideoPlayer(
 
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
-       /* if (event.keyCode === KeyEvent.KEYCODE_VOLUME_DOWN) {
-            var maxVolume = audioManager?.getStreamMaxVolume(AudioManager.STREAM_MUSIC) ?: 100
-            var startVolume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) ?: 100
-            volumeProgressBar.setProgress(audioManager!!.getStreamVolume(mMediaPlayer.audioComponent.getAudioStreamType()))
-        }*/
+        /* if (event.keyCode === KeyEvent.KEYCODE_VOLUME_DOWN) {
+             var maxVolume = audioManager?.getStreamMaxVolume(AudioManager.STREAM_MUSIC) ?: 100
+             var startVolume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) ?: 100
+             volumeProgressBar.setProgress(audioManager!!.getStreamVolume(mMediaPlayer.audioComponent.getAudioStreamType()))
+         }*/
         return super.onKeyDown(keyCode, event)
     }
 
