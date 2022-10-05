@@ -108,6 +108,7 @@ class BalajiVideoPlayer(
     private var videoMenuLayout: RelativeLayout? = null
     private var durationlayout: LinearLayout? = null
     private var volumeLayout: LinearLayout? = null
+    private var volumeLinearLayout: LinearLayout? = null
     private var videoProgressLayout: LinearLayout? = null
     private var bufferingProgressBarLayout: LinearLayout? = null
     private var circularProgressLayout: LinearLayout? = null
@@ -192,6 +193,7 @@ class BalajiVideoPlayer(
         videoProgressLayout = findViewById(R.id.video_progress_layout)
         setting = view.findViewById(R.id.settings_btn)
         volumeLayout = view.findViewById(R.id.volumeLayout)
+        volumeLinearLayout = view.findViewById(R.id.volumeLinearLayout)
         previewFrameLayout = view.findViewById(R.id.previewFrameLayout)
         setting?.setOnClickListener(this)
         centerButtonLayout = view.findViewById(R.id.centerButtonLayout)
@@ -410,11 +412,11 @@ class BalajiVideoPlayer(
 
 
     fun showMuteUnMuteButton() {
-        volumeMuteAndUnMuteButton?.visibility = View.VISIBLE
+        volumeLinearLayout?.visibility = View.VISIBLE
     }
 
     fun hideMuteUnMuteButton() {
-        volumeMuteAndUnMuteButton?.visibility = View.GONE
+        volumeLinearLayout?.visibility = View.GONE
     }
 
     fun showRotateButton() {
@@ -1471,9 +1473,11 @@ class BalajiVideoPlayer(
         maxVolume = audioManager?.getStreamMaxVolume(AudioManager.STREAM_MUSIC) ?: 100
         startVolume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) ?: 100
         volumeProgressBar.progress = startVolume
+        volumeProgressBar.max = maxVolume
         volumeProgressBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
-                audioManager?.setStreamVolume(AudioManager.STREAM_MUSIC, p1, 0);
+                audioManager?.setStreamVolume(AudioManager.STREAM_MUSIC, p1, 0)
+                Log.e("Volume::::", "" + p1)
             }
 
             override fun onStartTrackingTouch(p0: SeekBar?) {
@@ -1506,6 +1510,7 @@ class BalajiVideoPlayer(
             var startVolume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) ?: 100
             volumeProgressBar.setProgress(startVolume)
             volumeProgressBar.max = maxVolume
+            Log.e("Volume::::", "" + startVolume)
         }
         return super.onKeyDown(keyCode, event)
     }
@@ -1516,6 +1521,7 @@ class BalajiVideoPlayer(
             var startVolume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) ?: 100
             volumeProgressBar.setProgress(startVolume)
             volumeProgressBar.max = maxVolume
+            Log.e("Volume::::", "" + startVolume)
         }
 
         return super.onKeyUp(keyCode, event)

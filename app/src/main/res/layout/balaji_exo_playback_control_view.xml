@@ -250,25 +250,38 @@
                 android:src="@drawable/speed"
                 android:visibility="gone" />
 
-            <ImageView
-                android:id="@+id/volumeUnMuteButton"
+
+            <LinearLayout
+                android:id="@+id/volumeLinearLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:orientation="horizontal"
                 android:layout_gravity="center"
-                android:layout_marginRight="10dp"
-                android:background="@android:color/transparent"
-                android:src="@drawable/ic_balaji_volume_on" />
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/volumeUnMuteButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="10dp"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/ic_balaji_volume_on" />
 
 
-            <ImageView
-                android:id="@+id/volumeMuteAndUnMuteButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginRight="10dp"
-                android:background="@android:color/transparent"
-                android:src="@drawable/ic_balaji_volume_off"
-                android:visibility="gone" />
+                <ImageView
+                    android:id="@+id/volumeMuteAndUnMuteButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="10dp"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/ic_balaji_volume_off"
+                    android:visibility="gone" />
+
+            </LinearLayout>
+
+
 
             <ImageView
                 android:id="@+id/settings_btn"
