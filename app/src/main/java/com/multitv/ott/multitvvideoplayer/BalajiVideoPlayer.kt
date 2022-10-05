@@ -641,6 +641,8 @@ class BalajiVideoPlayer(
         )
 
         mWindow = context.window
+
+        volumeProgressBarSetUp()
     }
 
     fun setMultiTvVideoPlayerSdkListener(videoPlayerSdkCallBackListener: VideoPlayerSdkCallBackListener?) {
@@ -1503,6 +1505,7 @@ class BalajiVideoPlayer(
             var maxVolume = audioManager?.getStreamMaxVolume(AudioManager.STREAM_MUSIC) ?: 100
             var startVolume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) ?: 100
             volumeProgressBar.setProgress(startVolume)
+            volumeProgressBar.max = maxVolume
         }
         return super.onKeyDown(keyCode, event)
     }
@@ -1512,6 +1515,7 @@ class BalajiVideoPlayer(
             var maxVolume = audioManager?.getStreamMaxVolume(AudioManager.STREAM_MUSIC) ?: 100
             var startVolume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) ?: 100
             volumeProgressBar.setProgress(startVolume)
+            volumeProgressBar.max = maxVolume
         }
 
         return super.onKeyUp(keyCode, event)
