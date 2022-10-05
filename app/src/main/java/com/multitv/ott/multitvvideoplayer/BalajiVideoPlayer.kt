@@ -1477,6 +1477,7 @@ class BalajiVideoPlayer(
         volumeProgressBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
                 audioManager?.setStreamVolume(AudioManager.STREAM_MUSIC, p1, 0)
+                volumeProgressBar.progress = p1
                 Log.e("Volume::::", "" + p1)
             }
 
@@ -1506,22 +1507,22 @@ class BalajiVideoPlayer(
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
         if (event.keyCode === KeyEvent.KEYCODE_VOLUME_DOWN) {
-            var maxVolume = audioManager?.getStreamMaxVolume(AudioManager.STREAM_MUSIC) ?: 100
-            var startVolume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) ?: 100
-            volumeProgressBar.setProgress(startVolume)
-            volumeProgressBar.max = maxVolume
-            Log.e("Volume::::", "" + startVolume)
+            volumeProgressBar.setProgress(audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC)!!)
+            Log.e(
+                "Volume::::",
+                "KEYCODE_VOLUME_DOWN:::" + audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC)
+            )
         }
         return super.onKeyDown(keyCode, event)
     }
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent): Boolean {
         if (event.keyCode === KeyEvent.KEYCODE_VOLUME_UP) {
-            var maxVolume = audioManager?.getStreamMaxVolume(AudioManager.STREAM_MUSIC) ?: 100
-            var startVolume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) ?: 100
-            volumeProgressBar.setProgress(startVolume)
-            volumeProgressBar.max = maxVolume
-            Log.e("Volume::::", "" + startVolume)
+            volumeProgressBar.setProgress(audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC)!!)
+            Log.e(
+                "Volume::::",
+                "KEYCODE_VOLUME_UP::::" + audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC)
+            )
         }
 
         return super.onKeyUp(keyCode, event)
