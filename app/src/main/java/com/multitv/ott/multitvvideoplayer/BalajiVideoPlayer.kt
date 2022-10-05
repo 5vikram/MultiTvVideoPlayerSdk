@@ -1477,7 +1477,7 @@ class BalajiVideoPlayer(
         volumeProgressBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
                 audioManager?.setStreamVolume(AudioManager.STREAM_MUSIC, p1, 0)
-                volumeProgressBar.progress = p1
+
                 Log.e("Volume::::", "" + p1)
             }
 
@@ -1486,7 +1486,7 @@ class BalajiVideoPlayer(
             }
 
             override fun onStopTrackingTouch(p0: SeekBar?) {
-
+                volumeProgressBar.progress = p0?.progress!!
             }
 
         })
