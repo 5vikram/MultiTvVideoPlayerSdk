@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/drawable/background_fill.xml" value="0.168" />
         <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/drawable/button_focus_background.xml" value="0.1125" />
         <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/drawable/button_selector.xml" value="0.1125" />
         <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/drawable/ic_balaji_pip.xml" value="0.152" />
@@ -11,8 +12,12 @@
         <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/drawable/ic_balaji_volume_on.xml" value="0.168" />
         <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/drawable/ic_check.xml" value="0.1975" />
         <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/drawable/ic_download.xml" value="0.1975" />
+        <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/drawable/previewseekbar_morph.xml" value="0.168" />
+        <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/drawable/progress.xml" value="0.168" />
+        <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/drawable/progress_fill.xml" value="0.168" />
         <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/drawable/seek_bar_focus.xml" value="0.138" />
         <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/drawable/seek_focus_background.xml" value="0.138" />
+        <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/drawable/thumb.xml" value="0.168" />
         <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/drawable/vertical_progress_bar.xml" value="0.152" />
         <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/drawable/video_frame.xml" value="0.144" />
         <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/layout/balaji_exo_playback_control_view.xml" value="0.19153484395040615" />

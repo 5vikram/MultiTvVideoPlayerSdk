@@ -198,11 +198,11 @@
             android:id="@+id/volumeLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="10dp"
             android:layout_weight="1"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
@@ -215,16 +215,18 @@
                 android:background="@android:color/transparent"
                 android:src="@drawable/ic_balaji_volume_on" />
 
-            <ProgressBar
+            <SeekBar
                 android:id="@+id/volumeProgressBar"
                 style="@style/Widget.ProgressBar.Vertical"
                 android:layout_width="160dp"
                 android:layout_height="5dp"
-                android:progress="5"
-                android:layout_marginRight="40dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginEnd="16dp"
-                android:layout_weight="1" />
+                android:layout_marginRight="40dp"
+                android:progressDrawable="@drawable/progress"
+                android:thumb="@drawable/thumb"
+                android:layout_weight="1"
+                android:progress="5" />
 
         </LinearLayout>
 
@@ -232,10 +234,10 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:gravity="center_vertical"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <ImageView
@@ -265,7 +267,8 @@
                 android:layout_gravity="center"
                 android:layout_marginRight="10dp"
                 android:background="@android:color/transparent"
-                android:src="@drawable/ic_balaji_volume_off" />
+                android:src="@drawable/ic_balaji_volume_off"
+                android:visibility="gone" />
 
             <ImageView
                 android:id="@+id/settings_btn"
@@ -340,6 +343,8 @@
                 android:layout_weight="1"
                 android:gravity="center_vertical"
                 app:previewAnimationEnabled="true"
+                android:progressDrawable="@drawable/progress"
+                android:thumb="@drawable/thumb"
                 app:previewFrameLayout="@id/previewFrameLayout" />
 
 
@@ -406,6 +411,7 @@
     <FrameLayout
         android:id="@+id/progress_bar_parent"
         android:layout_width="match_parent"
+        android:visibility="gone"
         android:layout_height="match_parent">
 
         <ProgressBar

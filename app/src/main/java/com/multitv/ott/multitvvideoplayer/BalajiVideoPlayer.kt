@@ -157,7 +157,7 @@ class BalajiVideoPlayer(
 
 
     private lateinit var progressBarParent: FrameLayout
-    private lateinit var volumeProgressBar: ProgressBar
+    private lateinit var volumeProgressBar: SeekBar
     private lateinit var brightnessProgressBar: ProgressBar
 
     private var isPipModeOn = false
@@ -237,11 +237,10 @@ class BalajiVideoPlayer(
                 videoLockUnlockStatus()
             }
         })
-
+        volumeMuteAndUnMuteButton?.visibility = View.GONE
 
         volumeUnMuteButton?.setOnClickListener {
-            mMediaPlayer?.audioComponent?.volume = mMediaPlayer?.audioComponent?.volume!!
-            mMediaPlayer?.audioComponent?.volume = 2f
+            mMediaPlayer?.audioComponent?.volume = 0f
             volumeMuteAndUnMuteButton?.visibility = View.VISIBLE
             volumeUnMuteButton?.visibility = View.GONE
         }
@@ -249,6 +248,8 @@ class BalajiVideoPlayer(
 
         volumeMuteAndUnMuteButton?.setOnClickListener {
             mMediaPlayer?.audioComponent?.volume = 0f
+            mMediaPlayer?.audioComponent?.volume = mMediaPlayer?.audioComponent?.volume!!
+            mMediaPlayer?.audioComponent?.volume = 2f
             volumeMuteAndUnMuteButton?.visibility = View.GONE
             volumeUnMuteButton?.visibility = View.VISIBLE
 
@@ -1458,6 +1459,32 @@ class BalajiVideoPlayer(
         }
     }
 
+    private fun volumeProgressBarSetUp() {
+        var diffTime = -1f
+        var finalTime = -1f
+        var startVolume: Int = 0
+        var maxVolume: Int = 0
+        var startBrightness: Int = 0
+        var maxBrightness: Int = 0
+        maxVolume = audioManager?.getStreamMaxVolume(AudioManager.STREAM_MUSIC) ?: 100
+        startVolume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) ?: 100
+        volumeProgressBar.progress = startVolume
+        volumeProgressBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
+                audioManager?.setStreamVolume(AudioManager.STREAM_MUSIC, p1, 0);
+            }
+
+            override fun onStartTrackingTouch(p0: SeekBar?) {
+
+            }
+
+            override fun onStopTrackingTouch(p0: SeekBar?) {
+
+            }
+
+        })
+    }
+
     enum class GestureType {
         NoGesture, SwipeGesture, DoubleTapGesture
     }
@@ -1472,20 +1499,20 @@ class BalajiVideoPlayer(
 
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
-        /* if (event.keyCode === KeyEvent.KEYCODE_VOLUME_DOWN) {
-             var maxVolume = audioManager?.getStreamMaxVolume(AudioManager.STREAM_MUSIC) ?: 100
-             var startVolume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) ?: 100
-             volumeProgressBar.setProgress(audioManager!!.getStreamVolume(mMediaPlayer.audioComponent.getAudioStreamType()))
-         }*/
+        if (event.keyCode === KeyEvent.KEYCODE_VOLUME_DOWN) {
+            var maxVolume = audioManager?.getStreamMaxVolume(AudioManager.STREAM_MUSIC) ?: 100
+            var startVolume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) ?: 100
+            volumeProgressBar.setProgress(startVolume)
+        }
         return super.onKeyDown(keyCode, event)
     }
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent): Boolean {
-//        if (event.keyCode === KeyEvent.KEYCODE_VOLUME_UP) {
-//            var maxVolume = audioManager?.getStreamMaxVolume(AudioManager.STREAM_MUSIC) ?: 100
-//            var startVolume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) ?: 100
-//            volumeProgressBar.setProgress(audioManager!!.getStreamVolume(mMediaPlayer.getAudioStreamType()))
-//        }
+        if (event.keyCode === KeyEvent.KEYCODE_VOLUME_UP) {
+            var maxVolume = audioManager?.getStreamMaxVolume(AudioManager.STREAM_MUSIC) ?: 100
+            var startVolume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) ?: 100
+            volumeProgressBar.setProgress(startVolume)
+        }
 
         return super.onKeyUp(keyCode, event)
     }
