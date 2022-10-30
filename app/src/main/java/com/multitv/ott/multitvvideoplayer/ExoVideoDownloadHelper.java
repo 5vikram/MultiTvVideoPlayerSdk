@@ -19,6 +19,7 @@ import com.multitv.ott.multitvvideoplayer.download.DownloadVideo;
 import com.multitv.ott.multitvvideoplayer.download.DownloadVideoListener;
 import com.multitv.ott.multitvvideoplayer.download.MediaItemTag;
 import com.multitv.ott.multitvvideoplayer.download.SdkPopCallbackListner;
+import com.multitv.ott.multitvvideoplayer.fabbutton.FabButton;
 
 
 public class ExoVideoDownloadHelper implements DownloadTracker.Listener, SdkPopCallbackListner {
@@ -48,13 +49,13 @@ public class ExoVideoDownloadHelper implements DownloadTracker.Listener, SdkPopC
     }
 
 
-    public void downloadVideo(String url, String videoTitle, Long videoDurationInSeconds, ImageView imageView) {
+    public void downloadVideo(String url, String videoTitle, Long videoDurationInSeconds) {
         mediaItem = getMediaItem(url, videoTitle);
         if (DownloadUtil.INSTANCE.getDownloadTracker(context).isDownloaded(getMediaItem(url, videoTitle))) {
             new DownloadVideo(context, this).removeVideoFromDownload(mediaItem.playbackProperties.uri);
-            new DownloadVideo(context, this).downloadVideo(mediaItem, imageView, videoDurationInSeconds);
+            new DownloadVideo(context, this).downloadVideo(mediaItem, videoDurationInSeconds);
         } else {
-            new DownloadVideo(context, this).downloadVideo(mediaItem, imageView, videoDurationInSeconds);
+            new DownloadVideo(context, this).downloadVideo(mediaItem, videoDurationInSeconds);
         }
     }
 /* public void removeDownload() {

@@ -11,7 +11,7 @@ class DownloadVideo(
 ) : DailogCallbackListener {
     private var dailogShown = false;
 
-    fun downloadVideo(mediaItem: MediaItem, progressDrawable: ImageView, duration: Long): Boolean {
+    fun downloadVideo(mediaItem: MediaItem, duration: Long): Boolean {
 
         val item = mediaItem.buildUpon()
             .setTag(
