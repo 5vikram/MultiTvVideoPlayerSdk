@@ -48,7 +48,6 @@ public class ExoVideoDownloadHelper implements DownloadTracker.Listener, SdkPopC
 
     }
 
-
     public void downloadVideo(String url, String videoTitle, Long videoDurationInSeconds) {
         mediaItem = getMediaItem(url, videoTitle);
         if (DownloadUtil.INSTANCE.getDownloadTracker(context).isDownloaded(getMediaItem(url, videoTitle))) {
@@ -56,6 +55,17 @@ public class ExoVideoDownloadHelper implements DownloadTracker.Listener, SdkPopC
             new DownloadVideo(context, this).downloadVideo(mediaItem, videoDurationInSeconds);
         } else {
             new DownloadVideo(context, this).downloadVideo(mediaItem, videoDurationInSeconds);
+        }
+    }
+
+
+    public void downloadVideo(String url, String videoTitle, Long videoDurationInSeconds, ImageView imageView) {
+        mediaItem = getMediaItem(url, videoTitle);
+        if (DownloadUtil.INSTANCE.getDownloadTracker(context).isDownloaded(getMediaItem(url, videoTitle))) {
+            new DownloadVideo(context, this).removeVideoFromDownload(mediaItem.playbackProperties.uri);
+            new DownloadVideo(context, this).downloadVideo(mediaItem, imageView, videoDurationInSeconds);
+        } else {
+            new DownloadVideo(context, this).downloadVideo(mediaItem, imageView, videoDurationInSeconds);
         }
     }
 /* public void removeDownload() {

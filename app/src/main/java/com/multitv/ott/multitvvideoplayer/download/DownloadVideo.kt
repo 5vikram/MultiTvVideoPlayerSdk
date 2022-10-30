@@ -11,7 +11,51 @@ class DownloadVideo(
 ) : DailogCallbackListener {
     private var dailogShown = false;
 
+
+
+
+
+
+
+
     fun downloadVideo(mediaItem: MediaItem, duration: Long): Boolean {
+
+        val item = mediaItem.buildUpon()
+            .setTag(
+                (mediaItem.playbackProperties?.tag as MediaItemTag)
+                    .copy(duration = duration)
+            )
+            .build()
+
+
+        DownloadUtil.getDownloadTracker(context)
+            .toggleDownloadDialogHelper(context, item, this)
+        return DownloadUtil.getDownloadTracker(context).getTrackDailogStatus()
+
+/*
+        if (!DownloadUtil.getDownloadTracker(context)
+                .hasDownload(item.playbackProperties?.uri)
+        ) {
+            DownloadUtil.getDownloadTracker(context)
+                .toggleDownloadDialogHelper(context, item, this)
+            return DownloadUtil.getDownloadTracker(context).getTrackDailogStatus()
+        } else {
+            DownloadUtil.getDownloadTracker(context)
+                .toggleDownloadPopupMenu(context, progressDrawable, item.playbackProperties?.uri)
+
+            return DownloadUtil.getDownloadTracker(context).getTrackDailogStatus()
+        }
+*/
+    }
+
+
+
+
+
+
+
+
+    fun downloadVideo(mediaItem: MediaItem, progressDrawable: ImageView, duration: Long): Boolean {
 
         val item = mediaItem.buildUpon()
             .setTag(
