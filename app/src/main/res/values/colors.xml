@@ -15,4 +15,9 @@
 
     <color name="white">#FFFFFFFF</color>
     <color name="faste_red">#4d1e2327</color>
+
+    <color name="white_opycity_hundred_present">#DEDEDE</color>
+    <color name="white_opycity_swenty_present">#CCDEDEDE</color>
+    <color name="white_opycity_sixty_present">#99DEDEDE</color>
+    <color name="white_opycity_fifty_present">#80DEDEDE</color>
 </resources>

@@ -106,6 +106,7 @@ class BalajiVideoPlayer(
     private val TAG = "VikramExoVideoPlayer"
     private var errorRetryLayout: LinearLayout? = null
     private var videoMenuLayout: RelativeLayout? = null
+    private var resumedVideoTv: TextView? = null
     private var durationlayout: LinearLayout? = null
     private var volumeLayout: LinearLayout? = null
     private var volumeLinearLayout: LinearLayout? = null
@@ -181,6 +182,7 @@ class BalajiVideoPlayer(
         val view =
             LayoutInflater.from(getContext()).inflate(R.layout.balaji_video_player_layout, this)
         volumeMuteAndUnMuteButton = view.findViewById(R.id.volumeMuteAndUnMuteButton)
+        resumedVideoTv = view.findViewById(R.id.resumedVideoTv)
         progressBarParent = view.findViewById(R.id.progress_bar_parent)
         volumeProgressBar = view.findViewById(R.id.exo_volume_progress)
         brightnessProgressBar = view.findViewById(R.id.brightness_progress_bar)
@@ -235,7 +237,7 @@ class BalajiVideoPlayer(
                     ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
                 (getContext() as Activity).window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
                 hideSystemBars()
-              //  videoRotationButton?.setImageResource(R.drawable.minimize)
+                //  videoRotationButton?.setImageResource(R.drawable.minimize)
                 videoLockUnlockStatus()
             }
         })
@@ -515,6 +517,7 @@ class BalajiVideoPlayer(
         videoProgressLayout!!.visibility = GONE
         durationlayout!!.visibility = GONE
         videoMenuLayout!!.visibility = GONE
+        resumedVideoTv?.visibility = View.GONE
         removeCallbacks(hideAction)
         hideAtMs = C.TIME_UNSET
         isControllerShown = false
@@ -525,6 +528,7 @@ class BalajiVideoPlayer(
         videoProgressLayout!!.visibility = VISIBLE
         durationlayout!!.visibility = VISIBLE
         videoMenuLayout!!.visibility = VISIBLE
+        resumedVideoTv?.visibility = View.GONE
         updatePlayPauseButton()
         hideAfterTimeout()
         isControllerShown = true
@@ -1147,6 +1151,18 @@ class BalajiVideoPlayer(
 
     private fun rewind() {
         seekTo(Math.max(mMediaPlayer!!.currentPosition - DEFAULT_REWIND_MS, 0))
+    }
+
+
+    fun seekVideoPlayer(watch: Int) {
+        seekTo(Math.max(mMediaPlayer!!.currentPosition - watch * 1000, 0))
+    }
+
+    fun showResumedVideoHint(isShow: Boolean) {
+        if (isShow)
+            resumedVideoTv?.visibility = View.VISIBLE
+        else
+            resumedVideoTv?.visibility = View.GONE
     }
 
     private fun fastForward() {
