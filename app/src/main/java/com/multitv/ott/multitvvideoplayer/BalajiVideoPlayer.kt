@@ -273,6 +273,14 @@ class BalajiVideoPlayer(
             }
         }
 
+
+        findViewById<View>(R.id.frameLayout).setOnClickListener {
+            if (isControllerShown)
+                hideController()
+            else
+                showController()
+        }
+
         //  findViewById<View>(R.id.frameLayout)?.setOnTouchListener(clickFrameSwipeListener)
         //findViewById<View>(R.id.frameLayout).setOnTouchListener(clickFrameSwipeListener)
         //findViewById(R.id.frameLayout)
