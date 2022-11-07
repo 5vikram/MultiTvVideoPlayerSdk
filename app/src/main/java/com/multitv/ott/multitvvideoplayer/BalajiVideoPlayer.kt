@@ -1155,7 +1155,7 @@ class BalajiVideoPlayer(
 
 
     fun seekVideoPlayer(watch: Int) {
-        seekTo(Math.max(mMediaPlayer!!.currentPosition - watch * 1000, 0))
+        seekTo(Math.max(mMediaPlayer!!.currentPosition + watch * 1000, 0))
     }
 
     fun showResumedVideoHint(isShow: Boolean) {
