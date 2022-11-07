@@ -1161,7 +1161,7 @@ class BalajiVideoPlayer(
 
     fun seekVideoPlayer(watch: Int, isWatchDurationEnable: Boolean) {
         this.isWatchDurationEnable = isWatchDurationEnable
-        this.watchDuration = watchDuration;
+        this.watchDuration = watch;
     }
 
     fun showResumedVideoHint(isShow: Boolean) {
