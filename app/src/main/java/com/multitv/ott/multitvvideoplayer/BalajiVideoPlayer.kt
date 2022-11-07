@@ -921,6 +921,9 @@ class BalajiVideoPlayer(
             val mediaSessionConnector = MediaSessionConnector(mediaSession)
             mediaSessionConnector.setPlayer(mMediaPlayer)
             mediaSession.isActive = true
+
+            if (isWatchDurationEnable)
+                seekTo(Math.max(mMediaPlayer!!.currentPosition + watchDuration * 1000, 0))
         }
     }
 
@@ -1153,9 +1156,12 @@ class BalajiVideoPlayer(
         seekTo(Math.max(mMediaPlayer!!.currentPosition - DEFAULT_REWIND_MS, 0))
     }
 
+    private var isWatchDurationEnable = false
+    private var watchDuration = 0
 
-    fun seekVideoPlayer(watch: Int) {
-        seekTo(Math.max(mMediaPlayer!!.currentPosition + watch * 1000, 0))
+    fun seekVideoPlayer(watch: Int, isWatchDurationEnable: Boolean) {
+        this.isWatchDurationEnable = isWatchDurationEnable
+        this.watchDuration = watchDuration;
     }
 
     fun showResumedVideoHint(isShow: Boolean) {
