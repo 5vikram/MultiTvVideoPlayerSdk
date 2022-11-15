@@ -104,13 +104,11 @@ class BalajiCarsolVideoPlayer(
     private var bufferingTimeHandler: Handler? = null
     private var countDownTimer: CountDownTimerWithPause? = null
     private val TAG = "VikramExoVideoPlayer"
-    private var errorRetryLayout: LinearLayout? = null
+
     private var videoMenuLayout: RelativeLayout? = null
 
     private var volumeLayout: LinearLayout? = null
     private var volumeLinearLayout: LinearLayout? = null
-    private var bufferingProgressBarLayout: LinearLayout? = null
-    private var circularProgressLayout: LinearLayout? = null
     private var moreInfoLinearLayout: LinearLayoutCompat? = null
 
     private var volumeMuteAndUnMuteButton: ImageView? = null
@@ -169,10 +167,8 @@ class BalajiCarsolVideoPlayer(
         volumeMuteAndUnMuteButton = view.findViewById(R.id.volumeMuteAndUnMuteButton)
 
         moreInfoLinearLayout = view.findViewById(R.id.moreInfoLinearLayout)
-        errorRetryLayout = view.findViewById(R.id.errorRetryLayout)
         videoMenuLayout = view.findViewById(R.id.videoMenuLayout)
         volumeUnMuteButton = view.findViewById(R.id.volumeUnMuteButton)
-        bufferingProgressBarLayout = view.findViewById(R.id.bufferingProgressBarLayout)
         volumeLayout = view.findViewById(R.id.volumeLayout)
         volumeLinearLayout = view.findViewById(R.id.volumeLinearLayout)
 
@@ -180,7 +176,7 @@ class BalajiCarsolVideoPlayer(
         videoPauseButton = view.findViewById(R.id.exo_pause)
 
         simpleExoPlayerView = view.findViewById(R.id.videoPlayer)
-        volumeMuteAndUnMuteButton?.visibility = View.GONE
+
 
         volumeUnMuteButton?.setOnClickListener {
             mMediaPlayer?.audioComponent?.volume = 0f
@@ -202,96 +198,6 @@ class BalajiCarsolVideoPlayer(
 
         }
 
-
-
-        findViewById<View>(R.id.frameLayout).setOnClickListener {
-            if (isControllerShown)
-                hideController()
-            else
-                showController()
-        }
-
-        //  findViewById<View>(R.id.frameLayout)?.setOnTouchListener(clickFrameSwipeListener)
-        //findViewById<View>(R.id.frameLayout).setOnTouchListener(clickFrameSwipeListener)
-        //findViewById(R.id.frameLayout)
-/*
-        findViewById<View>(R.id.frameLayout).setOnTouchListener(object :
-            OnSwipeTouchListener(true) {
-            override fun onClick() {
-                VideoPlayerTracer.error("Swipe:::", "onClick()")
-            }
-
-            override fun onBeforeMove(dir: Direction) {
-                VideoPlayerTracer.error("Swipe:::", "onBeforeMove()  " + dir.name)
-            }
-
-            override fun onAfterMove() {
-                VideoPlayerTracer.error("Swipe:::", "onAfterMove()")
-            }
-
-            override fun onDoubleTap(event: MotionEvent) {
-                VideoPlayerTracer.error("Swipe:::", "onDoubleTap()")
-            }
-
-            override fun onMove(dir: Direction, diff: Float) {
-                VideoPlayerTracer.error("Swipe:::", "onMove()")
-            } */
-/*    @Override
-            public void onClick() {
-                super.onClick();
-                if (isControllerShown)
-                    hideController();
-                else
-                    showController();
-
-                VideoPlayerTracer.error("Swipe:::", "onClick()");
-            }
-
-            @Override
-            public void onSwipeLeft() {
-                VideoPlayerTracer.error("Swipe:::", "onSwipeLeft()");
-                super.onSwipeLeft();
-            }
-
-            @Override
-            public void onSwipeRight() {
-                VideoPlayerTracer.error("Swipe:::", "onSwipeRight()");
-                super.onSwipeRight();
-            }
-
-            @Override
-            public void onSwipeDown() {
-                VideoPlayerTracer.error("Swipe:::", "onSwipeDown()");
-                super.onSwipeDown();
-            }
-
-            @Override
-            public void onSwipeUp() {
-                VideoPlayerTracer.error("Swipe:::", "onSwipeUp()");
-                super.onSwipeUp();
-            }*//*
-
-        })
-*/
-
-        findViewById<View>(R.id.speed_btn)?.setOnClickListener { showSpeedControlDailog() }
-        // simpleExoPlayerView.set
-        errorRetryLayout?.setOnClickListener(OnClickListener {
-            errorRetryLayout?.setVisibility(GONE)
-            initializeMainPlayer(mContentUrl, true)
-        })
-        /*   videoUnLockButton?.setOnClickListener(OnClickListener {
-               isScreenLockEnable = false
-               videoUnLockButton?.setVisibility(GONE)
-             //  videoLockButton?.setVisibility(VISIBLE)
-               showController()
-           })
-           videoLockButton?.setOnClickListener(OnClickListener {
-               isScreenLockEnable = true
-               videoUnLockButton?.setVisibility(VISIBLE)
-              // videoLockButton?.setVisibility(GONE)
-               hideController()
-           })*/
 
         videoPlayButton?.setOnClickListener(OnClickListener {
             if (mMediaPlayer != null) {
@@ -315,22 +221,7 @@ class BalajiCarsolVideoPlayer(
     }
 
 
-    fun showVolumeProgressBarButton() {
-        volumeLayout?.visibility = View.VISIBLE
-    }
 
-    fun hideVolumeProgressBarButton() {
-        volumeLayout?.visibility = View.GONE
-    }
-
-
-    fun showMuteUnMuteButton() {
-        volumeLinearLayout?.visibility = View.VISIBLE
-    }
-
-    fun hideMuteUnMuteButton() {
-        volumeLinearLayout?.visibility = View.GONE
-    }
 
 
     override fun onAttachedToWindow() {
@@ -342,7 +233,7 @@ class BalajiCarsolVideoPlayer(
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
         isAttachedToWindowStatus = false
-        removeCallbacks(hideAction)
+       /* removeCallbacks(hideAction)
         if (hideAtMs != C.TIME_UNSET) {
             val delayMs = hideAtMs - SystemClock.uptimeMillis()
             if (delayMs <= 0) {
@@ -350,13 +241,13 @@ class BalajiCarsolVideoPlayer(
             } else {
                 postDelayed(hideAction, delayMs)
             }
-        }
+        }*/
     }
 
-    private val hideAction = Runnable {
+  /*  private val hideAction = Runnable {
         VideoPlayerTracer.error("Controller Listener:::", "Stop Timer")
         hideController()
-    }
+    }*/
 
 
     fun isNeedVideoPlayerPause(): Boolean {
@@ -384,7 +275,7 @@ class BalajiCarsolVideoPlayer(
     }
 
     private fun hideAfterTimeout() {
-        removeCallbacks(hideAction)
+     /*   removeCallbacks(hideAction)
         if (5000 > 0) {
             VideoPlayerTracer.error("Controller Listener:::", "Start Timer")
             hideAtMs = SystemClock.uptimeMillis() + 5000
@@ -393,22 +284,22 @@ class BalajiCarsolVideoPlayer(
             }
         } else {
             hideAtMs = C.TIME_UNSET
-        }
+        }*/
     }
 
-    fun hideController() {
+ /*   fun hideController() {
         videoMenuLayout!!.visibility = GONE
         removeCallbacks(hideAction)
         hideAtMs = C.TIME_UNSET
         isControllerShown = false
-    }
+    }*/
 
-    fun showController() {
+   /* fun showController() {
         videoMenuLayout!!.visibility = VISIBLE
         updatePlayPauseButton()
         hideAfterTimeout()
         isControllerShown = true
-    }
+    }*/
 
     private fun updatePlayPauseButton() {
         var requestPlayPauseFocus = false
@@ -801,9 +692,9 @@ class BalajiCarsolVideoPlayer(
             val mediaSessionConnector = MediaSessionConnector(mediaSession)
             mediaSessionConnector.setPlayer(mMediaPlayer)
             mediaSession.isActive = true
-
-            if (isWatchDurationEnable)
-                seekTo(Math.max(mMediaPlayer!!.currentPosition + watchDuration * 1000, 0))
+            mMediaPlayer?.audioComponent?.volume = 0f
+            /*if (isWatchDurationEnable)
+                seekTo(Math.max(mMediaPlayer!!.currentPosition + watchDuration * 1000, 0))*/
         }
     }
 
@@ -813,8 +704,6 @@ class BalajiCarsolVideoPlayer(
             if (mMediaPlayer != null && mMediaPlayer!!.currentPosition != 0L) seekPlayerTo =
                 mMediaPlayer!!.currentPosition
                     .toInt() / 1000
-            errorRetryLayout!!.bringToFront()
-            errorRetryLayout!!.visibility = VISIBLE
             videoPlayerSdkCallBackListener!!.onPlayerError(error.message)
         }
 
@@ -838,49 +727,18 @@ class BalajiCarsolVideoPlayer(
             when (playbackState) {
                 ExoPlayer.STATE_BUFFERING -> {
                     text += "buffering"
-                    bufferingProgressBarLayout!!.bringToFront()
-                    bufferingProgressBarLayout!!.visibility = VISIBLE
                     if (contentType == ContentType.LIVE) startBufferingTimer()
                 }
                 ExoPlayer.STATE_ENDED -> {
                     text += "ended"
                     if (contentType == ContentType.VOD) {
-                        if (mMediaPlayer != null) contentPlayedTimeInMillis =
-                            mMediaPlayer!!.currentPosition
                         releaseVideoPlayer()
-                        bufferingProgressBarLayout!!.visibility = GONE
-                        val circularProgressRing =
-                            circularProgressLayout!!.findViewById<View>(R.id.circular_progress_ring) as FabButton
-                        circularProgressRing.showProgress(true)
-                        circularProgressRing.setProgress(0f)
-                        circularProgressLayout!!.visibility = VISIBLE
-                        circularProgressLayout!!.bringToFront()
-                        val totalDuration = 2000
-                        val tickDuration = 500
-                        countDownTimer = object : CountDownTimerWithPause(
-                            totalDuration.toLong(),
-                            (tickDuration / 10).toLong(),
-                            true
-                        ) {
-                            override fun onTick(millisUntilFinished: Long) {
-                                var progress = millisUntilFinished.toFloat() / totalDuration
-                                progress = progress * 100
-                                progress = 100 - progress
-                                circularProgressRing.setProgress(progress)
-                            }
-
-                            override fun onFinish() {
-                                circularProgressLayout?.visibility = View.GONE
-                                prepareVideoPlayer()
-                            }
-                        }.create()
+                        prepareVideoPlayer()
                     }
                 }
                 ExoPlayer.STATE_IDLE -> {
                     text += "idle"
                     if (!checkForAudioFocus()) return
-                    if (bufferingProgressBarLayout != null) bufferingProgressBarLayout!!.visibility =
-                        GONE
 
                     if (mMediaPlayer != null) {
                         contentPlayedTimeInMillis = mMediaPlayer!!.currentPosition
@@ -892,7 +750,6 @@ class BalajiCarsolVideoPlayer(
                 }
                 ExoPlayer.STATE_READY -> {
                     text += "ready"
-                    bufferingProgressBarLayout!!.visibility = GONE
                 }
                 else -> text += "unknown"
             }
@@ -939,52 +796,6 @@ class BalajiCarsolVideoPlayer(
     var dialog: AlertDialog? = null
     fun hideSpeedDailog() {
         if (dialog != null && dialog!!.isShowing) dialog!!.dismiss()
-    }
-
-    fun showSpeedControlDailog() {
-        // setup the alert builder
-        if (dialog != null && dialog!!.isShowing) dialog!!.dismiss()
-        val position =
-            sharedPreferencePlayer.getPreferencesInt(context, "player_playback_position", 2)
-        val builder = AlertDialog.Builder(context)
-        builder.setTitle("Speed Control")
-        val animals = arrayOf("0.25x", "0.5x", "Normal", "1.5x", "2x")
-        builder.setSingleChoiceItems(animals, position) { dialog, which ->
-            var speed = 1f
-            var pitch = 1f
-            when (which) {
-                0 -> {
-                    speed = 0.25f
-                    pitch = 0.25f
-                    sharedPreferencePlayer.setPreferenceInt(context, "player_playback_position", 0)
-                }
-                1 -> {
-                    speed = 0.5f
-                    pitch = 0.5f
-                    sharedPreferencePlayer.setPreferenceInt(context, "player_playback_position", 1)
-                }
-                2 -> {
-                    speed = 1f
-                    pitch = 1f
-                    sharedPreferencePlayer.setPreferenceInt(context, "player_playback_position", 2)
-                }
-                3 -> {
-                    speed = 1.5f
-                    pitch = 1.5f
-                    sharedPreferencePlayer.setPreferenceInt(context, "player_playback_position", 3)
-                }
-                4 -> {
-                    speed = 2f
-                    pitch = 2f
-                    sharedPreferencePlayer.setPreferenceInt(context, "player_playback_position", 4)
-                }
-            }
-            val param = PlaybackParameters(speed, pitch)
-            mMediaPlayer!!.playbackParameters = param
-            dialog.dismiss()
-        }
-        dialog = builder.create()
-        dialog?.show()
     }
 
 
