@@ -92,6 +92,8 @@ class BalajiCarsolVideoPlayer(
     private val adPlayedTimeInMillis: Long = 0
     private var contentPlayedTimeInMillis: Long = 0
 
+    private var playPauseButtonEnable = true;
+
 
     private var mInitialTextureWidth: Int = 0
     private var mInitialTextureHeight: Int = 0
@@ -178,6 +180,8 @@ class BalajiCarsolVideoPlayer(
         simpleExoPlayerView = view.findViewById(R.id.videoPlayer)
 
 
+
+
         volumeUnMuteButton?.setOnClickListener {
             mMediaPlayer?.audioComponent?.volume = 0f
             volumeMuteAndUnMuteButton?.visibility = View.VISIBLE
@@ -221,7 +225,9 @@ class BalajiCarsolVideoPlayer(
     }
 
 
-
+    fun playPauseEnable(playPauseButtonEnable: Boolean) {
+        this.playPauseButtonEnable = playPauseButtonEnable;
+    }
 
 
     override fun onAttachedToWindow() {
@@ -233,21 +239,21 @@ class BalajiCarsolVideoPlayer(
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
         isAttachedToWindowStatus = false
-       /* removeCallbacks(hideAction)
-        if (hideAtMs != C.TIME_UNSET) {
-            val delayMs = hideAtMs - SystemClock.uptimeMillis()
-            if (delayMs <= 0) {
-                hideController()
-            } else {
-                postDelayed(hideAction, delayMs)
-            }
-        }*/
+        /* removeCallbacks(hideAction)
+         if (hideAtMs != C.TIME_UNSET) {
+             val delayMs = hideAtMs - SystemClock.uptimeMillis()
+             if (delayMs <= 0) {
+                 hideController()
+             } else {
+                 postDelayed(hideAction, delayMs)
+             }
+         }*/
     }
 
-  /*  private val hideAction = Runnable {
-        VideoPlayerTracer.error("Controller Listener:::", "Stop Timer")
-        hideController()
-    }*/
+    /*  private val hideAction = Runnable {
+          VideoPlayerTracer.error("Controller Listener:::", "Stop Timer")
+          hideController()
+      }*/
 
 
     fun isNeedVideoPlayerPause(): Boolean {
@@ -275,31 +281,31 @@ class BalajiCarsolVideoPlayer(
     }
 
     private fun hideAfterTimeout() {
-     /*   removeCallbacks(hideAction)
-        if (5000 > 0) {
-            VideoPlayerTracer.error("Controller Listener:::", "Start Timer")
-            hideAtMs = SystemClock.uptimeMillis() + 5000
-            if (isAttachedToWindow) {
-                postDelayed(hideAction, 5000)
-            }
-        } else {
-            hideAtMs = C.TIME_UNSET
-        }*/
+        /*   removeCallbacks(hideAction)
+           if (5000 > 0) {
+               VideoPlayerTracer.error("Controller Listener:::", "Start Timer")
+               hideAtMs = SystemClock.uptimeMillis() + 5000
+               if (isAttachedToWindow) {
+                   postDelayed(hideAction, 5000)
+               }
+           } else {
+               hideAtMs = C.TIME_UNSET
+           }*/
     }
 
- /*   fun hideController() {
-        videoMenuLayout!!.visibility = GONE
-        removeCallbacks(hideAction)
-        hideAtMs = C.TIME_UNSET
-        isControllerShown = false
-    }*/
+    /*   fun hideController() {
+           videoMenuLayout!!.visibility = GONE
+           removeCallbacks(hideAction)
+           hideAtMs = C.TIME_UNSET
+           isControllerShown = false
+       }*/
 
-   /* fun showController() {
-        videoMenuLayout!!.visibility = VISIBLE
-        updatePlayPauseButton()
-        hideAfterTimeout()
-        isControllerShown = true
-    }*/
+    /* fun showController() {
+         videoMenuLayout!!.visibility = VISIBLE
+         updatePlayPauseButton()
+         hideAfterTimeout()
+         isControllerShown = true
+     }*/
 
     private fun updatePlayPauseButton() {
         var requestPlayPauseFocus = false
