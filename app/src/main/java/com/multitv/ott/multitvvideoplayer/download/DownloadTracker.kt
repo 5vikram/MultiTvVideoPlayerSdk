@@ -3,12 +3,14 @@ package com.multitv.ott.multitvvideoplayer.download
 import android.content.Context
 import android.net.Uri
 import android.os.StatFs
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.PopupMenu
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.AppCompatTextView
 import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.DefaultRenderersFactory
 import com.google.android.exoplayer2.Format
@@ -290,7 +292,14 @@ class DownloadTracker(
 
             setTrackDailogStatus(true)
             val dialogBuilder: AlertDialog.Builder = AlertDialog.Builder(context)
+            val view = LayoutInflater.from(context).inflate(R.layout.alert_download_dialog, null)
+            dialogBuilder.setView(view)
             dialogBuilder.setCancelable(false)
+
+            val done = view.findViewById<AppCompatTextView>(R.id.done)
+            val hd_720 = view.findViewById<AppCompatTextView>(R.id.hd_quality)
+            val sd_420 = view.findViewById<AppCompatTextView>(R.id.sd_quality)
+
             val formatDownloadable: MutableList<Format> = mutableListOf()
             var qualitySelected: DefaultTrackSelector.Parameters
             val mappedTrackInfo = downloadHelper.getMappedTrackInfo(0)
