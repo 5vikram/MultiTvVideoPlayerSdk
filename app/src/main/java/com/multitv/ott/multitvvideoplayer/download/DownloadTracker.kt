@@ -1,14 +1,18 @@
 package com.multitv.ott.multitvvideoplayer.download
 
 import android.content.Context
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.StatFs
 import android.view.LayoutInflater
 import android.view.View
+
 import android.widget.PopupMenu
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
+
 import androidx.appcompat.widget.AppCompatTextView
+
 import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.DefaultRenderersFactory
 import com.google.android.exoplayer2.Format
@@ -287,20 +291,19 @@ class DownloadTracker(
                 return
             }
 
-            setTrackDailogStatus(true)
+            val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+            val binding = inflater.inflate(R.layout.alert_download_dialog, null)
 
-            val deleteDialogView = LayoutInflater.from(context).inflate(R.layout.alert_download_dialog, null)
-            val deleteDialog = AlertDialog.Builder(context).create()
-            deleteDialog.setView(deleteDialogView)
-            //  val dialogView: View = LayoutInflater.from(context).inflate(R.layout.alert_download_dialog, null, false)
-            //    val dialogBuilder = AlertDialog.Builder(context)
-//     dialogBuilder.setView(dialogView)
-            //   val alertDialog = dialogBuilder.create()
-            //   alertDialog.show()
+            val alert = android.app.AlertDialog.Builder(context)
+            alert.setView(binding)
+            alert.setCancelable(false)
+            val dialog = alert.create()
+            dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            dialog.show()
 
-            val done = deleteDialogView.findViewById<AppCompatTextView>(R.id.done)
-            val hd_720 = deleteDialogView.findViewById<AppCompatTextView>(R.id.hd_quality)
-            val sd_420 = deleteDialogView.findViewById<AppCompatTextView>(R.id.sd_quality)
+            val done = binding.findViewById<AppCompatTextView>(R.id.done)
+            val hd_720 = binding.findViewById<AppCompatTextView>(R.id.hd_quality)
+            val sd_420 = binding.findViewById<AppCompatTextView>(R.id.sd_quality)
 
             val formatDownloadable: MutableList<Format> = mutableListOf()
             var qualitySelected: DefaultTrackSelector.Parameters
@@ -471,7 +474,6 @@ class DownloadTracker(
                     dismissCallback?.invoke()
                     dailogCallbackListener.trackDailogStatus(false)
                 }*/
-            deleteDialog.show()
 
             //dailogCallbackListener.trackDailogStatus(true)
 
