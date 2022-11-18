@@ -24,5 +24,12 @@
 
     <color name="bottom_navigation_unselected_color">#DEDEDE</color>
     <color name="bottom_navigation_selected_color">@color/white</color>
+    <color name="download_background_color">#414141</color>
+    <color name="text_color1">#F2F2F2</color>
+    <color name="text_color_2">#676767</color>
+    <color name="line_color">#707070</color>
+    <color name="button_background_color">#5B5B5B</color>
+    <color name="button_background_color_2">#2D2D2D</color>
+    <color name="done_button_color">#FB0000</color>
 
 </resources>
