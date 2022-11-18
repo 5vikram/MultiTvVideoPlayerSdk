@@ -5,9 +5,7 @@ import android.net.Uri
 import android.os.StatFs
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.LinearLayout
 import android.widget.PopupMenu
-import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AppCompatTextView
@@ -26,7 +24,6 @@ import com.google.android.exoplayer2.util.Log
 import com.google.android.exoplayer2.util.MimeTypes
 import com.google.android.exoplayer2.util.Util
 import com.multitv.ott.multitvvideoplayer.R
-import com.multitv.ott.multitvvideoplayer.download.MyDownloadService
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -291,8 +288,8 @@ class DownloadTracker(
             }
 
             setTrackDailogStatus(true)
-            val factory = LayoutInflater.from(context)
-            val deleteDialogView: View = factory.inflate(R.layout.alert_download_dialog, null)
+
+            val deleteDialogView = LayoutInflater.from(context).inflate(R.layout.alert_download_dialog, null)
             val deleteDialog = AlertDialog.Builder(context).create()
             deleteDialog.setView(deleteDialogView)
             //  val dialogView: View = LayoutInflater.from(context).inflate(R.layout.alert_download_dialog, null, false)
