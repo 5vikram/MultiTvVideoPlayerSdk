@@ -31,5 +31,5 @@
     <color name="button_background_color">#5B5B5B</color>
     <color name="button_background_color_2">#2D2D2D</color>
     <color name="done_button_color">#FB0000</color>
-
+    <color name="dailog_bg">#393939</color>
 </resources>

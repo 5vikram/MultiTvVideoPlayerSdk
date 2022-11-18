@@ -279,115 +279,7 @@ class DownloadTracker(
         fun release() {
             downloadHelper.release()
             trackSelectionDialog?.dismiss()
-          //  dailogCallbackListener.trackDailogStatus(false)
         }
-
-        // DownloadHelper.Callback implementation.
-/*
-        override fun onPrepared(helper: DownloadHelper) {
-            if (helper.periodCount == 0) {
-                Log.d(TAG, "No periods found. Downloading entire stream.")
-                downloadHelper.release()
-                return
-            }
-
-            setTrackDailogStatus(true)
-            val dialogBuilder: AlertDialog.Builder = AlertDialog.Builder(context)
-            dialogBuilder.setCancelable(false)
-            val formatDownloadable: MutableList<Format> = mutableListOf()
-            var qualitySelected: DefaultTrackSelector.Parameters
-            val mappedTrackInfo = downloadHelper.getMappedTrackInfo(0)
-
-            for (i in 0 until mappedTrackInfo.rendererCount) {
-                if (C.TRACK_TYPE_VIDEO == mappedTrackInfo.getRendererType(i)) {
-                    val trackGroups: TrackGroupArray = mappedTrackInfo.getTrackGroups(i)
-                    for (j in 0 until trackGroups.length) {
-                        val trackGroup: TrackGroup = trackGroups[j]
-                        for (k in 0 until trackGroup.length) {
-                            formatDownloadable.add(trackGroup.getFormat(k))
-                        }
-                    }
-                }
-            }
-
-            if (formatDownloadable.isEmpty()) {
-                dialogBuilder.setTitle("An error occurred")
-                    .setPositiveButton("OK", null)
-                    .show()
-                return
-            }
-
-            // We sort here because later we use formatDownloadable to select track
-            formatDownloadable.sortBy { it.height }
-            val mediaItemTag: MediaItemTag = mediaItem.playbackProperties?.tag as MediaItemTag
-            val optionsDownload: List<String> = formatDownloadable.map {
-                context.getString(
-                    R.string.dialog_option, it.height,
-                    (it.bitrate * mediaItemTag.duration).div(8000).formatFileSize()
-                )
-            }
-
-            //Default quality download
-            qualitySelected = DefaultTrackSelector(context).buildUponParameters()
-                .setMinVideoSize(formatDownloadable[0].width, formatDownloadable[0].height)
-                .setMinVideoBitrate(formatDownloadable[0].bitrate)
-                .setMaxVideoSize(formatDownloadable[0].width, formatDownloadable[0].height)
-                .setMaxVideoBitrate(formatDownloadable[0].bitrate)
-                .build()
-
-
-
-            dialogBuilder.setTitle("Select Download Format")
-                .setSingleChoiceItems(optionsDownload.toTypedArray(), 0) { _, which ->
-                    val format = formatDownloadable[which]
-                    qualitySelected = DefaultTrackSelector(context).buildUponParameters()
-                        .setMinVideoSize(format.width, format.height)
-                        .setMinVideoBitrate(format.bitrate)
-                        .setMaxVideoSize(format.width, format.height)
-                        .setMaxVideoBitrate(format.bitrate)
-                        .build()
-                    Log.e(TAG, "format Selected= width: ${format.width}, height: ${format.height}")
-                }.setPositiveButton("Download") { _, _ ->
-                    helper.clearTrackSelections(0)
-                    helper.addTrackSelection(0, qualitySelected)
-                    val estimatedContentLength: Long =
-                        (qualitySelected.maxVideoBitrate * mediaItemTag.duration).div(C.MILLIS_PER_SECOND)
-                            .div(C.BITS_PER_BYTE)
-                    if (availableBytesLeft > estimatedContentLength) {
-                        val downloadRequest: DownloadRequest = downloadHelper.getDownloadRequest(
-                            (mediaItem.playbackProperties?.tag as MediaItemTag).title,
-                            Util.getUtf8Bytes(estimatedContentLength.toString())
-                        )
-                        startDownload(downloadRequest)
-                        availableBytesLeft -= estimatedContentLength
-                        Log.e(TAG, "availableBytesLeft after calculation: $availableBytesLeft")
-                    } else {
-                        Toast.makeText(
-                            context,
-                            "Not enough space to download this file",
-                            Toast.LENGTH_LONG
-                        ).show()
-                    }
-                   // dailogCallbackListener.trackDailogStatus(false)
-                    positiveCallback?.invoke()
-                }.setOnDismissListener {
-                    trackSelectionDialog = null
-
-                    downloadHelper.release()
-                    dismissCallback?.invoke()
-                   // dailogCallbackListener.trackDailogStatus(false)
-                }.setNegativeButton("Cancel") { _, _ ->
-                    trackSelectionDialog = null
-                    downloadHelper.release()
-                    dismissCallback?.invoke()
-                    dailogCallbackListener.trackDailogStatus(false)
-                }
-            trackSelectionDialog = dialogBuilder.create().apply { show() }
-
-            //dailogCallbackListener.trackDailogStatus(true)
-
-        }
-*/
 
 
 
@@ -400,12 +292,12 @@ class DownloadTracker(
 
             setTrackDailogStatus(true)
             val dialogView: View =
-                LayoutInflater.from(context).inflate(R.layout.alert_download_dialog, null, false)
-            val dialogBuilder: AlertDialog.Builder = AlertDialog.Builder(context)
-            dialogBuilder.setCancelable(false)
-            dialogBuilder?.setView(dialogView)
+                LayoutInflater.from(context).inflate(R.layout.alert_download_dialog, null)
+            trackSelectionDialog = AlertDialog.Builder(context).create()
+            trackSelectionDialog?.setCancelable(false)
+            trackSelectionDialog?.setView(dialogView)
 
-          //  trackSelectionDialog.show()
+            //  trackSelectionDialog.show()
 
             val done = dialogView?.findViewById<AppCompatTextView>(R.id.done)
             val hd_720 = dialogView?.findViewById<AppCompatTextView>(R.id.hd_quality)
@@ -529,7 +421,8 @@ class DownloadTracker(
                         Toast.LENGTH_LONG
                     ).show()
                 }
-                // dailogCallbackListener.trackDailogStatus(false)
+
+                trackSelectionDialog?.dismiss()
                 positiveCallback?.invoke()
             }
 
@@ -582,9 +475,9 @@ class DownloadTracker(
 
 
 
-            trackSelectionDialog = dialogBuilder.create().apply { show() }
-            //dailogCallbackListener.trackDailogStatus(true)
 
+            //dailogCallbackListener.trackDailogStatus(true)
+            trackSelectionDialog?.show()
         }
 
         override fun onPrepareError(helper: DownloadHelper, e: IOException) {

@@ -18,6 +18,7 @@ package com.multitv.ott.multitvvideoplayer.popup;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.res.Resources;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
