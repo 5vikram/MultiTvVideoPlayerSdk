@@ -293,14 +293,13 @@ class DownloadTracker(
             }
 
             val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-            val binding = inflater.inflate(R.layout.alert_download_dialog, null)
+            val view = inflater.inflate(R.layout.alert_download_dialog, null)
 
 
             val alert = android.app.AlertDialog.Builder(context)
-            alert.setView(binding)
+            alert.setView(view)
             alert.setCancelable(false)
             val dialog = alert.create()
-            dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             dialog.show()
 
        /*     val deleteDialogView = LayoutInflater.from(context).inflate(R.layout.alert_download_dialog, null)
@@ -315,9 +314,9 @@ class DownloadTracker(
             //   alertDialog.show()
 
 
-            val done = binding.findViewById<AppCompatTextView>(R.id.done)
-            val hd_720 = binding.findViewById<AppCompatTextView>(R.id.hd_quality)
-            val sd_420 = binding.findViewById<AppCompatTextView>(R.id.sd_quality)
+            val done = view.findViewById<AppCompatTextView>(R.id.done)
+            val hd_720 = view.findViewById<AppCompatTextView>(R.id.hd_quality)
+            val sd_420 = view.findViewById<AppCompatTextView>(R.id.sd_quality)
 
             val formatDownloadable: MutableList<Format> = mutableListOf()
             var qualitySelected: DefaultTrackSelector.Parameters
