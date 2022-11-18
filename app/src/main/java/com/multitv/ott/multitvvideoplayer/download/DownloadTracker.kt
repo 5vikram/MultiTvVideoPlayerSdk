@@ -1,10 +1,12 @@
 package com.multitv.ott.multitvvideoplayer.download
 
+import android.app.Dialog
 import android.content.Context
 import android.net.Uri
 import android.os.StatFs
 import android.view.LayoutInflater
 import android.view.View
+import android.view.Window
 import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -289,9 +291,17 @@ class DownloadTracker(
 
             setTrackDailogStatus(true)
 
-            val deleteDialogView = LayoutInflater.from(context).inflate(R.layout.alert_download_dialog, null)
+       /*     val deleteDialogView = LayoutInflater.from(context).inflate(R.layout.alert_download_dialog, null)
             val deleteDialog = AlertDialog.Builder(context).create()
-            deleteDialog.setView(deleteDialogView)
+            deleteDialog.setView(deleteDialogView)*/
+
+
+            val deleteDialogView = Dialog(context)
+            deleteDialogView.requestWindowFeature(Window.FEATURE_NO_TITLE)
+            deleteDialogView.setCancelable(false)
+            deleteDialogView.setContentView(R.layout.alert_download_dialog)
+
+
             //  val dialogView: View = LayoutInflater.from(context).inflate(R.layout.alert_download_dialog, null, false)
             //    val dialogBuilder = AlertDialog.Builder(context)
 //     dialogBuilder.setView(dialogView)
@@ -471,7 +481,7 @@ class DownloadTracker(
                     dismissCallback?.invoke()
                     dailogCallbackListener.trackDailogStatus(false)
                 }*/
-            deleteDialog.show()
+            deleteDialogView.show()
 
             //dailogCallbackListener.trackDailogStatus(true)
 
