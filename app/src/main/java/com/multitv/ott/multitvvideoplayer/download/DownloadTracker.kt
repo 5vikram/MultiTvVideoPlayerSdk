@@ -1,5 +1,6 @@
 package com.multitv.ott.multitvvideoplayer.download
 
+import android.app.Dialog
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -294,12 +295,25 @@ class DownloadTracker(
             val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
             val binding = inflater.inflate(R.layout.alert_download_dialog, null)
 
+
             val alert = android.app.AlertDialog.Builder(context)
             alert.setView(binding)
             alert.setCancelable(false)
             val dialog = alert.create()
             dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             dialog.show()
+
+       /*     val deleteDialogView = LayoutInflater.from(context).inflate(R.layout.alert_download_dialog, null)
+            val deleteDialog = AlertDialog.Builder(context).create()
+            deleteDialog.setView(deleteDialogView)*/
+
+
+            //  val dialogView: View = LayoutInflater.from(context).inflate(R.layout.alert_download_dialog, null, false)
+            //    val dialogBuilder = AlertDialog.Builder(context)
+//     dialogBuilder.setView(dialogView)
+            //   val alertDialog = dialogBuilder.create()
+            //   alertDialog.show()
+
 
             val done = binding.findViewById<AppCompatTextView>(R.id.done)
             val hd_720 = binding.findViewById<AppCompatTextView>(R.id.hd_quality)
@@ -474,6 +488,7 @@ class DownloadTracker(
                     dismissCallback?.invoke()
                     dailogCallbackListener.trackDailogStatus(false)
                 }*/
+
 
             //dailogCallbackListener.trackDailogStatus(true)
 
