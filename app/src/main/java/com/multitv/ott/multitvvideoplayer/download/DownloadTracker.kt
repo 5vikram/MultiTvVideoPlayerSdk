@@ -401,14 +401,15 @@ class DownloadTracker(
             setTrackDailogStatus(true)
             val dialogView: View =
                 LayoutInflater.from(context).inflate(R.layout.alert_download_dialog, null, false)
-            val dialogBuilder = AlertDialog.Builder(context)
-            dialogBuilder.setView(dialogView)
-            val alertDialog = dialogBuilder.create()
-            alertDialog.show()
+            val dialogBuilder: AlertDialog.Builder = AlertDialog.Builder(context)
+            dialogBuilder.setCancelable(false)
+            dialogBuilder?.setView(dialogView)
 
-            val done = alertDialog.findViewById<AppCompatTextView>(R.id.done)
-            val hd_720 = alertDialog.findViewById<AppCompatTextView>(R.id.hd_quality)
-            val sd_420 = alertDialog.findViewById<AppCompatTextView>(R.id.sd_quality)
+          //  trackSelectionDialog.show()
+
+            val done = dialogView?.findViewById<AppCompatTextView>(R.id.done)
+            val hd_720 = dialogView?.findViewById<AppCompatTextView>(R.id.hd_quality)
+            val sd_420 = dialogView?.findViewById<AppCompatTextView>(R.id.sd_quality)
 
             val formatDownloadable: MutableList<Format> = mutableListOf()
             var qualitySelected: DefaultTrackSelector.Parameters
@@ -427,9 +428,6 @@ class DownloadTracker(
             }
 
             if (formatDownloadable.isEmpty()) {
-                dialogBuilder.setTitle("An error occurred")
-                    .setPositiveButton("OK", null)
-                    .show()
                 return
             }
 
@@ -581,8 +579,10 @@ class DownloadTracker(
                     dismissCallback?.invoke()
                     dailogCallbackListener.trackDailogStatus(false)
                 }*/
-            trackSelectionDialog = dialogBuilder.create().apply { show() }
 
+
+            trackSelectionDialog = dialogBuilder.create()
+            trackSelectionDialog?.show()
             //dailogCallbackListener.trackDailogStatus(true)
 
         }
