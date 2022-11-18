@@ -270,7 +270,7 @@ class DownloadTracker(
         private val dailogCallbackListener: DailogCallbackListener
     ) : DownloadHelper.Callback {
 
-        private var trackSelectionDialog: AlertDialog? = null
+       // private var trackSelectionDialog: AlertDialog? = null
 
         init {
             downloadHelper.prepare(this)
@@ -278,7 +278,7 @@ class DownloadTracker(
 
         fun release() {
             downloadHelper.release()
-            trackSelectionDialog?.dismiss()
+            //trackSelectionDialog?.dismiss()
         }
 
 
@@ -291,17 +291,19 @@ class DownloadTracker(
             }
 
             setTrackDailogStatus(true)
-            val dialogView: View =
-                LayoutInflater.from(context).inflate(R.layout.alert_download_dialog, null)
-            trackSelectionDialog = AlertDialog.Builder(context).create()
-            trackSelectionDialog?.setCancelable(false)
-            trackSelectionDialog?.setView(dialogView)
+            val factory = LayoutInflater.from(context)
+            val deleteDialogView: View = factory.inflate(R.layout.alert_download_dialog, null)
+            val deleteDialog = AlertDialog.Builder(context).create()
+            deleteDialog.setView(deleteDialogView)
+            //  val dialogView: View = LayoutInflater.from(context).inflate(R.layout.alert_download_dialog, null, false)
+            //    val dialogBuilder = AlertDialog.Builder(context)
+//     dialogBuilder.setView(dialogView)
+            //   val alertDialog = dialogBuilder.create()
+            //   alertDialog.show()
 
-            //  trackSelectionDialog.show()
-
-            val done = dialogView?.findViewById<AppCompatTextView>(R.id.done)
-            val hd_720 = dialogView?.findViewById<AppCompatTextView>(R.id.hd_quality)
-            val sd_420 = dialogView?.findViewById<AppCompatTextView>(R.id.sd_quality)
+            val done = deleteDialogView.findViewById<AppCompatTextView>(R.id.done)
+            val hd_720 = deleteDialogView.findViewById<AppCompatTextView>(R.id.hd_quality)
+            val sd_420 = deleteDialogView.findViewById<AppCompatTextView>(R.id.sd_quality)
 
             val formatDownloadable: MutableList<Format> = mutableListOf()
             var qualitySelected: DefaultTrackSelector.Parameters
@@ -320,6 +322,7 @@ class DownloadTracker(
             }
 
             if (formatDownloadable.isEmpty()) {
+
                 return
             }
 
@@ -421,8 +424,7 @@ class DownloadTracker(
                         Toast.LENGTH_LONG
                     ).show()
                 }
-
-                trackSelectionDialog?.dismiss()
+                // dailogCallbackListener.trackDailogStatus(false)
                 positiveCallback?.invoke()
             }
 
@@ -472,12 +474,10 @@ class DownloadTracker(
                     dismissCallback?.invoke()
                     dailogCallbackListener.trackDailogStatus(false)
                 }*/
-
-
-
+            deleteDialog.show()
 
             //dailogCallbackListener.trackDailogStatus(true)
-            trackSelectionDialog?.show()
+
         }
 
         override fun onPrepareError(helper: DownloadHelper, e: IOException) {
