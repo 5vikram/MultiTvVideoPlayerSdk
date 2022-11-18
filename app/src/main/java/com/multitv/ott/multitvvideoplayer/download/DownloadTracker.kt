@@ -403,14 +403,13 @@ class DownloadTracker(
                 LayoutInflater.from(context).inflate(R.layout.alert_download_dialog, null, false)
             val dialogBuilder: AlertDialog.Builder = AlertDialog.Builder(context)
             dialogBuilder.setCancelable(false)
-            trackSelectionDialog = dialogBuilder.create()
             dialogBuilder?.setView(dialogView)
 
           //  trackSelectionDialog.show()
 
-            val done = trackSelectionDialog?.findViewById<AppCompatTextView>(R.id.done)
-            val hd_720 = trackSelectionDialog?.findViewById<AppCompatTextView>(R.id.hd_quality)
-            val sd_420 = trackSelectionDialog?.findViewById<AppCompatTextView>(R.id.sd_quality)
+            val done = dialogView?.findViewById<AppCompatTextView>(R.id.done)
+            val hd_720 = dialogView?.findViewById<AppCompatTextView>(R.id.hd_quality)
+            val sd_420 = dialogView?.findViewById<AppCompatTextView>(R.id.sd_quality)
 
             val formatDownloadable: MutableList<Format> = mutableListOf()
             var qualitySelected: DefaultTrackSelector.Parameters
@@ -583,7 +582,7 @@ class DownloadTracker(
 
 
 
-            trackSelectionDialog?.show()
+            trackSelectionDialog = dialogBuilder.create().apply { show() }
             //dailogCallbackListener.trackDailogStatus(true)
 
         }
