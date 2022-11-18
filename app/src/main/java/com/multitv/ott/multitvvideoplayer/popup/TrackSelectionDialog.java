@@ -158,14 +158,12 @@ public final class TrackSelectionDialog extends DialogFragment {
   }
 
   private void init(
-      int titleId,
       MappedTrackInfo mappedTrackInfo,
       DefaultTrackSelector.Parameters initialParameters,
       boolean allowAdaptiveSelections,
       boolean allowMultipleOverrides,
       DialogInterface.OnClickListener onClickListener,
       DialogInterface.OnDismissListener onDismissListener) {
-    this.titleId = titleId;
     this.onClickListener = onClickListener;
     this.onDismissListener = onDismissListener;
     for (int i = 0; i < mappedTrackInfo.getRendererCount(); i++) {
@@ -217,7 +215,7 @@ public final class TrackSelectionDialog extends DialogFragment {
     // the AlertDialog theme overlay with force-enabled title.
     AppCompatDialog dialog =
         new AppCompatDialog(getActivity(), R.style.TrackSelectionDialogThemeOverlay);
-    dialog.setTitle(titleId);
+    dialog.setTitle("");
     return dialog;
   }
 
