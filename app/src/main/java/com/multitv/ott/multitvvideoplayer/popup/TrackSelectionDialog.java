@@ -55,7 +55,6 @@ public final class TrackSelectionDialog extends DialogFragment {
   private final SparseArray<TrackSelectionViewFragment> tabFragments;
   private final ArrayList<Integer> tabTrackTypes;
 
-  private int titleId;
   private DialogInterface.OnClickListener onClickListener;
   private DialogInterface.OnDismissListener onDismissListener;
 
@@ -98,8 +97,8 @@ public final class TrackSelectionDialog extends DialogFragment {
 
 
 
+
     trackSelectionDialog.init(
-        /* titleId= */ 0,
         mappedTrackInfo,
         /* initialParameters = */ parameters,
         /* allowAdaptiveSelections= */ true,
