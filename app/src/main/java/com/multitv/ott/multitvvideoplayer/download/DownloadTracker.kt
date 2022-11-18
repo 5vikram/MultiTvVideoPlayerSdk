@@ -300,6 +300,8 @@ class DownloadTracker(
             val hd_720 = view.findViewById<AppCompatTextView>(R.id.hd_quality)
             val sd_420 = view.findViewById<AppCompatTextView>(R.id.sd_quality)
 
+
+
             val formatDownloadable: MutableList<Format> = mutableListOf()
             var qualitySelected: DefaultTrackSelector.Parameters
             val mappedTrackInfo = downloadHelper.getMappedTrackInfo(0)
@@ -388,6 +390,92 @@ class DownloadTracker(
                     dismissCallback?.invoke()
                     dailogCallbackListener.trackDailogStatus(false)
                 }
+
+
+
+            hd_720?.setOnClickListener {
+                for (item in formatDownloadable.indices) {
+                    val format = formatDownloadable[item]
+                    qualitySelected = DefaultTrackSelector(context).buildUponParameters()
+                        .setMinVideoSize(format.width, format.height)
+                        .setMinVideoBitrate(format.bitrate)
+                        .setMaxVideoSize(format.width, format.height)
+                        .setMaxVideoBitrate(format.bitrate)
+                        .build()
+                    when (formatDownloadable[item].height) {
+                        720 -> {
+                            //   hd_720.text = formatDownloadable[item].height.toString()
+                            hd_720.text = qualitySelected.toString()
+                        }
+                        480 -> {
+                            //   hd_720.text = formatDownloadable[item].height.toString()
+                            hd_720.text = qualitySelected.toString()
+                        }
+                        360 -> {
+                            //  hd_720.text = formatDownloadable[item].height.toString()
+                            hd_720.text = qualitySelected.toString()
+                        }
+                        else -> {
+                            // hd_720.text = formatDownloadable[item].height.toString()
+                            hd_720.text = qualitySelected.toString()
+                        }
+                    }
+                }
+            }
+
+            sd_420?.setOnClickListener {
+                for (item in formatDownloadable.indices) {
+                    val format = formatDownloadable[item]
+                    qualitySelected = DefaultTrackSelector(context).buildUponParameters()
+                        .setMinVideoSize(format.width, format.height)
+                        .setMinVideoBitrate(format.bitrate)
+                        .setMaxVideoSize(format.width, format.height)
+                        .setMaxVideoBitrate(format.bitrate)
+                        .build()
+                    when (formatDownloadable[item].height) {
+                        480 -> {
+                            //  sd_420.text = formatDownloadable[item].height.toString()
+                            sd_420.text = qualitySelected.toString()
+                        }
+                        360 -> {
+                            // sd_420.text = formatDownloadable[item].height.toString()
+                            sd_420.text = qualitySelected.toString()
+                        }
+                        else -> {
+                            //  sd_420.text = formatDownloadable[item].height.toString()
+                            sd_420.text = qualitySelected.toString()
+                        }
+                    }
+                }
+            }
+
+            done?.setOnClickListener {
+                helper.clearTrackSelections(0)
+                helper.addTrackSelection(0, qualitySelected)
+                val estimatedContentLength: Long =
+                    (qualitySelected.maxVideoBitrate * mediaItemTag.duration).div(C.MILLIS_PER_SECOND)
+                        .div(C.BITS_PER_BYTE)
+                if (availableBytesLeft > estimatedContentLength) {
+                    val downloadRequest: DownloadRequest = downloadHelper.getDownloadRequest(
+                        (mediaItem.playbackProperties?.tag as MediaItemTag).title,
+                        Util.getUtf8Bytes(estimatedContentLength.toString())
+                    )
+                    startDownload(downloadRequest)
+                    availableBytesLeft -= estimatedContentLength
+                    Log.e(TAG, "availableBytesLeft after calculation: $availableBytesLeft")
+                } else {
+                    Toast.makeText(
+                        context,
+                        "Not enough space to download this file",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+                // dailogCallbackListener.trackDailogStatus(false)
+                positiveCallback?.invoke()
+            }
+
+
+
             trackSelectionDialog = dialogBuilder.create().apply { show() }
 
             //dailogCallbackListener.trackDailogStatus(true)
