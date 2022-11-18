@@ -1,46 +1,84 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@drawable/tracks_selector_bg"
+    android:orientation="vertical">
 
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/track_selection_dialog_view_pager"
-        android:layout_width="match_parent"
-        android:layout_height="360dp"
-        >
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="15dp"
+        android:text="@string/track_selection_title"
+        android:textAlignment="center"
+        android:textColor="@color/dailog_header"
+        android:textSize="25sp"
+        android:textStyle="bold" />
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/track_selection_dialog_tab_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:tabGravity="fill"
-            app:tabMode="fixed" />
-
-    </androidx.viewpager.widget.ViewPager>
-
-    <LinearLayout
-        android:orientation="horizontal"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="end">
+        android:fillViewport="true"
+        android:scrollbars="none">
 
-        <Button
-            android:id="@+id/track_selection_dialog_cancel_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@android:string/cancel"
-            android:textColor="@color/black"
-            style="?android:attr/borderlessButtonStyle"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-        <Button
-            android:id="@+id/track_selection_dialog_ok_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@android:string/ok"
-            android:textColor="@color/black"
-            style="?android:attr/borderlessButtonStyle"/>
+           <LinearLayout
+               android:layout_width="match_parent"
+               android:layout_height="0dp"
+               android:layout_weight="1"
+               android:orientation="vertical">
 
-    </LinearLayout>
+
+               <androidx.viewpager.widget.ViewPager
+                   android:id="@+id/track_selection_dialog_view_pager"
+                   android:layout_width="match_parent"
+                   android:layout_height="match_parent"
+                   android:minHeight="360dp">
+
+                   <com.google.android.material.tabs.TabLayout
+                       android:id="@+id/track_selection_dialog_tab_layout"
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       app:tabGravity="fill"
+                       app:tabMode="fixed" />
+
+               </androidx.viewpager.widget.ViewPager>
+           </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:gravity="end"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/track_selection_dialog_cancel_button"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@android:string/cancel"
+                    android:textColor="@color/text_color"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/track_selection_dialog_ok_button"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@android:string/ok"
+                    android:textColor="@color/text_color"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
 </LinearLayout>

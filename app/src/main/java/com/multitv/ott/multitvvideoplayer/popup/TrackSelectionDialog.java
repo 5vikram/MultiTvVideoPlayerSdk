@@ -39,10 +39,11 @@ import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector.SelectionOverride;
 import com.google.android.exoplayer2.trackselection.MappingTrackSelector.MappedTrackInfo;
-import com.google.android.exoplayer2.ui.TrackSelectionView;
+
 import com.google.android.exoplayer2.util.Assertions;
 import com.google.android.material.tabs.TabLayout;
 import com.multitv.ott.multitvvideoplayer.R;
+import com.multitv.ott.multitvvideoplayer.custom.TrackSelectionView;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -98,7 +99,7 @@ public final class TrackSelectionDialog extends DialogFragment {
 
 
     trackSelectionDialog.init(
-        /* titleId= */ R.string.track_selection_title,
+        /* titleId= */ 0,
         mappedTrackInfo,
         /* initialParameters = */ parameters,
         /* allowAdaptiveSelections= */ true,

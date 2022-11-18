@@ -8,16 +8,21 @@
     <color name="black">@android:color/black</color>
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
+    <color name="purple_700">#1E1E1EC9</color>
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
     <color name="app_background_color_two">#FFFFFF</color>
 
     <color name="white">#FFFFFFFF</color>
     <color name="faste_red">#4d1e2327</color>
-
     <color name="white_opycity_hundred_present">#DEDEDE</color>
     <color name="white_opycity_swenty_present">#CCDEDEDE</color>
     <color name="white_opycity_sixty_present">#99DEDEDE</color>
-    <color name="white_opycity_fifty_present">#80DEDEDE</color>
+    <color name="white_opycity_fifty_present">#393939</color>
+    <color name="text_color">#DEDEDE</color>
+    <color name="dailog_header">#F2F2F2</color>
+
+    <color name="bottom_navigation_unselected_color">#DEDEDE</color>
+    <color name="bottom_navigation_selected_color">@color/white</color>
+
 </resources>

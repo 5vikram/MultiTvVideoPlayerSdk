@@ -6,6 +6,7 @@
         <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/drawable/background_fill.xml" value="0.168" />
         <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/drawable/button_focus_background.xml" value="0.1125" />
         <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/drawable/button_selector.xml" value="0.1125" />
+        <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/drawable/check.xml" value="0.1595" />
         <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/drawable/ic_balaji_fullscreen.xml" value="0.168" />
         <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/drawable/ic_balaji_pip.xml" value="0.152" />
         <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/drawable/ic_balaji_play.xml" value="0.168" />
@@ -21,18 +22,23 @@
         <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/drawable/seek_focus_background.xml" value="0.138" />
         <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/drawable/selection_bg.xml" value="0.168" />
         <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/drawable/thumb.xml" value="0.168" />
+        <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/drawable/tracks_selector_bg.xml" value="0.168" />
         <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/drawable/vertical_progress_bar.xml" value="0.152" />
         <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/drawable/video_frame.xml" value="0.144" />
         <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/layout/balaji_exo_playback_control_view.xml" value="0.19153484395040615" />
         <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/layout/balaji_no_controller_exo_playback_control_view.xml" value="0.1923899102180419" />
         <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/layout/balaji_no_controller_video_player_layout.xml" value="0.1923899102180419" />
         <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/layout/balaji_video_player_layout.xml" value="0.19153484395040615" />
+        <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/layout/exo_list_divider.xml" value="0.20521590423257802" />
         <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/layout/exo_playback_control_view.xml" value="0.128" />
         <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/layout/exo_playback_control_view_tv.xml" value="0.1" />
         <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/layout/exo_track_selection_dialog.xml" value="0.17058572039333048" />
+        <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/layout/menu_dialog.xml" value="0.20521590423257802" />
         <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/layout/player_layout.xml" value="0.1" />
         <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/layout/short_video_playback_control_view.xml" value="0.1" />
         <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/layout/short_video_player_layout.xml" value="0.152" />
+        <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/layout/simple_list_item_single_choice_b.xml" value="0.20521590423257802" />
+        <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/layout/track_selection_dialog.xml" value="0.20521590423257802" />
         <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/layout/tv_player_layout.xml" value="0.12" />
         <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/menu/popup_menu.xml" value="0.1923899102180419" />
         <entry key="..\:/Users/mtv/StudioProjects/MultiTvVideoPlayerSdk/app/src/main/res/drawable/vertical_progress_bar.xml" value="0.161" />

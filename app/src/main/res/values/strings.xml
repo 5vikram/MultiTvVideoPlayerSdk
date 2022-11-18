@@ -38,5 +38,5 @@
     <string name="exo_download_queued">Download in queue</string>
     <string name="exo_download_stopped">Download stopped</string>
     <string name="exo_download_restarting">Download restarting</string>
-
+    <string name="exo_track_selection_none">None</string>
 </resources>
