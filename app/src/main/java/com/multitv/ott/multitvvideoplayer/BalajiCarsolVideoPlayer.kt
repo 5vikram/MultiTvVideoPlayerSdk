@@ -140,6 +140,8 @@ class BalajiCarsolVideoPlayer(
 
     private var mWindow: Window? = null
 
+    private var isPlayerControllEnabled = true
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     private val mPictureInPictureParamsBuilder = PictureInPictureParams.Builder()
@@ -222,6 +224,28 @@ class BalajiCarsolVideoPlayer(
 
 
         super.onFinishInflate()
+    }
+
+    private fun VideoPlayerControllerEnable(enabled: Boolean) {
+        if (enabled) {
+            volumeUnMuteButton?.isClickable = true
+            volumeUnMuteButton?.isFocusable = true
+            volumeMuteAndUnMuteButton?.isClickable = true
+            volumeMuteAndUnMuteButton?.isFocusable = true
+            moreInfoLinearLayout?.isClickable = true
+            moreInfoLinearLayout?.isFocusable = true
+            videoPlayButton?.isClickable = true
+            videoPlayButton?.isFocusable = true
+        } else {
+            volumeUnMuteButton?.isClickable = false
+            volumeUnMuteButton?.isFocusable = false
+            volumeMuteAndUnMuteButton?.isClickable = false
+            volumeMuteAndUnMuteButton?.isFocusable = false
+            moreInfoLinearLayout?.isClickable = false
+            moreInfoLinearLayout?.isFocusable = false
+            videoPlayButton?.isClickable = false
+            videoPlayButton?.isFocusable = false
+        }
     }
 
 
