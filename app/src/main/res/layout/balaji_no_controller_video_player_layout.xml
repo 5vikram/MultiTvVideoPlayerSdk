@@ -27,7 +27,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:alpha=".4"
+            android:alpha=".01"
             android:background="#CC212121" />
 
 
@@ -60,15 +60,15 @@
 
                 <ImageView
                     android:id="@id/exo_play"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:layout_gravity="center_vertical"
                     android:src="@drawable/ic_balaji_pause" />
 
                 <ImageView
                     android:id="@id/exo_pause"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:visibility="gone"
                     android:layout_gravity="center_vertical"
                     android:src="@drawable/ic_balaji_play" />
@@ -87,8 +87,8 @@
 
                     <ImageView
                         android:id="@id/info"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
                         android:layout_gravity="center_vertical"
                         android:gravity="center_vertical"
                         android:src="@drawable/ic_info" />
@@ -129,8 +129,8 @@
 
                     <ImageView
                         android:id="@+id/volumeUnMuteButton"
-                        android:layout_width="25dp"
-                        android:layout_height="23dp"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
                         android:layout_gravity="center"
                         android:layout_marginRight="10dp"
                         android:visibility="gone"
@@ -140,8 +140,8 @@
 
                     <ImageView
                         android:id="@+id/volumeMuteAndUnMuteButton"
-                        android:layout_width="25dp"
-                        android:layout_height="23dp"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
                         android:layout_gravity="center"
                         android:layout_marginRight="10dp"
                         android:background="@android:color/transparent"

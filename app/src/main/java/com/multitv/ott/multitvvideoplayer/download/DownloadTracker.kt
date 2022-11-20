@@ -329,7 +329,6 @@ class DownloadTracker(
             }
 
             if (formatDownloadable.isEmpty()) {
-
                 return
             }
 

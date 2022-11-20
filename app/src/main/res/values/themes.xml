@@ -17,7 +17,7 @@
 
     <style parent="ThemeOverlay.AppCompat.Dialog.Alert" name="TrackSelectionDialogThemeOverlay">
 
-        <item name="windowNoTitle">false</item>
+        <item name="windowNoTitle">true</item>
 
     </style>
 

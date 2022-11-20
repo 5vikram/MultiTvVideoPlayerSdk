@@ -24,6 +24,7 @@ import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
@@ -213,9 +214,10 @@ public final class TrackSelectionDialog extends DialogFragment {
     // We need to own the view to let tab layout work correctly on all API levels. We can't use
     // AlertDialog because it owns the view itself, so we use AppCompatDialog instead, themed using
     // the AlertDialog theme overlay with force-enabled title.
-    AppCompatDialog dialog =
-        new AppCompatDialog(getActivity(), R.style.TrackSelectionDialogThemeOverlay);
-    dialog.setTitle("");
+    Dialog dialog =
+        new Dialog(getActivity(), R.style.TrackSelectionDialogThemeOverlay);
+    dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+    dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
     return dialog;
   }
 
