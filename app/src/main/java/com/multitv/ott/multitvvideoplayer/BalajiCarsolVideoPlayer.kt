@@ -694,10 +694,10 @@ class BalajiCarsolVideoPlayer(
                 mMediaPlayer!!.playWhenReady = true
             }
 
-            val mediaSession = MediaSessionCompat(context, "com.multitv.ott.lionsgateplay")
-            val mediaSessionConnector = MediaSessionConnector(mediaSession)
-            mediaSessionConnector.setPlayer(mMediaPlayer)
-            mediaSession.isActive = true
+//            val mediaSession = MediaSessionCompat(context, "com.multitv.ott.lionsgateplay")
+//            val mediaSessionConnector = MediaSessionConnector(mediaSession)
+//            mediaSessionConnector.setPlayer(mMediaPlayer)
+//            mediaSession.isActive = true
             mMediaPlayer?.audioComponent?.volume = 0f
             /*if (isWatchDurationEnable)
                 seekTo(Math.max(mMediaPlayer!!.currentPosition + watchDuration * 1000, 0))*/
