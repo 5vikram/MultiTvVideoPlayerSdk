@@ -226,7 +226,7 @@ class BalajiCarsolVideoPlayer(
         super.onFinishInflate()
     }
 
-    private fun VideoPlayerControllerEnable(enabled: Boolean) {
+     fun VideoPlayerControllerEnable(enabled: Boolean) {
         if (enabled) {
             volumeUnMuteButton?.isClickable = true
             volumeUnMuteButton?.isFocusable = true
