@@ -41,6 +41,8 @@
         android:padding="5dp"
         android:src="@mipmap/player_back_btn" />
 
+
+
     <TextView
         android:id="@+id/resumedVideoTv"
         android:layout_width="wrap_content"
@@ -237,13 +239,13 @@
                 android:id="@+id/exo_volume_progress"
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="160dp"
-                android:layout_height="5dp"
+                android:layout_height="10dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginEnd="16dp"
                 android:layout_marginRight="40dp"
+                android:layout_weight="1"
                 android:progressDrawable="@drawable/progress"
-                android:thumb="@drawable/thumb"
-                android:layout_weight="1" />
+                android:thumb="@drawable/thumb" />
 
         </LinearLayout>
 
