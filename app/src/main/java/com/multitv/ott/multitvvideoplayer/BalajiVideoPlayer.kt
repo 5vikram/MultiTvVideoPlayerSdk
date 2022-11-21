@@ -161,7 +161,7 @@ class BalajiVideoPlayer(
 
     private var isWebSeries = false;
     private var userSubscriptionDtatus = false
-    private var contentAccessType = false
+    private var contentAccessType = ""
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -429,7 +429,7 @@ class BalajiVideoPlayer(
     fun setWebSeriesEnable(
         isWebSeries: Boolean,
         UserLoginStatus: Boolean,
-        contentAccessType: Boolean
+        contentAccessType: String
     ) {
         this.isWebSeries = isWebSeries
         this.userSubscriptionDtatus = UserLoginStatus
