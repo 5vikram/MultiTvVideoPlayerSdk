@@ -1021,33 +1021,25 @@ class BalajiVideoPlayer(
                                     findViewById<View>(R.id.circular_progress_ring) as FabButton
 
 
-                                circularProgressRing?.bringToFront()
+                                circularProgressLayout?.visibility = View.GONE
 
-                                circularProgressRing?.setOnClickListener {
-                                    circularProgressLayout?.visibility = View.GONE
-                                    /* isWatchDurationEnable = false
-                                     watchDuration = 0
-                                     initializeMainPlayer(mContentUrl, true)*/
+                                if (isWebSeries) {
+                                    if (userSubscriptionDtatus)
+                                        videoPlayerSdkCallBackListener?.onPlayNextVideo()
+                                    else if (contentAccessType.equals("paid") && !userSubscriptionDtatus)
+                                        videoPlayerSdkCallBackListener?.subscriptionCallBack()
+                                    else if (contentAccessType.equals("free"))
+                                        videoPlayerSdkCallBackListener?.showThumbnailCallback()
+                                    else
+                                        videoPlayerSdkCallBackListener?.showThumbnailCallback()
 
-                                    if (isWebSeries) {
-                                        if (userSubscriptionDtatus)
-                                            videoPlayerSdkCallBackListener?.onPlayNextVideo()
-                                        else if (contentAccessType.equals("paid") && !userSubscriptionDtatus)
-                                            videoPlayerSdkCallBackListener?.subscriptionCallBack()
-                                        else if (contentAccessType.equals("free"))
-                                            videoPlayerSdkCallBackListener?.showThumbnailCallback()
-                                        else
-                                            videoPlayerSdkCallBackListener?.showThumbnailCallback()
-
-                                    } else {
-                                        if (contentAccessType.equals("free"))
-                                            videoPlayerSdkCallBackListener?.showThumbnailCallback()
-                                        else
-                                            videoPlayerSdkCallBackListener?.subscriptionCallBack()
-                                    }
-
-
+                                } else {
+                                    if (contentAccessType.equals("free"))
+                                        videoPlayerSdkCallBackListener?.showThumbnailCallback()
+                                    else
+                                        videoPlayerSdkCallBackListener?.subscriptionCallBack()
                                 }
+
                             }
                         }.create()
                     }
