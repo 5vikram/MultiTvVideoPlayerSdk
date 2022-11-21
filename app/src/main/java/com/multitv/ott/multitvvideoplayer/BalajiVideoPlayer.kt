@@ -291,7 +291,7 @@ class BalajiVideoPlayer(
         }
 
 
-        findViewById<View>(R.id.frameLayout).setOnClickListener {
+        videoControllerLayout?.setOnClickListener {
             if (isControllerShown)
                 hideController()
             else
