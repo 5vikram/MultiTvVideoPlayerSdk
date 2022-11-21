@@ -977,7 +977,7 @@ class BalajiVideoPlayer(
                         circularProgressRing?.showProgress(true)
                         circularProgressRing?.setProgress(0f)
                         circularProgressLayout!!.visibility = VISIBLE
-                        circularProgressLayout!!.bringToFront()
+                       // circularProgressLayout!!.bringToFront()
                         val totalDuration = 2000
                         val tickDuration = 500
                         countDownTimer = object : CountDownTimerWithPause(
@@ -998,6 +998,10 @@ class BalajiVideoPlayer(
                             override fun onFinish() {
                                 circularProgressRing =
                                     findViewById<View>(R.id.circular_progress_ring) as FabButton
+
+
+                                circularProgressRing?.bringToFront()
+
                                 circularProgressRing?.setOnClickListener {
                                     circularProgressLayout?.visibility = View.GONE
                                     isWatchDurationEnable = false
