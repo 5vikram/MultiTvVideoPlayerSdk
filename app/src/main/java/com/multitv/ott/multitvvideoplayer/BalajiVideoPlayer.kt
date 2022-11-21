@@ -136,7 +136,7 @@ class BalajiVideoPlayer(
     private var previewFrameLayout: FrameLayout? = null
     private var videoTitle: TextView? = null
 
-    private var videoControllerLayout: FrameLayout? = null
+    private var videoControllerLayout: RelativeLayout? = null
 
 
     private val formatBuilder: StringBuilder
