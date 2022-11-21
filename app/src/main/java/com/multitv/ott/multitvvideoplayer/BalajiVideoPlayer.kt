@@ -990,6 +990,9 @@ class BalajiVideoPlayer(
                                 circularProgressRing.setProgress(progress)
                             }
 
+
+                            // comment
+
                             override fun onFinish() {
                                 circularProgressLayout?.setOnClickListener {
                                     circularProgressLayout?.visibility = View.GONE
