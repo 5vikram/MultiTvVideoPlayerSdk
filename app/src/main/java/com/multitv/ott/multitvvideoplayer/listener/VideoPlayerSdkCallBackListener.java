@@ -14,6 +14,10 @@ public interface VideoPlayerSdkCallBackListener {
 
     void prepareVideoPlayer();
 
+    void subscriptionCallBack();
+
+    void showThumbnailCallback();
+
 
     //void showSpeedControllMenu();
 }

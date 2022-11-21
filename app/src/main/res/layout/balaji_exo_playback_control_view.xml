@@ -15,7 +15,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/frameLayout"
+    android:id="@+id/videoControllerLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="bottom"
@@ -60,6 +60,26 @@
         android:textSize="12sp"
         android:visibility="gone"
         android:text="Resumed Video"
+        android:textColor="@color/white_opycity_hundred_present"/>
+
+
+    <TextView
+        android:id="@+id/videoTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/selection_bg"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
+        android:textSize="12sp"
+        android:visibility="gone"
+        tools:text="video title"
         android:textColor="@color/white_opycity_hundred_present"/>
 
 
@@ -322,8 +342,8 @@
 
             <ImageView
                 android:id="@+id/enter_full_screen"
-                android:layout_width="30dp"
-                android:layout_height="28dp"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
                 android:layout_gravity="center_vertical"
                 android:background="@android:color/transparent"
                 android:src="@drawable/ic_balaji_fullscreen" />

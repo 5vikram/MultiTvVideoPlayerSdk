@@ -134,6 +134,11 @@ class BalajiVideoPlayer(
     private var playerProgress: PreviewTimeBar? = null
     private var currentDurationPlayTv: TextView? = null
     private var previewFrameLayout: FrameLayout? = null
+    private var videoTitle: TextView? = null
+
+    private var videoControllerLayout: FrameLayout? = null
+
+
     private val formatBuilder: StringBuilder
     private val formatter: Formatter
     private var isDrmContent = false
@@ -153,6 +158,10 @@ class BalajiVideoPlayer(
     private var mGestureType = GestureType.NoGesture
 
     private var mWindow: Window? = null
+
+    private var isWebSeries = false;
+    private var userSubscriptionDtatus = false
+    private var contentAccessType = false
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -198,7 +207,11 @@ class BalajiVideoPlayer(
         setting = view.findViewById(R.id.settings_btn)
         volumeLayout = view.findViewById(R.id.volumeLayout)
         volumeLinearLayout = view.findViewById(R.id.volumeLinearLayout)
+
+        videoControllerLayout = view.findViewById(R.id.videoControllerLayout)
         previewFrameLayout = view.findViewById(R.id.previewFrameLayout)
+
+
         setting?.setOnClickListener(this)
         centerButtonLayout = view.findViewById(R.id.centerButtonLayout)
         videoPerviousButton = view.findViewById(R.id.exo_prev)
@@ -239,7 +252,7 @@ class BalajiVideoPlayer(
                     ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
                 (getContext() as Activity).window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
                 hideSystemBars()
-                //  videoRotationButton?.setImageResource(R.drawable.minimize)
+                videoRotationButton?.setImageResource(R.drawable.minimize)
                 videoLockUnlockStatus()
             }
         })
@@ -413,6 +426,16 @@ class BalajiVideoPlayer(
         super.onFinishInflate()
     }
 
+    fun setWebSeriesEnable(
+        isWebSeries: Boolean,
+        UserLoginStatus: Boolean,
+        contentAccessType: Boolean
+    ) {
+        this.isWebSeries = isWebSeries
+        this.userSubscriptionDtatus = UserLoginStatus
+        this.contentAccessType = contentAccessType
+    }
+
 
     fun showVolumeProgressBarButton() {
         volumeLayout?.visibility = View.VISIBLE
@@ -472,6 +495,7 @@ class BalajiVideoPlayer(
     }
 
     private val hideAction = Runnable {
+        isControllerShown = false
         VideoPlayerTracer.error("Controller Listener:::", "Stop Timer")
         hideController()
     }
@@ -492,12 +516,14 @@ class BalajiVideoPlayer(
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         val orientation = resources.configuration.orientation
-        /*if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            videoLockUnlockStatus()
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            if (contentTitle != null && !TextUtils.isEmpty(contentTitle))
+                videoTitle?.visibility = View.VISIBLE
+            else
+                videoTitle?.visibility = View.GONE
         } else if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-            videoLockButton!!.visibility = GONE
-            videoUnLockButton!!.visibility = GONE
-        }*/
+            videoTitle?.visibility = View.GONE
+        }
         super.onConfigurationChanged(newConfig)
     }
 
@@ -515,10 +541,7 @@ class BalajiVideoPlayer(
     }
 
     fun hideController() {
-        centerButtonLayout!!.visibility = GONE
-        videoProgressLayout!!.visibility = GONE
-        durationlayout!!.visibility = GONE
-        videoMenuLayout!!.visibility = GONE
+        videoControllerLayout?.visibility = View.GONE
         resumedVideoTv?.visibility = View.GONE
         removeCallbacks(hideAction)
         hideAtMs = C.TIME_UNSET
@@ -526,10 +549,8 @@ class BalajiVideoPlayer(
     }
 
     fun showController() {
-        centerButtonLayout!!.visibility = VISIBLE
-        videoProgressLayout!!.visibility = VISIBLE
-        durationlayout!!.visibility = VISIBLE
-        videoMenuLayout!!.visibility = VISIBLE
+        videoControllerLayout?.visibility = View.VISIBLE
+
         resumedVideoTv?.visibility = View.GONE
         updatePlayPauseButton()
         hideAfterTimeout()
@@ -761,7 +782,7 @@ class BalajiVideoPlayer(
     // relase and destroy video player
     fun releaseVideoPlayer() {
         if (mMediaPlayer != null && simpleExoPlayerView != null) {
-            sendAnalaticsData(context, userId, contentId, contentTitle, token)
+            //sendAnalaticsData(context, userId, contentId, contentTitle, token)
             simpleExoPlayerView!!.player!!.release()
             mMediaPlayer!!.release()
             if (adsLoader != null) adsLoader!!.setPlayer(null)
@@ -977,9 +998,9 @@ class BalajiVideoPlayer(
                         circularProgressRing?.showProgress(true)
                         circularProgressRing?.setProgress(0f)
                         circularProgressLayout!!.visibility = VISIBLE
-                       // circularProgressLayout!!.bringToFront()
-                        val totalDuration = 2000
-                        val tickDuration = 500
+                        // circularProgressLayout!!.bringToFront()
+                        val totalDuration = 1200
+                        val tickDuration = 300
                         countDownTimer = object : CountDownTimerWithPause(
                             totalDuration.toLong(),
                             (tickDuration / 10).toLong(),
@@ -1004,9 +1025,28 @@ class BalajiVideoPlayer(
 
                                 circularProgressRing?.setOnClickListener {
                                     circularProgressLayout?.visibility = View.GONE
-                                    isWatchDurationEnable = false
-                                    watchDuration = 0
-                                    initializeMainPlayer(mContentUrl, true)
+                                    /* isWatchDurationEnable = false
+                                     watchDuration = 0
+                                     initializeMainPlayer(mContentUrl, true)*/
+
+                                    if (isWebSeries) {
+                                        if (userSubscriptionDtatus)
+                                            videoPlayerSdkCallBackListener?.onPlayNextVideo()
+                                        else if (contentAccessType.equals("paid") && !userSubscriptionDtatus)
+                                            videoPlayerSdkCallBackListener?.subscriptionCallBack()
+                                        else if (contentAccessType.equals("free"))
+                                            videoPlayerSdkCallBackListener?.showThumbnailCallback()
+                                        else
+                                            videoPlayerSdkCallBackListener?.showThumbnailCallback()
+
+                                    } else {
+                                        if (contentAccessType.equals("free"))
+                                            videoPlayerSdkCallBackListener?.showThumbnailCallback()
+                                        else
+                                            videoPlayerSdkCallBackListener?.subscriptionCallBack()
+                                    }
+
+
                                 }
                             }
                         }.create()
@@ -1141,11 +1181,17 @@ class BalajiVideoPlayer(
         }
     }
 
+
     private fun hideSystemBars() {
         val decorView = (getContext() as Activity).window.decorView
         val uiOptions = (SYSTEM_UI_FLAG_HIDE_NAVIGATION
                 or SYSTEM_UI_FLAG_FULLSCREEN)
         decorView.systemUiVisibility = uiOptions
+
+        if (contentTitle != null && !TextUtils.isEmpty(contentTitle))
+            videoTitle?.visibility = View.VISIBLE
+        else
+            videoTitle?.visibility = View.GONE
     }
 
     private fun showSystemBar() {
@@ -1153,6 +1199,8 @@ class BalajiVideoPlayer(
         val uiOptions = SYSTEM_UI_FLAG_VISIBLE
         decorView.systemUiVisibility = uiOptions
         //hideSystemUiFullScreen()
+
+        videoTitle?.visibility = View.GONE
     }
 
     @SuppressLint("InlinedApi")
