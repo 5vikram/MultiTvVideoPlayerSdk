@@ -991,8 +991,10 @@ class BalajiVideoPlayer(
                             }
 
                             override fun onFinish() {
-                                circularProgressLayout?.visibility = View.GONE
-                                videoPlayerSdkCallBackListener?.onPlayNextVideo()
+                                circularProgressLayout?.setOnClickListener {
+                                    circularProgressLayout?.visibility = View.GONE
+                                    videoPlayerSdkCallBackListener?.prepareVideoPlayer()
+                                }
                             }
                         }.create()
                     }
