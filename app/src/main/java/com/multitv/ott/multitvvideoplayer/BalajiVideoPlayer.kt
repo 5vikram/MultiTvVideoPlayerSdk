@@ -113,6 +113,8 @@ class BalajiVideoPlayer(
     private var videoProgressLayout: LinearLayout? = null
     private var bufferingProgressBarLayout: LinearLayout? = null
     private var circularProgressLayout: LinearLayout? = null
+
+    private var circularProgressRing: FabButton? = null
     private var centerButtonLayout: LinearLayout? = null
     private var pictureInPicture: ImageView? = null
     private var previewImageView: ImageView? = null
@@ -970,10 +972,10 @@ class BalajiVideoPlayer(
                             mMediaPlayer!!.currentPosition
                         releaseVideoPlayer()
                         bufferingProgressBarLayout!!.visibility = GONE
-                        val circularProgressRing =
+                        circularProgressRing =
                             findViewById<View>(R.id.circular_progress_ring) as FabButton
-                        circularProgressRing.showProgress(true)
-                        circularProgressRing.setProgress(0f)
+                        circularProgressRing?.showProgress(true)
+                        circularProgressRing?.setProgress(0f)
                         circularProgressLayout!!.visibility = VISIBLE
                         circularProgressLayout!!.bringToFront()
                         val totalDuration = 2000
@@ -987,14 +989,14 @@ class BalajiVideoPlayer(
                                 var progress = millisUntilFinished.toFloat() / totalDuration
                                 progress = progress * 100
                                 progress = 100 - progress
-                                circularProgressRing.setProgress(progress)
+                                circularProgressRing?.setProgress(progress)
                             }
 
 
                             // comment
 
                             override fun onFinish() {
-                                circularProgressLayout?.setOnClickListener {
+                                circularProgressRing?.setOnClickListener {
                                     circularProgressLayout?.visibility = View.GONE
                                     isWatchDurationEnable = false
                                     watchDuration = 0
