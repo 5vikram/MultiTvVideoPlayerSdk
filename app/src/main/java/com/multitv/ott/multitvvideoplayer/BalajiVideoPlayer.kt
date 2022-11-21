@@ -996,6 +996,8 @@ class BalajiVideoPlayer(
                             // comment
 
                             override fun onFinish() {
+                                circularProgressRing =
+                                    findViewById<View>(R.id.circular_progress_ring) as FabButton
                                 circularProgressRing?.setOnClickListener {
                                     circularProgressLayout?.visibility = View.GONE
                                     isWatchDurationEnable = false
