@@ -970,8 +970,7 @@ class BalajiVideoPlayer(
                             mMediaPlayer!!.currentPosition
                         releaseVideoPlayer()
                         bufferingProgressBarLayout!!.visibility = GONE
-                        val circularProgressRing =
-                            circularProgressLayout!!.findViewById<View>(R.id.circular_progress_ring) as FabButton
+                        val circularProgressRing = findViewById<View>(R.id.circular_progress_ring) as FabButton
                         circularProgressRing.showProgress(true)
                         circularProgressRing.setProgress(0f)
                         circularProgressLayout!!.visibility = VISIBLE
