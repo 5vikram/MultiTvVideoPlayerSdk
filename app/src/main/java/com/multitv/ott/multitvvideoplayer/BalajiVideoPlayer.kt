@@ -1029,13 +1029,13 @@ class BalajiVideoPlayer(
                                     else if (contentAccessType.equals("paid") && !userSubscriptionDtatus)
                                         videoPlayerSdkCallBackListener?.subscriptionCallBack()
                                     else if (contentAccessType.equals("free"))
-                                        videoPlayerSdkCallBackListener?.showThumbnailCallback()
+                                        videoPlayerSdkCallBackListener?.onPlayNextVideo()
                                     else
                                         videoPlayerSdkCallBackListener?.showThumbnailCallback()
 
                                 } else {
                                     if (contentAccessType.equals("free"))
-                                        videoPlayerSdkCallBackListener?.showThumbnailCallback()
+                                        videoPlayerSdkCallBackListener?.onPlayNextVideo()
                                     else
                                         videoPlayerSdkCallBackListener?.subscriptionCallBack()
                                 }
