@@ -540,8 +540,12 @@ class BalajiVideoPlayer(
         }
     }
 
+
     fun hideController() {
-        videoControllerLayout?.visibility = View.GONE
+        centerButtonLayout!!.visibility = GONE
+        videoProgressLayout!!.visibility = GONE
+        durationlayout!!.visibility = GONE
+        videoMenuLayout!!.visibility = GONE
         resumedVideoTv?.visibility = View.GONE
         removeCallbacks(hideAction)
         hideAtMs = C.TIME_UNSET
@@ -549,8 +553,10 @@ class BalajiVideoPlayer(
     }
 
     fun showController() {
-        videoControllerLayout?.visibility = View.VISIBLE
-
+        centerButtonLayout!!.visibility = VISIBLE
+        videoProgressLayout!!.visibility = VISIBLE
+        durationlayout!!.visibility = VISIBLE
+        videoMenuLayout!!.visibility = VISIBLE
         resumedVideoTv?.visibility = View.GONE
         updatePlayPauseButton()
         hideAfterTimeout()
