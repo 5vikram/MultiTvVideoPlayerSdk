@@ -114,6 +114,9 @@ class BalajiVideoPlayer(
     private var bufferingProgressBarLayout: LinearLayout? = null
     private var circularProgressLayout: LinearLayout? = null
 
+
+    private var overlayImageTransparent: View? = null
+
     private var circularProgressRing: FabButton? = null
     private var centerButtonLayout: LinearLayout? = null
     private var pictureInPicture: ImageView? = null
@@ -193,6 +196,9 @@ class BalajiVideoPlayer(
         val view =
             LayoutInflater.from(getContext()).inflate(R.layout.balaji_video_player_layout, this)
         volumeMuteAndUnMuteButton = view.findViewById(R.id.volumeMuteAndUnMuteButton)
+
+        overlayImageTransparent = view.findViewById(R.id.overlayImageTransparent)
+
         resumedVideoTv = view.findViewById(R.id.resumedVideoTv)
         progressBarParent = view.findViewById(R.id.progress_bar_parent)
         volumeProgressBar = view.findViewById(R.id.exo_volume_progress)
@@ -542,6 +548,8 @@ class BalajiVideoPlayer(
 
 
     fun hideController() {
+        closeVideoPlayerButton!!.visibility = GONE
+        overlayImageTransparent!!.visibility = GONE
         centerButtonLayout!!.visibility = GONE
         videoProgressLayout!!.visibility = GONE
         durationlayout!!.visibility = GONE
@@ -553,6 +561,8 @@ class BalajiVideoPlayer(
     }
 
     fun showController() {
+        closeVideoPlayerButton!!.visibility = VISIBLE
+        overlayImageTransparent!!.visibility = VISIBLE
         centerButtonLayout!!.visibility = VISIBLE
         videoProgressLayout!!.visibility = VISIBLE
         durationlayout!!.visibility = VISIBLE
