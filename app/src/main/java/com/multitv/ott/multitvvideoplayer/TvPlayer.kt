@@ -219,7 +219,7 @@ class TvPlayer :FrameLayout, PreviewLoader, PreviewBar.OnScrubListener, View.OnC
                     ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
                 (getContext() as Activity).window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
                 hideSystemBars()
-                videoRotationButton?.setImageResource(R.drawable.minimize)
+                videoRotationButton?.setImageResource(R.drawable.ic_minimize)
                 videoLockUnlockStatus()
             }
         })
