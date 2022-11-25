@@ -18,6 +18,8 @@ public interface VideoPlayerSdkCallBackListener {
 
     void showThumbnailCallback();
 
+    void showEpisodeListData();
+
 
     //void showSpeedControllMenu();
 }

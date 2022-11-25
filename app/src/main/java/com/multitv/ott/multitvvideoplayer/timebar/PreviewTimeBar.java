@@ -167,7 +167,7 @@ public class PreviewTimeBar extends DefaultTimeBar implements PreviewBar {
 
     @Override
     public void setAutoHidePreview(boolean autoHide) {
-        delegate.setAutoHidePreview(autoHide);
+        delegate.setAutoHidePreview(false);
     }
 
     @Override

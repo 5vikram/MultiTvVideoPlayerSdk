@@ -139,6 +139,9 @@ class BalajiVideoPlayer(
     private var previewFrameLayout: FrameLayout? = null
     private var videoTitle: TextView? = null
 
+    private lateinit var epsodeButton: ImageView
+    private lateinit var epsodeNextButton: ImageView
+
     private var videoControllerLayout: RelativeLayout? = null
 
 
@@ -195,8 +198,29 @@ class BalajiVideoPlayer(
     override fun onFinishInflate() {
         val view =
             LayoutInflater.from(getContext()).inflate(R.layout.balaji_video_player_layout, this)
-        volumeMuteAndUnMuteButton = view.findViewById(R.id.volumeMuteAndUnMuteButton)
 
+        epsodeButton = view.findViewById(R.id.epsodeButton)
+        epsodeNextButton = view.findViewById(R.id.epsodeNextButton)
+
+        epsodeButton.setOnClickListener {
+            videoPlayerSdkCallBackListener?.showEpisodeListData()
+        }
+
+        epsodeNextButton.setOnClickListener {
+            if (userSubscriptionDtatus)
+                videoPlayerSdkCallBackListener?.onPlayNextVideo()
+            else if (contentAccessType.equals("paid") && !userSubscriptionDtatus)
+                videoPlayerSdkCallBackListener?.subscriptionCallBack()
+            else if (contentAccessType.equals("free"))
+                videoPlayerSdkCallBackListener?.onPlayNextVideo()
+            else
+                videoPlayerSdkCallBackListener?.showThumbnailCallback()
+        }
+
+
+
+
+        volumeMuteAndUnMuteButton = view.findViewById(R.id.volumeMuteAndUnMuteButton)
         overlayImageTransparent = view.findViewById(R.id.overlayImageTransparent)
 
         resumedVideoTv = view.findViewById(R.id.resumedVideoTv)
@@ -441,6 +465,17 @@ class BalajiVideoPlayer(
         this.isWebSeries = isWebSeries
         this.userSubscriptionDtatus = UserLoginStatus
         this.contentAccessType = contentAccessType
+    }
+
+
+    fun showEpisodeButton() {
+        if (isWebSeries) {
+            epsodeButton.visibility = View.VISIBLE
+            epsodeNextButton.visibility = View.VISIBLE
+        } else {
+            epsodeButton.visibility = View.GONE
+            epsodeNextButton.visibility = View.GONE
+        }
     }
 
 
@@ -1637,11 +1672,13 @@ class BalajiVideoPlayer(
             }
 
             override fun onStartTrackingTouch(p0: SeekBar?) {
-
+                showController()
             }
 
             override fun onStopTrackingTouch(p0: SeekBar?) {
                 // volumeProgressBar.progress = p0?.progress!!
+
+                hideController()
             }
 
         })
