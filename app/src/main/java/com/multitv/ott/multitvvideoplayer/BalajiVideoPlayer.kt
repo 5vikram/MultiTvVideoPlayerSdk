@@ -241,6 +241,7 @@ class BalajiVideoPlayer(
         pictureInPicture = view.findViewById(R.id.picture_in_picture)
         videoNextButton?.setVisibility(GONE)
         videoPerviousButton?.setVisibility(GONE)
+        playerProgress?.setAutoHidePreview(false)
         playerProgress!!.setAdMarkerColor(Color.argb(0x00, 0xFF, 0xFF, 0xFF))
         playerProgress!!.setPlayedAdMarkerColor(Color.argb(0x98, 0xFF, 0xFF, 0xFF))
         videoRotationButton?.setOnClickListener(OnClickListener {
@@ -258,7 +259,7 @@ class BalajiVideoPlayer(
                     ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
                 (getContext() as Activity).window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
                 hideSystemBars()
-                videoRotationButton?.setImageResource(R.drawable.minimize)
+                videoRotationButton?.setImageResource(R.drawable.ic_minimize)
                 videoLockUnlockStatus()
             }
         })

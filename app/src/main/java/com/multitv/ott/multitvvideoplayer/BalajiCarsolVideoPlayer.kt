@@ -226,7 +226,15 @@ class BalajiCarsolVideoPlayer(
         super.onFinishInflate()
     }
 
-     fun VideoPlayerControllerEnable(enabled: Boolean) {
+
+    fun restoreCarsoulVideoPlayer() {
+        mMediaPlayer?.audioComponent?.volume = 0f
+        volumeMuteAndUnMuteButton?.visibility = View.VISIBLE
+        volumeUnMuteButton?.visibility = View.GONE
+    }
+
+
+    fun VideoPlayerControllerEnable(enabled: Boolean) {
         if (enabled) {
             volumeUnMuteButton?.isClickable = true
             volumeUnMuteButton?.isFocusable = true
