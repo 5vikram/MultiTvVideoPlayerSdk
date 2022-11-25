@@ -73,7 +73,6 @@ public class ShortVideoPlayer extends FrameLayout implements View.OnClickListene
     private StyledPlayerView simpleExoPlayerView;
     private DefaultTrackSelector trackSelector;
     private VideoPlayerSdkCallBackListener videoPlayerSdkCallBackListener;
-    private boolean isShowingTrackSelectionDialog;
     private PallyconWVMSDK WVMAgent = null;
     private String analaticsUrl, token, userId, contentTitle, contentId;
 
