@@ -468,8 +468,8 @@ class BalajiVideoPlayer(
     }
 
 
-    fun showEpisodeButton() {
-        if (isWebSeries) {
+    fun showEpisodeButton(show: Boolean) {
+        if (isWebSeries && show) {
             epsodeButton.visibility = View.VISIBLE
             epsodeNextButton.visibility = View.VISIBLE
         } else {
