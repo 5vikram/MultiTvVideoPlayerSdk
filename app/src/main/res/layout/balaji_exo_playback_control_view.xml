@@ -163,6 +163,7 @@
                 android:id="@id/exo_play"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
+                android:padding="5dp"
                 android:layout_gravity="center_vertical"
                 android:src="@drawable/ic_balaji_pause" />
 
@@ -170,6 +171,7 @@
                 android:id="@id/exo_pause"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
+                android:padding="5dp"
                 android:layout_gravity="center_vertical"
                 android:src="@drawable/ic_balaji_play" />
 
@@ -244,8 +246,9 @@
 
             <ImageView
                 android:id="@+id/epsodeButton"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:padding="5dp"
                 android:layout_gravity="center"
                 android:layout_marginRight="5dp"
                 android:visibility="gone"
@@ -255,8 +258,9 @@
 
             <ImageView
                 android:id="@+id/epsodeNextButton"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:padding="5dp"
                 android:layout_gravity="center"
                 android:visibility="gone"
                 android:layout_marginRight="5dp"
@@ -266,8 +270,9 @@
 
             <ImageView
                 android:id="@+id/volumeUpDownBUtton"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:padding="5dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="15dp"
                 android:background="@android:color/transparent"
@@ -318,20 +323,22 @@
 
                 <ImageView
                     android:id="@+id/volumeUnMuteButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="40dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:padding="5dp"
                     android:layout_gravity="center"
-                    android:layout_marginRight="15dp"
+                    android:layout_marginRight="5dp"
                     android:background="@android:color/transparent"
                     android:src="@drawable/ic_balaji_volume_on" />
 
 
                 <ImageView
                     android:id="@+id/volumeMuteAndUnMuteButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="40dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:padding="5dp"
                     android:layout_gravity="center"
-                    android:layout_marginRight="15dp"
+                    android:layout_marginRight="5dp"
                     android:background="@android:color/transparent"
                     android:src="@drawable/ic_balaji_volume_off"
                     android:visibility="gone" />
@@ -341,26 +348,29 @@
 
             <ImageView
                 android:id="@+id/settings_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:padding="5dp"
                 android:layout_gravity="center"
-                android:layout_marginRight="15dp"
+                android:layout_marginRight="5dp"
                 android:background="@android:color/transparent"
                 android:src="@drawable/ic_balaji_setting" />
 
             <ImageView
                 android:id="@+id/picture_in_picture"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:padding="5dp"
                 android:layout_gravity="center_vertical"
-                android:layout_marginRight="15dp"
+                android:layout_marginRight="5dp"
                 android:background="@android:color/transparent"
                 android:src="@drawable/ic_balaji_pip" />
 
             <ImageView
                 android:id="@+id/enter_full_screen"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:padding="5dp"
                 android:layout_gravity="center_vertical"
                 android:background="@android:color/transparent"
                 android:src="@drawable/ic_balaji_fullscreen" />
