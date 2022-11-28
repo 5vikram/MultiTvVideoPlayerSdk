@@ -1,35 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="unlock_bg">#4d1e2327</color>
-    <color name="seekbar_progess_color">#1E90FF</color>
-    <color name="elv_bg">#808080</color>
     <color name="elv_unselected_text">#808080</color>
-    <color name="elv_selected_text">@android:color/white</color>
     <color name="black">@android:color/black</color>
-    <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#1E1E1EC9</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_700">#FF018786</color>
-    <color name="app_background_color_two">#FFFFFF</color>
 
     <color name="white">#FFFFFFFF</color>
     <color name="faste_red">#4d1e2327</color>
     <color name="white_opycity_hundred_present">#DEDEDE</color>
     <color name="white_opycity_swenty_present">#CCDEDEDE</color>
-    <color name="white_opycity_sixty_present">#99DEDEDE</color>
-    <color name="white_opycity_fifty_present">#393939</color>
     <color name="text_color">#DEDEDE</color>
     <color name="dailog_header">#F2F2F2</color>
 
-    <color name="bottom_navigation_unselected_color">#DEDEDE</color>
-    <color name="bottom_navigation_selected_color">@color/white</color>
-    <color name="download_background_color">#414141</color>
-    <color name="text_color1">#F2F2F2</color>
-    <color name="text_color_2">#676767</color>
-    <color name="line_color">#707070</color>
-    <color name="button_background_color">#5B5B5B</color>
-    <color name="button_background_color_2">#2D2D2D</color>
-    <color name="done_button_color">#FB0000</color>
-    <color name="dailog_bg">#393939</color>
 </resources>

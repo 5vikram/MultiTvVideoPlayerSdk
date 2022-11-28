@@ -322,7 +322,7 @@ class BalajiVideoPlayer(
         }
 
 
-        videoControllerLayout?.setOnClickListener {
+        simpleExoPlayerView?.setOnClickListener {
             if (isControllerShown)
                 hideController()
             else

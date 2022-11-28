@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">MultiTvVideoPlayer</string>
 
     <string name="exo_track_selection_title_video">Video</string>
     <!-- The title of a track selection view for audio tracks. [CHAR LIMIT=20] -->
@@ -11,20 +10,11 @@
     <!-- An option in a track selection view (e.g. a view that allows the user to choose between multiple media tracks) to indicate that the automatic or default track should be selected. Examples: If there are multiple audio tracks in different languages, the automatic selection would normally be the track in the user's native language. If there are multiple video tracks at different qualities, the automatic selection would normally be the highest quality track that can be played without buffering over the current network. [CHAR LIMIT=20] -->
     <string name="exo_track_selection_auto">Auto</string>
     <!-- Name of a media track about which nothing is known. Shown in a list view that allows the user to choose between multiple media tracks. [CHAR LIMIT=20] -->
-    <string name="exo_track_unknown">Unknown</string>
 
     <string name="track_selection_title">Select Tracks</string>
 
-    <string name="bvp_right">RIGHT</string>
-    <string name="bvp_left">LEFT</string>
-    <string name="volume">Volume: %1$d</string>
-    <string name="brightness">Brightness: %1$d</string>
-    <string name="seconds">%1$d seconds</string>
-
-
 
     <string name="exo_download_completed">Download completed</string>
-    <string name="exo_download_description">Download</string>
     <string name="exo_download_downloading">Downloading</string>
     <string name="exo_download_failed">Download failed</string>
     <string name="exo_download_notification_channel_name">Downloads</string>
@@ -32,7 +22,6 @@
 
 
     <string name="dialog_option">%1$dp - %2$s</string>
-    <string name="item_download_percentage">Size: %1$s | Progress: %2$d %%</string>
 
     <string name="download_start_error">Failed to start download</string>
     <string name="exo_download_queued">Download in queue</string>
@@ -40,10 +29,5 @@
     <string name="exo_download_restarting">Download restarting</string>
     <string name="exo_track_selection_none">None</string>
 
-
-    <string name="select_download_quality">Select Download Quality</string>
-    <string name="hd_720p">HD (720p)</string>
-    <string name="save_as_default">Save as default</string>
-    <string name="done">Done</string>
 
 </resources>
