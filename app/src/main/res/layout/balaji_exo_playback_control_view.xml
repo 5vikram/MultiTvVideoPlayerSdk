@@ -230,28 +230,7 @@
         android:layout_marginBottom="5dp"
         android:orientation="horizontal">
 
-        <ImageView
-            android:id="@+id/epsodeButton"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:padding="5dp"
-            android:layout_gravity="center"
-            android:layout_marginRight="5dp"
-            android:visibility="gone"
-            android:background="@android:color/transparent"
-            android:src="@drawable/webseries" />
 
-
-        <ImageView
-            android:id="@+id/epsodeNextButton"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:padding="5dp"
-            android:layout_gravity="center"
-            android:visibility="gone"
-            android:layout_marginRight="5dp"
-            android:background="@android:color/transparent"
-            android:src="@drawable/next_epsode" />
 
 
         <LinearLayout
@@ -267,7 +246,28 @@
             android:orientation="horizontal">
 
 
+            <ImageView
+                android:id="@+id/epsodeButton"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:padding="5dp"
+                android:layout_gravity="center"
+                android:layout_marginRight="5dp"
+                android:visibility="gone"
+                android:background="@android:color/transparent"
+                android:src="@drawable/webseries" />
 
+
+            <ImageView
+                android:id="@+id/epsodeNextButton"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:padding="5dp"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                android:layout_marginRight="5dp"
+                android:background="@android:color/transparent"
+                android:src="@drawable/next_epsode" />
 
 
             <ImageView
