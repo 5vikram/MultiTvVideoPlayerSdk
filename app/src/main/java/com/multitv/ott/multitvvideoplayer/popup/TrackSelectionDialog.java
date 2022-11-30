@@ -220,6 +220,8 @@ public final class TrackSelectionDialog extends DialogFragment {
     dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
     dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
     dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+    Window window = dialog.getWindow();
+    window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
 
     return dialog;
   }
