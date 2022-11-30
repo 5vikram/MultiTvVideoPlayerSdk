@@ -25,6 +25,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
@@ -217,7 +218,9 @@ public final class TrackSelectionDialog extends DialogFragment {
     Dialog dialog =
         new Dialog(getActivity(), R.style.TrackSelectionDialogThemeOverlay);
     dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+    dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
     dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+
     return dialog;
   }
 

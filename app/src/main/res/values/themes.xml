@@ -2,9 +2,10 @@
     <!-- Base application theme. -->
 
 
-    <style parent="ThemeOverlay.AppCompat.Dialog.Alert" name="TrackSelectionDialogThemeOverlay">
+    <style parent="android:Theme.Holo.Dialog" name="TrackSelectionDialogThemeOverlay">
 
         <item name="windowNoTitle">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
 
     </style>
 
