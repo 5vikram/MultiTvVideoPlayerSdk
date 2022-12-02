@@ -183,7 +183,7 @@ class BalajiCarsolVideoPlayer(
         simpleExoPlayerView = view.findViewById(R.id.videoPlayer)
 
         enter_full_screen?.setOnClickListener {
-         videoPlayerSdkCallBackListener?.fullScreenCallBack()
+            videoPlayerSdkCallBackListener?.fullScreenCallBack()
         }
 
 
@@ -1189,5 +1189,33 @@ class BalajiCarsolVideoPlayer(
 
         return super.onKeyUp(keyCode, event)
     }
+
+
+    fun onKeyDownEvent() {
+
+        var volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
+
+        if (volume < 1) {
+            volumeMuteAndUnMuteButton?.visibility = View.VISIBLE
+            volumeUnMuteButton?.visibility = View.GONE
+        } else {
+            volumeMuteAndUnMuteButton?.visibility = View.GONE
+            volumeUnMuteButton?.visibility = View.VISIBLE
+        }
+    }
+
+    fun onKeyUpEvent() {
+
+        var volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
+
+        if (volume < 1) {
+            volumeMuteAndUnMuteButton?.visibility = View.VISIBLE
+            volumeUnMuteButton?.visibility = View.GONE
+        } else {
+            volumeMuteAndUnMuteButton?.visibility = View.GONE
+            volumeUnMuteButton?.visibility = View.VISIBLE
+        }
+    }
+
 
 }
