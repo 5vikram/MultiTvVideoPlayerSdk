@@ -418,7 +418,7 @@
             <com.multitv.ott.multitvvideoplayer.timebar.PreviewTimeBar
                 android:id="@+id/exo_progress"
                 android:layout_width="0dp"
-                android:layout_height="5dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="10dp"
                 android:layout_weight="1"
