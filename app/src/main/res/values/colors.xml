@@ -10,5 +10,5 @@
     <color name="white_opycity_swenty_present">#CCDEDEDE</color>
     <color name="text_color">#DEDEDE</color>
     <color name="dailog_header">#F2F2F2</color>
-
+    <color name="ad_marker">#FFFFC107</color>
 </resources>

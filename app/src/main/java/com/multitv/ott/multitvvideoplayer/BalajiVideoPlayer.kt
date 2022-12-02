@@ -266,6 +266,7 @@ class BalajiVideoPlayer(
         videoNextButton?.setVisibility(GONE)
         videoPerviousButton?.setVisibility(GONE)
         playerProgress?.setAutoHidePreview(false)
+        playerProgress?.setPreviewAnimationEnabled(false)
         playerProgress!!.setAdMarkerColor(Color.argb(0x00, 0xFF, 0xFF, 0xFF))
         playerProgress!!.setPlayedAdMarkerColor(Color.argb(0x98, 0xFF, 0xFF, 0xFF))
         videoRotationButton?.setOnClickListener(OnClickListener {
@@ -992,7 +993,7 @@ class BalajiVideoPlayer(
                 mMediaPlayer!!.playWhenReady = true
             }
 
-            val mediaSession = MediaSessionCompat(context, "com.multitv.ott.lionsgateplay")
+            val mediaSession = MediaSessionCompat(context, ".lionsgacom.multitv.ottteplay")
             val mediaSessionConnector = MediaSessionConnector(mediaSession)
             mediaSessionConnector.setPlayer(mMediaPlayer)
             mediaSession.isActive = true

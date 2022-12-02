@@ -425,6 +425,7 @@
                 android:gravity="center_vertical"
                 android:progressDrawable="@drawable/progress"
                 android:thumb="@drawable/thumb"
+                app:ad_marker_color="@color/ad_marker"
                 app:previewFrameLayout="@id/previewFrameLayout" />
 
 
@@ -473,7 +474,7 @@
                     android:paddingLeft="4dp"
                     android:paddingRight="4dp"
                     android:textColor="#FFBEBEBE"
-                    android:textSize="16sp"
+                    android:textSize="12sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
