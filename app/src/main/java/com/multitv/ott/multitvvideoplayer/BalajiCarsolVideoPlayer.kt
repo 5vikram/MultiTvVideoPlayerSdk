@@ -774,7 +774,8 @@ class BalajiCarsolVideoPlayer(
                     text += "ended"
                     if (contentType == ContentType.VOD) {
                         releaseVideoPlayer()
-                        prepareVideoPlayer()
+                       // prepareVideoPlayer()
+                        videoPlayerSdkCallBackListener?.onPlayNextVideo()
                     }
                 }
                 ExoPlayer.STATE_IDLE -> {
