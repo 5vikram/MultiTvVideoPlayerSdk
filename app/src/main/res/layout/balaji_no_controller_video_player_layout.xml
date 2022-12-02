@@ -43,6 +43,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginRight="15dp"
             android:layout_marginBottom="7dp"
+            android:background="@color/black"
             android:orientation="horizontal">
 
 
@@ -147,6 +148,17 @@
                         android:background="@android:color/transparent"
                         android:src="@drawable/ic_balaji_volume_off"
                         android:visibility="visible" />
+
+
+                    <ImageView
+                        android:id="@+id/enter_full_screen"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:padding="5dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_gravity="center_vertical"
+                        android:background="@android:color/transparent"
+                        android:src="@drawable/ic_balaji_fullscreen" />
 
                 </LinearLayout>
 

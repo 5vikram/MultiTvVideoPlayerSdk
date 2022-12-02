@@ -118,6 +118,7 @@ class BalajiCarsolVideoPlayer(
 
 
     private var videoPlayButton: ImageView? = null
+    private var enter_full_screen: ImageView? = null
     private var videoPauseButton: ImageView? = null
 
     private val formatBuilder: StringBuilder
@@ -178,10 +179,12 @@ class BalajiCarsolVideoPlayer(
 
         videoPlayButton = view.findViewById(R.id.exo_play)
         videoPauseButton = view.findViewById(R.id.exo_pause)
-
+        enter_full_screen = view.findViewById(R.id.enter_full_screen)
         simpleExoPlayerView = view.findViewById(R.id.videoPlayer)
 
-
+        enter_full_screen?.setOnClickListener {
+         videoPlayerSdkCallBackListener?.fullScreenCallBack()
+        }
 
 
         volumeUnMuteButton?.setOnClickListener {
@@ -1161,5 +1164,30 @@ class BalajiCarsolVideoPlayer(
 
     }
 
+
+    override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
+        if (event.keyCode === KeyEvent.KEYCODE_VOLUME_DOWN) {
+            Log.e(
+                "Volume::::",
+                "KEYCODE_VOLUME_DOWN:::" + audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC)
+            )
+            volumeMuteAndUnMuteButton?.visibility = View.VISIBLE
+            volumeUnMuteButton?.visibility = View.GONE
+        }
+        return super.onKeyDown(keyCode, event)
+    }
+
+    override fun onKeyUp(keyCode: Int, event: KeyEvent): Boolean {
+        if (event.keyCode === KeyEvent.KEYCODE_VOLUME_UP) {
+            volumeMuteAndUnMuteButton?.visibility = View.GONE
+            volumeUnMuteButton?.visibility = View.VISIBLE
+            Log.e(
+                "Volume::::",
+                "KEYCODE_VOLUME_UP::::" + audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC)
+            )
+        }
+
+        return super.onKeyUp(keyCode, event)
+    }
 
 }

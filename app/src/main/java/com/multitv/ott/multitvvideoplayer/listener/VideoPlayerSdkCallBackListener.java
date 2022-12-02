@@ -20,6 +20,7 @@ public interface VideoPlayerSdkCallBackListener {
 
     void showEpisodeListData();
 
+    void fullScreenCallBack();
 
     //void showSpeedControllMenu();
 }

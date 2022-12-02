@@ -1641,6 +1641,8 @@ class BalajiVideoPlayer(
                 "Volume::::",
                 "KEYCODE_VOLUME_DOWN:::" + audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC)
             )
+            volumeMuteAndUnMuteButton?.visibility=View.VISIBLE
+            volumeUnMuteButton?.visibility=View.GONE
         }
         return super.onKeyDown(keyCode, event)
     }
@@ -1648,6 +1650,8 @@ class BalajiVideoPlayer(
     override fun onKeyUp(keyCode: Int, event: KeyEvent): Boolean {
         if (event.keyCode === KeyEvent.KEYCODE_VOLUME_UP) {
             volumeProgressBar.setProgress(audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC)!!)
+            volumeMuteAndUnMuteButton?.visibility=View.GONE
+            volumeUnMuteButton?.visibility=View.VISIBLE
             Log.e(
                 "Volume::::",
                 "KEYCODE_VOLUME_UP::::" + audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC)
