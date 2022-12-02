@@ -791,6 +791,16 @@ class BalajiCarsolVideoPlayer(
                 }
                 ExoPlayer.STATE_READY -> {
                     text += "ready"
+
+                    var volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
+
+                    if (volume < 1) {
+                        volumeMuteAndUnMuteButton?.visibility = View.VISIBLE
+                        volumeUnMuteButton?.visibility = View.GONE
+                    } else {
+                        volumeMuteAndUnMuteButton?.visibility = View.GONE
+                        volumeUnMuteButton?.visibility = View.VISIBLE
+                    }
                 }
                 else -> text += "unknown"
             }
