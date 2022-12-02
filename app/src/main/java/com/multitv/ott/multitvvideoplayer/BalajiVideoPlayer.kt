@@ -1629,7 +1629,7 @@ class BalajiVideoPlayer(
             volumeProgressBar.setProgress(audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC)!!)
 
         var volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
-
+        mMediaPlayer?.audioComponent?.volume = mMediaPlayer?.audioComponent?.volume!!
         if (volume < 1) {
             volumeMuteAndUnMuteButton?.visibility = View.VISIBLE
             volumeUnMuteButton?.visibility = View.GONE
@@ -1644,7 +1644,7 @@ class BalajiVideoPlayer(
             volumeProgressBar.setProgress(audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC)!!)
 
         var volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
-
+        mMediaPlayer?.audioComponent?.volume = mMediaPlayer?.audioComponent?.volume!!
         if (volume < 1) {
             volumeMuteAndUnMuteButton?.visibility = View.VISIBLE
             volumeUnMuteButton?.visibility = View.GONE

@@ -1204,7 +1204,7 @@ class BalajiCarsolVideoPlayer(
     fun onKeyDownEvent() {
 
         var volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
-
+        mMediaPlayer?.audioComponent?.volume = mMediaPlayer?.audioComponent?.volume!!
         if (volume < 1) {
             volumeMuteAndUnMuteButton?.visibility = View.VISIBLE
             volumeUnMuteButton?.visibility = View.GONE
@@ -1217,7 +1217,7 @@ class BalajiCarsolVideoPlayer(
     fun onKeyUpEvent() {
 
         var volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
-
+        mMediaPlayer?.audioComponent?.volume = mMediaPlayer?.audioComponent?.volume!!
         if (volume < 1) {
             volumeMuteAndUnMuteButton?.visibility = View.VISIBLE
             volumeUnMuteButton?.visibility = View.GONE
