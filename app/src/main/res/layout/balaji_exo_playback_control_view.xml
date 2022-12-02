@@ -225,7 +225,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_marginLeft="7dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         android:layout_marginRight="15dp"
         android:layout_marginBottom="5dp"
         android:orientation="horizontal">
@@ -418,14 +418,13 @@
             <com.multitv.ott.multitvvideoplayer.timebar.PreviewTimeBar
                 android:id="@+id/exo_progress"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="5dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="10dp"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
                 android:progressDrawable="@drawable/progress"
                 android:thumb="@drawable/thumb"
-                app:previewAnimationEnabled="true"
                 app:previewFrameLayout="@id/previewFrameLayout" />
 
 
@@ -447,7 +446,7 @@
                     android:paddingLeft="4dp"
                     android:paddingRight="4dp"
                     android:textColor="#FFBEBEBE"
-                    android:textSize="16sp"
+                    android:textSize="12sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -461,7 +460,7 @@
                     android:includeFontPadding="false"
                     android:text="/"
                     android:textColor="#FFBEBEBE"
-                    android:textSize="16sp"
+                    android:textSize="12sp"
                     android:textStyle="bold" />
 
 

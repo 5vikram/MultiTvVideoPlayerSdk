@@ -151,10 +151,9 @@
 
                     <ImageView
                         android:id="@+id/enter_full_screen"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
                         android:padding="5dp"
-                        android:layout_marginRight="10dp"
                         android:layout_gravity="center_vertical"
                         android:background="@android:color/transparent"
                         android:src="@drawable/ic_balaji_fullscreen" />
