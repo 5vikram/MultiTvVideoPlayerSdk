@@ -1736,7 +1736,7 @@ class BalajiVideoPlayer(
         }
 
         if (parentalAge != null && !TextUtils.isEmpty(parentalAge)) {
-            contentRatedTv.setText(parentalAge)
+            contentRatedTv.setText("Rated U/A " + parentalAge + "+")
             contentRatedTv.visibility = View.VISIBLE
         } else {
             contentRatedTv.visibility = View.GONE
@@ -1751,7 +1751,7 @@ class BalajiVideoPlayer(
 
 
         if (language != null && !TextUtils.isEmpty(language)) {
-            languageTv.setText(language)
+            languageTv.setText("Language : "+language)
             languageTv.visibility = View.VISIBLE
         } else {
             languageTv.visibility = View.GONE
