@@ -1010,6 +1010,9 @@ class BalajiVideoPlayer(
 
             if (isWatchDurationEnable)
                 seekTo(Math.max(mMediaPlayer!!.currentPosition + watchDuration * 1000, 0))
+
+            if (!isControllerShown)
+                setTimerOnVideoPlayer(true)
         }
     }
 

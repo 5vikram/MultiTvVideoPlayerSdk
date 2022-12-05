@@ -979,6 +979,10 @@ class FullScreenVideoPlayer(
 
             if (isWatchDurationEnable)
                 seekTo(Math.max(mMediaPlayer!!.currentPosition + watchDuration * 1000, 0))
+
+
+            if (!isControllerShown)
+                setTimerOnVideoPlayer(true)
         }
     }
 
@@ -1715,7 +1719,7 @@ class FullScreenVideoPlayer(
 
 
         if (language != null && !TextUtils.isEmpty(language)) {
-            languageTv.setText("Language : "+language)
+            languageTv.setText("Language : " + language)
             languageTv.visibility = View.VISIBLE
         } else {
             languageTv.visibility = View.GONE
@@ -1730,6 +1734,7 @@ class FullScreenVideoPlayer(
                 override fun onFinish() {
                     contentRateLayout.visibility = View.GONE
                     countDownTimer1?.cancel()
+
                 }
             }.create()
     }
