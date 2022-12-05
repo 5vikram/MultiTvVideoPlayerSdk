@@ -547,7 +547,7 @@
             android:layout_alignParentTop="true"
             android:text="Title"
             android:layout_centerHorizontal="true"
-            android:textColor="@color/white_opycity_hundred_present"
+            android:textColor="@color/white_opycity_swenty_present"
             android:textSize="15sp"
             android:visibility="gone" />
 
@@ -560,7 +560,7 @@
             android:layout_marginTop="5dp"
             android:text="Title"
             android:layout_centerHorizontal="true"
-            android:textColor="@color/white_opycity_hundred_present"
+            android:textColor="@color/white_opycity_swenty_present"
             android:textSize="15sp"
             android:visibility="gone" />
 

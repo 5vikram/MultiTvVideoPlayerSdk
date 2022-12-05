@@ -216,7 +216,7 @@ class FullScreenVideoPlayer(
         }
 
 
-        contentRateLayout = view.findViewById(R.id.volumeMuteAndUnMuteButton)
+        contentRateLayout = view.findViewById(R.id.contentRateLayout)
         contentRatedTv = view.findViewById(R.id.contentRatedTv)
         languageTv = view.findViewById(R.id.languageTv)
         genureTv = view.findViewById(R.id.genureTv)
