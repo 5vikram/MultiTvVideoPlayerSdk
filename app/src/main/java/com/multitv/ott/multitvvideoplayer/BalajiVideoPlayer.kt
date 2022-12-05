@@ -1730,13 +1730,12 @@ class BalajiVideoPlayer(
     private var countDownTimer1: CountDownTimerWithPause? = null
 
     private fun setTimerOnVideoPlayer(isShow: Boolean) {
-        val tickDuration = 1000
+        val tickDuration = 500
         if (isShow)
             contentRateLayout.visibility = View.VISIBLE
-        else {
+        else
             contentRatedTv.visibility = View.GONE
-            countDownTimer1?.cancel()
-        }
+
 
         if (parentalAge != null && !TextUtils.isEmpty(parentalAge)) {
             contentRatedTv.setText("Rated U/A " + parentalAge + "+")

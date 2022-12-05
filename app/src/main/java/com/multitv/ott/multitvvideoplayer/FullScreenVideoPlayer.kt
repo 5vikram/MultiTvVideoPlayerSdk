@@ -1695,7 +1695,7 @@ class FullScreenVideoPlayer(
     private var countDownTimer1: CountDownTimerWithPause? = null
 
     private fun setTimerOnVideoPlayer(isShow: Boolean) {
-        val tickDuration = 1000
+        val tickDuration = 500
         if (isShow)
             contentRateLayout.visibility = View.VISIBLE
         else {
