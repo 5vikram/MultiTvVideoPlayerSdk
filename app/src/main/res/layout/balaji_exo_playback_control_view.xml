@@ -44,6 +44,22 @@
 
 
     <TextView
+        android:id="@+id/videoTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="Title"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/white_opycity_hundred_present"
+        android:textSize="15sp"
+        android:visibility="gone" />
+
+
+
+    <TextView
         android:id="@+id/resumedVideoTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -63,24 +79,6 @@
         android:visibility="gone" />
 
 
-    <TextView
-        android:id="@+id/videoTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:background="@drawable/selection_bg"
-        android:paddingLeft="30dp"
-        android:paddingTop="5dp"
-        android:paddingRight="30dp"
-        android:paddingBottom="5dp"
-        android:textColor="@color/white_opycity_hundred_present"
-        android:textSize="12sp"
-        android:visibility="gone"
-        tools:text="video title" />
 
 
     <LinearLayout
@@ -516,5 +514,57 @@
         -->
 
     </FrameLayout>
+
+
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/contentRateLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/contentRatedTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="Title"
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/white_opycity_hundred_present"
+            android:textSize="15sp"
+            android:visibility="gone" />
+
+
+        <TextView
+            android:id="@+id/genureTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:text="Title"
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/white_opycity_hundred_present"
+            android:textSize="15sp"
+            android:visibility="gone" />
+
+
+        <TextView
+            android:id="@+id/languageTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="5dp"
+            android:text="Title"
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/white_opycity_hundred_present"
+            android:textSize="15sp"
+            android:visibility="gone" />
+
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
 </RelativeLayout>

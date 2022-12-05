@@ -15,6 +15,7 @@ import android.graphics.Color
 import android.media.AudioManager
 import android.net.Uri
 import android.os.Build
+import android.os.CountDownTimer
 import android.os.Handler
 import android.os.SystemClock
 import android.support.v4.media.session.MediaSessionCompat
@@ -29,6 +30,7 @@ import android.view.View.OnClickListener
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.Target
@@ -161,6 +163,7 @@ class BalajiVideoPlayer(
     private var isAttachedToWindowStatus = false
     private var hideAtMs: Long = 0
 
+
     private var mGestureType = GestureType.NoGesture
 
     private var mWindow: Window? = null
@@ -218,6 +221,11 @@ class BalajiVideoPlayer(
         }
 
 
+
+        contentRateLayout = view.findViewById(R.id.volumeMuteAndUnMuteButton)
+        contentRatedTv = view.findViewById(R.id.contentRatedTv)
+        languageTv = view.findViewById(R.id.languageTv)
+        genureTv = view.findViewById(R.id.genureTv)
 
 
         volumeMuteAndUnMuteButton = view.findViewById(R.id.volumeMuteAndUnMuteButton)
@@ -595,6 +603,7 @@ class BalajiVideoPlayer(
         removeCallbacks(hideAction)
         hideAtMs = C.TIME_UNSET
         isControllerShown = false
+        setTimerOnVideoPlayer(true)
     }
 
     fun showController() {
@@ -608,6 +617,7 @@ class BalajiVideoPlayer(
         updatePlayPauseButton()
         hideAfterTimeout()
         isControllerShown = true
+        setTimerOnVideoPlayer(false)
     }
 
     private fun updatePlayPauseButton() {
@@ -1629,8 +1639,11 @@ class BalajiVideoPlayer(
             volumeProgressBar.setProgress(audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC)!!)
 
         var volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
-        mMediaPlayer?.audioComponent?.volume = mMediaPlayer?.audioComponent?.volume!!
-        if (volume < 1) {
+
+
+        mMediaPlayer?.audioComponent?.volume = volume.toFloat()
+
+        if (volume < 0) {
             volumeMuteAndUnMuteButton?.visibility = View.VISIBLE
             volumeUnMuteButton?.visibility = View.GONE
         } else {
@@ -1644,8 +1657,10 @@ class BalajiVideoPlayer(
             volumeProgressBar.setProgress(audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC)!!)
 
         var volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
-        mMediaPlayer?.audioComponent?.volume = mMediaPlayer?.audioComponent?.volume!!
-        if (volume < 1) {
+
+        mMediaPlayer?.audioComponent?.volume = volume.toFloat()
+
+        if (volume < 0) {
             volumeMuteAndUnMuteButton?.visibility = View.VISIBLE
             volumeUnMuteButton?.visibility = View.GONE
         } else {
@@ -1709,5 +1724,74 @@ class BalajiVideoPlayer(
         })
     }
 
+    private var countDownTimer1: CountDownTimerWithPause? = null
+
+    private fun setTimerOnVideoPlayer(isShow: Boolean) {
+        val tickDuration = 1000
+        if (isShow)
+            contentRateLayout.visibility = View.VISIBLE
+        else {
+            contentRatedTv.visibility = View.GONE
+            countDownTimer1?.cancel()
+        }
+
+        if (parentalAge != null && !TextUtils.isEmpty(parentalAge)) {
+            contentRatedTv.setText(parentalAge)
+            contentRatedTv.visibility = View.VISIBLE
+        } else {
+            contentRatedTv.visibility = View.GONE
+        }
+
+        if (genure != null && !TextUtils.isEmpty(genure)) {
+            genureTv.setText(genure)
+            genureTv.visibility = View.VISIBLE
+        } else {
+            genureTv.visibility = View.GONE
+        }
+
+
+        if (language != null && !TextUtils.isEmpty(language)) {
+            languageTv.setText(language)
+            languageTv.visibility = View.VISIBLE
+        } else {
+            languageTv.visibility = View.GONE
+        }
+
+        countDownTimer1 =
+            object : CountDownTimerWithPause(5000.toLong(), (tickDuration).toLong(), true) {
+                override fun onTick(millisUntilFinished: Long) {
+
+                }
+
+                override fun onFinish() {
+                    contentRateLayout.visibility = View.GONE
+                    countDownTimer1?.cancel()
+                }
+            }.create()
+    }
+
+    private var parentalAge = ""
+    private var genure = ""
+    private var language = ""
+    private lateinit var contentRateLayout: LinearLayoutCompat
+    private lateinit var genureTv: TextView
+    private lateinit var languageTv: TextView
+    private lateinit var contentRatedTv: TextView
+
+    fun setGenure(genure: String) {
+        this.genure = genure
+    }
+
+    fun setLanguage(language: String) {
+        this.language = language;
+    }
+
+    fun setAgeGroup(age: String) {
+        this.parentalAge = age
+    }
+
+    fun stopCounter() {
+        countDownTimer1?.cancel()
+    }
 
 }
