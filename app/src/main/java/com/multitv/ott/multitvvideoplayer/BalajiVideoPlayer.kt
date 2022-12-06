@@ -226,7 +226,7 @@ class BalajiVideoPlayer(
         contentRatedTv = view.findViewById(R.id.contentRatedTv)
         languageTv = view.findViewById(R.id.languageTv)
         genureTv = view.findViewById(R.id.genureTv)
-
+        videoTitle = view.findViewById(R.id.videoTitle)
 
         volumeMuteAndUnMuteButton = view.findViewById(R.id.volumeMuteAndUnMuteButton)
         overlayImageTransparent = view.findViewById(R.id.overlayImageTransparent)
@@ -1753,7 +1753,7 @@ class BalajiVideoPlayer(
 
 
         if (language != null && !TextUtils.isEmpty(language)) {
-            languageTv.setText("Language : "+language)
+            languageTv.setText("Language : " + language)
             languageTv.visibility = View.VISIBLE
         } else {
             languageTv.visibility = View.GONE
