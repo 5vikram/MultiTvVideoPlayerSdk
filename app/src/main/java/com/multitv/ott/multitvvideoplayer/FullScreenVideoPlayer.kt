@@ -537,9 +537,10 @@ class FullScreenVideoPlayer(
     override fun onConfigurationChanged(newConfig: Configuration) {
         val orientation = resources.configuration.orientation
         if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            if (contentTitle != null && !TextUtils.isEmpty(contentTitle))
+            if (contentTitle != null && !TextUtils.isEmpty(contentTitle)) {
                 videoTitle?.visibility = View.VISIBLE
-            else
+                videoTitle?.setText(contentTitle)
+            } else
                 videoTitle?.visibility = View.GONE
         } else if (orientation == Configuration.ORIENTATION_PORTRAIT) {
             videoTitle?.visibility = View.GONE
@@ -1216,9 +1217,10 @@ class FullScreenVideoPlayer(
                 or SYSTEM_UI_FLAG_FULLSCREEN)
         decorView.systemUiVisibility = uiOptions
 
-        if (contentTitle != null && !TextUtils.isEmpty(contentTitle))
+        if (contentTitle != null && !TextUtils.isEmpty(contentTitle)) {
             videoTitle?.visibility = View.VISIBLE
-        else
+            videoTitle?.setText(contentTitle)
+        } else
             videoTitle?.visibility = View.GONE
     }
 
