@@ -967,16 +967,22 @@ class FullScreenVideoPlayer(
                 }
                 mMediaPlayer!!.setMediaItem(mediaItem)
             }
-            mMediaPlayer!!.audioComponent!!.volume = mMediaPlayer!!.audioComponent!!.volume
+
             mMediaPlayer!!.prepare()
             if (isNeedToPlayInstantly) {
                 mMediaPlayer!!.playWhenReady = true
             }
 
-            val mediaSession = MediaSessionCompat(context, ".lionsgacom.multitv.ottteplay")
+            val mediaSession = MediaSessionCompat(context, "com.lionsgacom.multitv.ottteplay")
             val mediaSessionConnector = MediaSessionConnector(mediaSession)
             mediaSessionConnector.setPlayer(mMediaPlayer)
             mediaSession.isActive = true
+
+
+
+            mMediaPlayer?.audioComponent?.volume = 0f
+            volumeMuteAndUnMuteButton?.visibility = View.VISIBLE
+            volumeUnMuteButton?.visibility = View.GONE
 
             if (isWatchDurationEnable)
                 seekTo(Math.max(mMediaPlayer!!.currentPosition + watchDuration * 1000, 0))
