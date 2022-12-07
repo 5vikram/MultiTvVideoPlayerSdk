@@ -568,9 +568,10 @@ class BalajiVideoPlayer(
     override fun onConfigurationChanged(newConfig: Configuration) {
         val orientation = resources.configuration.orientation
         if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            if (contentTitle != null && !TextUtils.isEmpty(contentTitle))
+            if (contentTitle != null && !TextUtils.isEmpty(contentTitle)) {
                 videoTitle?.visibility = View.VISIBLE
-            else
+                videoTitle?.setText(contentTitle)
+            }  else
                 videoTitle?.visibility = View.GONE
         } else if (orientation == Configuration.ORIENTATION_PORTRAIT) {
             videoTitle?.visibility = View.GONE
@@ -1008,11 +1009,19 @@ class BalajiVideoPlayer(
             mediaSessionConnector.setPlayer(mMediaPlayer)
             mediaSession.isActive = true
 
+            var volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
+            mMediaPlayer?.audioComponent?.volume = volume.toFloat()
+            if (volume < 1) {
+                volumeMuteAndUnMuteButton?.visibility = View.VISIBLE
+                volumeUnMuteButton?.visibility = View.GONE
+            } else {
+                volumeMuteAndUnMuteButton?.visibility = View.GONE
+                volumeUnMuteButton?.visibility = View.VISIBLE
+            }
+
             if (isWatchDurationEnable)
                 seekTo(Math.max(mMediaPlayer!!.currentPosition + watchDuration * 1000, 0))
 
-            if (!isControllerShown)
-                setTimerOnVideoPlayer(true)
         }
     }
 
@@ -1246,9 +1255,10 @@ class BalajiVideoPlayer(
                 or SYSTEM_UI_FLAG_FULLSCREEN)
         decorView.systemUiVisibility = uiOptions
 
-        if (contentTitle != null && !TextUtils.isEmpty(contentTitle))
+        if (contentTitle != null && !TextUtils.isEmpty(contentTitle)) {
             videoTitle?.visibility = View.VISIBLE
-        else
+            videoTitle?.setText(contentTitle)
+        }else
             videoTitle?.visibility = View.GONE
     }
 
@@ -1259,6 +1269,12 @@ class BalajiVideoPlayer(
         //hideSystemUiFullScreen()
 
         videoTitle?.visibility = View.GONE
+
+        if (contentTitle != null && !TextUtils.isEmpty(contentTitle)) {
+            videoTitle?.visibility = View.VISIBLE
+            videoTitle?.setText(contentTitle)
+        }else
+            videoTitle?.visibility = View.GONE
     }
 
     @SuppressLint("InlinedApi")
@@ -1646,7 +1662,7 @@ class BalajiVideoPlayer(
 
         mMediaPlayer?.audioComponent?.volume = volume.toFloat()
 
-        if (volume < 0) {
+        if (volume < 1) {
             volumeMuteAndUnMuteButton?.visibility = View.VISIBLE
             volumeUnMuteButton?.visibility = View.GONE
         } else {
@@ -1663,7 +1679,7 @@ class BalajiVideoPlayer(
 
         mMediaPlayer?.audioComponent?.volume = volume.toFloat()
 
-        if (volume < 0) {
+        if (volume < 1) {
             volumeMuteAndUnMuteButton?.visibility = View.VISIBLE
             volumeUnMuteButton?.visibility = View.GONE
         } else {

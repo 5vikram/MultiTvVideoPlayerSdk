@@ -980,16 +980,23 @@ class FullScreenVideoPlayer(
 
 
 
-            mMediaPlayer?.audioComponent?.volume = 0f
+       /*     mMediaPlayer?.audioComponent?.volume = 0f
             volumeMuteAndUnMuteButton?.visibility = View.VISIBLE
-            volumeUnMuteButton?.visibility = View.GONE
+            volumeUnMuteButton?.visibility = View.GONE*/
+
+            var volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
+            mMediaPlayer?.audioComponent?.volume = volume.toFloat()
+            if (volume < 1) {
+                volumeMuteAndUnMuteButton?.visibility = View.VISIBLE
+                volumeUnMuteButton?.visibility = View.GONE
+            } else {
+                volumeMuteAndUnMuteButton?.visibility = View.GONE
+                volumeUnMuteButton?.visibility = View.VISIBLE
+            }
 
             if (isWatchDurationEnable)
                 seekTo(Math.max(mMediaPlayer!!.currentPosition + watchDuration * 1000, 0))
 
-
-            if (!isControllerShown)
-                setTimerOnVideoPlayer(true)
         }
     }
 
