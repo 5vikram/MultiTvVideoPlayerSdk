@@ -93,8 +93,6 @@ class BalajiCarsolVideoPlayer(
     private var contentPlayedTimeInMillis: Long = 0
 
 
-
-
     private var playPauseButtonEnable = true;
 
 
@@ -748,7 +746,7 @@ class BalajiCarsolVideoPlayer(
             if (mMediaPlayer != null && mMediaPlayer!!.currentPosition != 0L) seekPlayerTo =
                 mMediaPlayer!!.currentPosition
                     .toInt() / 1000
-            videoPlayerSdkCallBackListener!!.onPlayerError(error.message)
+            videoPlayerSdkCallBackListener.onPlayerError(error.message)
         }
 
         override fun onTracksChanged(
@@ -777,7 +775,7 @@ class BalajiCarsolVideoPlayer(
                     text += "ended"
                     if (contentType == ContentType.VOD) {
                         releaseVideoPlayer()
-                       // prepareVideoPlayer()
+                        // prepareVideoPlayer()
                         videoPlayerSdkCallBackListener?.onPlayNextVideo()
                     }
                 }
@@ -805,6 +803,8 @@ class BalajiCarsolVideoPlayer(
                         volumeMuteAndUnMuteButton?.visibility = View.GONE
                         volumeUnMuteButton?.visibility = View.VISIBLE
                     }
+
+                    videoPlayerSdkCallBackListener?.onVideoStartNow()
                 }
                 else -> text += "unknown"
             }

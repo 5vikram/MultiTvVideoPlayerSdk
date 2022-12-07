@@ -835,7 +835,7 @@ class FullScreenVideoPlayer(
             mMediaPlayer = null
         }
         centerButtonLayout!!.visibility = GONE
-        videoPlayerSdkCallBackListener!!.prepareVideoPlayer()
+        videoPlayerSdkCallBackListener?.prepareVideoPlayer()
         //        ToastMessage.showLogs(ToastMessage.LogType.DEBUG, TAG, "Content url is " + videoUrl);
         val customLoadControl: LoadControl = DefaultLoadControl.Builder()
             .setBufferDurationsMs(1000, 50000, 1000, 1)
@@ -1114,6 +1114,7 @@ class FullScreenVideoPlayer(
                     centerButtonLayout!!.visibility = VISIBLE
                     videoNextButton!!.visibility = GONE
                     videoPerviousButton!!.visibility = GONE
+                    videoPlayerSdkCallBackListener?.onVideoStartNow()
                 }
                 else -> text += "unknown"
             }

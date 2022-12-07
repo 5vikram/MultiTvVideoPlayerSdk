@@ -22,6 +22,8 @@ public interface VideoPlayerSdkCallBackListener {
 
     void fullScreenCallBack();
 
+    void onVideoStartNow();
+
 
     //void showSpeedControllMenu();
 }
