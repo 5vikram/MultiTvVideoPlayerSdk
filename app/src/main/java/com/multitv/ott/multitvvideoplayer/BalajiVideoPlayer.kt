@@ -488,6 +488,7 @@ class BalajiVideoPlayer(
     }
 
 
+
     fun showVolumeProgressBarButton() {
         volumeLayout?.visibility = View.VISIBLE
     }
@@ -571,7 +572,7 @@ class BalajiVideoPlayer(
             if (contentTitle != null && !TextUtils.isEmpty(contentTitle)) {
                 videoTitle?.visibility = View.VISIBLE
                 videoTitle?.setText(contentTitle)
-            }  else
+            } else
                 videoTitle?.visibility = View.GONE
         } else if (orientation == Configuration.ORIENTATION_PORTRAIT) {
             videoTitle?.visibility = View.GONE
@@ -1258,7 +1259,7 @@ class BalajiVideoPlayer(
         if (contentTitle != null && !TextUtils.isEmpty(contentTitle)) {
             videoTitle?.visibility = View.VISIBLE
             videoTitle?.setText(contentTitle)
-        }else
+        } else
             videoTitle?.visibility = View.GONE
     }
 
@@ -1273,7 +1274,7 @@ class BalajiVideoPlayer(
         if (contentTitle != null && !TextUtils.isEmpty(contentTitle)) {
             videoTitle?.visibility = View.VISIBLE
             videoTitle?.setText(contentTitle)
-        }else
+        } else
             videoTitle?.visibility = View.GONE
     }
 
@@ -1811,5 +1812,37 @@ class BalajiVideoPlayer(
     fun stopCounter() {
         countDownTimer1?.cancel()
     }
+
+    fun onBackButtonPress() {
+        val orientation = getContext().resources.configuration.orientation
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            (getContext() as Activity).requestedOrientation =
+                ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+            (getContext() as Activity).window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
+            showSystemBar()
+            videoRotationButton?.setImageResource(R.drawable.ic_balaji_fullscreen)
+            videoLockButton?.setVisibility(GONE)
+            videoUnLockButton?.setVisibility(GONE)
+        } else if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+            (getContext() as Activity).requestedOrientation =
+                ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+            (getContext() as Activity).window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
+            hideSystemBars()
+            videoRotationButton?.setImageResource(R.drawable.ic_minimize)
+            videoLockUnlockStatus()
+        }
+    }
+
+
+    fun showEpisodeButtonVisiblityListener(size: Int) {
+        if (isWebSeries && size > 1) {
+            epsodeButton.visibility = View.VISIBLE
+            epsodeNextButton.visibility = View.VISIBLE
+        } else {
+            epsodeButton.visibility = View.GONE
+            epsodeNextButton.visibility = View.GONE
+        }
+    }
+
 
 }
