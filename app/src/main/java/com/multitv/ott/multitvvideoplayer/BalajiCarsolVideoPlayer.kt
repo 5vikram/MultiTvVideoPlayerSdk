@@ -746,7 +746,7 @@ class BalajiCarsolVideoPlayer(
             if (mMediaPlayer != null && mMediaPlayer!!.currentPosition != 0L) seekPlayerTo =
                 mMediaPlayer!!.currentPosition
                     .toInt() / 1000
-            videoPlayerSdkCallBackListener.onPlayerError(error.message)
+            videoPlayerSdkCallBackListener?.onPlayerError(error.message)
         }
 
         override fun onTracksChanged(
