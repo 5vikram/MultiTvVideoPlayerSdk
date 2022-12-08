@@ -310,13 +310,21 @@ class FullScreenVideoPlayer(
             context.finish()
         }
 
-
         videoControllerLayout?.setOnClickListener {
+            /*  if (isControllerShown)
+                  hideController()
+              else
+                  showController()*/
+
+            setTimerOnVideoPlayer(true)
+        }
+
+       /* videoControllerLayout?.setOnClickListener {
             if (isControllerShown)
                 hideController()
             else
                 showController()
-        }
+        }*/
 
         //  findViewById<View>(R.id.frameLayout)?.setOnTouchListener(clickFrameSwipeListener)
         //findViewById<View>(R.id.frameLayout).setOnTouchListener(clickFrameSwipeListener)
@@ -573,7 +581,7 @@ class FullScreenVideoPlayer(
     }
 
 
-    fun hideController() {
+   /* fun hideController() {
         closeVideoPlayerButton!!.visibility = GONE
         overlayImageTransparent!!.visibility = GONE
         centerButtonLayout!!.visibility = GONE
@@ -599,7 +607,7 @@ class FullScreenVideoPlayer(
         hideAfterTimeout()
         isControllerShown = true
         setTimerOnVideoPlayer(false)
-    }
+    }*/
 
     private fun updatePlayPauseButton() {
         var requestPlayPauseFocus = false
@@ -1801,5 +1809,37 @@ class FullScreenVideoPlayer(
         }
     }
 
+
+    fun hideController() {
+        /*closeVideoPlayerButton!!.visibility = GONE
+        overlayImageTransparent!!.visibility = GONE
+        centerButtonLayout!!.visibility = GONE
+        videoProgressLayout!!.visibility = GONE
+        durationlayout!!.visibility = GONE
+        videoMenuLayout!!.visibility = GONE
+        resumedVideoTv?.visibility = View.GONE
+        removeCallbacks(hideAction)
+        hideAtMs = C.TIME_UNSET*/
+        isControllerShown = false
+        setTimerOnVideoPlayer(true)
+        updatePlayPauseButton()
+        simpleExoPlayerView?.hideController()
+    }
+
+    fun showController() {
+        /*  closeVideoPlayerButton!!.visibility = VISIBLE
+          overlayImageTransparent!!.visibility = VISIBLE
+          centerButtonLayout!!.visibility = VISIBLE
+          videoProgressLayout!!.visibility = VISIBLE
+          durationlayout!!.visibility = VISIBLE
+          videoMenuLayout!!.visibility = VISIBLE
+          resumedVideoTv?.visibility = View.GONE
+          updatePlayPauseButton()
+          hideAfterTimeout()*/
+        isControllerShown = true
+        setTimerOnVideoPlayer(false)
+        updatePlayPauseButton()
+        simpleExoPlayerView?.showController()
+    }
 
 }

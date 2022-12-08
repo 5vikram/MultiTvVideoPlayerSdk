@@ -602,8 +602,8 @@ class BalajiVideoPlayer(
     }
 
 
-    /*  fun hideController() {
-          closeVideoPlayerButton!!.visibility = GONE
+      fun hideController() {
+          /*closeVideoPlayerButton!!.visibility = GONE
           overlayImageTransparent!!.visibility = GONE
           centerButtonLayout!!.visibility = GONE
           videoProgressLayout!!.visibility = GONE
@@ -611,13 +611,15 @@ class BalajiVideoPlayer(
           videoMenuLayout!!.visibility = GONE
           resumedVideoTv?.visibility = View.GONE
           removeCallbacks(hideAction)
-          hideAtMs = C.TIME_UNSET
+          hideAtMs = C.TIME_UNSET*/
           isControllerShown = false
           setTimerOnVideoPlayer(true)
+          updatePlayPauseButton()
+          simpleExoPlayerView?.hideController()
       }
 
       fun showController() {
-          closeVideoPlayerButton!!.visibility = VISIBLE
+        /*  closeVideoPlayerButton!!.visibility = VISIBLE
           overlayImageTransparent!!.visibility = VISIBLE
           centerButtonLayout!!.visibility = VISIBLE
           videoProgressLayout!!.visibility = VISIBLE
@@ -625,12 +627,12 @@ class BalajiVideoPlayer(
           videoMenuLayout!!.visibility = VISIBLE
           resumedVideoTv?.visibility = View.GONE
           updatePlayPauseButton()
-          hideAfterTimeout()
+          hideAfterTimeout()*/
           isControllerShown = true
-          countDownTimer1?.cancel()
           setTimerOnVideoPlayer(false)
+          updatePlayPauseButton()
+          simpleExoPlayerView?.showController()
       }
-  */
     private fun updatePlayPauseButton() {
         var requestPlayPauseFocus = false
         val playing = mMediaPlayer != null && mMediaPlayer!!.playWhenReady
