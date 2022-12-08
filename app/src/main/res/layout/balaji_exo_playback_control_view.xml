@@ -275,15 +275,16 @@
                 android:padding="5dp"
                 android:src="@drawable/ic_balaji_volume_on" />
 
-            <com.github.rubensousa.previewseekbar.PreviewSeekBar
+            <SeekBar
                 android:id="@+id/exo_volume_progress"
-                style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="160dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="40dp"
-                android:layout_weight="1"
-                app:previewThumbTint="@color/white" />
+                android:maxHeight="8dp"
+                android:progressDrawable="@drawable/seekbar_progress_style"
+                android:thumb="@drawable/seekbar_thumb"
+                android:thumbOffset="0dp" />
 
         </LinearLayout>
 
@@ -391,7 +392,7 @@
             android:layout_width="120dp"
             android:layout_height="70dp"
             android:background="@drawable/video_frame"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <ImageView
                 android:id="@+id/previewImageView"
