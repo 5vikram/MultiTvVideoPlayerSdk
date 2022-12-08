@@ -32,6 +32,10 @@ import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.Target
+import com.github.rubensousa.previewseekbar.PreviewBar
+import com.github.rubensousa.previewseekbar.PreviewLoader
+import com.github.rubensousa.previewseekbar.PreviewSeekBar
+import com.github.rubensousa.previewseekbar.exoplayer.PreviewTimeBar
 import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.drm.DrmSessionManager
 import com.google.android.exoplayer2.ext.ima.ImaAdsLoader
@@ -59,9 +63,6 @@ import com.multitv.ott.multitvvideoplayer.fabbutton.FabButton
 import com.multitv.ott.multitvvideoplayer.listener.VideoPlayerSdkCallBackListener
 import com.multitv.ott.multitvvideoplayer.playerglide.GlideThumbnailTransformation
 import com.multitv.ott.multitvvideoplayer.popup.TrackSelectionDialog
-import com.multitv.ott.multitvvideoplayer.timebar.PreviewTimeBar
-import com.multitv.ott.multitvvideoplayer.timebar.previewseekbar.PreviewBar
-import com.multitv.ott.multitvvideoplayer.timebar.previewseekbar.PreviewLoader
 import com.multitv.ott.multitvvideoplayer.utils.*
 import com.pallycon.widevinelibrary.*
 import java.util.*
@@ -174,7 +175,7 @@ class FullScreenVideoPlayer(
 
 
     private lateinit var progressBarParent: FrameLayout
-    private lateinit var volumeProgressBar: SeekBar
+    private lateinit var volumeProgressBar: PreviewSeekBar
     private lateinit var brightnessProgressBar: ProgressBar
 
     private var isPipModeOn = false
@@ -266,10 +267,22 @@ class FullScreenVideoPlayer(
         pictureInPicture?.setVisibility(GONE)
         videoNextButton?.setVisibility(GONE)
         videoPerviousButton?.setVisibility(GONE)
-        playerProgress?.setAutoHidePreview(false)
-        playerProgress?.setPreviewAnimationEnabled(false)
+
+
+        playerProgress?.setPreviewEnabled(true)
+        playerProgress?.setAutoHidePreview(true)
+        volumeProgressBar?.setPreviewEnabled(false)
+        playerProgress?.setPreviewAnimationEnabled(true)
+        volumeProgressBar?.setPreviewAnimationEnabled(false)
         playerProgress!!.setAdMarkerColor(Color.argb(0x00, 0xFF, 0xFF, 0xFF))
         playerProgress!!.setPlayedAdMarkerColor(Color.argb(0x98, 0xFF, 0xFF, 0xFF))
+        playerProgress!!.addOnScrubListener(this)
+        playerProgress!!.setPreviewLoader(this)
+        playerProgress!!.setAdMarkerColor(Color.argb(0x00, 0xFF, 0xFF, 0xFF))
+        playerProgress!!.setPlayedAdMarkerColor(Color.argb(0x98, 0xFF, 0xFF, 0xFF))
+
+
+
         videoRotationButton?.setOnClickListener(OnClickListener {
             context.finish()
         })

@@ -33,6 +33,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.Target
+import com.github.rubensousa.previewseekbar.PreviewBar
+import com.github.rubensousa.previewseekbar.PreviewLoader
+import com.github.rubensousa.previewseekbar.exoplayer.PreviewTimeBar
 import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.MediaItem.AdsConfiguration
 import com.google.android.exoplayer2.MediaItem.SubtitleConfiguration
@@ -62,9 +65,6 @@ import com.multitv.ott.multitvvideoplayer.fabbutton.FabButton
 import com.multitv.ott.multitvvideoplayer.listener.VideoPlayerSdkCallBackListener
 import com.multitv.ott.multitvvideoplayer.playerglide.GlideThumbnailTransformation
 import com.multitv.ott.multitvvideoplayer.popup.TrackSelectionDialog
-import com.multitv.ott.multitvvideoplayer.timebar.PreviewTimeBar
-import com.multitv.ott.multitvvideoplayer.timebar.previewseekbar.PreviewBar
-import com.multitv.ott.multitvvideoplayer.timebar.previewseekbar.PreviewLoader
 import com.multitv.ott.multitvvideoplayer.touchevent.OnSwipeTouchListener
 import com.multitv.ott.multitvvideoplayer.utils.*
 import com.multitv.ott.multitvvideoplayer.videoplayer.MyVideoPlayer

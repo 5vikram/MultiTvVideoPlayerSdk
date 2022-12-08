@@ -1,4 +1,4 @@
-package com.multitv.ott.multitvvideoplayer.timebar.previewseekbar;
+package com.github.rubensousa.previewseekbar;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -16,9 +16,7 @@ import androidx.appcompat.widget.AppCompatSeekBar;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 
-import com.multitv.ott.multitvvideoplayer.R;
-import com.multitv.ott.multitvvideoplayer.timebar.animator.PreviewAnimator;
-
+import com.github.rubensousa.previewseekbar.animator.PreviewAnimator;
 
 /**
  * A {@link PreviewBar} that extends from {@link AppCompatSeekBar}.
@@ -188,22 +186,22 @@ public class PreviewSeekBar extends AppCompatSeekBar implements PreviewBar {
     }
 
     @Override
-    public void addOnScrubListener(OnScrubListener listener) {
+    public void addOnScrubListener(PreviewBar.OnScrubListener listener) {
         delegate.addOnScrubListener(listener);
     }
 
     @Override
-    public void removeOnScrubListener(OnScrubListener listener) {
+    public void removeOnScrubListener(PreviewBar.OnScrubListener listener) {
         delegate.removeOnScrubListener(listener);
     }
 
     @Override
-    public void addOnPreviewVisibilityListener(OnPreviewVisibilityListener listener) {
+    public void addOnPreviewVisibilityListener(PreviewBar.OnPreviewVisibilityListener listener) {
         delegate.addOnPreviewVisibilityListener(listener);
     }
 
     @Override
-    public void removeOnPreviewVisibilityListener(OnPreviewVisibilityListener listener) {
+    public void removeOnPreviewVisibilityListener(PreviewBar.OnPreviewVisibilityListener listener) {
         delegate.removeOnPreviewVisibilityListener(listener);
     }
 

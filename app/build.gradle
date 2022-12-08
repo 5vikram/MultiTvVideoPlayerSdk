@@ -86,7 +86,8 @@ dependencies {
     //api files('libs/PallyconWVMSDK.aar')
 
     embed project(path: ':drmsdk', configuration: 'default')
-
+    implementation project(':previewseekbar')
+    implementation project(':previewseekbar-exoplayer')
 
     // GMS
     api 'com.google.android.gms:play-services-cast-framework:21.0.1'

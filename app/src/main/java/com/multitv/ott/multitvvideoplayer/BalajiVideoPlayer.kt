@@ -15,7 +15,6 @@ import android.graphics.Color
 import android.media.AudioManager
 import android.net.Uri
 import android.os.Build
-import android.os.CountDownTimer
 import android.os.Handler
 import android.os.SystemClock
 import android.support.v4.media.session.MediaSessionCompat
@@ -34,6 +33,10 @@ import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.Target
+import com.github.rubensousa.previewseekbar.PreviewBar
+import com.github.rubensousa.previewseekbar.PreviewLoader
+import com.github.rubensousa.previewseekbar.PreviewSeekBar
+import com.github.rubensousa.previewseekbar.exoplayer.PreviewTimeBar
 import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.drm.DrmSessionManager
 import com.google.android.exoplayer2.ext.ima.ImaAdsLoader
@@ -61,12 +64,7 @@ import com.multitv.ott.multitvvideoplayer.fabbutton.FabButton
 import com.multitv.ott.multitvvideoplayer.listener.VideoPlayerSdkCallBackListener
 import com.multitv.ott.multitvvideoplayer.playerglide.GlideThumbnailTransformation
 import com.multitv.ott.multitvvideoplayer.popup.TrackSelectionDialog
-import com.multitv.ott.multitvvideoplayer.timebar.PreviewTimeBar
-import com.multitv.ott.multitvvideoplayer.timebar.previewseekbar.PreviewBar
-import com.multitv.ott.multitvvideoplayer.timebar.previewseekbar.PreviewLoader
-import com.multitv.ott.multitvvideoplayer.touchevent.OnSwipeTouchListener
 import com.multitv.ott.multitvvideoplayer.utils.*
-import com.multitv.ott.multitvvideoplayer.videoplayer.MyVideoPlayer
 import com.pallycon.widevinelibrary.*
 import java.util.*
 
@@ -179,7 +177,7 @@ class BalajiVideoPlayer(
 
 
     private lateinit var progressBarParent: FrameLayout
-    private lateinit var volumeProgressBar: SeekBar
+    private lateinit var volumeProgressBar: PreviewSeekBar
     private lateinit var brightnessProgressBar: ProgressBar
 
     private var isPipModeOn = false
@@ -268,13 +266,21 @@ class BalajiVideoPlayer(
         simpleExoPlayerView = view.findViewById(R.id.videoPlayer)
         videoRotationButton = view.findViewById(R.id.enter_full_screen)
         closeVideoPlayerButton = view.findViewById(R.id.closeButton);
-        playerProgress!!.addOnScrubListener(this)
-        playerProgress!!.setPreviewLoader(this)
         pictureInPicture = view.findViewById(R.id.picture_in_picture)
         videoNextButton?.setVisibility(GONE)
         videoPerviousButton?.setVisibility(GONE)
+
+
+        playerProgress?.setPreviewEnabled(true)
+        playerProgress?.setAutoHidePreview(true)
+        volumeProgressBar?.setPreviewEnabled(false)
+        playerProgress?.setPreviewAnimationEnabled(true)
+        volumeProgressBar?.setPreviewAnimationEnabled(false)
         playerProgress!!.setAdMarkerColor(Color.argb(0x00, 0xFF, 0xFF, 0xFF))
         playerProgress!!.setPlayedAdMarkerColor(Color.argb(0x98, 0xFF, 0xFF, 0xFF))
+        playerProgress!!.addOnScrubListener(this)
+        playerProgress!!.setPreviewLoader(this)
+
         videoRotationButton?.setOnClickListener(OnClickListener {
             val orientation = getContext().resources.configuration.orientation
             if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
@@ -330,11 +336,14 @@ class BalajiVideoPlayer(
 
 
         videoControllerLayout?.setOnClickListener {
-            if (isControllerShown)
-                hideController()
-            else
-                showController()
+            /*  if (isControllerShown)
+                  hideController()
+              else
+                  showController()*/
+
+            setTimerOnVideoPlayer(true)
         }
+
 
         //  findViewById<View>(R.id.frameLayout)?.setOnTouchListener(clickFrameSwipeListener)
         //findViewById<View>(R.id.frameLayout).setOnTouchListener(clickFrameSwipeListener)
@@ -419,7 +428,8 @@ class BalajiVideoPlayer(
            })*/
         pictureInPicture?.setOnClickListener(OnClickListener {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                hideController()
+                //hideController()
+                simpleExoPlayerView?.hideController()
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     val aspectRatio = Rational(16, 9)
@@ -486,7 +496,6 @@ class BalajiVideoPlayer(
     }
 
 
-
     fun showVolumeProgressBarButton() {
         volumeLayout?.visibility = View.VISIBLE
     }
@@ -537,7 +546,8 @@ class BalajiVideoPlayer(
         if (hideAtMs != C.TIME_UNSET) {
             val delayMs = hideAtMs - SystemClock.uptimeMillis()
             if (delayMs <= 0) {
-                hideController()
+                // hideController()
+                simpleExoPlayerView?.hideController()
             } else {
                 postDelayed(hideAction, delayMs)
             }
@@ -547,7 +557,7 @@ class BalajiVideoPlayer(
     private val hideAction = Runnable {
         isControllerShown = false
         VideoPlayerTracer.error("Controller Listener:::", "Stop Timer")
-        hideController()
+        //hideController()
     }
 
 
@@ -592,34 +602,35 @@ class BalajiVideoPlayer(
     }
 
 
-    fun hideController() {
-        closeVideoPlayerButton!!.visibility = GONE
-        overlayImageTransparent!!.visibility = GONE
-        centerButtonLayout!!.visibility = GONE
-        videoProgressLayout!!.visibility = GONE
-        durationlayout!!.visibility = GONE
-        videoMenuLayout!!.visibility = GONE
-        resumedVideoTv?.visibility = View.GONE
-        removeCallbacks(hideAction)
-        hideAtMs = C.TIME_UNSET
-        isControllerShown = false
-        setTimerOnVideoPlayer(true)
-    }
+    /*  fun hideController() {
+          closeVideoPlayerButton!!.visibility = GONE
+          overlayImageTransparent!!.visibility = GONE
+          centerButtonLayout!!.visibility = GONE
+          videoProgressLayout!!.visibility = GONE
+          durationlayout!!.visibility = GONE
+          videoMenuLayout!!.visibility = GONE
+          resumedVideoTv?.visibility = View.GONE
+          removeCallbacks(hideAction)
+          hideAtMs = C.TIME_UNSET
+          isControllerShown = false
+          setTimerOnVideoPlayer(true)
+      }
 
-    fun showController() {
-        closeVideoPlayerButton!!.visibility = VISIBLE
-        overlayImageTransparent!!.visibility = VISIBLE
-        centerButtonLayout!!.visibility = VISIBLE
-        videoProgressLayout!!.visibility = VISIBLE
-        durationlayout!!.visibility = VISIBLE
-        videoMenuLayout!!.visibility = VISIBLE
-        resumedVideoTv?.visibility = View.GONE
-        updatePlayPauseButton()
-        hideAfterTimeout()
-        isControllerShown = true
-        setTimerOnVideoPlayer(false)
-    }
-
+      fun showController() {
+          closeVideoPlayerButton!!.visibility = VISIBLE
+          overlayImageTransparent!!.visibility = VISIBLE
+          centerButtonLayout!!.visibility = VISIBLE
+          videoProgressLayout!!.visibility = VISIBLE
+          durationlayout!!.visibility = VISIBLE
+          videoMenuLayout!!.visibility = VISIBLE
+          resumedVideoTv?.visibility = View.GONE
+          updatePlayPauseButton()
+          hideAfterTimeout()
+          isControllerShown = true
+          countDownTimer1?.cancel()
+          setTimerOnVideoPlayer(false)
+      }
+  */
     private fun updatePlayPauseButton() {
         var requestPlayPauseFocus = false
         val playing = mMediaPlayer != null && mMediaPlayer!!.playWhenReady
@@ -898,7 +909,7 @@ class BalajiVideoPlayer(
             mMediaPlayer!!.addListener(stateChangeCallback1)
             simpleExoPlayerView!!.player = mMediaPlayer
             simpleExoPlayerView!!.controllerHideOnTouch = true
-            simpleExoPlayerView!!.controllerAutoShow = false
+            simpleExoPlayerView!!.controllerAutoShow = true
             simpleExoPlayerView!!.controllerShowTimeoutMs = DEFAULT_TIMEOUT_MS
             simpleExoPlayerView!!.setControllerHideDuringAds(true)
             var mediaItem: MediaItem? = null
@@ -1712,13 +1723,13 @@ class BalajiVideoPlayer(
             }
 
             override fun onStartTrackingTouch(p0: SeekBar?) {
-                showController()
+                //showController()
             }
 
             override fun onStopTrackingTouch(p0: SeekBar?) {
                 // volumeProgressBar.progress = p0?.progress!!
 
-                hideController()
+                //hideController()
             }
 
         })
@@ -1727,6 +1738,13 @@ class BalajiVideoPlayer(
     private var countDownTimer1: CountDownTimerWithPause? = null
 
     private fun setTimerOnVideoPlayer(isShow: Boolean) {
+
+        if (simpleExoPlayerView?.isControllerFullyVisible!!) {
+            Log.e("VideoPlayer:::", "Controller show")
+            return
+        } else {
+            Log.e("VideoPlayer:::", "Controller hide")
+        }
         val tickDuration = 500
         if (isShow)
             contentRateLayout.visibility = View.VISIBLE

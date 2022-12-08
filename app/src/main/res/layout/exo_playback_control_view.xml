@@ -214,7 +214,7 @@
 
         </FrameLayout>
 
-        <com.multitv.ott.multitvvideoplayer.timebar.PreviewTimeBar
+        <com.github.rubensousa.previewseekbar.exoplayer.PreviewTimeBar
             android:id="@+id/exo_progress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
