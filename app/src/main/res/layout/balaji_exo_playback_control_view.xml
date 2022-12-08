@@ -383,7 +383,7 @@
 
     <LinearLayout
         android:id="@id/video_progress_layout"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/videoMenuLayout"
         android:layout_marginLeft="5dp"
@@ -392,8 +392,8 @@
 
         <FrameLayout
             android:id="@+id/previewFrameLayout"
-            android:layout_width="120dp"
-            android:layout_height="70dp"
+            android:layout_width="160dp"
+            android:layout_height="90dp"
             android:background="@drawable/video_frame"
             android:visibility="gone">
 
@@ -423,6 +423,9 @@
                 android:progressDrawable="@drawable/progress"
                 android:thumb="@drawable/thumb"
                 app:ad_marker_color="@color/ad_marker"
+                app:previewAnimationEnabled="true"
+                app:scrubber_dragged_size="24dp"
+                app:scrubber_enabled_size="16dp"
                 app:previewFrameLayout="@id/previewFrameLayout" />
 
 

@@ -15,6 +15,18 @@ import com.multitv.ott.multitvvideoplayer.timebar.animator.PreviewMorphAnimator;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.os.Build;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Handles the logic to display and animate a preview view when a {@link PreviewBar} is scrubbed
  */
@@ -44,8 +56,8 @@ public class PreviewDelegate {
         this.scrubListeners = new ArrayList<>();
         this.visibilityListeners = new ArrayList<>();
         this.previewBar = previewBar;
-        this.animationEnabled = false;
-        this.previewAutoHide = false;
+        this.animationEnabled = true;
+        this.previewAutoHide = true;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             animator = new PreviewMorphAnimator();
         } else {

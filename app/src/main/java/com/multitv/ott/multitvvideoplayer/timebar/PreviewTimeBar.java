@@ -68,19 +68,19 @@ public class PreviewTimeBar extends DefaultTimeBar implements PreviewBar {
         typedArray.recycle();
 
         typedArray = context.getTheme().obtainStyledAttributes(
-                attrs, R.styleable.PreviewSeekBar, 0, 0);
+                attrs, R.styleable.PreviewTimeBar, 0, 0);
 
         previewId = typedArray.getResourceId(
-                R.styleable.PreviewSeekBar_previewFrameLayout, View.NO_ID);
+                R.styleable.PreviewTimeBar_previewFrameLayout, View.NO_ID);
 
         delegate = new PreviewDelegate(this);
         delegate.setPreviewEnabled(isEnabled());
         delegate.setAnimationEnabled(typedArray.getBoolean(
-                R.styleable.PreviewSeekBar_previewAnimationEnabled, true));
+                R.styleable.PreviewTimeBar_previewAnimationEnabled, true));
         delegate.setPreviewEnabled(typedArray.getBoolean(
-                R.styleable.PreviewSeekBar_previewEnabled, true));
+                R.styleable.PreviewTimeBar_previewEnabled, true));
         delegate.setAutoHidePreview(typedArray.getBoolean(
-                R.styleable.PreviewSeekBar_previewAutoHide, true));
+                R.styleable.PreviewTimeBar_previewAutoHide, true));
 
         typedArray.recycle();
 
@@ -167,7 +167,7 @@ public class PreviewTimeBar extends DefaultTimeBar implements PreviewBar {
 
     @Override
     public void setAutoHidePreview(boolean autoHide) {
-        delegate.setAutoHidePreview(false);
+        delegate.setAutoHidePreview(autoHide);
     }
 
     @Override

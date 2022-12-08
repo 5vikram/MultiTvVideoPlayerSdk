@@ -262,8 +262,6 @@ class FullScreenVideoPlayer(
         simpleExoPlayerView = view.findViewById(R.id.videoPlayer)
         videoRotationButton = view.findViewById(R.id.enter_full_screen)
         closeVideoPlayerButton = view.findViewById(R.id.closeButton);
-        playerProgress!!.addOnScrubListener(this)
-        playerProgress!!.setPreviewLoader(this)
         pictureInPicture = view.findViewById(R.id.picture_in_picture)
         pictureInPicture?.setVisibility(GONE)
         videoNextButton?.setVisibility(GONE)
@@ -1340,29 +1338,10 @@ class FullScreenVideoPlayer(
         if (spriteImageUrl != null && !TextUtils.isEmpty(spriteImageUrl)) {
             Glide.with(previewImageView!!)
                 .load(spriteImageUrl)
-                .transform(GlideThumbnailTransformation(currentPosition))
-                .into(previewImageView!!)
-        } else {
-            Glide.with(previewImageView!!)
-                .load("https://d2i2fx2s3ubjwq.cloudfront.net/converted_demo/SAW4TRAILERY2007M_4500/sprite.png")
                 .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
                 .transform(GlideThumbnailTransformation(currentPosition))
                 .into(previewImageView!!)
         }
-
-
-        /* if (spriteImageUrl != null && !TextUtils.isEmpty(spriteImageUrl)) {
-            Glide.with(previewImageView!!)
-                .load(spriteImageUrl)
-                .transform(GlideThumbnailTransformation(currentPosition))
-                .into(previewImageView!!)
-        } else {
-            Glide.with(previewImageView!!)
-                .load("https://d2i2fx2s3ubjwq.cloudfront.net/converted_demo/SAW4TRAILERY2007M_4500/sprite.png")
-                .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
-                .transform(GlideThumbnailTransformation(currentPosition))
-                .into(previewImageView!!)
-        }*/
 
     }
 

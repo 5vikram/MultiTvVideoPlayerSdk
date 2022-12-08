@@ -22,14 +22,12 @@
         <attr name="previewAutoHide" format="boolean" />
     </declare-styleable>
 
-<!--
     <declare-styleable name="PreviewTimeBar">
         <attr name="previewFrameLayout" format="reference" />
         <attr name="previewAnimationEnabled" format="boolean" />
         <attr name="previewEnabled" format="boolean" />
         <attr name="previewAutoHide" format="boolean" />
     </declare-styleable>
--->
 
     <!-- Must be kept in sync with AspectRatioFrameLayout -->
     <attr name="resize_mode" format="enum">

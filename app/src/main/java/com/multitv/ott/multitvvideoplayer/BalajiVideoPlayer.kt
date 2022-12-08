@@ -273,8 +273,6 @@ class BalajiVideoPlayer(
         pictureInPicture = view.findViewById(R.id.picture_in_picture)
         videoNextButton?.setVisibility(GONE)
         videoPerviousButton?.setVisibility(GONE)
-        playerProgress?.setAutoHidePreview(false)
-        playerProgress?.setPreviewAnimationEnabled(false)
         playerProgress!!.setAdMarkerColor(Color.argb(0x00, 0xFF, 0xFF, 0xFF))
         playerProgress!!.setPlayedAdMarkerColor(Color.argb(0x98, 0xFF, 0xFF, 0xFF))
         videoRotationButton?.setOnClickListener(OnClickListener {
@@ -1372,29 +1370,10 @@ class BalajiVideoPlayer(
         if (spriteImageUrl != null && !TextUtils.isEmpty(spriteImageUrl)) {
             Glide.with(previewImageView!!)
                 .load(spriteImageUrl)
-                .transform(GlideThumbnailTransformation(currentPosition))
-                .into(previewImageView!!)
-        } else {
-            Glide.with(previewImageView!!)
-                .load("https://d2i2fx2s3ubjwq.cloudfront.net/converted_demo/SAW4TRAILERY2007M_4500/sprite.png")
                 .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
                 .transform(GlideThumbnailTransformation(currentPosition))
                 .into(previewImageView!!)
         }
-
-
-        /* if (spriteImageUrl != null && !TextUtils.isEmpty(spriteImageUrl)) {
-            Glide.with(previewImageView!!)
-                .load(spriteImageUrl)
-                .transform(GlideThumbnailTransformation(currentPosition))
-                .into(previewImageView!!)
-        } else {
-            Glide.with(previewImageView!!)
-                .load("https://d2i2fx2s3ubjwq.cloudfront.net/converted_demo/SAW4TRAILERY2007M_4500/sprite.png")
-                .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
-                .transform(GlideThumbnailTransformation(currentPosition))
-                .into(previewImageView!!)
-        }*/
 
     }
 
