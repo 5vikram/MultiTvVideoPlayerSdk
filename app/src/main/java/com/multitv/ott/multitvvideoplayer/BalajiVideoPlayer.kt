@@ -347,7 +347,16 @@ class BalajiVideoPlayer(
                   showController()
           }*/
 
-
+        simpleExoPlayerView?.setControllerVisibilityListener {
+            if (it == 0) {
+                Log.e("Video Controller::::", "HIDE")
+                hideController()
+            } else {
+                Log.e("Video Controller::::", "Show")
+                showController()
+            }
+        }
+/*
         simpleExoPlayerView?.setOnSystemUiVisibilityChangeListener {
             if (it == View.VISIBLE) {
                 Log.e("Video Controller::::", "HIDE")
@@ -356,7 +365,7 @@ class BalajiVideoPlayer(
                 Log.e("Video Controller::::", "Show")
                 showController()
             }
-        }
+        }*/
 
 
         //  findViewById<View>(R.id.frameLayout)?.setOnTouchListener(clickFrameSwipeListener)
@@ -442,7 +451,7 @@ class BalajiVideoPlayer(
            })*/
         pictureInPicture?.setOnClickListener(OnClickListener {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                //hideController()
+                hideController()
                 simpleExoPlayerView?.hideController()
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -1749,6 +1758,7 @@ class BalajiVideoPlayer(
                 // volumeProgressBar.progress = p0?.progress!!
                 audioManager?.setStreamVolume(AudioManager.STREAM_MUSIC, p0?.progress!!, 0)
                 hideController()
+                simpleExoPlayerView?.hideController()
             }
 
         })
