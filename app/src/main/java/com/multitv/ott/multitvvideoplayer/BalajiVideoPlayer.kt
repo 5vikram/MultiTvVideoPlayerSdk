@@ -340,12 +340,12 @@ class BalajiVideoPlayer(
         }
 
 
-      /*  videoControllerLayout?.setOnClickListener {
-            if (isControllerShown)
-                hideController()
-            else
-                showController()
-        }*/
+        /*  videoControllerLayout?.setOnClickListener {
+              if (isControllerShown)
+                  hideController()
+              else
+                  showController()
+          }*/
 
 
         simpleExoPlayerView?.setOnSystemUiVisibilityChangeListener {
@@ -629,6 +629,7 @@ class BalajiVideoPlayer(
         isControllerShown = false
         setTimerOnVideoPlayer(true)
         updatePlayPauseButton()
+        contentRateLayout.visibility = View.VISIBLE
         simpleExoPlayerView?.hideController()
     }
 
@@ -645,6 +646,7 @@ class BalajiVideoPlayer(
         isControllerShown = true
         setTimerOnVideoPlayer(false)
         updatePlayPauseButton()
+        contentRateLayout.visibility = View.GONE
         simpleExoPlayerView?.showController()
     }
 
@@ -1758,11 +1760,15 @@ class BalajiVideoPlayer(
 
 
         val tickDuration = 500
-        if (isShow)
+        if (isShow) {
+            Log.e("Genure:::", "Show")
             contentRateLayout.visibility = View.VISIBLE
-        else
-            contentRatedTv.visibility = View.GONE
-
+        } else {
+            Log.e("Genure:::", "Hide")
+            contentRateLayout.visibility = View.GONE
+            return
+        }
+        Toast.makeText(context, "Show", Toast.LENGTH_SHORT).show()
 
         if (parentalAge != null && !TextUtils.isEmpty(parentalAge)) {
             contentRatedTv.setText("Rated U/A " + parentalAge + "+")
