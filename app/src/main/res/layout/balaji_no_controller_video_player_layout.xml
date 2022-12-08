@@ -169,34 +169,6 @@
         </RelativeLayout>
 
 
-        <LinearLayout
-            android:id="@id/video_progress_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/videoMenuLayout"
-            android:layout_marginLeft="5dp"
-            android:orientation="vertical">
-
-
-            <FrameLayout
-                android:id="@+id/previewFrameLayout"
-                android:layout_width="120dp"
-                android:layout_height="70dp"
-                android:background="@drawable/video_frame"
-                android:visibility="gone">
-
-                <ImageView
-                    android:id="@+id/previewImageView"
-                    android:layout_width="120dp"
-                    android:layout_height="70dp"
-                    android:scaleType="fitXY" />
-
-            </FrameLayout>
-
-
-
-        </LinearLayout>
-
 
         <FrameLayout
             android:id="@+id/progress_bar_parent"

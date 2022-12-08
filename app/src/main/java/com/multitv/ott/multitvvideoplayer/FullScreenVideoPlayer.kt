@@ -35,6 +35,7 @@ import com.bumptech.glide.request.target.Target
 import com.github.rubensousa.previewseekbar.PreviewBar
 import com.github.rubensousa.previewseekbar.PreviewLoader
 import com.github.rubensousa.previewseekbar.PreviewSeekBar
+import com.github.rubensousa.previewseekbar.animator.PreviewMorphAnimator
 import com.github.rubensousa.previewseekbar.exoplayer.PreviewTimeBar
 import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.drm.DrmSessionManager
@@ -271,15 +272,16 @@ class FullScreenVideoPlayer(
 
         playerProgress?.setPreviewEnabled(true)
         playerProgress?.setAutoHidePreview(true)
-        volumeProgressBar?.setPreviewEnabled(false)
+        playerProgress?.setPreviewAnimator(PreviewMorphAnimator())
         playerProgress?.setPreviewAnimationEnabled(true)
-        volumeProgressBar?.setPreviewAnimationEnabled(false)
         playerProgress!!.setAdMarkerColor(Color.argb(0x00, 0xFF, 0xFF, 0xFF))
         playerProgress!!.setPlayedAdMarkerColor(Color.argb(0x98, 0xFF, 0xFF, 0xFF))
         playerProgress!!.addOnScrubListener(this)
         playerProgress!!.setPreviewLoader(this)
-        playerProgress!!.setAdMarkerColor(Color.argb(0x00, 0xFF, 0xFF, 0xFF))
-        playerProgress!!.setPlayedAdMarkerColor(Color.argb(0x98, 0xFF, 0xFF, 0xFF))
+
+
+        volumeProgressBar?.setPreviewAnimationEnabled(false)
+        volumeProgressBar?.setPreviewEnabled(false)
 
 
 
