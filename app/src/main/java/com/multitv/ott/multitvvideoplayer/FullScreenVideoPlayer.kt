@@ -313,12 +313,10 @@ class FullScreenVideoPlayer(
         }
 
         videoControllerLayout?.setOnClickListener {
-            /*  if (isControllerShown)
+              if (isControllerShown)
                   hideController()
               else
-                  showController()*/
-
-            setTimerOnVideoPlayer(true)
+                  showController()
         }
 
        /* videoControllerLayout?.setOnClickListener {
@@ -1692,18 +1690,18 @@ class FullScreenVideoPlayer(
         volumeProgressBar.max = maxVolume
         volumeProgressBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
-                audioManager?.setStreamVolume(AudioManager.STREAM_MUSIC, p1, 0)
+                audioManager?.setStreamVolume(AudioManager.STREAM_MUSIC, p0?.progress!!, 0)
 
-                Log.e("Volume::::", "" + p1)
+                Log.e("Volume::::", "" + p0?.progress)
             }
 
             override fun onStartTrackingTouch(p0: SeekBar?) {
-                showController()
+                //showController()
             }
 
             override fun onStopTrackingTouch(p0: SeekBar?) {
                 // volumeProgressBar.progress = p0?.progress!!
-
+                audioManager?.setStreamVolume(AudioManager.STREAM_MUSIC, p0?.progress!!, 0)
                 hideController()
             }
 

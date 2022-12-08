@@ -138,8 +138,8 @@
 
                 <ImageView
                     android:id="@id/exo_rew"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginRight="5dp"
                     android:background="@android:color/transparent"
@@ -151,23 +151,23 @@
                     android:layout_gravity="center_vertical"
                     android:text="10s"
                     android:textColor="@color/white"
-                    android:textSize="12sp" />
+                    android:textSize="10sp" />
 
             </LinearLayout>
 
 
             <ImageView
                 android:id="@id/exo_play"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:padding="5dp"
                 android:layout_gravity="center_vertical"
                 android:src="@drawable/ic_balaji_pause" />
 
             <ImageView
                 android:id="@id/exo_pause"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:padding="5dp"
                 android:layout_gravity="center_vertical"
                 android:src="@drawable/ic_balaji_play" />
@@ -186,12 +186,12 @@
                     android:layout_gravity="center_vertical"
                     android:text="10s"
                     android:textColor="@color/white"
-                    android:textSize="12sp" />
+                    android:textSize="10sp" />
 
                 <ImageView
                     android:id="@id/exo_ffwd"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="10dp"
                     android:src="@drawable/ic_balaji_farward_10_sec" />
@@ -222,9 +222,9 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_marginLeft="7dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginRight="15dp"
-        android:layout_marginBottom="5dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="3dp"
         android:orientation="horizontal">
 
 
@@ -379,7 +379,7 @@
 
     <LinearLayout
         android:id="@id/video_progress_layout"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/videoMenuLayout"
         android:layout_marginLeft="5dp"
@@ -388,8 +388,8 @@
 
         <FrameLayout
             android:id="@+id/previewFrameLayout"
-            android:layout_width="160dp"
-            android:layout_height="90dp"
+            android:layout_width="120dp"
+            android:layout_height="70dp"
             android:background="@drawable/video_frame"
             android:visibility="visible">
 
@@ -421,8 +421,7 @@
                 app:ad_marker_color="@color/ad_marker"
                 app:previewAnimationEnabled="true"
                 app:scrubber_dragged_size="24dp"
-                app:scrubber_enabled_size="16dp"
-                app:previewFrameLayout="@id/previewFrameLayout" />
+                app:scrubber_enabled_size="16dp" />
 
 
             <LinearLayout
@@ -515,54 +514,5 @@
 
 
 
-    <androidx.appcompat.widget.LinearLayoutCompat
-        android:id="@+id/contentRateLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="30dp"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-        <TextView
-            android:id="@+id/contentRatedTv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            tools:text="Title"
-            android:layout_centerHorizontal="true"
-            android:textColor="@color/white"
-            android:textSize="12sp"
-            android:visibility="gone" />
-
-
-        <TextView
-            android:id="@+id/genureTv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            tools:text="Title"
-            android:layout_centerHorizontal="true"
-            android:textColor="@color/white_opycity_swenty_present"
-            android:textSize="10sp"
-            android:visibility="gone" />
-
-
-        <TextView
-            android:id="@+id/languageTv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_marginTop="2dp"
-            tools:text="Title"
-            android:layout_centerHorizontal="true"
-            android:textColor="@color/white_opycity_swenty_present"
-            android:textSize="10sp"
-            android:visibility="gone" />
-
-
-    </androidx.appcompat.widget.LinearLayoutCompat>
 
 </RelativeLayout>
