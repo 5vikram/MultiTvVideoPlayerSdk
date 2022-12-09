@@ -347,8 +347,9 @@ class BalajiVideoPlayer(
                   showController()
           }*/
 
-        simpleExoPlayerView?.setControllerVisibilityListener {
-            if (it == 0) {
+        simpleExoPlayerView?.setOnClickListener {
+
+            if (isControllerShown) {
                 Log.e("Video Controller::::", "HIDE")
                 hideController()
             } else {
@@ -356,6 +357,16 @@ class BalajiVideoPlayer(
                 showController()
             }
         }
+
+//        simpleExoPlayerView?.setControllerVisibilityListener {
+//            if (it == 0) {
+//                Log.e("Video Controller::::", "HIDE")
+//                hideController()
+//            } else {
+//                Log.e("Video Controller::::", "Show")
+//                showController()
+//            }
+//        }
 /*
         simpleExoPlayerView?.setOnSystemUiVisibilityChangeListener {
             if (it == View.VISIBLE) {
