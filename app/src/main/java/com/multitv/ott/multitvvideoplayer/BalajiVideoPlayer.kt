@@ -35,7 +35,6 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.Target
 import com.github.rubensousa.previewseekbar.PreviewBar
 import com.github.rubensousa.previewseekbar.PreviewLoader
-import com.github.rubensousa.previewseekbar.animator.PreviewMorphAnimator
 import com.github.rubensousa.previewseekbar.exoplayer.PreviewTimeBar
 import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.drm.DrmSessionManager
@@ -104,41 +103,39 @@ class BalajiVideoPlayer(
     private var bufferingTimeHandler: Handler? = null
     private var countDownTimer: CountDownTimerWithPause? = null
     private val TAG = "VikramExoVideoPlayer"
-    private var errorRetryLayout: LinearLayout? = null
-    private var videoMenuLayout: RelativeLayout? = null
-    private var resumedVideoTv: TextView? = null
-    private var durationlayout: LinearLayout? = null
-    private var volumeLayout: LinearLayout? = null
-    private var volumeLinearLayout: LinearLayout? = null
-    private var videoProgressLayout: LinearLayout? = null
-    private var bufferingProgressBarLayout: LinearLayout? = null
-    private var circularProgressLayout: LinearLayout? = null
 
 
-    private var overlayImageTransparent: View? = null
-
-    private var circularProgressRing: FabButton? = null
-    private var centerButtonLayout: LinearLayout? = null
-    private var pictureInPicture: ImageView? = null
-    private var previewImageView: ImageView? = null
-    private var videoLockButton: ImageView? = null
-    private var videoUnLockButton: ImageView? = null
-    private var volumeMuteAndUnMuteButton: ImageView? = null
-    private var volumeUnMuteButton: ImageView? = null
-    private var closeVideoPlayerButton: ImageView? = null
-    private var setting: ImageView? = null
-    private var videoRotationButton: ImageView? = null
-    private var videoPerviousButton: ImageView? = null
-    private var videoNextButton: ImageView? = null
-    private var VideoRenuButton: ImageView? = null
-    private var videoFarwardButton: ImageView? = null
-    private var videoPlayButton: ImageView? = null
-    private var videoPauseButton: ImageView? = null
-    private var previewTimeBar: PreviewTimeBar? = null
-    private var currentDurationPlayTv: TextView? = null
-    private var previewFrameLayout: FrameLayout? = null
-    private var videoTitle: TextView? = null
-
+    private lateinit var errorRetryLayout: LinearLayout
+    private lateinit var videoMenuLayout: RelativeLayout
+    private lateinit var resumedVideoTv: TextView
+    private lateinit var durationlayout: LinearLayout
+    private lateinit var volumeLayout: LinearLayout
+    private lateinit var volumeLinearLayout: LinearLayout
+    private lateinit var videoProgressLayout: LinearLayout
+    private lateinit var bufferingProgressBarLayout: LinearLayout
+    private lateinit var circularProgressLayout: LinearLayout
+    private lateinit var overlayImageTransparent: View
+    private lateinit var circularProgressRing: FabButton
+    private lateinit var centerButtonLayout: LinearLayout
+    private lateinit var pictureInPicture: ImageView
+    private lateinit var previewImageView: ImageView
+    private lateinit var videoLockButton: ImageView
+    private lateinit var videoUnLockButton: ImageView
+    private lateinit var volumeMuteAndUnMuteButton: ImageView
+    private lateinit var volumeUnMuteButton: ImageView
+    private lateinit var closeVideoPlayerButton: ImageView
+    private lateinit var setting: ImageView
+    private lateinit var videoRotationButton: ImageView
+    private lateinit var videoPerviousButton: ImageView
+    private lateinit var videoNextButton: ImageView
+    private lateinit var VideoRenuButton: ImageView
+    private lateinit var videoFarwardButton: ImageView
+    private lateinit var videoPlayButton: ImageView
+    private lateinit var videoPauseButton: ImageView
+    private lateinit var previewTimeBar: PreviewTimeBar
+    private lateinit var currentDurationPlayTv: TextView
+    private lateinit var previewFrameLayout: FrameLayout
+    private lateinit var videoTitle: TextView
     private lateinit var epsodeButton: ImageView
     private lateinit var epsodeNextButton: ImageView
 
@@ -260,7 +257,7 @@ class BalajiVideoPlayer(
         videoUnLockButton = view.findViewById(R.id.exo_unlock)
         previewTimeBar = findViewById<View>(R.id.exo_progress) as PreviewTimeBar
         currentDurationPlayTv = view.findViewById(R.id.exo_position)
-        previewImageView = view.findViewById(R.id.previewImageView)
+        previewImageView = view.findViewById(R.id.videoPreviewImageView)
         videoNextButton?.setVisibility(GONE)
         videoPerviousButton?.setVisibility(GONE)
         simpleExoPlayerView = view.findViewById(R.id.videoPlayer)
@@ -271,14 +268,13 @@ class BalajiVideoPlayer(
         videoPerviousButton?.setVisibility(GONE)
 
 
-        previewTimeBar?.setPreviewEnabled(true)
-        previewTimeBar?.setAutoHidePreview(true)
-        previewTimeBar?.setPreviewAnimator(PreviewMorphAnimator())
-        previewTimeBar?.setPreviewAnimationEnabled(true)
-        previewTimeBar?.setAdMarkerColor(Color.argb(0x00, 0xFF, 0xFF, 0xFF))
-        previewTimeBar?.setPlayedAdMarkerColor(Color.argb(0x98, 0xFF, 0xFF, 0xFF))
-        previewTimeBar?.addOnScrubListener(this)
-        previewTimeBar?.setPreviewLoader(this)
+        previewTimeBar.setPreviewEnabled(true)
+        previewTimeBar.setAutoHidePreview(true)
+        previewTimeBar.setPreviewAnimationEnabled(false)
+        previewTimeBar.setAdMarkerColor(Color.argb(0x00, 0xFF, 0xFF, 0xFF))
+        previewTimeBar.setPlayedAdMarkerColor(Color.argb(0x98, 0xFF, 0xFF, 0xFF))
+        previewTimeBar.addOnScrubListener(this)
+        previewTimeBar.setPreviewLoader(this)
 
 
         /*      volumeProgressBar.getProgressDrawable().setColorFilter(
@@ -340,12 +336,12 @@ class BalajiVideoPlayer(
         }
 
 
-          videoControllerLayout?.setOnClickListener {
-              if (isControllerShown)
-                  hideController()
-              else
-                  showController()
-          }
+        videoControllerLayout?.setOnClickListener {
+            if (isControllerShown)
+                hideController()
+            else
+                showController()
+        }
 
 
         findViewById<View>(R.id.speed_btn)?.setOnClickListener { showSpeedControlDailog() }
@@ -473,7 +469,7 @@ class BalajiVideoPlayer(
         if (hideAtMs != C.TIME_UNSET) {
             val delayMs = hideAtMs - SystemClock.uptimeMillis()
             if (delayMs <= 0) {
-                 hideController()
+                hideController()
             } else {
                 postDelayed(hideAction, delayMs)
             }
@@ -546,15 +542,15 @@ class BalajiVideoPlayer(
     }
 
     fun showController() {
-          closeVideoPlayerButton!!.visibility = VISIBLE
-          overlayImageTransparent!!.visibility = VISIBLE
-          centerButtonLayout!!.visibility = VISIBLE
-          videoProgressLayout!!.visibility = VISIBLE
-          durationlayout!!.visibility = VISIBLE
-          videoMenuLayout!!.visibility = VISIBLE
-          resumedVideoTv?.visibility = View.GONE
-          updatePlayPauseButton()
-          hideAfterTimeout()
+        closeVideoPlayerButton!!.visibility = VISIBLE
+        overlayImageTransparent!!.visibility = VISIBLE
+        centerButtonLayout!!.visibility = VISIBLE
+        videoProgressLayout!!.visibility = VISIBLE
+        durationlayout!!.visibility = VISIBLE
+        videoMenuLayout!!.visibility = VISIBLE
+        resumedVideoTv?.visibility = View.GONE
+        updatePlayPauseButton()
+        hideAfterTimeout()
         isControllerShown = true
         setTimerOnVideoPlayer(false)
         updatePlayPauseButton()
@@ -1304,14 +1300,16 @@ class BalajiVideoPlayer(
 
     override fun loadPreview(currentPosition: Long, max: Long) {
         pauseVideoPlayer()
-
+        Log.e("Video Sprite::::", "Url position:::" + currentPosition)
         if (spriteImageUrl != null && !TextUtils.isEmpty(spriteImageUrl)) {
             Log.e("Video Sprite::::", "Url:::" + spriteImageUrl)
-            Glide.with(context)
+            Glide.with(previewImageView)
                 .load(spriteImageUrl)
                 .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
                 .transform(GlideThumbnailTransformation(currentPosition))
-                .into(previewImageView!!)
+                .into(previewImageView)
+        } else {
+            Log.e("Video Sprite::::", "Url:::Empty")
         }
 
     }
@@ -1389,7 +1387,6 @@ class BalajiVideoPlayer(
         }
 
     }
-
 
 
     enum class GestureType {

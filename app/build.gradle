@@ -71,8 +71,7 @@ dependencies {
     //api 'com.google.android.exoplayer:extension-ima:2.11.1'
     implementation 'com.google.android.exoplayer:extension-ima:2.16.1'
 
-    implementation 'com.github.bumptech.glide:glide:4.13.0'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.13.0'
+
 
 
 
@@ -83,14 +82,12 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.13.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.13.0'
 
-    //api files('libs/PallyconWVMSDK.aar')
 
     embed project(path: ':drmsdk', configuration: 'default')
-    implementation project(':previewseekbar')
-    implementation project(':previewseekbar-exoplayer')
 
     // GMS
     api 'com.google.android.gms:play-services-cast-framework:21.0.1'
 
-
+    implementation project(':previewseekbar')
+    implementation project(':previewseekbar-exoplayer')
 }

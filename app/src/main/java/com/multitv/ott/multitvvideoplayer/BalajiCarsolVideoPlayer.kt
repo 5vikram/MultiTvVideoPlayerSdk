@@ -42,7 +42,6 @@ import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.DefaultAllocator
 import com.google.android.exoplayer2.upstream.DefaultDataSource
 import com.google.android.exoplayer2.util.MimeTypes
-import com.google.android.exoplayer2.util.Util
 import com.google.android.exoplayer2.video.VideoSize
 import com.google.common.collect.ImmutableList
 import com.multitv.ott.multitvvideoplayer.cast.SessionAvailabilityListener

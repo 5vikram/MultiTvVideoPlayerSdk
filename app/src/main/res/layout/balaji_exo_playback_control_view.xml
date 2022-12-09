@@ -395,7 +395,7 @@
             android:visibility="gone">
 
             <ImageView
-                android:id="@+id/previewImageView"
+                android:id="@+id/videoPreviewImageView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="fitXY" />
