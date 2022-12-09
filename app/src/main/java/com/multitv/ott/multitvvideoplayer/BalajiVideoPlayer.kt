@@ -258,7 +258,7 @@ class BalajiVideoPlayer(
         videoPauseButton = view.findViewById(R.id.exo_pause)
         videoLockButton = view.findViewById(R.id.exo_lock)
         videoUnLockButton = view.findViewById(R.id.exo_unlock)
-        previewTimeBar = findViewById<View>(R.id.previewSeekBar) as PreviewTimeBar
+        previewTimeBar = findViewById<View>(R.id.exo_progress) as PreviewTimeBar
         currentDurationPlayTv = view.findViewById(R.id.exo_position)
         previewImageView = view.findViewById(R.id.videoPreviewImageView)
         videoNextButton.setVisibility(GONE)
@@ -272,7 +272,6 @@ class BalajiVideoPlayer(
 
 
         previewTimeBar.setPreviewEnabled(true)
-        previewTimeBar.setAutoHidePreview(true)
         previewTimeBar.setPreviewAnimationEnabled(false)
         previewTimeBar.setAdMarkerColor(Color.argb(0x00, 0xFF, 0xFF, 0xFF))
         previewTimeBar.setPlayedAdMarkerColor(Color.argb(0x98, 0xFF, 0xFF, 0xFF))
@@ -424,6 +423,11 @@ class BalajiVideoPlayer(
             epsodeButton.visibility = View.GONE
             epsodeNextButton.visibility = View.GONE
         }
+    }
+
+
+    fun getCurrentDurationFromTextView(): String {
+        return currentDurationPlayTv.text.toString()
     }
 
 
