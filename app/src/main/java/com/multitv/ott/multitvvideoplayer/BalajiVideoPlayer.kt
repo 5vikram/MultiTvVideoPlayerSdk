@@ -111,7 +111,6 @@ class BalajiVideoPlayer(
     private lateinit var errorRetryLayout: LinearLayout
     private lateinit var videoMenuLayout: RelativeLayout
     private lateinit var resumedVideoTv: TextView
-    private lateinit var durationlayout: LinearLayout
     private lateinit var volumeLayout: LinearLayout
     private lateinit var volumeLinearLayout: LinearLayout
     private lateinit var videoProgressLayout: LinearLayout
@@ -237,7 +236,6 @@ class BalajiVideoPlayer(
         volumeProgressBar = view.findViewById(R.id.exo_volume_progress)
         brightnessProgressBar = view.findViewById(R.id.brightness_progress_bar)
         errorRetryLayout = view.findViewById(R.id.errorRetryLayout)
-        durationlayout = view.findViewById(R.id.durationlayout)
         videoMenuLayout = view.findViewById(R.id.videoMenuLayout)
         volumeUnMuteButton = view.findViewById(R.id.volumeUnMuteButton)
         bufferingProgressBarLayout = view.findViewById(R.id.bufferingProgressBarLayout)
@@ -557,11 +555,10 @@ class BalajiVideoPlayer(
     fun hideController() {
         closeVideoPlayerButton!!.visibility = GONE
         overlayImageTransparent!!.visibility = GONE
-        centerButtonLayout!!.visibility = GONE
-        videoProgressLayout!!.visibility = GONE
-        durationlayout!!.visibility = GONE
-        videoMenuLayout!!.visibility = GONE
-        resumedVideoTv?.visibility = View.GONE
+        centerButtonLayout.visibility = GONE
+        videoProgressLayout.visibility = GONE
+        videoMenuLayout.visibility = GONE
+        resumedVideoTv.visibility = View.GONE
         seekBarLayout.visibility = View.GONE
         removeCallbacks(hideAction)
         hideAtMs = C.TIME_UNSET
@@ -573,13 +570,12 @@ class BalajiVideoPlayer(
     }
 
     fun showController() {
-        closeVideoPlayerButton!!.visibility = VISIBLE
-        overlayImageTransparent!!.visibility = VISIBLE
-        centerButtonLayout!!.visibility = VISIBLE
-        videoProgressLayout!!.visibility = VISIBLE
-        durationlayout!!.visibility = VISIBLE
-        videoMenuLayout!!.visibility = VISIBLE
-        resumedVideoTv?.visibility = View.GONE
+        closeVideoPlayerButton.visibility = VISIBLE
+        overlayImageTransparent.visibility = VISIBLE
+        centerButtonLayout.visibility = VISIBLE
+        videoProgressLayout.visibility = VISIBLE
+        videoMenuLayout.visibility = VISIBLE
+        resumedVideoTv.visibility = View.GONE
         seekBarLayout.visibility = View.VISIBLE
         updatePlayPauseButton()
         hideAfterTimeout()
