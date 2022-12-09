@@ -392,7 +392,7 @@
             android:layout_width="120dp"
             android:layout_height="70dp"
             android:background="@drawable/video_frame"
-            android:visibility="gone">
+            android:visibility="invisible">
 
             <ImageView
                 android:id="@+id/videoPreviewImageView"
@@ -410,7 +410,7 @@
             android:orientation="horizontal">
 
             <com.github.rubensousa.previewseekbar.exoplayer.PreviewTimeBar
-                android:id="@+id/exo_progress"
+                android:id="@+id/previewSeekBar"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -420,7 +420,7 @@
                 android:progressDrawable="@drawable/progress"
                 android:thumb="@drawable/thumb"
                 app:ad_marker_color="@color/ad_marker"
-                app:previewAnimationEnabled="true"
+                app:previewAnimationEnabled="false"
                 app:scrubber_dragged_size="24dp"
                 app:scrubber_enabled_size="16dp" />
 

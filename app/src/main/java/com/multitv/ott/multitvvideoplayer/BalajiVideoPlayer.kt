@@ -61,11 +61,13 @@ import com.multitv.ott.multitvvideoplayer.database.SharedPreferencePlayer
 import com.multitv.ott.multitvvideoplayer.download.DownloadUtil
 import com.multitv.ott.multitvvideoplayer.fabbutton.FabButton
 import com.multitv.ott.multitvvideoplayer.listener.VideoPlayerSdkCallBackListener
+import com.multitv.ott.multitvvideoplayer.models.SkipDurationPlayer
 import com.multitv.ott.multitvvideoplayer.playerglide.GlideThumbnailTransformation
 import com.multitv.ott.multitvvideoplayer.popup.TrackSelectionDialog
 import com.multitv.ott.multitvvideoplayer.utils.*
 import com.pallycon.widevinelibrary.*
 import java.util.*
+import kotlin.collections.ArrayList
 
 class BalajiVideoPlayer(
     private val context: AppCompatActivity,
@@ -166,6 +168,7 @@ class BalajiVideoPlayer(
     private var isWebSeries = false;
     private var userSubscriptionDtatus = false
     private var contentAccessType = ""
+    private var skipDurationArray = ArrayList<SkipDurationPlayer>()
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -245,7 +248,7 @@ class BalajiVideoPlayer(
         previewFrameLayout = view.findViewById(R.id.previewFrameLayout)
 
 
-        setting?.setOnClickListener(this)
+        setting.setOnClickListener(this)
         centerButtonLayout = view.findViewById(R.id.centerButtonLayout)
         videoPerviousButton = view.findViewById(R.id.exo_prev)
         videoNextButton = view.findViewById(R.id.exo_next)
@@ -255,17 +258,17 @@ class BalajiVideoPlayer(
         videoPauseButton = view.findViewById(R.id.exo_pause)
         videoLockButton = view.findViewById(R.id.exo_lock)
         videoUnLockButton = view.findViewById(R.id.exo_unlock)
-        previewTimeBar = findViewById<View>(R.id.exo_progress) as PreviewTimeBar
+        previewTimeBar = findViewById<View>(R.id.previewSeekBar) as PreviewTimeBar
         currentDurationPlayTv = view.findViewById(R.id.exo_position)
         previewImageView = view.findViewById(R.id.videoPreviewImageView)
-        videoNextButton?.setVisibility(GONE)
-        videoPerviousButton?.setVisibility(GONE)
+        videoNextButton.setVisibility(GONE)
+        videoPerviousButton.setVisibility(GONE)
         simpleExoPlayerView = view.findViewById(R.id.videoPlayer)
         videoRotationButton = view.findViewById(R.id.enter_full_screen)
         closeVideoPlayerButton = view.findViewById(R.id.closeButton);
         pictureInPicture = view.findViewById(R.id.picture_in_picture)
-        videoNextButton?.setVisibility(GONE)
-        videoPerviousButton?.setVisibility(GONE)
+        videoNextButton.setVisibility(GONE)
+        videoPerviousButton.setVisibility(GONE)
 
 
         previewTimeBar.setPreviewEnabled(true)
@@ -386,7 +389,7 @@ class BalajiVideoPlayer(
                 videoPlayerSdkCallBackListener?.onPlayClick(0)
             }
         })
-        previewTimeBar!!.addOnPreviewVisibilityListener { previewBar, isPreviewShowing ->
+        previewTimeBar.addOnPreviewVisibilityListener { previewBar, isPreviewShowing ->
             Log.d(
                 "PreviewShowing::::",
                 isPreviewShowing.toString()
@@ -395,6 +398,11 @@ class BalajiVideoPlayer(
 
 
         super.onFinishInflate()
+    }
+
+
+    fun setSkipDuraionArrayList(skipDurationArray: ArrayList<SkipDurationPlayer>) {
+        this.skipDurationArray = skipDurationArray;
     }
 
     fun setWebSeriesEnable(
@@ -429,30 +437,30 @@ class BalajiVideoPlayer(
 
 
     fun showMuteUnMuteButton() {
-        volumeLinearLayout?.visibility = View.VISIBLE
+        volumeLinearLayout.visibility = View.VISIBLE
     }
 
     fun hideMuteUnMuteButton() {
-        volumeLinearLayout?.visibility = View.GONE
+        volumeLinearLayout.visibility = View.GONE
     }
 
     fun showRotateButton() {
-        videoRotationButton?.visibility = View.VISIBLE
+        videoRotationButton.visibility = View.VISIBLE
     }
 
     fun hideRotateButton() {
-        videoRotationButton?.visibility = View.GONE
+        videoRotationButton.visibility = View.GONE
     }
 
 
     fun showBackButton() {
         if (closeVideoPlayerButton != null)
-            closeVideoPlayerButton?.visibility = View.VISIBLE
+            closeVideoPlayerButton.visibility = View.VISIBLE
     }
 
     fun hideBackButton() {
         if (closeVideoPlayerButton != null)
-            closeVideoPlayerButton?.visibility = View.GONE
+            closeVideoPlayerButton.visibility = View.GONE
     }
 
 
@@ -500,12 +508,12 @@ class BalajiVideoPlayer(
         val orientation = resources.configuration.orientation
         if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
             if (contentTitle != null && !TextUtils.isEmpty(contentTitle)) {
-                videoTitle?.visibility = View.VISIBLE
-                videoTitle?.setText(contentTitle)
+                videoTitle.visibility = View.VISIBLE
+                videoTitle.setText(contentTitle)
             } else
-                videoTitle?.visibility = View.GONE
+                videoTitle.visibility = View.GONE
         } else if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-            videoTitle?.visibility = View.GONE
+            videoTitle.visibility = View.GONE
         }
         super.onConfigurationChanged(newConfig)
     }
@@ -1228,6 +1236,12 @@ class BalajiVideoPlayer(
         seekTo(Math.max(mMediaPlayer!!.currentPosition - DEFAULT_REWIND_MS, 0))
     }
 
+    fun seekToVideoPlayer(skipDuration: Int) {
+        if (skipDuration > 1) {
+            seekTo(Math.max(mMediaPlayer!!.currentPosition + skipDuration * 1000, 0))
+        }
+    }
+
     private var isWatchDurationEnable = false
     private var watchDuration = 0
 
@@ -1279,10 +1293,10 @@ class BalajiVideoPlayer(
     }
 
     override fun onScrubMove(previewBar: PreviewBar, progress: Int, fromUser: Boolean) {
-        //findViewById(R.id.centerButtonLayout)?.setVisibility(View.GONE);
-        previewFrameLayout!!.visibility = VISIBLE
+
+        previewFrameLayout.visibility = VISIBLE
         if (currentDurationPlayTv != null) {
-            currentDurationPlayTv!!.text = Util.getStringForTime(
+            currentDurationPlayTv.text = Util.getStringForTime(
                 formatBuilder,
                 formatter,
                 progress.toLong()
