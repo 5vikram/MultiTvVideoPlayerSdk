@@ -30,6 +30,7 @@ import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.LinearLayoutCompat
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.Target
@@ -75,7 +76,7 @@ class BalajiVideoPlayer(
     defStyleAttr: Int
 ) : FrameLayout(
     context, attrs, defStyleAttr
-), PreviewLoader, PreviewBar.OnScrubListener, View.OnClickListener, SessionAvailabilityListener {
+), PreviewBar.OnScrubListener, OnClickListener, SessionAvailabilityListener {
     private val sharedPreferencePlayer: SharedPreferencePlayer
     private var contentType: ContentType? = null
     private var mMediaPlayer: ExoPlayer? = null
@@ -140,6 +141,8 @@ class BalajiVideoPlayer(
     private lateinit var videoTitle: TextView
     private lateinit var epsodeButton: ImageView
     private lateinit var epsodeNextButton: ImageView
+
+    private lateinit var seekBarLayout: ConstraintLayout
 
     private var videoControllerLayout: RelativeLayout? = null
 
@@ -269,14 +272,29 @@ class BalajiVideoPlayer(
         pictureInPicture = view.findViewById(R.id.picture_in_picture)
         videoNextButton.setVisibility(GONE)
         videoPerviousButton.setVisibility(GONE)
-
+        seekBarLayout = view.findViewById(R.id.seekBarLayout)
 
         previewTimeBar.setPreviewEnabled(true)
-        previewTimeBar.setPreviewAnimationEnabled(false)
-        previewTimeBar.setAdMarkerColor(Color.argb(0x00, 0xFF, 0xFF, 0xFF))
-        previewTimeBar.setPlayedAdMarkerColor(Color.argb(0x98, 0xFF, 0xFF, 0xFF))
         previewTimeBar.addOnScrubListener(this)
-        previewTimeBar.setPreviewLoader(this)
+        previewTimeBar.setPreviewLoader(object : PreviewLoader {
+            override fun loadPreview(currentPosition: Long, max: Long) {
+                pauseVideoPlayer()
+                previewFrameLayout.visibility = View.VISIBLE
+                previewTimeBar.showPreview()
+                Log.e("Video Sprite::::", "Url position:::" + currentPosition)
+                if (spriteImageUrl != null && !TextUtils.isEmpty(spriteImageUrl)) {
+                    Log.e("Video Sprite::::", "Url:::" + spriteImageUrl)
+                    Glide.with(previewImageView)
+                        .load(spriteImageUrl)
+                        .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
+                        .transform(GlideThumbnailTransformation(currentPosition))
+                        .into(previewImageView)
+                } else {
+                    Log.e("Video Sprite::::", "Url:::Empty")
+                }
+            }
+
+        })
 
 
         /*      volumeProgressBar.getProgressDrawable().setColorFilter(
@@ -544,6 +562,7 @@ class BalajiVideoPlayer(
         durationlayout!!.visibility = GONE
         videoMenuLayout!!.visibility = GONE
         resumedVideoTv?.visibility = View.GONE
+        seekBarLayout.visibility = View.GONE
         removeCallbacks(hideAction)
         hideAtMs = C.TIME_UNSET
         isControllerShown = false
@@ -561,6 +580,7 @@ class BalajiVideoPlayer(
         durationlayout!!.visibility = VISIBLE
         videoMenuLayout!!.visibility = VISIBLE
         resumedVideoTv?.visibility = View.GONE
+        seekBarLayout.visibility = View.VISIBLE
         updatePlayPauseButton()
         hideAfterTimeout()
         isControllerShown = true
@@ -1298,7 +1318,22 @@ class BalajiVideoPlayer(
 
     override fun onScrubMove(previewBar: PreviewBar, progress: Int, fromUser: Boolean) {
 
-        previewFrameLayout.visibility = VISIBLE
+        pauseVideoPlayer()
+        previewFrameLayout.visibility = View.VISIBLE
+        previewTimeBar.showPreview()
+        Log.e("Video Sprite::::", "Url position:::" + currentPosition)
+        if (spriteImageUrl != null && !TextUtils.isEmpty(spriteImageUrl)) {
+            Log.e("Video Sprite::::", "Url:::" + spriteImageUrl)
+            Glide.with(previewImageView)
+                .load(spriteImageUrl)
+                .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
+                .transform(GlideThumbnailTransformation(currentPosition))
+                .into(previewImageView)
+        } else {
+            Log.e("Video Sprite::::", "Url:::Empty")
+        }
+
+
         if (currentDurationPlayTv != null) {
             currentDurationPlayTv.text = Util.getStringForTime(
                 formatBuilder,
@@ -1313,24 +1348,10 @@ class BalajiVideoPlayer(
         if (mMediaPlayer != null) {
             seekTo(previewBar.progress.toLong())
         }
+        previewTimeBar.hidePreview()
         resumeVideoPlayer()
     }
 
-    override fun loadPreview(currentPosition: Long, max: Long) {
-        pauseVideoPlayer()
-        Log.e("Video Sprite::::", "Url position:::" + currentPosition)
-        if (spriteImageUrl != null && !TextUtils.isEmpty(spriteImageUrl)) {
-            Log.e("Video Sprite::::", "Url:::" + spriteImageUrl)
-            Glide.with(previewImageView)
-                .load(spriteImageUrl)
-                .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
-                .transform(GlideThumbnailTransformation(currentPosition))
-                .into(previewImageView)
-        } else {
-            Log.e("Video Sprite::::", "Url:::Empty")
-        }
-
-    }
 
     private val pallyconEventListener: PallyconEventListener = object : PallyconEventListener {
         override fun onDrmKeysLoaded(licenseInfo: Map<String, String>) {}

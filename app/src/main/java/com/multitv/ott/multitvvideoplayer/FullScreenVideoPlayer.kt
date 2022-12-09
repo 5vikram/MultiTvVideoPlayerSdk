@@ -29,6 +29,7 @@ import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.LinearLayoutCompat
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.Target
@@ -138,7 +139,7 @@ class FullScreenVideoPlayer(
     private lateinit var videoTitle: TextView
     private lateinit var epsodeButton: ImageView
     private lateinit var epsodeNextButton: ImageView
-
+    private lateinit var seekBarLayout: ConstraintLayout
     private var videoControllerLayout: RelativeLayout? = null
 
 
@@ -241,7 +242,7 @@ class FullScreenVideoPlayer(
 
         videoControllerLayout = view.findViewById(R.id.videoControllerLayout)
         previewFrameLayout = view.findViewById(R.id.previewFrameLayout)
-
+        seekBarLayout = view.findViewById(R.id.seekBarLayout)
 
         setting?.setOnClickListener(this)
         centerButtonLayout = view.findViewById(R.id.centerButtonLayout)
@@ -1218,10 +1219,25 @@ class FullScreenVideoPlayer(
     }
 
     override fun onScrubMove(previewBar: PreviewBar, progress: Int, fromUser: Boolean) {
-        //findViewById(R.id.centerButtonLayout)?.setVisibility(View.GONE);
-        previewFrameLayout!!.visibility = VISIBLE
+
+        pauseVideoPlayer()
+        previewFrameLayout.visibility = View.VISIBLE
+        previewTimeBar.showPreview()
+        Log.e("Video Sprite::::", "Url position:::" + currentPosition)
+        if (spriteImageUrl != null && !TextUtils.isEmpty(spriteImageUrl)) {
+            Log.e("Video Sprite::::", "Url:::" + spriteImageUrl)
+            Glide.with(previewImageView)
+                .load(spriteImageUrl)
+                .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
+                .transform(GlideThumbnailTransformation(currentPosition))
+                .into(previewImageView)
+        } else {
+            Log.e("Video Sprite::::", "Url:::Empty")
+        }
+
+
         if (currentDurationPlayTv != null) {
-            currentDurationPlayTv!!.text = Util.getStringForTime(
+            currentDurationPlayTv.text = Util.getStringForTime(
                 formatBuilder,
                 formatter,
                 progress.toLong()
@@ -1231,12 +1247,13 @@ class FullScreenVideoPlayer(
 
     override fun onScrubStop(previewBar: PreviewBar) {
         previewFrameLayout!!.visibility = GONE
-        //findViewById(R.id.centerButtonLayout)?.setVisibility(View.VISIBLE);
         if (mMediaPlayer != null) {
             seekTo(previewBar.progress.toLong())
         }
+        previewTimeBar.hidePreview()
         resumeVideoPlayer()
     }
+
 
     override fun loadPreview(currentPosition: Long, max: Long) {
         pauseVideoPlayer()
@@ -1532,9 +1549,10 @@ class FullScreenVideoPlayer(
         overlayImageTransparent!!.visibility = GONE
         centerButtonLayout!!.visibility = GONE
         videoProgressLayout!!.visibility = GONE
-        durationlayout!!.visibility = GONE
-        videoMenuLayout!!.visibility = GONE
-        resumedVideoTv?.visibility = View.GONE
+        durationlayout.visibility = GONE
+        videoMenuLayout.visibility = GONE
+        resumedVideoTv.visibility = View.GONE
+        seekBarLayout.visibility = View.GONE
         removeCallbacks(hideAction)
         hideAtMs = C.TIME_UNSET
         isControllerShown = false
@@ -1547,9 +1565,10 @@ class FullScreenVideoPlayer(
         overlayImageTransparent!!.visibility = VISIBLE
         centerButtonLayout!!.visibility = VISIBLE
         videoProgressLayout!!.visibility = VISIBLE
-        durationlayout!!.visibility = VISIBLE
-        videoMenuLayout!!.visibility = VISIBLE
+        durationlayout.visibility = VISIBLE
+        videoMenuLayout.visibility = VISIBLE
         resumedVideoTv?.visibility = View.GONE
+        seekBarLayout.visibility = View.VISIBLE
         updatePlayPauseButton()
         hideAfterTimeout()
         isControllerShown = true
