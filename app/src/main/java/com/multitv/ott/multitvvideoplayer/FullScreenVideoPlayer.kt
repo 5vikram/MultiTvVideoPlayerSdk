@@ -308,104 +308,23 @@ class FullScreenVideoPlayer(
             context.finish()
         }
 
-        simpleExoPlayerView?.setOnSystemUiVisibilityChangeListener {
-            if (it == View.VISIBLE) {
-                Log.e("Video Controller::::", "HIDE")
-                hideController()
-            } else {
-                Log.e("Video Controller::::", "Show")
-                showController()
-            }
-        }
 
-        /* videoControllerLayout?.setOnClickListener {
+
+         videoControllerLayout?.setOnClickListener {
              if (isControllerShown)
                  hideController()
              else
                  showController()
-         }*/
+         }
 
-        //  findViewById<View>(R.id.frameLayout)?.setOnTouchListener(clickFrameSwipeListener)
-        //findViewById<View>(R.id.frameLayout).setOnTouchListener(clickFrameSwipeListener)
-        //findViewById(R.id.frameLayout)
-/*
-        findViewById<View>(R.id.frameLayout).setOnTouchListener(object :
-            OnSwipeTouchListener(true) {
-            override fun onClick() {
-                VideoPlayerTracer.error("Swipe:::", "onClick()")
-            }
 
-            override fun onBeforeMove(dir: Direction) {
-                VideoPlayerTracer.error("Swipe:::", "onBeforeMove()  " + dir.name)
-            }
-
-            override fun onAfterMove() {
-                VideoPlayerTracer.error("Swipe:::", "onAfterMove()")
-            }
-
-            override fun onDoubleTap(event: MotionEvent) {
-                VideoPlayerTracer.error("Swipe:::", "onDoubleTap()")
-            }
-
-            override fun onMove(dir: Direction, diff: Float) {
-                VideoPlayerTracer.error("Swipe:::", "onMove()")
-            } */
-/*    @Override
-            public void onClick() {
-                super.onClick();
-                if (isControllerShown)
-                    hideController();
-                else
-                    showController();
-
-                VideoPlayerTracer.error("Swipe:::", "onClick()");
-            }
-
-            @Override
-            public void onSwipeLeft() {
-                VideoPlayerTracer.error("Swipe:::", "onSwipeLeft()");
-                super.onSwipeLeft();
-            }
-
-            @Override
-            public void onSwipeRight() {
-                VideoPlayerTracer.error("Swipe:::", "onSwipeRight()");
-                super.onSwipeRight();
-            }
-
-            @Override
-            public void onSwipeDown() {
-                VideoPlayerTracer.error("Swipe:::", "onSwipeDown()");
-                super.onSwipeDown();
-            }
-
-            @Override
-            public void onSwipeUp() {
-                VideoPlayerTracer.error("Swipe:::", "onSwipeUp()");
-                super.onSwipeUp();
-            }*//*
-
-        })
-*/
 
         findViewById<View>(R.id.speed_btn)?.setOnClickListener { showSpeedControlDailog() }
-        // simpleExoPlayerView.set
         errorRetryLayout?.setOnClickListener(OnClickListener {
             errorRetryLayout?.setVisibility(GONE)
             initializeMainPlayer(mContentUrl, true)
         })
-        /*   videoUnLockButton?.setOnClickListener(OnClickListener {
-               isScreenLockEnable = false
-               videoUnLockButton?.setVisibility(GONE)
-             //  videoLockButton?.setVisibility(VISIBLE)
-               showController()
-           })
-           videoLockButton?.setOnClickListener(OnClickListener {
-               isScreenLockEnable = true
-               videoUnLockButton?.setVisibility(VISIBLE)
-              // videoLockButton?.setVisibility(GONE)
-               hideController()
-           })*/
+
         pictureInPicture?.setOnClickListener(OnClickListener {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 hideController()
@@ -580,33 +499,7 @@ class FullScreenVideoPlayer(
     }
 
 
-    /* fun hideController() {
-         closeVideoPlayerButton!!.visibility = GONE
-         overlayImageTransparent!!.visibility = GONE
-         centerButtonLayout!!.visibility = GONE
-         videoProgressLayout!!.visibility = GONE
-         durationlayout!!.visibility = GONE
-         videoMenuLayout!!.visibility = GONE
-         resumedVideoTv?.visibility = View.GONE
-         removeCallbacks(hideAction)
-         hideAtMs = C.TIME_UNSET
-         isControllerShown = false
-         setTimerOnVideoPlayer(true)
-     }
 
-     fun showController() {
-         closeVideoPlayerButton!!.visibility = VISIBLE
-         overlayImageTransparent!!.visibility = VISIBLE
-         centerButtonLayout!!.visibility = VISIBLE
-         videoProgressLayout!!.visibility = VISIBLE
-         durationlayout!!.visibility = VISIBLE
-         videoMenuLayout!!.visibility = VISIBLE
-         resumedVideoTv?.visibility = View.GONE
-         updatePlayPauseButton()
-         hideAfterTimeout()
-         isControllerShown = true
-         setTimerOnVideoPlayer(false)
-     }*/
 
     private fun updatePlayPauseButton() {
         var requestPlayPauseFocus = false
@@ -886,8 +779,6 @@ class FullScreenVideoPlayer(
             mMediaPlayer!!.addListener(stateChangeCallback1)
             simpleExoPlayerView!!.player = mMediaPlayer
             simpleExoPlayerView!!.controllerHideOnTouch = true
-            simpleExoPlayerView!!.controllerAutoShow = false
-            simpleExoPlayerView!!.controllerShowTimeoutMs = DEFAULT_TIMEOUT_MS
             simpleExoPlayerView!!.setControllerHideDuringAds(true)
             var mediaItem: MediaItem? = null
             var subtitle: MediaItem.SubtitleConfiguration? = null
@@ -1439,175 +1330,6 @@ class FullScreenVideoPlayer(
     }
 
 
-/*
-    private var clickFrameSwipeListener = object : OnSwipeTouchListener(true) {
-        // mGestureType=
-        var diffTime = -1f
-        var finalTime = -1f
-        var startVolume: Int = 0
-        var maxVolume: Int = 0
-        var startBrightness: Int = 0
-        var maxBrightness: Int = 0
-
-        override fun onMove(dir: OnSwipeTouchListener.Direction, diff: Float) {
-            finalTime = -1f
-
-            if (initialX >= mInitialTextureWidth / 2 || mWindow == null) {
-                // Right side swipe when up and down
-
-                var diffVolume: Float
-                var finalVolume: Int
-
-                diffVolume = maxVolume.toFloat() * diff / (mInitialTextureHeight.toFloat() / 2)
-                if (dir == OnSwipeTouchListener.Direction.DOWN) {
-                    diffVolume = -diffVolume
-                }
-                finalVolume = startVolume + diffVolume.toInt()
-                if (finalVolume < 0)
-                    finalVolume = 0
-                else if (finalVolume > maxVolume)
-                    finalVolume = maxVolume
-
-                */
-/*val progressText = String.format(
-                    resources.getString(R.string.volume), finalVolume
-                )*//*
-
-                // mPositionTextView.text = progressText
-                volumeProgressBar.progress = finalVolume
-                audioManager?.setStreamVolume(AudioManager.STREAM_MUSIC, finalVolume, 0)
-
-            } else if (initialX < mInitialTextureWidth / 2) {
-                // Left side swipe when up and down
-
-                var diffBrightness: Float
-                var finalBrightness: Int
-
-                diffBrightness =
-                    maxBrightness.toFloat() * diff / (mInitialTextureHeight.toFloat() / 2)
-                if (dir == OnSwipeTouchListener.Direction.DOWN) {
-                    diffBrightness = -diffBrightness
-                }
-                finalBrightness = startBrightness + diffBrightness.toInt()
-                if (finalBrightness < 0)
-                    finalBrightness = 0
-                else if (finalBrightness > maxBrightness)
-                    finalBrightness = maxBrightness
-
-
-                val layout = mWindow?.attributes
-                layout?.screenBrightness = finalBrightness.toFloat() / 100
-                mWindow?.attributes = layout
-
-
-                brightnessProgressBar.progress = finalBrightness
-
-
-                */
-/*PreferenceManager.getDefaultSharedPreferences(context)
-                    .edit()
-                    .putInt(BETTER_VIDEO_PLAYER_BRIGHTNESS, finalBrightness)
-                    .apply()*//*
-
-            }
-        }
-
-        override fun onClick() {
-            if (isControllerShown)
-                hideController()
-            else
-                showController()
-        }
-
-        override fun onDoubleTap(event: MotionEvent) {
-*/
-/*
-            if (mGestureType == GestureType.DoubleTapGesture) {
-                val seekSec = mDoubleTapSeekDuration / 1000
-                viewForward.text = String.format(resources.getString(R.string.seconds), seekSec)
-                viewBackward.text = String.format(resources.getString(R.string.seconds), seekSec)
-                if (event.x > mInitialTextureWidth / 2) {
-                    viewForward.let {
-                        animateViewFade(it, 1)
-                        Handler().postDelayed({
-                            animateViewFade(it, 0)
-                        }, 500)
-                    }
-                    seekTo(getCurrentPosition() + mDoubleTapSeekDuration)
-                } else {
-                    viewBackward.let {
-                        animateViewFade(it, 1)
-                        Handler().postDelayed({
-                            animateViewFade(it, 0)
-                        }, 500)
-                    }
-                    seekTo(getCurrentPosition() - mDoubleTapSeekDuration)
-                }
-            }
-*//*
-
-        }
-
-        override fun onAfterMove() {
-            */
-/* if (finalTime >= 0 && mGestureType == GestureType.SwipeGesture) {
-                 seekTo(finalTime.toLong())*//*
-
-            //if (mWasPlaying) mPlayer?.start()
-            //  }
-            //  mPositionTextView.visibility = View.GONE
-
-            volumeProgressBar.visibility = View.GONE
-            brightnessProgressBar.visibility = View.GONE
-            resumeVideoPlayer()
-            hideController()
-
-        }
-
-        override fun onBeforeMove(dir: Direction) {
-//            if (mGestureType != GestureType.SwipeGesture)
-//                return
-//            if (dir == Direction.LEFT || dir == Direction.RIGHT) {
-//                val playing = mMediaPlayer != null && mMediaPlayer!!.playWhenReady
-//                if (playing)
-//                    pauseVideoPlayer()
-//            } else {
-//                maxBrightness = 100
-//                startBrightness = (mWindow?.attributes?.screenBrightness!! * 100).toInt()
-//                maxVolume = audioManager?.getStreamMaxVolume(AudioManager.STREAM_MUSIC) ?: 100
-//                startVolume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) ?: 100
-//
-//                volumeProgressBar.max = maxVolume
-//                brightnessProgressBar.max = maxBrightness
-//            }
-
-
-            if (initialX >= mInitialTextureWidth / 2 || mWindow == null) {
-                // Right side swipe when up and down
-                volumeProgressBar.visibility = View.VISIBLE
-                volumeProgressBar.progress = startVolume
-            } else if (initialX < mInitialTextureWidth / 2) {
-                // Left side swipe when up and down
-                brightnessProgressBar.visibility = View.VISIBLE
-                brightnessProgressBar.progress = startBrightness
-            }
-
-
-            maxBrightness = 100
-            startBrightness = (mWindow?.attributes?.screenBrightness!! * 100).toInt()
-            maxVolume = audioManager?.getStreamMaxVolume(AudioManager.STREAM_MUSIC) ?: 100
-            startVolume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) ?: 100
-
-            volumeProgressBar.max = maxVolume
-            brightnessProgressBar.max = maxBrightness
-
-            hideController()
-
-        }
-    }
-*/
-
-
     enum class GestureType {
         NoGesture, SwipeGesture, DoubleTapGesture
     }
@@ -1810,7 +1532,7 @@ class FullScreenVideoPlayer(
 
 
     fun hideController() {
-        /*closeVideoPlayerButton!!.visibility = GONE
+        closeVideoPlayerButton!!.visibility = GONE
         overlayImageTransparent!!.visibility = GONE
         centerButtonLayout!!.visibility = GONE
         videoProgressLayout!!.visibility = GONE
@@ -1818,15 +1540,14 @@ class FullScreenVideoPlayer(
         videoMenuLayout!!.visibility = GONE
         resumedVideoTv?.visibility = View.GONE
         removeCallbacks(hideAction)
-        hideAtMs = C.TIME_UNSET*/
+        hideAtMs = C.TIME_UNSET
         isControllerShown = false
         setTimerOnVideoPlayer(true)
         updatePlayPauseButton()
-        simpleExoPlayerView?.hideController()
     }
 
     fun showController() {
-        /*  closeVideoPlayerButton!!.visibility = VISIBLE
+          closeVideoPlayerButton!!.visibility = VISIBLE
           overlayImageTransparent!!.visibility = VISIBLE
           centerButtonLayout!!.visibility = VISIBLE
           videoProgressLayout!!.visibility = VISIBLE
@@ -1834,11 +1555,11 @@ class FullScreenVideoPlayer(
           videoMenuLayout!!.visibility = VISIBLE
           resumedVideoTv?.visibility = View.GONE
           updatePlayPauseButton()
-          hideAfterTimeout()*/
+          hideAfterTimeout()
         isControllerShown = true
         setTimerOnVideoPlayer(false)
         updatePlayPauseButton()
-        simpleExoPlayerView?.showController()
+
     }
 
 }
