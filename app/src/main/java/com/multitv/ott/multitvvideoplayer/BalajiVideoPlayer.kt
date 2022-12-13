@@ -166,24 +166,6 @@ class BalajiVideoPlayer(
     /** Intent extra for media controls from Picture-in-Picture mode.  */
     private val EXTRA_CONTROL_TYPE = "control_type"
 
-    /** The request code for play action PendingIntent.  */
-    private val REQUEST_PLAY = 1
-
-    /** The request code for pause action PendingIntent.  */
-    private val REQUEST_PAUSE = 2
-
-    /** The request code for info action PendingIntent.  */
-    private val REQUEST_INFO = 3
-
-    /** The intent extra value for play action.  */
-    private val CONTROL_TYPE_PLAY = 1
-
-    /** The intent extra value for pause action.  */
-    private val CONTROL_TYPE_PAUSE = 2
-
-
-
-    private var mGestureType = GestureType.NoGesture
 
     private var mWindow: Window? = null
 
@@ -444,7 +426,7 @@ class BalajiVideoPlayer(
     ) {
         val actions = ArrayList<RemoteAction>()
 
-        val intent = PendingIntent.getBroadcast(context, requestCode, Intent(ACTION_MEDIA_CONTROL).putExtra(EXTRA_CONTROL_TYPE, controlType), 0)
+        val intent = PendingIntent.getBroadcast(context, requestCode, Intent(ACTION_MEDIA_CONTROL).putExtra(EXTRA_CONTROL_TYPE, controlType), PendingIntent.FLAG_MUTABLE)
         val icon: Icon = Icon.createWithResource(context, iconId)
         actions.add(RemoteAction(icon, title!!, title, intent))
         mPictureInPictureParamsBuilder.setActions(actions)
