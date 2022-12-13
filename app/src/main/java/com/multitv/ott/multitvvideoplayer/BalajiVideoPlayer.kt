@@ -11,14 +11,12 @@ import android.content.DialogInterface
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.content.res.Configuration
-import android.graphics.Color
 import android.media.AudioManager
 import android.net.Uri
 import android.os.Build
 import android.os.Handler
 import android.os.SystemClock
 import android.support.v4.media.session.MediaSessionCompat
-import android.support.v4.media.session.PlaybackStateCompat
 import android.telephony.PhoneStateListener
 import android.telephony.TelephonyManager
 import android.text.TextUtils
@@ -308,15 +306,15 @@ class BalajiVideoPlayer(
                     ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
                 (getContext() as Activity).window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
                 showSystemBar()
-                videoRotationButton?.setImageResource(R.drawable.ic_balaji_fullscreen)
-                videoLockButton?.setVisibility(GONE)
-                videoUnLockButton?.setVisibility(GONE)
+                videoRotationButton.setImageResource(R.drawable.ic_balaji_fullscreen)
+                videoLockButton.setVisibility(GONE)
+                videoUnLockButton.setVisibility(GONE)
             } else if (orientation == Configuration.ORIENTATION_PORTRAIT) {
                 (getContext() as Activity).requestedOrientation =
                     ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
                 (getContext() as Activity).window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
                 hideSystemBars()
-                videoRotationButton?.setImageResource(R.drawable.ic_minimize)
+                videoRotationButton.setImageResource(R.drawable.ic_minimize)
                 videoLockUnlockStatus()
             }
         })
@@ -324,7 +322,7 @@ class BalajiVideoPlayer(
 
         volumeUnMuteButton?.setOnClickListener {
             mMediaPlayer?.audioComponent?.volume = 0f
-            volumeMuteAndUnMuteButton?.visibility = View.VISIBLE
+            volumeMuteAndUnMuteButton.visibility = View.VISIBLE
             volumeUnMuteButton?.visibility = View.GONE
         }
 
@@ -972,27 +970,6 @@ class BalajiVideoPlayer(
             val mediaSessionConnector = MediaSessionConnector(mediaSession)
             mediaSessionConnector.setPlayer(mMediaPlayer)
             mediaSession.isActive = true
-
-            val MEDIA_ACTIONS_PLAY_PAUSE =
-                PlaybackStateCompat.ACTION_PLAY or
-                        PlaybackStateCompat.ACTION_PAUSE or
-                        PlaybackStateCompat.ACTION_PLAY_PAUSE
-
-            val MEDIA_ACTIONS_ALL =
-                MEDIA_ACTIONS_PLAY_PAUSE or
-                        PlaybackStateCompat.ACTION_SKIP_TO_NEXT or
-                        PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS
-            val builder = PlaybackStateCompat.Builder()
-                .setActions(MEDIA_ACTIONS_ALL)
-
-            mediaSession.setPlaybackState(builder.build())
-
-            val actions = mediaSession.controller.playbackState.actions
-            val state = if (mMediaPlayer!!.isPlaying) {
-                PlaybackStateCompat.STATE_PLAYING
-            } else {
-                PlaybackStateCompat.STATE_PAUSED
-            }
 
             var volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
             mMediaPlayer?.audioComponent?.volume = volume.toFloat()
