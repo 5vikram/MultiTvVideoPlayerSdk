@@ -333,6 +333,7 @@ class FullScreenVideoPlayer(
                     mPictureInPictureParamsBuilder.setAspectRatio(aspectRatio).setActions(actions)
                         .build()
                     context.enterPictureInPictureMode(mPictureInPictureParamsBuilder.build())
+
                 } else {
                     context.enterPictureInPictureMode()
                 }

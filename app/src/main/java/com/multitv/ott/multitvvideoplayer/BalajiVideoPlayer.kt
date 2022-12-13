@@ -18,6 +18,7 @@ import android.os.Build
 import android.os.Handler
 import android.os.SystemClock
 import android.support.v4.media.session.MediaSessionCompat
+import android.support.v4.media.session.PlaybackStateCompat
 import android.telephony.PhoneStateListener
 import android.telephony.TelephonyManager
 import android.text.TextUtils
@@ -379,6 +380,7 @@ class BalajiVideoPlayer(
                     mPictureInPictureParamsBuilder.setAspectRatio(aspectRatio).setActions(actions)
                         .build()
                     context.enterPictureInPictureMode(mPictureInPictureParamsBuilder.build())
+
                 } else {
                     context.enterPictureInPictureMode()
                 }
@@ -971,6 +973,27 @@ class BalajiVideoPlayer(
             mediaSessionConnector.setPlayer(mMediaPlayer)
             mediaSession.isActive = true
 
+            val MEDIA_ACTIONS_PLAY_PAUSE =
+                PlaybackStateCompat.ACTION_PLAY or
+                        PlaybackStateCompat.ACTION_PAUSE or
+                        PlaybackStateCompat.ACTION_PLAY_PAUSE
+
+            val MEDIA_ACTIONS_ALL =
+                MEDIA_ACTIONS_PLAY_PAUSE or
+                        PlaybackStateCompat.ACTION_SKIP_TO_NEXT or
+                        PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS
+            val builder = PlaybackStateCompat.Builder()
+                .setActions(MEDIA_ACTIONS_ALL)
+
+            mediaSession.setPlaybackState(builder.build())
+
+            val actions = mediaSession.controller.playbackState.actions
+            val state = if (mMediaPlayer!!.isPlaying) {
+                PlaybackStateCompat.STATE_PLAYING
+            } else {
+                PlaybackStateCompat.STATE_PAUSED
+            }
+
             var volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
             mMediaPlayer?.audioComponent?.volume = volume.toFloat()
             if (volume < 1) {
@@ -1542,7 +1565,7 @@ class BalajiVideoPlayer(
             contentRateLayout.visibility = View.GONE
             return
         }
-        Toast.makeText(context, "Show", Toast.LENGTH_SHORT).show()
+
 
         if (parentalAge != null && !TextUtils.isEmpty(parentalAge)) {
             contentRatedTv.setText("Rated U/A " + parentalAge + "+")
