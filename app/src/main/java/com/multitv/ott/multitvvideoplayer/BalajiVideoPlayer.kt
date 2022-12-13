@@ -439,7 +439,6 @@ class BalajiVideoPlayer(
     }
 
 
-    @RequiresApi(Build.VERSION_CODES.O)
     fun updatePictureInPictureActions(
         @DrawableRes iconId: Int, title: String?, controlType: Int, requestCode: Int
     ) {
