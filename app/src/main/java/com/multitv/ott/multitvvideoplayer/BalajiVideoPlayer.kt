@@ -2,15 +2,14 @@ package com.multitv.ott.multitvvideoplayer
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.Activity
-import android.app.AlertDialog
-import android.app.PictureInPictureParams
-import android.app.RemoteAction
+import android.app.*
 import android.content.Context
 import android.content.DialogInterface
+import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.content.res.Configuration
+import android.graphics.drawable.Icon
 import android.media.AudioManager
 import android.net.Uri
 import android.os.Build
@@ -26,6 +25,7 @@ import android.util.Rational
 import android.view.*
 import android.view.View.OnClickListener
 import android.widget.*
+import androidx.annotation.DrawableRes
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.LinearLayoutCompat
@@ -67,7 +67,6 @@ import com.multitv.ott.multitvvideoplayer.popup.TrackSelectionDialog
 import com.multitv.ott.multitvvideoplayer.utils.*
 import com.pallycon.widevinelibrary.*
 import java.util.*
-import kotlin.collections.ArrayList
 
 class BalajiVideoPlayer(
     private val context: AppCompatActivity,
@@ -160,6 +159,28 @@ class BalajiVideoPlayer(
     private var isControllerShown = false
     private var isAttachedToWindowStatus = false
     private var hideAtMs: Long = 0
+
+    /** Intent action for media controls from Picture-in-Picture mode.  */
+    private val ACTION_MEDIA_CONTROL = "media_control"
+
+    /** Intent extra for media controls from Picture-in-Picture mode.  */
+    private val EXTRA_CONTROL_TYPE = "control_type"
+
+    /** The request code for play action PendingIntent.  */
+    private val REQUEST_PLAY = 1
+
+    /** The request code for pause action PendingIntent.  */
+    private val REQUEST_PAUSE = 2
+
+    /** The request code for info action PendingIntent.  */
+    private val REQUEST_INFO = 3
+
+    /** The intent extra value for play action.  */
+    private val CONTROL_TYPE_PLAY = 1
+
+    /** The intent extra value for pause action.  */
+    private val CONTROL_TYPE_PAUSE = 2
+
 
 
     private var mGestureType = GestureType.NoGesture
@@ -374,6 +395,8 @@ class BalajiVideoPlayer(
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     val aspectRatio = Rational(16, 9)
                     val actions: ArrayList<RemoteAction> = ArrayList()
+
+
                     //actions.add(remoteAction)
                     mPictureInPictureParamsBuilder.setAspectRatio(aspectRatio).setActions(actions)
                         .build()
@@ -413,6 +436,20 @@ class BalajiVideoPlayer(
 
 
         super.onFinishInflate()
+    }
+
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun updatePictureInPictureActions(
+        @DrawableRes iconId: Int, title: String?, controlType: Int, requestCode: Int
+    ) {
+        val actions = ArrayList<RemoteAction>()
+
+        val intent = PendingIntent.getBroadcast(context, requestCode, Intent(ACTION_MEDIA_CONTROL).putExtra(EXTRA_CONTROL_TYPE, controlType), 0)
+        val icon: Icon = Icon.createWithResource(context, iconId)
+        actions.add(RemoteAction(icon, title!!, title, intent))
+        mPictureInPictureParamsBuilder.setActions(actions)
+        context.setPictureInPictureParams(mPictureInPictureParamsBuilder.build())
     }
 
 
