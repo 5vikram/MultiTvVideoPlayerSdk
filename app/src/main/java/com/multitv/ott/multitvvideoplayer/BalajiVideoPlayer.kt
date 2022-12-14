@@ -552,14 +552,14 @@ class BalajiVideoPlayer(
         this.spriteImageUrl = url;
     }
 
-    fun hideTitleContanierView(isSHow:Boolean){
+    fun hideTitleContanierView(isSHow: Boolean) {
         if (isSHow)
             videoTitle.visibility = View.VISIBLE
         else
             videoTitle.visibility = View.GONE
     }
 
-    fun hideRatingContanierView(isSHow:Boolean){
+    fun hideRatingContanierView(isSHow: Boolean) {
         if (isSHow)
             contentRateLayout.visibility = View.VISIBLE
         else
@@ -605,7 +605,10 @@ class BalajiVideoPlayer(
         removeCallbacks(hideAction)
         hideAtMs = C.TIME_UNSET
         isControllerShown = false
-        setTimerOnVideoPlayer(true)
+
+        if (!isPipModeOn)
+            setTimerOnVideoPlayer(true)
+
         updatePlayPauseButton()
         contentRateLayout.visibility = View.VISIBLE
 
