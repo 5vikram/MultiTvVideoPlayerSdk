@@ -552,6 +552,20 @@ class BalajiVideoPlayer(
         this.spriteImageUrl = url;
     }
 
+    fun hideTitleContanierView(isSHow:Boolean){
+        if (isSHow)
+            videoTitle.visibility = View.VISIBLE
+        else
+            videoTitle.visibility = View.GONE
+    }
+
+    fun hideRatingContanierView(isSHow:Boolean){
+        if (isSHow)
+            contentRateLayout.visibility = View.VISIBLE
+        else
+            contentRateLayout.visibility = View.GONE
+    }
+
     override fun onConfigurationChanged(newConfig: Configuration) {
         val orientation = resources.configuration.orientation
         if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
