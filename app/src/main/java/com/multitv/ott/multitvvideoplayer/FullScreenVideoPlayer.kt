@@ -341,21 +341,21 @@ class FullScreenVideoPlayer(
                 isPipModeOn = true
             }
         })
-        VideoRenuButton?.setOnClickListener(OnClickListener { rewind() })
-        videoFarwardButton?.setOnClickListener(OnClickListener { fastForward() })
-        videoPlayButton?.setOnClickListener(OnClickListener {
+        VideoRenuButton.setOnClickListener(OnClickListener { rewind() })
+        videoFarwardButton.setOnClickListener(OnClickListener { fastForward() })
+        videoPlayButton.setOnClickListener(OnClickListener {
             if (mMediaPlayer != null) {
                 mMediaPlayer!!.playWhenReady = true
-                videoPlayButton?.setVisibility(GONE)
-                videoPauseButton?.setVisibility(VISIBLE)
+                videoPlayButton.setVisibility(GONE)
+                videoPauseButton.setVisibility(VISIBLE)
                 videoPlayerSdkCallBackListener?.onPlayClick(1)
             }
         })
-        videoPauseButton?.setOnClickListener(OnClickListener {
+        videoPauseButton.setOnClickListener(OnClickListener {
             if (mMediaPlayer != null) {
                 mMediaPlayer!!.playWhenReady = false
-                videoPlayButton?.setVisibility(VISIBLE)
-                videoPauseButton?.setVisibility(GONE)
+                videoPlayButton.setVisibility(VISIBLE)
+                videoPauseButton.setVisibility(GONE)
                 videoPlayerSdkCallBackListener?.onPlayClick(0)
             }
         })
