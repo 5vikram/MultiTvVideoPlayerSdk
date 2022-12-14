@@ -385,7 +385,7 @@ class BalajiVideoPlayer(
 
 
                     //actions.add(remoteAction)
-                    mPictureInPictureParamsBuilder.setAspectRatio(aspectRatio).setActions(actions)
+                    mPictureInPictureParamsBuilder.setAspectRatio(aspectRatio)
                         .build()
                     context.enterPictureInPictureMode(mPictureInPictureParamsBuilder.build())
 
@@ -828,7 +828,8 @@ class BalajiVideoPlayer(
         if (mMediaPlayer != null && simpleExoPlayerView != null) {
             simpleExoPlayerView!!.onResume()
             mMediaPlayer!!.playWhenReady = true
-            videoPlayPauseCallBackListener?.videoStart()
+            if (isPipModeOn)
+                videoPlayPauseCallBackListener?.videoStart()
         }
     }
 
@@ -837,7 +838,8 @@ class BalajiVideoPlayer(
         if (mMediaPlayer != null && simpleExoPlayerView != null) {
             simpleExoPlayerView!!.onPause()
             mMediaPlayer!!.playWhenReady = false
-            videoPlayPauseCallBackListener?.videoStop()
+            if (isPipModeOn)
+                videoPlayPauseCallBackListener?.videoStop()
         }
     }
 
