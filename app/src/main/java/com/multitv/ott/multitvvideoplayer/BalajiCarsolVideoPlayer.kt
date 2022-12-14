@@ -199,16 +199,16 @@ class BalajiCarsolVideoPlayer(
         videoPlayButton?.setOnClickListener(OnClickListener {
             if (mMediaPlayer != null) {
                 mMediaPlayer!!.playWhenReady = true
-                videoPlayButton?.setVisibility(GONE)
-                videoPauseButton?.setVisibility(VISIBLE)
+                videoPlayButton?.setVisibility(View.GONE)
+                videoPauseButton?.setVisibility(View.VISIBLE)
                 videoPlayerSdkCallBackListener?.onPlayClick(1)
             }
         })
         videoPauseButton?.setOnClickListener(OnClickListener {
             if (mMediaPlayer != null) {
                 mMediaPlayer!!.playWhenReady = false
-                videoPlayButton?.setVisibility(VISIBLE)
-                videoPauseButton?.setVisibility(GONE)
+                videoPlayButton?.setVisibility(View.VISIBLE)
+                videoPauseButton?.setVisibility(View.GONE)
                 videoPlayerSdkCallBackListener?.onPlayClick(0)
             }
         })
@@ -545,6 +545,9 @@ class BalajiCarsolVideoPlayer(
         if (mMediaPlayer != null && simpleExoPlayerView != null) {
             simpleExoPlayerView!!.onResume()
             mMediaPlayer!!.playWhenReady = true
+
+            videoPlayButton?.setVisibility(View.GONE)
+            videoPauseButton?.setVisibility(View.VISIBLE)
         }
     }
 
@@ -553,6 +556,9 @@ class BalajiCarsolVideoPlayer(
         if (mMediaPlayer != null && simpleExoPlayerView != null) {
             simpleExoPlayerView!!.onPause()
             mMediaPlayer!!.playWhenReady = false
+
+            videoPlayButton?.setVisibility(View.VISIBLE)
+            videoPauseButton?.setVisibility(View.GONE)
         }
     }
 
