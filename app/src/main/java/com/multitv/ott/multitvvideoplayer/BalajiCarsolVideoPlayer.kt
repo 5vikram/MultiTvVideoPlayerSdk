@@ -546,8 +546,6 @@ class BalajiCarsolVideoPlayer(
             simpleExoPlayerView!!.onResume()
             mMediaPlayer!!.playWhenReady = true
 
-            videoPlayButton?.setVisibility(View.GONE)
-            videoPauseButton?.setVisibility(View.VISIBLE)
         }
     }
 
@@ -556,9 +554,6 @@ class BalajiCarsolVideoPlayer(
         if (mMediaPlayer != null && simpleExoPlayerView != null) {
             simpleExoPlayerView!!.onPause()
             mMediaPlayer!!.playWhenReady = false
-
-            videoPlayButton?.setVisibility(View.VISIBLE)
-            videoPauseButton?.setVisibility(View.GONE)
         }
     }
 
