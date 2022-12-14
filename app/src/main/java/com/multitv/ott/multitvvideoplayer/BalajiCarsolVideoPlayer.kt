@@ -68,7 +68,6 @@ class BalajiCarsolVideoPlayer(
     private var trackSelector: DefaultTrackSelector
     private var videoPlayerSdkCallBackListener: VideoPlayerSdkCallBackListener? = null
     private var MoreInfoListener: MoreInfoListener? = null
-    private var isShowingTrackSelectionDialog = false
     private var WVMAgent: PallyconWVMSDK? = null
     private var analaticsUrl: String? = null
     private var token: String? = null
@@ -76,7 +75,6 @@ class BalajiCarsolVideoPlayer(
     private var contentTitle: String? = null
     private var contentId: String? = null
     private var millisecondsForResume: Long = 0
-    private val adPlayedTimeInMillis: Long = 0
     private var contentPlayedTimeInMillis: Long = 0
 
 
@@ -86,14 +84,13 @@ class BalajiCarsolVideoPlayer(
     private var mInitialTextureWidth: Int = 0
     private var mInitialTextureHeight: Int = 0
 
-    // get buffer duration of video in milli second
+
     var bufferingTimeInMillis: Long = 0
     private var seekPlayerTo = 0
     private var mContentUrl: String? = null
     private var subTitleUri: String? = null
     private var bufferingTimeHandler: Handler? = null
-    private var countDownTimer: CountDownTimerWithPause? = null
-    private val TAG = "VikramExoVideoPlayer"
+
 
     private var videoMenuLayout: RelativeLayout? = null
 
@@ -120,16 +117,13 @@ class BalajiCarsolVideoPlayer(
     private var drmSessionManager: DrmSessionManager? = null
     private var adsLoader: ImaAdsLoader? = null
     private var adsUrl: String? = null
-    private var isScreenLockEnable = false
-    private var isControllerShown = false
-    private var isAttachedToWindowStatus = false
-    private var hideAtMs: Long = 0
 
-    private var mGestureType = GestureType.NoGesture
+    private var isAttachedToWindowStatus = false
+
+
 
     private var mWindow: Window? = null
 
-    private var isPlayerControllEnabled = true
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -201,7 +195,6 @@ class BalajiCarsolVideoPlayer(
                 mMediaPlayer!!.playWhenReady = true
                 videoPlayButton?.setVisibility(View.GONE)
                 videoPauseButton?.setVisibility(View.VISIBLE)
-                resumeVideoPlayer()
                 videoPlayerSdkCallBackListener?.onPlayClick(1)
             }
         })
