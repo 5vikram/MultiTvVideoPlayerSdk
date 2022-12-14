@@ -385,113 +385,124 @@
         android:layout_marginLeft="5dp"
         android:orientation="vertical">
 
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/seekBarLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layoutDirection="ltr"
-        android:orientation="vertical">
-
-
-        <com.github.rubensousa.previewseekbar.exoplayer.PreviewTimeBar
-            android:id="@+id/exo_progress"
-            android:layout_width="0dp"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/seekBarLayout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:previewAnimationEnabled="true"
-            app:layout_constraintEnd_toStartOf="@id/timeUnitlayout"
-            app:previewFrameLayout="@id/previewFrameLayout"
-            app:scrubber_dragged_size="24dp"
-            app:scrubber_enabled_size="16dp" />
+            android:layout_gravity="bottom"
+            android:layoutDirection="ltr"
+            android:orientation="vertical">
 
-        <LinearLayout
-            android:id="@+id/timeUnitlayout"
-            android:layout_width="wrap_content"
+
+
+            <FrameLayout
+                android:id="@+id/previewFrameLayout"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/video_frame"
+                app:layout_constraintDimensionRatio="16:9"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintWidth_default="percent"
+                app:layout_constraintWidth_percent="0.35"
+                tools:visibility="visible"
+                tools:ignore="MissingConstraints">
+
+                <ImageView
+                    android:id="@+id/videoPreviewImageView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/video_frame_width"
+                    android:scaleType="fitXY" />
+            </FrameLayout>
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginRight="5dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             android:orientation="horizontal">
 
-            <TextView
-                android:id="@id/exo_position"
+
+            <com.github.rubensousa.previewseekbar.exoplayer.PreviewTimeBar
+                android:id="@+id/exo_progress"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:layout_marginEnd="5dp"
+                app:previewAnimationEnabled="true"
+                android:layout_gravity="center_vertical"
+                app:previewFrameLayout="@id/previewFrameLayout"
+                app:scrubber_dragged_size="24dp"
+                app:scrubber_enabled_size="16dp" />
+
+            <LinearLayout
+                android:id="@+id/timeUnitlayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:gravity="center_vertical"
-                android:includeFontPadding="false"
-                android:paddingLeft="4dp"
-                android:paddingRight="4dp"
-                android:textColor="#FFBEBEBE"
-                android:textSize="12sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                tools:text="3.00" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:gravity="center_vertical"
-                android:includeFontPadding="false"
-                android:text="/"
-                android:textColor="#FFBEBEBE"
-                android:textSize="12sp"
-                android:textStyle="bold" />
-
-
-            <TextView
-                android:id="@id/exo_duration"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:includeFontPadding="false"
-                android:paddingLeft="4dp"
-                android:paddingRight="4dp"
-                android:textColor="#FFBEBEBE"
-                android:textSize="12sp"
-                android:textStyle="bold"
+                android:layout_marginRight="5dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                tools:text="3.00" />
+                android:orientation="horizontal">
 
-        </LinearLayout>
+                <TextView
+                    android:id="@id/exo_position"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical"
+                    android:includeFontPadding="false"
+                    android:paddingLeft="4dp"
+                    android:paddingRight="4dp"
+                    android:textColor="#FFBEBEBE"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    tools:text="3.00" />
 
-        <FrameLayout
-            android:id="@+id/previewFrameLayout"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
-            android:background="@drawable/video_frame"
-            android:visibility="invisible"
-            app:layout_constraintBottom_toTopOf="@+id/exo_progress"
-            app:layout_constraintDimensionRatio="16:9"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintWidth_default="percent"
-            app:layout_constraintWidth_percent="0.35"
-            tools:visibility="visible">
-
-            <ImageView
-                android:id="@+id/videoPreviewImageView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="@dimen/video_frame_width"
-                android:scaleType="fitXY" />
-        </FrameLayout>
-
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical"
+                    android:includeFontPadding="false"
+                    android:text="/"
+                    android:textColor="#FFBEBEBE"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                <TextView
+                    android:id="@id/exo_duration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:includeFontPadding="false"
+                    android:paddingLeft="4dp"
+                    android:paddingRight="4dp"
+                    android:textColor="#FFBEBEBE"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    tools:text="3.00" />
+
+            </LinearLayout>
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+
 
     </LinearLayout>
 
