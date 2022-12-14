@@ -60,6 +60,7 @@ import com.multitv.ott.multitvvideoplayer.custom.CountDownTimerWithPause
 import com.multitv.ott.multitvvideoplayer.database.SharedPreferencePlayer
 import com.multitv.ott.multitvvideoplayer.download.DownloadUtil
 import com.multitv.ott.multitvvideoplayer.fabbutton.FabButton
+import com.multitv.ott.multitvvideoplayer.listener.VideoPlayPauseCallBackListener
 import com.multitv.ott.multitvvideoplayer.listener.VideoPlayerSdkCallBackListener
 import com.multitv.ott.multitvvideoplayer.models.SkipDurationPlayer
 import com.multitv.ott.multitvvideoplayer.playerglide.GlideThumbnailTransformation
@@ -80,7 +81,11 @@ class BalajiVideoPlayer(
     private var mMediaPlayer: ExoPlayer? = null
     private var simpleExoPlayerView: StyledPlayerView? = null
     private var trackSelector: DefaultTrackSelector
+
+    private var videoPlayPauseCallBackListener: VideoPlayPauseCallBackListener? = null
     private var videoPlayerSdkCallBackListener: VideoPlayerSdkCallBackListener? = null
+
+
     private var isShowingTrackSelectionDialog = false
     private var WVMAgent: PallyconWVMSDK? = null
     private var analaticsUrl: String? = null
@@ -426,7 +431,12 @@ class BalajiVideoPlayer(
     ) {
         val actions = ArrayList<RemoteAction>()
 
-        val intent = PendingIntent.getBroadcast(context, requestCode, Intent(ACTION_MEDIA_CONTROL).putExtra(EXTRA_CONTROL_TYPE, controlType), PendingIntent.FLAG_MUTABLE)
+        val intent = PendingIntent.getBroadcast(
+            context,
+            requestCode,
+            Intent(ACTION_MEDIA_CONTROL).putExtra(EXTRA_CONTROL_TYPE, controlType),
+            PendingIntent.FLAG_MUTABLE
+        )
         val icon: Icon = Icon.createWithResource(context, iconId)
         actions.add(RemoteAction(icon, title!!, title, intent))
         mPictureInPictureParamsBuilder.setActions(actions)
@@ -726,6 +736,10 @@ class BalajiVideoPlayer(
         volumeProgressBarSetUp()
     }
 
+    fun setMultiTvVideoPlayerPausePlaySdkListener(videoPlayPauseCallBackListener: VideoPlayPauseCallBackListener?) {
+        this.videoPlayPauseCallBackListener = videoPlayPauseCallBackListener
+    }
+
     fun setMultiTvVideoPlayerSdkListener(videoPlayerSdkCallBackListener: VideoPlayerSdkCallBackListener?) {
         this.videoPlayerSdkCallBackListener = videoPlayerSdkCallBackListener
     }
@@ -814,6 +828,7 @@ class BalajiVideoPlayer(
         if (mMediaPlayer != null && simpleExoPlayerView != null) {
             simpleExoPlayerView!!.onResume()
             mMediaPlayer!!.playWhenReady = true
+            videoPlayPauseCallBackListener?.videoStart()
         }
     }
 
@@ -822,6 +837,7 @@ class BalajiVideoPlayer(
         if (mMediaPlayer != null && simpleExoPlayerView != null) {
             simpleExoPlayerView!!.onPause()
             mMediaPlayer!!.playWhenReady = false
+            videoPlayPauseCallBackListener?.videoStop()
         }
     }
 
