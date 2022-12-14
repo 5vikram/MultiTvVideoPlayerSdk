@@ -1550,7 +1550,6 @@ class FullScreenVideoPlayer(
         videoProgressLayout.visibility = GONE
         videoMenuLayout.visibility = GONE
         resumedVideoTv.visibility = View.GONE
-        seekBarLayout.visibility = View.GONE
         removeCallbacks(hideAction)
         hideAtMs = C.TIME_UNSET
         isControllerShown = false
@@ -1565,7 +1564,6 @@ class FullScreenVideoPlayer(
         videoProgressLayout.visibility = VISIBLE
         videoMenuLayout.visibility = VISIBLE
         resumedVideoTv.visibility = View.GONE
-        seekBarLayout.visibility = View.VISIBLE
         updatePlayPauseButton()
         hideAfterTimeout()
         isControllerShown = true

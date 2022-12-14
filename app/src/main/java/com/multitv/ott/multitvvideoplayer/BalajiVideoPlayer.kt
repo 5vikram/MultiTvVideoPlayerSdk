@@ -383,7 +383,8 @@ class BalajiVideoPlayer(
                     val aspectRatio = Rational(16, 9)
                     val actions: ArrayList<RemoteAction> = ArrayList()
 
-
+                    hideTitleContanierView(false)
+                    hideRatingContanierView(false)
                     //actions.add(remoteAction)
                     mPictureInPictureParamsBuilder.setAspectRatio(aspectRatio)
                         .build()
@@ -601,7 +602,6 @@ class BalajiVideoPlayer(
         videoProgressLayout.visibility = GONE
         videoMenuLayout.visibility = GONE
         resumedVideoTv.visibility = View.GONE
-        seekBarLayout.visibility = View.GONE
         removeCallbacks(hideAction)
         hideAtMs = C.TIME_UNSET
         isControllerShown = false
@@ -621,7 +621,6 @@ class BalajiVideoPlayer(
         videoProgressLayout.visibility = VISIBLE
         videoMenuLayout.visibility = VISIBLE
         resumedVideoTv.visibility = View.GONE
-        seekBarLayout.visibility = View.VISIBLE
         updatePlayPauseButton()
         hideAfterTimeout()
         isControllerShown = true
