@@ -409,7 +409,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintWidth_default="percent"
                 app:layout_constraintWidth_percent="0.35"
-                tools:visibility="visible"
+                android:visibility="gone"
                 tools:ignore="MissingConstraints">
 
                 <ImageView

@@ -383,8 +383,8 @@ class BalajiVideoPlayer(
                     val aspectRatio = Rational(16, 9)
                     val actions: ArrayList<RemoteAction> = ArrayList()
 
-                    hideTitleContanierView(false)
-                    hideRatingContanierView(false)
+                    videoTitle.visibility = View.VISIBLE
+                    contentRateLayout.visibility = View.GONE
                     //actions.add(remoteAction)
                     mPictureInPictureParamsBuilder.setAspectRatio(aspectRatio)
                         .build()
