@@ -95,9 +95,9 @@ class BalajiCarsolVideoPlayer(
     private var volumeUnMuteButton: ImageView? = null
 
 
-    private var videoPlayButton: ImageView? = null
+    // private var videoPlayButton: ImageView? = null
     private var enter_full_screen: ImageView? = null
-    private var videoPauseButton: ImageView? = null
+    ///private var videoPauseButton: ImageView? = null
 
     private val formatBuilder: StringBuilder
     private val formatter: Formatter
@@ -141,8 +141,8 @@ class BalajiCarsolVideoPlayer(
         volumeLayout = view.findViewById(R.id.volumeLayout)
         volumeLinearLayout = view.findViewById(R.id.volumeLinearLayout)
 
-        videoPlayButton = view.findViewById(R.id.exo_play)
-        videoPauseButton = view.findViewById(R.id.exo_pause)
+        //videoPlayButton = view.findViewById(R.id.exo_play)
+        // videoPauseButton = view.findViewById(R.id.exo_pause)
         enter_full_screen = view.findViewById(R.id.enter_full_screen)
         simpleExoPlayerView = view.findViewById(R.id.videoPlayer)
 
@@ -171,19 +171,19 @@ class BalajiCarsolVideoPlayer(
 
         }
 
-        videoPlayButton?.setOnClickListener {
-            resumeVideoPlayer()
-            videoPlayButton?.setVisibility(View.GONE)
-            videoPauseButton?.setVisibility(View.VISIBLE)
-            videoPlayerSdkCallBackListener?.onPlayClick(1)
-        }
+        /* videoPlayButton?.setOnClickListener {
+             resumeVideoPlayer()
+             videoPlayButton?.setVisibility(View.GONE)
+             videoPauseButton?.setVisibility(View.VISIBLE)
+             videoPlayerSdkCallBackListener?.onPlayClick(1)
+         }
 
-        videoPauseButton?.setOnClickListener {
-            pauseVideoPlayer()
-            videoPlayButton?.setVisibility(View.VISIBLE)
-            videoPauseButton?.setVisibility(View.GONE)
-            videoPlayerSdkCallBackListener?.onPlayClick(0)
-        }
+         videoPauseButton?.setOnClickListener {
+             pauseVideoPlayer()
+             videoPlayButton?.setVisibility(View.VISIBLE)
+             videoPauseButton?.setVisibility(View.GONE)
+             videoPlayerSdkCallBackListener?.onPlayClick(0)
+         }*/
 
 
         super.onFinishInflate()
@@ -205,8 +205,8 @@ class BalajiCarsolVideoPlayer(
             volumeMuteAndUnMuteButton?.isFocusable = true
             moreInfoLinearLayout?.isClickable = true
             moreInfoLinearLayout?.isFocusable = true
-            videoPlayButton?.isClickable = true
-            videoPlayButton?.isFocusable = true
+            //videoPlayButton?.isClickable = true
+            // videoPlayButton?.isFocusable = true
         } else {
             volumeUnMuteButton?.isClickable = false
             volumeUnMuteButton?.isFocusable = false
@@ -214,8 +214,8 @@ class BalajiCarsolVideoPlayer(
             volumeMuteAndUnMuteButton?.isFocusable = false
             moreInfoLinearLayout?.isClickable = false
             moreInfoLinearLayout?.isFocusable = false
-            videoPlayButton?.isClickable = false
-            videoPlayButton?.isFocusable = false
+            //  videoPlayButton?.isClickable = false
+            // videoPlayButton?.isFocusable = false
         }
     }
 
@@ -302,34 +302,39 @@ class BalajiCarsolVideoPlayer(
          isControllerShown = true
      }*/
 
-    private fun updatePlayPauseButton() {
-        var requestPlayPauseFocus = false
-        val playing = mMediaPlayer != null && mMediaPlayer!!.playWhenReady
-        if (videoPlayButton != null) {
-            requestPlayPauseFocus =
-                requestPlayPauseFocus or (playing && videoPlayButton!!.isFocused)
-            videoPlayButton!!.visibility =
-                if (playing) GONE else VISIBLE
-        }
-        if (videoPauseButton != null) {
-            requestPlayPauseFocus =
-                requestPlayPauseFocus or (!playing && videoPauseButton!!.isFocused)
-            videoPauseButton!!.visibility =
-                if (!playing) GONE else VISIBLE
-        }
-        if (requestPlayPauseFocus) {
-            requestPlayPauseFocus()
-        }
+
+    fun getVideoPlayerStatus(): Boolean {
+        return mMediaPlayer != null && mMediaPlayer!!.playWhenReady
     }
 
-    private fun requestPlayPauseFocus() {
-        val playing = mMediaPlayer != null && mMediaPlayer!!.playWhenReady
-        if (!playing && videoPlayButton != null) {
-            videoPlayButton!!.requestFocus()
-        } else if (playing && videoPauseButton != null) {
-            videoPauseButton!!.requestFocus()
-        }
+    private fun updatePlayPauseButton() {
+        /*   var requestPlayPauseFocus = false
+           val playing = mMediaPlayer != null && mMediaPlayer!!.playWhenReady
+           if (videoPlayButton != null) {
+               requestPlayPauseFocus =
+                   requestPlayPauseFocus or (playing && videoPlayButton!!.isFocused)
+               videoPlayButton!!.visibility =
+                   if (playing) GONE else VISIBLE
+           }
+           if (videoPauseButton != null) {
+               requestPlayPauseFocus =
+                   requestPlayPauseFocus or (!playing && videoPauseButton!!.isFocused)
+               videoPauseButton!!.visibility =
+                   if (!playing) GONE else VISIBLE
+           }
+           if (requestPlayPauseFocus) {
+               requestPlayPauseFocus()
+           }*/
     }
+
+    /*   private fun requestPlayPauseFocus() {
+           val playing = mMediaPlayer != null && mMediaPlayer!!.playWhenReady
+           if (!playing && videoPlayButton != null) {
+               videoPlayButton!!.requestFocus()
+           } else if (playing && videoPauseButton != null) {
+               videoPauseButton!!.requestFocus()
+           }
+       }*/
 
     val audioFocusChangeListener = AudioManager.OnAudioFocusChangeListener { focusChange ->
         if (focusChange == AudioManager.AUDIOFOCUS_LOSS) {
@@ -717,7 +722,7 @@ class BalajiCarsolVideoPlayer(
         override fun onLoadingChanged(isLoading: Boolean) {}
         override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
             var text = "Main player"
-            //updatePlayPauseButton()
+            updatePlayPauseButton()
             when (playbackState) {
                 ExoPlayer.STATE_BUFFERING -> {
                     text += "buffering"
