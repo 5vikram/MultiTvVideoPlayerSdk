@@ -159,8 +159,8 @@ class BalajiCarsolVideoPlayer(
         volumeLayout = view.findViewById(R.id.volumeLayout)
         volumeLinearLayout = view.findViewById(R.id.volumeLinearLayout)
 
-        videoPlayButton = view.findViewById(R.id.videoPlay)
-        videoPauseButton = view.findViewById(R.id.videoPause)
+        videoPlayButton = view.findViewById(R.id.exo_play)
+        videoPauseButton = view.findViewById(R.id.exo_pause)
         enter_full_screen = view.findViewById(R.id.enter_full_screen)
         simpleExoPlayerView = view.findViewById(R.id.videoPlayer)
 
@@ -189,24 +189,19 @@ class BalajiCarsolVideoPlayer(
 
         }
 
+        videoPlayButton?.setOnClickListener {
+            mMediaPlayer?.playWhenReady = true
+            videoPlayButton?.setVisibility(View.GONE)
+            videoPauseButton?.setVisibility(View.VISIBLE)
+            videoPlayerSdkCallBackListener?.onPlayClick(1)
+        }
 
-        videoPlayButton?.setOnClickListener(OnClickListener {
-            if (mMediaPlayer != null) {
-                mMediaPlayer!!.playWhenReady = true
-                videoPlayButton?.setVisibility(View.GONE)
-                videoPauseButton?.setVisibility(View.VISIBLE)
-                videoPlayerSdkCallBackListener?.onPlayClick(1)
-            }
-        })
-        videoPauseButton?.setOnClickListener(OnClickListener {
-            if (mMediaPlayer != null) {
-                pauseVideoPlayer()
-                mMediaPlayer!!.playWhenReady = false
-                videoPlayButton?.setVisibility(View.VISIBLE)
-                videoPauseButton?.setVisibility(View.GONE)
-                videoPlayerSdkCallBackListener?.onPlayClick(0)
-            }
-        })
+        videoPauseButton?.setOnClickListener {
+            mMediaPlayer?.playWhenReady = false
+            videoPlayButton?.setVisibility(View.VISIBLE)
+            videoPauseButton?.setVisibility(View.GONE)
+            videoPlayerSdkCallBackListener?.onPlayClick(0)
+        }
 
 
         super.onFinishInflate()
