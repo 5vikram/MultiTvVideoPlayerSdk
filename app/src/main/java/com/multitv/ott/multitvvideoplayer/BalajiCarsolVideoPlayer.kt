@@ -126,7 +126,11 @@ class BalajiCarsolVideoPlayer(
         return mMediaPlayer!!
     }
 
-    fun setVolume(volumeMuteAndUnMuteButton: ImageView?, volumeUnMuteButton: ImageView?) {
+    fun setVolume() {
+
+        var volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
+        mMediaPlayer?.audioComponent?.volume = volume.toFloat()
+
         /* var volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
          mMediaPlayer?.audioComponent?.volume = volume.toFloat()
          if (volume < 1) {
@@ -139,10 +143,9 @@ class BalajiCarsolVideoPlayer(
     }
 
 
-    fun restoreCarsoulVideoPlayer(
-        volumeMuteAndUnMuteButton: ImageView?,
-        volumeUnMuteButton: ImageView?
-    ) {
+    fun restoreCarsoulVideoPlayer() {
+
+        mMediaPlayer?.audioComponent?.volume = 0f
         /*mMediaPlayer?.audioComponent?.volume = 0f
         volumeMuteAndUnMuteButton?.visibility = View.VISIBLE
         volumeUnMuteButton?.visibility = View.GONE*/
@@ -723,30 +726,30 @@ class BalajiCarsolVideoPlayer(
     }
 
 
-    fun onKeyDownEvent(volumeMuteAndUnMuteButton: ImageView, volumeUnMuteButton: ImageView) {
+    fun onKeyDownEvent() {
 
         var volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
         mMediaPlayer?.audioComponent?.volume = volume.toFloat()
-        if (volume < 1) {
+        /*if (volume < 1) {
             volumeMuteAndUnMuteButton?.visibility = View.VISIBLE
             volumeUnMuteButton?.visibility = View.GONE
         } else {
             volumeMuteAndUnMuteButton?.visibility = View.GONE
             volumeUnMuteButton?.visibility = View.VISIBLE
-        }
+        }*/
     }
 
-    fun onKeyUpEvent(volumeMuteAndUnMuteButton: ImageView, volumeUnMuteButton: ImageView) {
+    fun onKeyUpEvent() {
 
         var volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
         mMediaPlayer?.audioComponent?.volume = volume.toFloat()
-        if (volume < 1) {
+       /* if (volume < 1) {
             volumeMuteAndUnMuteButton?.visibility = View.VISIBLE
             volumeUnMuteButton?.visibility = View.GONE
         } else {
             volumeMuteAndUnMuteButton?.visibility = View.GONE
             volumeUnMuteButton?.visibility = View.VISIBLE
-        }
+        }*/
     }
 
 
