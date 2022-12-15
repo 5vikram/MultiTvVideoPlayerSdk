@@ -159,8 +159,8 @@ class BalajiCarsolVideoPlayer(
         volumeLayout = view.findViewById(R.id.volumeLayout)
         volumeLinearLayout = view.findViewById(R.id.volumeLinearLayout)
 
-        videoPlayButton = view.findViewById(R.id.exo_play)
-        videoPauseButton = view.findViewById(R.id.exo_pause)
+        videoPlayButton = view.findViewById(R.id.videoPlay)
+        videoPauseButton = view.findViewById(R.id.videoPause)
         enter_full_screen = view.findViewById(R.id.enter_full_screen)
         simpleExoPlayerView = view.findViewById(R.id.videoPlayer)
 
