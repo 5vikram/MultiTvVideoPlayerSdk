@@ -118,22 +118,22 @@ class BalajiCarsolVideoPlayer(
         val view =
             LayoutInflater.from(getContext())
                 .inflate(R.layout.balaji_no_controller_video_player_layout, this)
-       /* volumeMuteAndUnMuteButton = view.findViewById(R.id.volumeMuteAndUnMuteButton)
+        /* volumeMuteAndUnMuteButton = view.findViewById(R.id.volumeMuteAndUnMuteButton)
 
-        moreInfoLinearLayout = view.findViewById(R.id.moreInfoLinearLayout)
-        videoMenuLayout = view.findViewById(R.id.videoMenuLayout)
-        volumeUnMuteButton = view.findViewById(R.id.volumeUnMuteButton)
-        volumeLayout = view.findViewById(R.id.volumeLayout)
-        volumeLinearLayout = view.findViewById(R.id.volumeLinearLayout)
-*/
+         moreInfoLinearLayout = view.findViewById(R.id.moreInfoLinearLayout)
+         videoMenuLayout = view.findViewById(R.id.videoMenuLayout)
+         volumeUnMuteButton = view.findViewById(R.id.volumeUnMuteButton)
+         volumeLayout = view.findViewById(R.id.volumeLayout)
+         volumeLinearLayout = view.findViewById(R.id.volumeLinearLayout)
+ */
         //videoPlayButton = view.findViewById(R.id.exo_play)
         // videoPauseButton = view.findViewById(R.id.exo_pause)
         //enter_full_screen = view.findViewById(R.id.enter_full_screen)
         simpleExoPlayerView = view.findViewById(R.id.videoPlayer)
 
-      /*  enter_full_screen?.setOnClickListener {
-            videoPlayerSdkCallBackListener?.fullScreenCallBack()
-        }*/
+        /*  enter_full_screen?.setOnClickListener {
+              videoPlayerSdkCallBackListener?.fullScreenCallBack()
+          }*/
 
 
 //        volumeUnMuteButton?.setOnClickListener {
@@ -174,13 +174,26 @@ class BalajiCarsolVideoPlayer(
         super.onFinishInflate()
     }
 
-    fun setVolume(vol: Float) {
-        mMediaPlayer?.audioComponent?.volume = vol
+    fun setVolume(volumeMuteAndUnMuteButton: ImageView, volumeUnMuteButton: ImageView) {
+        var volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
+        mMediaPlayer?.audioComponent?.volume = volume.toFloat()
+        if (volume < 1) {
+            volumeMuteAndUnMuteButton?.visibility = View.VISIBLE
+            volumeUnMuteButton?.visibility = View.GONE
+        } else {
+            volumeMuteAndUnMuteButton?.visibility = View.GONE
+            volumeUnMuteButton?.visibility = View.VISIBLE
+        }
     }
 
 
-    fun restoreCarsoulVideoPlayer() {
+    fun restoreCarsoulVideoPlayer(
+        volumeMuteAndUnMuteButton: ImageView,
+        volumeUnMuteButton: ImageView
+    ) {
         mMediaPlayer?.audioComponent?.volume = 0f
+        volumeMuteAndUnMuteButton?.visibility = View.VISIBLE
+        volumeUnMuteButton?.visibility = View.GONE
     }
 
 
@@ -676,8 +689,8 @@ class BalajiCarsolVideoPlayer(
                 mMediaPlayer!!.setMediaItem(mediaItem)
             }
             mMediaPlayer?.audioComponent?.volume = 0f
-           // volumeMuteAndUnMuteButton?.visibility = View.VISIBLE
-          //  volumeUnMuteButton?.visibility = View.GONE
+            // volumeMuteAndUnMuteButton?.visibility = View.VISIBLE
+            //  volumeUnMuteButton?.visibility = View.GONE
             mMediaPlayer!!.prepare()
             if (isNeedToPlayInstantly) {
                 mMediaPlayer!!.playWhenReady = true
@@ -741,7 +754,7 @@ class BalajiCarsolVideoPlayer(
                     text += "ready"
 
                     mMediaPlayer?.audioComponent?.volume = 0f
-                   // volumeMuteAndUnMuteButton?.visibility = View.VISIBLE
+                    // volumeMuteAndUnMuteButton?.visibility = View.VISIBLE
                     //volumeUnMuteButton?.visibility = View.GONE
 
                     videoPlayerSdkCallBackListener?.onVideoStartNow()
@@ -857,7 +870,7 @@ class BalajiCarsolVideoPlayer(
     fun resumeFromPosition(millisecondsForResume: Long) {
         if (millisecondsForResume != 0L) {
             this.millisecondsForResume = millisecondsForResume
-            //isResumeFromPreviousPosition = true;
+
         }
     }
 
@@ -865,46 +878,10 @@ class BalajiCarsolVideoPlayer(
     private val pallyconEventListener: PallyconEventListener = object : PallyconEventListener {
         override fun onDrmKeysLoaded(licenseInfo: Map<String, String>) {}
         override fun onDrmSessionManagerError(e: Exception) {
-//            Toast.makeText(context, /*e.getMessage()*/ "Error in DRM", Toast.LENGTH_LONG).show();
         }
 
         override fun onDrmKeysRestored() {}
         override fun onDrmKeysRemoved() {}
-    }
-
-    private fun sendAnalaticsData(
-        activity: AppCompatActivity,
-        userId: String?,
-        contentId: String?,
-        contentTitle: String?,
-        token: String?
-    ) {
-        val finalAnalaticsUrl = analaticsUrl
-        if (finalAnalaticsUrl == null || TextUtils.isEmpty(finalAnalaticsUrl)) return
-        if (contentId != null && !TextUtils.isEmpty(contentId) && contentTitle != null && !TextUtils.isEmpty(
-                contentTitle
-            ) && token != null && !TextUtils.isEmpty(token)
-        ) {
-            val totalDuration = getDuration()
-            val bufferDuration = bufferingTimeInMillis
-            val palyedDuration = getContentPlayedTimeInMillis()
-            AppSessionUtil.sendHeartBeat(
-                activity,
-                userId,
-                finalAnalaticsUrl,
-                contentId,
-                contentTitle,
-                palyedDuration,
-                bufferDuration,
-                totalDuration,
-                token
-            )
-        } else {
-            VideoPlayerTracer.error(
-                "Analatics Error:::",
-                "token or content id or content title is required field."
-            )
-        }
     }
 
 
@@ -937,179 +914,6 @@ class BalajiCarsolVideoPlayer(
     }
 
 
-/*
-    private var clickFrameSwipeListener = object : OnSwipeTouchListener(true) {
-        // mGestureType=
-        var diffTime = -1f
-        var finalTime = -1f
-        var startVolume: Int = 0
-        var maxVolume: Int = 0
-        var startBrightness: Int = 0
-        var maxBrightness: Int = 0
-
-        override fun onMove(dir: OnSwipeTouchListener.Direction, diff: Float) {
-            finalTime = -1f
-
-            if (initialX >= mInitialTextureWidth / 2 || mWindow == null) {
-                // Right side swipe when up and down
-
-                var diffVolume: Float
-                var finalVolume: Int
-
-                diffVolume = maxVolume.toFloat() * diff / (mInitialTextureHeight.toFloat() / 2)
-                if (dir == OnSwipeTouchListener.Direction.DOWN) {
-                    diffVolume = -diffVolume
-                }
-                finalVolume = startVolume + diffVolume.toInt()
-                if (finalVolume < 0)
-                    finalVolume = 0
-                else if (finalVolume > maxVolume)
-                    finalVolume = maxVolume
-
-                */
-/*val progressText = String.format(
-                    resources.getString(R.string.volume), finalVolume
-                )*//*
-
-                // mPositionTextView.text = progressText
-                volumeProgressBar.progress = finalVolume
-                audioManager?.setStreamVolume(AudioManager.STREAM_MUSIC, finalVolume, 0)
-
-            } else if (initialX < mInitialTextureWidth / 2) {
-                // Left side swipe when up and down
-
-                var diffBrightness: Float
-                var finalBrightness: Int
-
-                diffBrightness =
-                    maxBrightness.toFloat() * diff / (mInitialTextureHeight.toFloat() / 2)
-                if (dir == OnSwipeTouchListener.Direction.DOWN) {
-                    diffBrightness = -diffBrightness
-                }
-                finalBrightness = startBrightness + diffBrightness.toInt()
-                if (finalBrightness < 0)
-                    finalBrightness = 0
-                else if (finalBrightness > maxBrightness)
-                    finalBrightness = maxBrightness
-
-
-                val layout = mWindow?.attributes
-                layout?.screenBrightness = finalBrightness.toFloat() / 100
-                mWindow?.attributes = layout
-
-
-                brightnessProgressBar.progress = finalBrightness
-
-
-                */
-/*PreferenceManager.getDefaultSharedPreferences(context)
-                    .edit()
-                    .putInt(BETTER_VIDEO_PLAYER_BRIGHTNESS, finalBrightness)
-                    .apply()*//*
-
-            }
-        }
-
-        override fun onClick() {
-            if (isControllerShown)
-                hideController()
-            else
-                showController()
-        }
-
-        override fun onDoubleTap(event: MotionEvent) {
-*/
-/*
-            if (mGestureType == GestureType.DoubleTapGesture) {
-                val seekSec = mDoubleTapSeekDuration / 1000
-                viewForward.text = String.format(resources.getString(R.string.seconds), seekSec)
-                viewBackward.text = String.format(resources.getString(R.string.seconds), seekSec)
-                if (event.x > mInitialTextureWidth / 2) {
-                    viewForward.let {
-                        animateViewFade(it, 1)
-                        Handler().postDelayed({
-                            animateViewFade(it, 0)
-                        }, 500)
-                    }
-                    seekTo(getCurrentPosition() + mDoubleTapSeekDuration)
-                } else {
-                    viewBackward.let {
-                        animateViewFade(it, 1)
-                        Handler().postDelayed({
-                            animateViewFade(it, 0)
-                        }, 500)
-                    }
-                    seekTo(getCurrentPosition() - mDoubleTapSeekDuration)
-                }
-            }
-*//*
-
-        }
-
-        override fun onAfterMove() {
-            */
-/* if (finalTime >= 0 && mGestureType == GestureType.SwipeGesture) {
-                 seekTo(finalTime.toLong())*//*
-
-            //if (mWasPlaying) mPlayer?.start()
-            //  }
-            //  mPositionTextView.visibility = View.GONE
-
-            volumeProgressBar.visibility = View.GONE
-            brightnessProgressBar.visibility = View.GONE
-            resumeVideoPlayer()
-            hideController()
-
-        }
-
-        override fun onBeforeMove(dir: Direction) {
-//            if (mGestureType != GestureType.SwipeGesture)
-//                return
-//            if (dir == Direction.LEFT || dir == Direction.RIGHT) {
-//                val playing = mMediaPlayer != null && mMediaPlayer!!.playWhenReady
-//                if (playing)
-//                    pauseVideoPlayer()
-//            } else {
-//                maxBrightness = 100
-//                startBrightness = (mWindow?.attributes?.screenBrightness!! * 100).toInt()
-//                maxVolume = audioManager?.getStreamMaxVolume(AudioManager.STREAM_MUSIC) ?: 100
-//                startVolume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) ?: 100
-//
-//                volumeProgressBar.max = maxVolume
-//                brightnessProgressBar.max = maxBrightness
-//            }
-
-
-            if (initialX >= mInitialTextureWidth / 2 || mWindow == null) {
-                // Right side swipe when up and down
-                volumeProgressBar.visibility = View.VISIBLE
-                volumeProgressBar.progress = startVolume
-            } else if (initialX < mInitialTextureWidth / 2) {
-                // Left side swipe when up and down
-                brightnessProgressBar.visibility = View.VISIBLE
-                brightnessProgressBar.progress = startBrightness
-            }
-
-
-            maxBrightness = 100
-            startBrightness = (mWindow?.attributes?.screenBrightness!! * 100).toInt()
-            maxVolume = audioManager?.getStreamMaxVolume(AudioManager.STREAM_MUSIC) ?: 100
-            startVolume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) ?: 100
-
-            volumeProgressBar.max = maxVolume
-            brightnessProgressBar.max = maxBrightness
-
-            hideController()
-
-        }
-    }
-*/
-
-
-    enum class GestureType {
-        NoGesture, SwipeGesture, DoubleTapGesture
-    }
-
     override fun onCastSessionAvailable() {
 
     }
@@ -1125,8 +929,8 @@ class BalajiCarsolVideoPlayer(
                 "Volume::::",
                 "KEYCODE_VOLUME_DOWN:::" + audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC)
             )
-           // volumeMuteAndUnMuteButton?.visibility = View.VISIBLE
-           // volumeUnMuteButton?.visibility = View.GONE
+            // volumeMuteAndUnMuteButton?.visibility = View.VISIBLE
+            // volumeUnMuteButton?.visibility = View.GONE
         }
         return super.onKeyDown(keyCode, event)
     }
@@ -1134,7 +938,7 @@ class BalajiCarsolVideoPlayer(
     override fun onKeyUp(keyCode: Int, event: KeyEvent): Boolean {
         if (event.keyCode === KeyEvent.KEYCODE_VOLUME_UP) {
             //volumeMuteAndUnMuteButton?.visibility = View.GONE
-           // volumeUnMuteButton?.visibility = View.VISIBLE
+            // volumeUnMuteButton?.visibility = View.VISIBLE
             Log.e(
                 "Volume::::",
                 "KEYCODE_VOLUME_UP::::" + audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC)
@@ -1145,30 +949,30 @@ class BalajiCarsolVideoPlayer(
     }
 
 
-    fun onKeyDownEvent() {
+    fun onKeyDownEvent(volumeMuteAndUnMuteButton: ImageView, volumeUnMuteButton: ImageView) {
 
         var volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
         mMediaPlayer?.audioComponent?.volume = volume.toFloat()
-      /*  if (volume < 1) {
+        if (volume < 1) {
             volumeMuteAndUnMuteButton?.visibility = View.VISIBLE
             volumeUnMuteButton?.visibility = View.GONE
         } else {
             volumeMuteAndUnMuteButton?.visibility = View.GONE
             volumeUnMuteButton?.visibility = View.VISIBLE
-        }*/
+        }
     }
 
-    fun onKeyUpEvent() {
+    fun onKeyUpEvent(volumeMuteAndUnMuteButton: ImageView, volumeUnMuteButton: ImageView) {
 
         var volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
         mMediaPlayer?.audioComponent?.volume = volume.toFloat()
-   /*     if (volume < 1) {
+        if (volume < 1) {
             volumeMuteAndUnMuteButton?.visibility = View.VISIBLE
             volumeUnMuteButton?.visibility = View.GONE
         } else {
             volumeMuteAndUnMuteButton?.visibility = View.GONE
             volumeUnMuteButton?.visibility = View.VISIBLE
-        }*/
+        }
     }
 
 
