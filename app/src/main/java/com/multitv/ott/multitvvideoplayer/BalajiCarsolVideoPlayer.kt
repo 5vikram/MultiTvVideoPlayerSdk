@@ -4,14 +4,9 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
-import android.app.PictureInPictureParams
-import android.app.RemoteAction
 import android.content.Context
-import android.content.DialogInterface
-import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.content.res.Configuration
-import android.graphics.Color
 import android.media.AudioManager
 import android.net.Uri
 import android.os.Build
@@ -23,7 +18,6 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.*
 import android.widget.*
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.content.ContextCompat
@@ -45,7 +39,6 @@ import com.google.android.exoplayer2.util.MimeTypes
 import com.google.android.exoplayer2.video.VideoSize
 import com.google.common.collect.ImmutableList
 import com.multitv.ott.multitvvideoplayer.cast.SessionAvailabilityListener
-import com.multitv.ott.multitvvideoplayer.custom.CountDownTimerWithPause
 import com.multitv.ott.multitvvideoplayer.database.SharedPreferencePlayer
 import com.multitv.ott.multitvvideoplayer.download.DownloadUtil
 import com.multitv.ott.multitvvideoplayer.listener.MoreInfoListener
@@ -117,20 +110,9 @@ class BalajiCarsolVideoPlayer(
     private var drmSessionManager: DrmSessionManager? = null
     private var adsLoader: ImaAdsLoader? = null
     private var adsUrl: String? = null
-
     private var isAttachedToWindowStatus = false
-
-
-
     private var mWindow: Window? = null
-
-
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    private val mPictureInPictureParamsBuilder = PictureInPictureParams.Builder()
     private var spriteImageUrl = ""
-
-
     private var isPipModeOn = false
 
 
@@ -190,14 +172,14 @@ class BalajiCarsolVideoPlayer(
         }
 
         videoPlayButton?.setOnClickListener {
-            mMediaPlayer?.playWhenReady = true
+            resumeVideoPlayer()
             videoPlayButton?.setVisibility(View.GONE)
             videoPauseButton?.setVisibility(View.VISIBLE)
             videoPlayerSdkCallBackListener?.onPlayClick(1)
         }
 
         videoPauseButton?.setOnClickListener {
-            mMediaPlayer?.playWhenReady = false
+            pauseVideoPlayer()
             videoPlayButton?.setVisibility(View.VISIBLE)
             videoPauseButton?.setVisibility(View.GONE)
             videoPlayerSdkCallBackListener?.onPlayClick(0)
