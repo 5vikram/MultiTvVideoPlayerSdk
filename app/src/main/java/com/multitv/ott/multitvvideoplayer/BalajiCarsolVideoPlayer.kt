@@ -228,7 +228,7 @@ class BalajiCarsolVideoPlayer(
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
         isAttachedToWindowStatus = true
-        updatePlayPauseButton()
+        //updatePlayPauseButton()
     }
 
     override fun onDetachedFromWindow() {
@@ -532,7 +532,7 @@ class BalajiCarsolVideoPlayer(
     // relase and destroy video player
     fun releaseVideoPlayer() {
         if (mMediaPlayer != null && simpleExoPlayerView != null) {
-            sendAnalaticsData(context, userId, contentId, contentTitle, token)
+            //sendAnalaticsData(context, userId, contentId, contentTitle, token)
             simpleExoPlayerView!!.player!!.release()
             mMediaPlayer!!.release()
             if (adsLoader != null) adsLoader!!.setPlayer(null)
@@ -584,9 +584,6 @@ class BalajiCarsolVideoPlayer(
         if (mMediaPlayer != null) {
             mMediaPlayer!!.addListener(stateChangeCallback1)
             simpleExoPlayerView!!.player = mMediaPlayer
-            simpleExoPlayerView!!.controllerHideOnTouch = true
-            simpleExoPlayerView!!.controllerAutoShow = false
-            simpleExoPlayerView!!.controllerShowTimeoutMs = DEFAULT_TIMEOUT_MS
             simpleExoPlayerView!!.setControllerHideDuringAds(true)
             var mediaItem: MediaItem? = null
             var subtitle: MediaItem.SubtitleConfiguration? = null
@@ -720,7 +717,7 @@ class BalajiCarsolVideoPlayer(
         override fun onLoadingChanged(isLoading: Boolean) {}
         override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
             var text = "Main player"
-            updatePlayPauseButton()
+            //updatePlayPauseButton()
             when (playbackState) {
                 ExoPlayer.STATE_BUFFERING -> {
                     text += "buffering"
