@@ -3,6 +3,7 @@ package com.multitv.ott.multitvvideoplayer;
 import android.net.Uri;
 import android.os.Handler;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -56,6 +57,12 @@ public class ExoVideoDownloadHelper implements DownloadTracker.Listener, SdkPopC
         } else {
             new DownloadVideo(context, this).downloadVideo(mediaItem, videoDurationInSeconds);
         }
+    }
+
+
+    public void downloadPopUpMenuOption(View view, String uri) {
+        DownloadUtil.INSTANCE.getDownloadTracker(context)
+                .toggleDownloadPopupMenu(context, view, Uri.parse(uri));
     }
 
 

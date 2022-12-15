@@ -15,6 +15,7 @@
         app:resize_mode="fill" />
 
 
+<!--
     <RelativeLayout
         android:id="@+id/frameLayout"
         android:layout_width="match_parent"
@@ -183,7 +184,7 @@
                 android:layout_marginStart="16dp"
                 android:visibility="gone" />
 
-            <!--
+            &lt;!&ndash;
                     <ProgressBar
                         android:id="@+id/volume_progress_bar"
                         style="@style/Widget.ProgressBar.Vertical"
@@ -192,11 +193,12 @@
                         android:visibility="gone"
                         android:layout_gravity="center_vertical|end"
                         android:layout_marginEnd="16dp" />
-            -->
+            &ndash;&gt;
 
         </FrameLayout>
 
     </RelativeLayout>
+-->
 
 
 

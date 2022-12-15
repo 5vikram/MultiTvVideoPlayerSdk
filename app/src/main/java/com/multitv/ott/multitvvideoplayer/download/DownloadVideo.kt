@@ -2,6 +2,7 @@ package com.multitv.ott.multitvvideoplayer.download
 
 import android.content.Context
 import android.net.Uri
+import android.view.View
 import android.widget.ImageView
 import com.google.android.exoplayer2.MediaItem
 
@@ -12,10 +13,10 @@ class DownloadVideo(
     private var dailogShown = false;
 
 
-
-
-
-
+    fun toggleDownloadPopupMenu(view: View, uri: Uri) {
+        DownloadUtil.getDownloadTracker(context)
+            .toggleDownloadPopupMenu(context, view, uri)
+    }
 
 
     fun downloadVideo(mediaItem: MediaItem, duration: Long): Boolean {
@@ -47,12 +48,6 @@ class DownloadVideo(
         }
 */
     }
-
-
-
-
-
-
 
 
     fun downloadVideo(mediaItem: MediaItem, progressDrawable: ImageView, duration: Long): Boolean {
