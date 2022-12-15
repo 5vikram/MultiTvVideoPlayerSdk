@@ -174,7 +174,7 @@ class BalajiCarsolVideoPlayer(
         super.onFinishInflate()
     }
 
-    fun setVolume(volumeMuteAndUnMuteButton: ImageView, volumeUnMuteButton: ImageView) {
+    fun setVolume(volumeMuteAndUnMuteButton: ImageView?, volumeUnMuteButton: ImageView?) {
         var volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
         mMediaPlayer?.audioComponent?.volume = volume.toFloat()
         if (volume < 1) {
@@ -188,8 +188,8 @@ class BalajiCarsolVideoPlayer(
 
 
     fun restoreCarsoulVideoPlayer(
-        volumeMuteAndUnMuteButton: ImageView,
-        volumeUnMuteButton: ImageView
+        volumeMuteAndUnMuteButton: ImageView?,
+        volumeUnMuteButton: ImageView?
     ) {
         mMediaPlayer?.audioComponent?.volume = 0f
         volumeMuteAndUnMuteButton?.visibility = View.VISIBLE
