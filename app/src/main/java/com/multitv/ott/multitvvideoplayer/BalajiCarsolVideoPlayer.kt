@@ -228,7 +228,7 @@ class BalajiCarsolVideoPlayer(
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
         isAttachedToWindowStatus = true
-        //updatePlayPauseButton()
+        updatePlayPauseButton()
     }
 
     override fun onDetachedFromWindow() {
