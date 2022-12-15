@@ -53,7 +53,7 @@ class BalajiCarsolVideoPlayer(
     defStyleAttr: Int
 ) : FrameLayout(
     context, attrs, defStyleAttr
-), SessionAvailabilityListener {
+) {
     private val sharedPreferencePlayer: SharedPreferencePlayer
     private var contentType: ContentType? = null
     private var mMediaPlayer: ExoPlayer? = null
@@ -97,7 +97,6 @@ class BalajiCarsolVideoPlayer(
     private var adsUrl: String? = null
     private var isAttachedToWindowStatus = false
     private var mWindow: Window? = null
-    private var spriteImageUrl = ""
     private var isPipModeOn = false
 
 
@@ -109,81 +108,34 @@ class BalajiCarsolVideoPlayer(
     }
 
 
-    /*
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        return super.onTouchEvent(event);
-    }*/
     override fun onFinishInflate() {
         val view =
             LayoutInflater.from(getContext())
                 .inflate(R.layout.balaji_no_controller_video_player_layout, this)
-        /* volumeMuteAndUnMuteButton = view.findViewById(R.id.volumeMuteAndUnMuteButton)
 
-         moreInfoLinearLayout = view.findViewById(R.id.moreInfoLinearLayout)
-         videoMenuLayout = view.findViewById(R.id.videoMenuLayout)
-         volumeUnMuteButton = view.findViewById(R.id.volumeUnMuteButton)
-         volumeLayout = view.findViewById(R.id.volumeLayout)
-         volumeLinearLayout = view.findViewById(R.id.volumeLinearLayout)
- */
-        //videoPlayButton = view.findViewById(R.id.exo_play)
-        // videoPauseButton = view.findViewById(R.id.exo_pause)
-        //enter_full_screen = view.findViewById(R.id.enter_full_screen)
         simpleExoPlayerView = view.findViewById(R.id.videoPlayer)
-
-        /*  enter_full_screen?.setOnClickListener {
-              videoPlayerSdkCallBackListener?.fullScreenCallBack()
-          }*/
-
-
-//        volumeUnMuteButton?.setOnClickListener {
-//            mMediaPlayer?.audioComponent?.volume = 0f
-//            volumeMuteAndUnMuteButton?.visibility = View.VISIBLE
-//            volumeUnMuteButton?.visibility = View.GONE
-//        }
-//
-//        moreInfoLinearLayout?.setOnClickListener {
-//            MoreInfoListener?.onMoreVideoClick()
-//        }
-//
-//
-//        volumeMuteAndUnMuteButton?.setOnClickListener {
-//            mMediaPlayer?.audioComponent?.volume = 0f
-//            mMediaPlayer?.audioComponent?.volume = mMediaPlayer?.audioComponent?.volume!!
-//            mMediaPlayer?.audioComponent?.volume = 2f
-//            volumeMuteAndUnMuteButton?.visibility = View.GONE
-//            volumeUnMuteButton?.visibility = View.VISIBLE
-//
-//        }
-
-        /* videoPlayButton?.setOnClickListener {
-             resumeVideoPlayer()
-             videoPlayButton?.setVisibility(View.GONE)
-             videoPauseButton?.setVisibility(View.VISIBLE)
-             videoPlayerSdkCallBackListener?.onPlayClick(1)
-         }
-
-         videoPauseButton?.setOnClickListener {
-             pauseVideoPlayer()
-             videoPlayButton?.setVisibility(View.VISIBLE)
-             videoPauseButton?.setVisibility(View.GONE)
-             videoPlayerSdkCallBackListener?.onPlayClick(0)
-         }*/
-
 
         super.onFinishInflate()
     }
 
+    fun getAudioManager(): AudioManager {
+        return audioManager!!
+    }
+
+    fun getMediaPlayer(): ExoPlayer {
+        return mMediaPlayer!!
+    }
+
     fun setVolume(volumeMuteAndUnMuteButton: ImageView?, volumeUnMuteButton: ImageView?) {
-        var volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
-        mMediaPlayer?.audioComponent?.volume = volume.toFloat()
-        if (volume < 1) {
-            volumeMuteAndUnMuteButton?.visibility = View.VISIBLE
-            volumeUnMuteButton?.visibility = View.GONE
-        } else {
-            volumeMuteAndUnMuteButton?.visibility = View.GONE
-            volumeUnMuteButton?.visibility = View.VISIBLE
-        }
+        /* var volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
+         mMediaPlayer?.audioComponent?.volume = volume.toFloat()
+         if (volume < 1) {
+             volumeMuteAndUnMuteButton?.visibility = View.VISIBLE
+             volumeUnMuteButton?.visibility = View.GONE
+         } else {
+             volumeMuteAndUnMuteButton?.visibility = View.GONE
+             volumeUnMuteButton?.visibility = View.VISIBLE
+         }*/
     }
 
 
@@ -191,35 +143,10 @@ class BalajiCarsolVideoPlayer(
         volumeMuteAndUnMuteButton: ImageView?,
         volumeUnMuteButton: ImageView?
     ) {
-        mMediaPlayer?.audioComponent?.volume = 0f
+        /*mMediaPlayer?.audioComponent?.volume = 0f
         volumeMuteAndUnMuteButton?.visibility = View.VISIBLE
-        volumeUnMuteButton?.visibility = View.GONE
+        volumeUnMuteButton?.visibility = View.GONE*/
     }
-
-
-/*
-    fun VideoPlayerControllerEnable(enabled: Boolean) {
-        if (enabled) {
-            volumeUnMuteButton?.isClickable = true
-            volumeUnMuteButton?.isFocusable = true
-            volumeMuteAndUnMuteButton?.isClickable = true
-            volumeMuteAndUnMuteButton?.isFocusable = true
-            moreInfoLinearLayout?.isClickable = true
-            moreInfoLinearLayout?.isFocusable = true
-            //videoPlayButton?.isClickable = true
-            // videoPlayButton?.isFocusable = true
-        } else {
-            volumeUnMuteButton?.isClickable = false
-            volumeUnMuteButton?.isFocusable = false
-            volumeMuteAndUnMuteButton?.isClickable = false
-            volumeMuteAndUnMuteButton?.isFocusable = false
-            moreInfoLinearLayout?.isClickable = false
-            moreInfoLinearLayout?.isFocusable = false
-            //  videoPlayButton?.isClickable = false
-            // videoPlayButton?.isFocusable = false
-        }
-    }
-*/
 
 
     fun playPauseEnable(playPauseButtonEnable: Boolean) {
@@ -230,27 +157,12 @@ class BalajiCarsolVideoPlayer(
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
         isAttachedToWindowStatus = true
-        updatePlayPauseButton()
     }
 
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
         isAttachedToWindowStatus = false
-        /* removeCallbacks(hideAction)
-         if (hideAtMs != C.TIME_UNSET) {
-             val delayMs = hideAtMs - SystemClock.uptimeMillis()
-             if (delayMs <= 0) {
-                 hideController()
-             } else {
-                 postDelayed(hideAction, delayMs)
-             }
-         }*/
     }
-
-    /*  private val hideAction = Runnable {
-          VideoPlayerTracer.error("Controller Listener:::", "Stop Timer")
-          hideController()
-      }*/
 
 
     fun isNeedVideoPlayerPause(): Boolean {
@@ -262,81 +174,15 @@ class BalajiCarsolVideoPlayer(
     }
 
 
-    fun setSpriteImageUrl(url: String) {
-        this.spriteImageUrl = url;
-    }
-
     override fun onConfigurationChanged(newConfig: Configuration) {
-        val orientation = resources.configuration.orientation
-        /*if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            videoLockUnlockStatus()
-        } else if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-            videoLockButton!!.visibility = GONE
-            videoUnLockButton!!.visibility = GONE
-        }*/
         super.onConfigurationChanged(newConfig)
     }
-
-    private fun hideAfterTimeout() {
-        /*   removeCallbacks(hideAction)
-           if (5000 > 0) {
-               VideoPlayerTracer.error("Controller Listener:::", "Start Timer")
-               hideAtMs = SystemClock.uptimeMillis() + 5000
-               if (isAttachedToWindow) {
-                   postDelayed(hideAction, 5000)
-               }
-           } else {
-               hideAtMs = C.TIME_UNSET
-           }*/
-    }
-
-    /*   fun hideController() {
-           videoMenuLayout!!.visibility = GONE
-           removeCallbacks(hideAction)
-           hideAtMs = C.TIME_UNSET
-           isControllerShown = false
-       }*/
-
-    /* fun showController() {
-         videoMenuLayout!!.visibility = VISIBLE
-         updatePlayPauseButton()
-         hideAfterTimeout()
-         isControllerShown = true
-     }*/
 
 
     fun getVideoPlayerStatus(): Boolean {
         return mMediaPlayer != null && mMediaPlayer!!.playWhenReady
     }
 
-    private fun updatePlayPauseButton() {
-        /*   var requestPlayPauseFocus = false
-           val playing = mMediaPlayer != null && mMediaPlayer!!.playWhenReady
-           if (videoPlayButton != null) {
-               requestPlayPauseFocus =
-                   requestPlayPauseFocus or (playing && videoPlayButton!!.isFocused)
-               videoPlayButton!!.visibility =
-                   if (playing) GONE else VISIBLE
-           }
-           if (videoPauseButton != null) {
-               requestPlayPauseFocus =
-                   requestPlayPauseFocus or (!playing && videoPauseButton!!.isFocused)
-               videoPauseButton!!.visibility =
-                   if (!playing) GONE else VISIBLE
-           }
-           if (requestPlayPauseFocus) {
-               requestPlayPauseFocus()
-           }*/
-    }
-
-    /*   private fun requestPlayPauseFocus() {
-           val playing = mMediaPlayer != null && mMediaPlayer!!.playWhenReady
-           if (!playing && videoPlayButton != null) {
-               videoPlayButton!!.requestFocus()
-           } else if (playing && videoPauseButton != null) {
-               videoPauseButton!!.requestFocus()
-           }
-       }*/
 
     val audioFocusChangeListener = AudioManager.OnAudioFocusChangeListener { focusChange ->
         if (focusChange == AudioManager.AUDIOFOCUS_LOSS) {
@@ -350,9 +196,6 @@ class BalajiCarsolVideoPlayer(
     private var audioManager: AudioManager? = null
 
     private fun checkForAudioFocus(): Boolean {
-
-
-        // Request audio focus for playback
         val result = audioManager?.requestAudioFocus(
             audioFocusChangeListener,  // Use the music stream.
             AudioManager.STREAM_MUSIC,  // Request permanent focus.
@@ -361,10 +204,6 @@ class BalajiCarsolVideoPlayer(
         return if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
             true
         } else {
-            // other app had stopped playing song now , so u can do u stuff now .
-//            Toast.makeText(context, "Other audio player did not stop. Can't play video",
-//                    Toast.LENGTH_LONG).show();
-//            pause();
             pauseVideoPlayer()
             false
         }
@@ -397,21 +236,7 @@ class BalajiCarsolVideoPlayer(
         initViews()
     }
 
-    private fun videoLockUnlockStatus() {
-/*
-        if (isScreenLockEnable) {
-            videoLockButton!!.visibility = VISIBLE
-            videoUnLockButton!!.visibility = GONE
-        } else {
-            videoLockButton!!.visibility = GONE
-            videoUnLockButton!!.visibility = VISIBLE
-        }
-*/
-    }
-
-    // init view and view group here
     private fun initViews() {
-//        ToastMessage.showLogs(ToastMessage.LogType.ERROR, "Video Player:::", "initViews()");
 
         if (mMediaPlayer != null && simpleExoPlayerView != null) {
             simpleExoPlayerView!!.player!!.release()
@@ -491,25 +316,6 @@ class BalajiCarsolVideoPlayer(
     }
 
 
-    fun setOfflineContentData(isOfflineContent: Boolean) {
-        this.isOfflineContent = isOfflineContent
-    }
-
-    // get play duration of video in milli second
-    fun getContentPlayedTimeInMillis(): Long {
-        // contentPlayedTimeInMillis = 0;
-        if (contentPlayedTimeInMillis == 0L) {
-            if (seekPlayerTo != 0) contentPlayedTimeInMillis =
-                seekPlayerTo.toLong() else if (mMediaPlayer != null) contentPlayedTimeInMillis =
-                mMediaPlayer!!.currentPosition
-        } else {
-            if (seekPlayerTo != 0) contentPlayedTimeInMillis =
-                seekPlayerTo.toLong() else if (mMediaPlayer != null) contentPlayedTimeInMillis =
-                mMediaPlayer!!.currentPosition
-        }
-        return contentPlayedTimeInMillis
-    }
-
     fun setContentPlayedTimeInMillis(contentPlayedTimeInMillis: Long) {
         this.contentPlayedTimeInMillis = contentPlayedTimeInMillis
     }
@@ -546,13 +352,8 @@ class BalajiCarsolVideoPlayer(
         }
     }
 
-    fun getTrackSelector(): DefaultTrackSelector {
-        return trackSelector
-    }
-
 
     private fun initializeMainPlayer(videoUrl: String?, isNeedToPlayInstantly: Boolean) {
-//        ToastMessage.showLogs(ToastMessage.LogType.ERROR, "Video Player:::", "initializeMainPlayer");
         if (mMediaPlayer != null) {
             mMediaPlayer!!.release()
             if (adsLoader != null) adsLoader!!.setPlayer(null)
@@ -724,11 +525,9 @@ class BalajiCarsolVideoPlayer(
         override fun onLoadingChanged(isLoading: Boolean) {}
         override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
             var text = "Main player"
-            updatePlayPauseButton()
             when (playbackState) {
                 ExoPlayer.STATE_BUFFERING -> {
                     text += "buffering"
-                    if (contentType == ContentType.LIVE) startBufferingTimer()
                 }
                 ExoPlayer.STATE_ENDED -> {
                     text += "ended"
@@ -744,7 +543,6 @@ class BalajiCarsolVideoPlayer(
 
                     if (mMediaPlayer != null) {
                         contentPlayedTimeInMillis = mMediaPlayer!!.currentPosition
-                        if (contentType == ContentType.LIVE) startBufferingTimer()
                     }
                     simpleExoPlayerView!!.videoSurfaceView!!.visibility = VISIBLE
                     simpleExoPlayerView!!.visibility = VISIBLE
@@ -752,18 +550,11 @@ class BalajiCarsolVideoPlayer(
                 }
                 ExoPlayer.STATE_READY -> {
                     text += "ready"
-
                     mMediaPlayer?.audioComponent?.volume = 0f
-                    // volumeMuteAndUnMuteButton?.visibility = View.VISIBLE
-                    //volumeUnMuteButton?.visibility = View.GONE
-
                     videoPlayerSdkCallBackListener?.onVideoStartNow()
                 }
                 else -> text += "unknown"
             }
-
-//            ToastMessage.showToastMsg(context, text, Toast.LENGTH_SHORT);
-//            ToastMessage.showLogs(ToastMessage.LogType.ERROR, "Video Player:::", text);
         }
 
         override fun onRepeatModeChanged(repeatMode: Int) {}
@@ -914,35 +705,18 @@ class BalajiCarsolVideoPlayer(
     }
 
 
-    override fun onCastSessionAvailable() {
-
-    }
-
-    override fun onCastSessionUnavailable() {
-
-    }
-
-
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
         if (event.keyCode === KeyEvent.KEYCODE_VOLUME_DOWN) {
             Log.e(
                 "Volume::::",
                 "KEYCODE_VOLUME_DOWN:::" + audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC)
             )
-            // volumeMuteAndUnMuteButton?.visibility = View.VISIBLE
-            // volumeUnMuteButton?.visibility = View.GONE
         }
         return super.onKeyDown(keyCode, event)
     }
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent): Boolean {
         if (event.keyCode === KeyEvent.KEYCODE_VOLUME_UP) {
-            //volumeMuteAndUnMuteButton?.visibility = View.GONE
-            // volumeUnMuteButton?.visibility = View.VISIBLE
-            Log.e(
-                "Volume::::",
-                "KEYCODE_VOLUME_UP::::" + audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC)
-            )
         }
 
         return super.onKeyUp(keyCode, event)
