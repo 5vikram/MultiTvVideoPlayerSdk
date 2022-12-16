@@ -536,6 +536,8 @@ class BalajiCarsolVideoPlayer(
                        /* releaseVideoPlayer()
                         prepareVideoPlayer()*/
                         //videoPlayerSdkCallBackListener?.onPlayNextVideo()
+
+                        mMediaPlayer?.setRepeatMode(Player. REPEAT_MODE_ONE)
                     }
                 }
                 ExoPlayer.STATE_IDLE -> {
