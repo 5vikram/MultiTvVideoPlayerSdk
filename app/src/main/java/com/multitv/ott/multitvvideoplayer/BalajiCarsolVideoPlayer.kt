@@ -126,29 +126,20 @@ class BalajiCarsolVideoPlayer(
         return mMediaPlayer!!
     }
 
-    fun setVolume() {
+    fun muteVolume() {
+        mMediaPlayer?.audioComponent?.volume = 0f
+    }
+
+    fun unmuteVolume() {
 
         var volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
         mMediaPlayer?.audioComponent?.volume = volume.toFloat()
 
-        /* var volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
-         mMediaPlayer?.audioComponent?.volume = volume.toFloat()
-         if (volume < 1) {
-             volumeMuteAndUnMuteButton?.visibility = View.VISIBLE
-             volumeUnMuteButton?.visibility = View.GONE
-         } else {
-             volumeMuteAndUnMuteButton?.visibility = View.GONE
-             volumeUnMuteButton?.visibility = View.VISIBLE
-         }*/
     }
 
 
     fun restoreCarsoulVideoPlayer() {
-
         mMediaPlayer?.audioComponent?.volume = 0f
-        /*mMediaPlayer?.audioComponent?.volume = 0f
-        volumeMuteAndUnMuteButton?.visibility = View.VISIBLE
-        volumeUnMuteButton?.visibility = View.GONE*/
     }
 
 
@@ -743,13 +734,13 @@ class BalajiCarsolVideoPlayer(
 
         var volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
         mMediaPlayer?.audioComponent?.volume = volume.toFloat()
-       /* if (volume < 1) {
-            volumeMuteAndUnMuteButton?.visibility = View.VISIBLE
-            volumeUnMuteButton?.visibility = View.GONE
-        } else {
-            volumeMuteAndUnMuteButton?.visibility = View.GONE
-            volumeUnMuteButton?.visibility = View.VISIBLE
-        }*/
+        /* if (volume < 1) {
+             volumeMuteAndUnMuteButton?.visibility = View.VISIBLE
+             volumeUnMuteButton?.visibility = View.GONE
+         } else {
+             volumeMuteAndUnMuteButton?.visibility = View.GONE
+             volumeUnMuteButton?.visibility = View.VISIBLE
+         }*/
     }
 
 
