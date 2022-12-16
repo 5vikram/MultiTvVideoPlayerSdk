@@ -493,6 +493,7 @@ class BalajiCarsolVideoPlayer(
             mMediaPlayer?.audioComponent?.volume = 0f
             // volumeMuteAndUnMuteButton?.visibility = View.VISIBLE
             //  volumeUnMuteButton?.visibility = View.GONE
+            mMediaPlayer?.setRepeatMode(Player.REPEAT_MODE_ONE)
             mMediaPlayer!!.prepare()
             if (isNeedToPlayInstantly) {
                 mMediaPlayer!!.playWhenReady = true
@@ -525,6 +526,7 @@ class BalajiCarsolVideoPlayer(
 
         override fun onLoadingChanged(isLoading: Boolean) {}
         override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
+            mMediaPlayer?.setRepeatMode(Player.REPEAT_MODE_ONE)
             var text = "Main player"
             when (playbackState) {
                 ExoPlayer.STATE_BUFFERING -> {
@@ -533,11 +535,11 @@ class BalajiCarsolVideoPlayer(
                 ExoPlayer.STATE_ENDED -> {
                     text += "ended"
                     if (contentType == ContentType.VOD) {
-                       /* releaseVideoPlayer()
-                        prepareVideoPlayer()*/
+                        /* releaseVideoPlayer()
+                         prepareVideoPlayer()*/
                         //videoPlayerSdkCallBackListener?.onPlayNextVideo()
 
-                        mMediaPlayer?.setRepeatMode(Player. REPEAT_MODE_ONE)
+                        mMediaPlayer?.setRepeatMode(Player.REPEAT_MODE_ONE)
                     }
                 }
                 ExoPlayer.STATE_IDLE -> {
