@@ -16,10 +16,12 @@ import android.telephony.TelephonyManager
 import android.text.TextUtils
 import android.util.AttributeSet
 import android.util.Log
-import android.view.*
-import android.widget.*
+import android.view.KeyEvent
+import android.view.LayoutInflater
+import android.view.View
+import android.view.Window
+import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.content.ContextCompat
 import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.drm.DrmSessionManager
@@ -27,6 +29,7 @@ import com.google.android.exoplayer2.ext.ima.ImaAdsLoader
 import com.google.android.exoplayer2.offline.DownloadHelper
 import com.google.android.exoplayer2.offline.DownloadRequest
 import com.google.android.exoplayer2.source.DefaultMediaSourceFactory
+import com.google.android.exoplayer2.source.LoopingMediaSource
 import com.google.android.exoplayer2.source.MediaSourceFactory
 import com.google.android.exoplayer2.source.TrackGroupArray
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
@@ -38,14 +41,17 @@ import com.google.android.exoplayer2.upstream.DefaultDataSource
 import com.google.android.exoplayer2.util.MimeTypes
 import com.google.android.exoplayer2.video.VideoSize
 import com.google.common.collect.ImmutableList
-import com.multitv.ott.multitvvideoplayer.cast.SessionAvailabilityListener
 import com.multitv.ott.multitvvideoplayer.database.SharedPreferencePlayer
 import com.multitv.ott.multitvvideoplayer.download.DownloadUtil
 import com.multitv.ott.multitvvideoplayer.listener.MoreInfoListener
 import com.multitv.ott.multitvvideoplayer.listener.VideoPlayerSdkCallBackListener
-import com.multitv.ott.multitvvideoplayer.utils.*
+import com.multitv.ott.multitvvideoplayer.utils.CommonUtils
+import com.multitv.ott.multitvvideoplayer.utils.ContentType
+import com.multitv.ott.multitvvideoplayer.utils.ExoUttils
+import com.multitv.ott.multitvvideoplayer.utils.VideoPlayerTracer
 import com.pallycon.widevinelibrary.*
 import java.util.*
+
 
 class BalajiCarsolVideoPlayer(
     private val context: AppCompatActivity,
@@ -426,7 +432,8 @@ class BalajiCarsolVideoPlayer(
                     videoUrl!!,
                     drmSessionManager!!
                 )
-                mMediaPlayer!!.setMediaSource(playerMediaSource!!)
+                val loopingSource = LoopingMediaSource(playerMediaSource!!)
+                mMediaPlayer?.setMediaSource(loopingSource!!)
             } else if (isOfflineContent) {
                 mediaItem = MediaItem.Builder().setUri(videoUrl).build()
                 val downloadRequest: DownloadRequest? =
@@ -440,8 +447,8 @@ class BalajiCarsolVideoPlayer(
                     downloadRequest!!,
                     DownloadUtil.getReadOnlyDataSourceFactory(context)
                 )
-
-                mMediaPlayer!!.setMediaSource(mediaSource!!)
+                val loopingSource = LoopingMediaSource(mediaSource)
+                mMediaPlayer?.setMediaSource(loopingSource!!)
 
             } else {
                 mediaItem = if (subtitle != null) {
