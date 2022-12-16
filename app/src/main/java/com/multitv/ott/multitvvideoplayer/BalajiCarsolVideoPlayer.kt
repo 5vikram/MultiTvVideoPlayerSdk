@@ -533,8 +533,8 @@ class BalajiCarsolVideoPlayer(
                 ExoPlayer.STATE_ENDED -> {
                     text += "ended"
                     if (contentType == ContentType.VOD) {
-                        releaseVideoPlayer()
-                        prepareVideoPlayer()
+                       /* releaseVideoPlayer()
+                        prepareVideoPlayer()*/
                         //videoPlayerSdkCallBackListener?.onPlayNextVideo()
                     }
                 }
