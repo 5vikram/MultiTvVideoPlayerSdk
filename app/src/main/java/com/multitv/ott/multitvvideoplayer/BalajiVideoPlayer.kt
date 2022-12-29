@@ -307,7 +307,7 @@ class BalajiVideoPlayer(
 
 
 
-        videoRotationButton?.setOnClickListener(OnClickListener {
+        videoRotationButton.setOnClickListener(OnClickListener {
             val orientation = getContext().resources.configuration.orientation
             if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
                 (getContext() as Activity).requestedOrientation =
@@ -326,21 +326,21 @@ class BalajiVideoPlayer(
                 videoLockUnlockStatus()
             }
         })
-        volumeMuteAndUnMuteButton?.visibility = View.GONE
+        volumeMuteAndUnMuteButton.visibility = View.GONE
 
-        volumeUnMuteButton?.setOnClickListener {
+        volumeUnMuteButton.setOnClickListener {
             mMediaPlayer?.audioComponent?.volume = 0f
             volumeMuteAndUnMuteButton.visibility = View.VISIBLE
-            volumeUnMuteButton?.visibility = View.GONE
+            volumeUnMuteButton.visibility = View.GONE
         }
 
 
-        volumeMuteAndUnMuteButton?.setOnClickListener {
+        volumeMuteAndUnMuteButton.setOnClickListener {
             mMediaPlayer?.audioComponent?.volume = 0f
             mMediaPlayer?.audioComponent?.volume = mMediaPlayer?.audioComponent?.volume!!
             mMediaPlayer?.audioComponent?.volume = 2f
-            volumeMuteAndUnMuteButton?.visibility = View.GONE
-            volumeUnMuteButton?.visibility = View.VISIBLE
+            volumeMuteAndUnMuteButton.visibility = View.GONE
+            volumeUnMuteButton.visibility = View.VISIBLE
 
         }
 
@@ -1533,7 +1533,7 @@ class BalajiVideoPlayer(
                 "KEYCODE_VOLUME_DOWN:::" + audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC)
             )
             volumeMuteAndUnMuteButton?.visibility = View.VISIBLE
-            volumeUnMuteButton?.visibility = View.GONE
+            volumeUnMuteButton.visibility = View.GONE
         }
         return super.onKeyDown(keyCode, event)
     }
@@ -1541,8 +1541,8 @@ class BalajiVideoPlayer(
     override fun onKeyUp(keyCode: Int, event: KeyEvent): Boolean {
         if (event.keyCode === KeyEvent.KEYCODE_VOLUME_UP) {
             volumeProgressBar.setProgress(audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC)!!)
-            volumeMuteAndUnMuteButton?.visibility = View.GONE
-            volumeUnMuteButton?.visibility = View.VISIBLE
+            volumeMuteAndUnMuteButton.visibility = View.GONE
+            volumeUnMuteButton.visibility = View.VISIBLE
             Log.e(
                 "Volume::::",
                 "KEYCODE_VOLUME_UP::::" + audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC)
