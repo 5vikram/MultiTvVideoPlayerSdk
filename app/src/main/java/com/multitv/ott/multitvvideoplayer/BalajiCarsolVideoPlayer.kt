@@ -99,13 +99,13 @@ class BalajiCarsolVideoPlayer(
     private var isPipModeOn = false
 
     private var simpleExoPlayerView: StyledPlayerView? = null
-    private lateinit var videoPlayerControllerRealtiveLayout: RelativeLayout
     private lateinit var videoRotationButton: ImageView
     private lateinit var moreInfoLinearLayout: LinearLayoutCompat
     private lateinit var videoPlayButton: ImageView
     private lateinit var videoPauseButton: ImageView
     private lateinit var volumeMuteButton: ImageView
     private lateinit var volumeUnMuteButton: ImageView
+    private lateinit var videoPlayerControllerRealtiveLayout: RelativeLayout
 
 
     constructor(context: Context, attrs: AttributeSet?) : this(
@@ -131,8 +131,7 @@ class BalajiCarsolVideoPlayer(
         volumeMuteButton = view.findViewById(R.id.volumeMuteButton)
         volumeUnMuteButton = view.findViewById(R.id.volumeUnMuteButton)
 
-        simpleExoPlayerView?.setControllerShowTimeoutMs(5000)
-        simpleExoPlayerView?.setControllerHideOnTouch(true)
+
         volumeMuteButton.visibility = View.VISIBLE
         volumeUnMuteButton.visibility = View.GONE
 
@@ -192,39 +191,41 @@ class BalajiCarsolVideoPlayer(
 
         }
 
+
+
         super.onFinishInflate()
     }
 
 
     fun setControllerEnabled(isChromeCastConnected: Boolean) {
 
-            if (isChromeCastConnected) {
-                videoPlayButton.isFocusable = false
-                videoPlayButton.isClickable = false
-                videoPauseButton.isFocusable = false
-                videoPauseButton.isClickable = false
-                volumeMuteButton.isFocusable = false
-                volumeMuteButton.isClickable = false
-                volumeUnMuteButton.isFocusable = false
-                volumeUnMuteButton.isClickable = false
-                videoRotationButton.isFocusable = false
-                videoRotationButton.isClickable = false
-                moreInfoLinearLayout.isFocusable = false
-                moreInfoLinearLayout.isClickable = false
+        if (isChromeCastConnected) {
+            videoPlayButton.isFocusable = false
+            videoPlayButton.isClickable = false
+            videoPauseButton.isFocusable = false
+            videoPauseButton.isClickable = false
+            volumeMuteButton.isFocusable = false
+            volumeMuteButton.isClickable = false
+            volumeUnMuteButton.isFocusable = false
+            volumeUnMuteButton.isClickable = false
+            videoRotationButton.isFocusable = false
+            videoRotationButton.isClickable = false
+            moreInfoLinearLayout.isFocusable = false
+            moreInfoLinearLayout.isClickable = false
 
-            } else {
-                videoPlayButton.isFocusable = true
-                videoPlayButton.isClickable = true
-                videoPauseButton.isFocusable = true
-                videoPauseButton.isClickable = true
-                volumeMuteButton.isFocusable = true
-                volumeMuteButton.isClickable = true
-                volumeUnMuteButton.isFocusable = true
-                volumeUnMuteButton.isClickable = true
-                videoRotationButton.isFocusable = true
-                videoRotationButton.isClickable = true
-                moreInfoLinearLayout.isFocusable = true
-                moreInfoLinearLayout.isClickable = true
+        } else {
+            videoPlayButton.isFocusable = true
+            videoPlayButton.isClickable = true
+            videoPauseButton.isFocusable = true
+            videoPauseButton.isClickable = true
+            volumeMuteButton.isFocusable = true
+            volumeMuteButton.isClickable = true
+            volumeUnMuteButton.isFocusable = true
+            volumeUnMuteButton.isClickable = true
+            videoRotationButton.isFocusable = true
+            videoRotationButton.isClickable = true
+            moreInfoLinearLayout.isFocusable = true
+            moreInfoLinearLayout.isClickable = true
 
         }
     }
