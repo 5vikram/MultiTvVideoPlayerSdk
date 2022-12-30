@@ -483,7 +483,6 @@ class BalajiCarsolVideoPlayer(
         if (mMediaPlayer != null) {
             mMediaPlayer!!.addListener(stateChangeCallback1)
             simpleExoPlayerView!!.player = mMediaPlayer
-            simpleExoPlayerView!!.setControllerHideDuringAds(true)
             var mediaItem: MediaItem? = null
             var subtitle: MediaItem.SubtitleConfiguration? = null
             if (subTitleUri != null && !TextUtils.isEmpty(subTitleUri)) {
