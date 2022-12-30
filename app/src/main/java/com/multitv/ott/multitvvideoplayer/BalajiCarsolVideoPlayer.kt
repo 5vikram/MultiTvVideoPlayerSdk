@@ -196,6 +196,40 @@ class BalajiCarsolVideoPlayer(
         super.onFinishInflate()
     }
 
+
+    fun setControllerEnabled(isChromeCastConnected: Boolean) {
+
+            if (isChromeCastConnected) {
+                videoPlayButton.isFocusable = false
+                videoPlayButton.isClickable = false
+                videoPauseButton.isFocusable = false
+                videoPauseButton.isClickable = false
+                volumeMuteButton.isFocusable = false
+                volumeMuteButton.isClickable = false
+                volumeUnMuteButton.isFocusable = false
+                volumeUnMuteButton.isClickable = false
+                videoRotationButton.isFocusable = false
+                videoRotationButton.isClickable = false
+                moreInfoLinearLayout.isFocusable = false
+                moreInfoLinearLayout.isClickable = false
+
+            } else {
+                videoPlayButton.isFocusable = true
+                videoPlayButton.isClickable = true
+                videoPauseButton.isFocusable = true
+                videoPauseButton.isClickable = true
+                volumeMuteButton.isFocusable = true
+                volumeMuteButton.isClickable = true
+                volumeUnMuteButton.isFocusable = true
+                volumeUnMuteButton.isClickable = true
+                videoRotationButton.isFocusable = true
+                videoRotationButton.isClickable = true
+                moreInfoLinearLayout.isFocusable = true
+                moreInfoLinearLayout.isClickable = true
+
+        }
+    }
+
     fun getAudioManager(): AudioManager {
         return audioManager!!
     }
@@ -340,7 +374,6 @@ class BalajiCarsolVideoPlayer(
     fun setPreRollAdUrl(adUrl: String?) {
         adsUrl = adUrl
     }
-
 
 
     fun setKeyToken(token: String?) {
