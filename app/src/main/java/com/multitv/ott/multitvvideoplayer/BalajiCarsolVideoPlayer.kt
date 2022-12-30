@@ -54,7 +54,7 @@ import java.util.*
 
 
 class BalajiCarsolVideoPlayer(
-    private val context: AppCompatActivity,
+    private val context: Activity,
     attrs: AttributeSet?,
     defStyleAttr: Int
 ) : FrameLayout(
@@ -67,7 +67,6 @@ class BalajiCarsolVideoPlayer(
     private var bannerVideoPlayerEventLister: BannerVideoPlayerEventLister? = null
     private var MoreInfoListener: MoreInfoListener? = null
     private var WVMAgent: PallyconWVMSDK? = null
-    private var analaticsUrl: String? = null
     private var token: String? = null
     private var userId: String? = null
     private var contentTitle: String? = null

@@ -11,6 +11,8 @@
         android:id="@+id/videoPlayer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        app:auto_show="true"
+        app:use_controller="true"
         app:controller_layout_id="@layout/banner_video_payer_controller_layout"
         app:resize_mode="fill" />
 </FrameLayout>

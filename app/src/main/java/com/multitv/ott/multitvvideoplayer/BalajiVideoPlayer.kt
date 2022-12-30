@@ -346,7 +346,7 @@ class BalajiVideoPlayer(
 
 
 
-        closeVideoPlayerButton?.setOnClickListener {
+        closeVideoPlayerButton.setOnClickListener {
             val orientation = getContext().resources.configuration.orientation
 
             if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
@@ -354,7 +354,7 @@ class BalajiVideoPlayer(
                     ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
                 (getContext() as Activity).window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
                 showSystemBar()
-                videoRotationButton?.setImageResource(R.drawable.ic_balaji_fullscreen)
+                videoRotationButton.setImageResource(R.drawable.ic_balaji_fullscreen)
             } else {
                 context.finish()
             }
@@ -370,12 +370,12 @@ class BalajiVideoPlayer(
 
 
         findViewById<View>(R.id.speed_btn)?.setOnClickListener { showSpeedControlDailog() }
-        errorRetryLayout?.setOnClickListener(OnClickListener {
-            errorRetryLayout?.setVisibility(GONE)
+        errorRetryLayout.setOnClickListener(OnClickListener {
+            errorRetryLayout.setVisibility(GONE)
             initializeMainPlayer(mContentUrl, true)
         })
 
-        pictureInPicture?.setOnClickListener(OnClickListener {
+        pictureInPicture.setOnClickListener(OnClickListener {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 hideController()
 

@@ -3,13 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="50dp"
     android:layout_gravity="bottom"
-    android:background="@color/black"
     android:layoutDirection="ltr">
 
     <View
+        android:id="@+id/overlayImageTransparent"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:alpha=".01"
+        android:layout_height="match_parent"
+        android:alpha=".4"
         android:background="#CC212121" />
 
 
