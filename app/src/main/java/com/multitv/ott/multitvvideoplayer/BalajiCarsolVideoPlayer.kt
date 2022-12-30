@@ -119,7 +119,7 @@ class BalajiCarsolVideoPlayer(
     override fun onFinishInflate() {
         val view =
             LayoutInflater.from(getContext())
-                .inflate(R.layout.balaji_no_controller_video_player_layout, this)
+                .inflate(R.layout.banner_video_player, this)
 
         simpleExoPlayerView = view.findViewById(R.id.videoPlayer)
         videoPlayerControllerRealtiveLayout =
