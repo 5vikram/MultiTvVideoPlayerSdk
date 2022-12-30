@@ -133,7 +133,7 @@ class BalajiCarsolVideoPlayer(
         volumeUnMuteButton = view.findViewById(R.id.volumeUnMuteButton)
 
         simpleExoPlayerView?.setControllerShowTimeoutMs(5000)
-        simpleExoPlayerView?.setControllerHideOnTouch(false)
+        simpleExoPlayerView?.setControllerHideOnTouch(true)
         volumeMuteButton.visibility = View.VISIBLE
         volumeUnMuteButton.visibility = View.GONE
 
@@ -644,7 +644,7 @@ class BalajiCarsolVideoPlayer(
                     }
                     simpleExoPlayerView?.videoSurfaceView!!.visibility = VISIBLE
                     simpleExoPlayerView?.visibility = VISIBLE
-                    simpleExoPlayerView?.bringToFront()
+
                 }
                 ExoPlayer.STATE_READY -> {
                     text += "ready"
