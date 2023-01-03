@@ -415,15 +415,23 @@ class BalajiCarsolVideoPlayer(
         if (mMediaPlayer != null && simpleExoPlayerView != null) {
             simpleExoPlayerView!!.onResume()
             mMediaPlayer!!.playWhenReady = true
-            var volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
-            mMediaPlayer?.audioComponent?.volume = volume.toFloat()
-            if (volume < 1) {
-                volumeMuteButton.visibility = View.VISIBLE
-                volumeUnMuteButton?.visibility = View.GONE
-            } else {
-                volumeMuteButton.visibility = View.GONE
-                volumeUnMuteButton.visibility = View.VISIBLE
-            }
+
+
+            videoPlayButton.visibility = View.VISIBLE
+            videoPauseButton.visibility = View.GONE
+
+        }
+    }
+
+    fun onResumeVolumeWhenScroll(){
+        var volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
+        mMediaPlayer?.audioComponent?.volume = volume.toFloat()F
+        if (volume < 1) {
+            volumeMuteButton.visibility = View.VISIBLE
+            volumeUnMuteButton?.visibility = View.GONE
+        } else {
+            volumeMuteButton.visibility = View.GONE
+            volumeUnMuteButton.visibility = View.VISIBLE
         }
     }
 
@@ -432,6 +440,8 @@ class BalajiCarsolVideoPlayer(
         if (mMediaPlayer != null && simpleExoPlayerView != null) {
             simpleExoPlayerView!!.onPause()
             mMediaPlayer!!.playWhenReady = false
+            videoPlayButton.visibility = View.VISIBLE
+            videoPauseButton.visibility = View.GONE
         }
     }
 
@@ -649,8 +659,8 @@ class BalajiCarsolVideoPlayer(
                 }
                 ExoPlayer.STATE_READY -> {
                     text += "ready"
-                    videoPauseButton.visibility = View.VISIBLE
                     videoPlayButton.visibility = View.VISIBLE
+                    videoPauseButton.visibility = View.GONE
                     mMediaPlayer?.audioComponent?.volume = 0f
                     bannerVideoPlayerEventLister?.onVideoStartNow()
                 }
