@@ -148,14 +148,7 @@ class BalajiCarsolVideoPlayer(
         }
 
         videoRotationButton.setOnClickListener {
-            val orientation = getContext().resources.configuration.orientation
-            if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                (getContext() as Activity).requestedOrientation =
-                    ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-            } else if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-                (getContext() as Activity).requestedOrientation =
-                    ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-            }
+            bannerVideoPlayerEventLister?.fullScreenCallBack()
         }
 
         moreInfoLinearLayout.setOnClickListener {
@@ -422,7 +415,15 @@ class BalajiCarsolVideoPlayer(
         if (mMediaPlayer != null && simpleExoPlayerView != null) {
             simpleExoPlayerView!!.onResume()
             mMediaPlayer!!.playWhenReady = true
-
+            var volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
+            mMediaPlayer?.audioComponent?.volume = volume.toFloat()
+            if (volume < 1) {
+                volumeMuteButton.visibility = View.VISIBLE
+                volumeUnMuteButton?.visibility = View.GONE
+            } else {
+                volumeMuteButton.visibility = View.GONE
+                volumeUnMuteButton.visibility = View.VISIBLE
+            }
         }
     }
 
@@ -582,6 +583,7 @@ class BalajiCarsolVideoPlayer(
             mMediaPlayer?.audioComponent?.volume = 0f
             volumeMuteButton.visibility = View.VISIBLE
             volumeUnMuteButton.visibility = View.GONE
+
             //mMediaPlayer?.setRepeatMode(Player.REPEAT_MODE_ONE)
             mMediaPlayer?.prepare()
             if (isNeedToPlayInstantly) {
@@ -647,6 +649,8 @@ class BalajiCarsolVideoPlayer(
                 }
                 ExoPlayer.STATE_READY -> {
                     text += "ready"
+                    videoPauseButton.visibility = View.VISIBLE
+                    videoPlayButton.visibility = View.VISIBLE
                     mMediaPlayer?.audioComponent?.volume = 0f
                     bannerVideoPlayerEventLister?.onVideoStartNow()
                 }
