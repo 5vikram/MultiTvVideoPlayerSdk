@@ -423,16 +423,21 @@ class BalajiCarsolVideoPlayer(
         }
     }
 
-    fun onResumeVolumeWhenScroll(){
-        var volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
-        mMediaPlayer?.audioComponent?.volume = volume.toFloat()F
-        if (volume < 1) {
-            volumeMuteButton.visibility = View.VISIBLE
-            volumeUnMuteButton?.visibility = View.GONE
-        } else {
-            volumeMuteButton.visibility = View.GONE
-            volumeUnMuteButton.visibility = View.VISIBLE
+    fun onResumeVolumeWhenScroll() {
+
+        if (volumeUnMuteButton.visibility == View.VISIBLE) {
+            var volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
+            mMediaPlayer?.audioComponent?.volume = volume.toFloat()
+            if (volume < 1) {
+                volumeMuteButton.visibility = View.VISIBLE
+                volumeUnMuteButton?.visibility = View.GONE
+            } else {
+                volumeMuteButton.visibility = View.GONE
+                volumeUnMuteButton.visibility = View.VISIBLE
+            }
         }
+
+
     }
 
     // pause video player
