@@ -151,15 +151,15 @@ class BalajiCarsolVideoPlayer(
         }
 
         videoPlayButton.setOnClickListener(OnClickListener {
+            videoPlayButton.visibility = View.GONE
+            videoPauseButton.visibility = View.VISIBLE
             mMediaPlayer?.playWhenReady = true
-            videoPlayButton.setVisibility(GONE)
-            videoPauseButton.setVisibility(VISIBLE)
             bannerVideoPlayerEventLister?.onPlayClick(1)
         })
         videoPauseButton.setOnClickListener(OnClickListener {
+            videoPlayButton.visibility = View.VISIBLE
+            videoPauseButton.visibility = View.GONE
             mMediaPlayer?.playWhenReady = false
-            videoPlayButton.setVisibility(VISIBLE)
-            videoPauseButton.setVisibility(GONE)
             bannerVideoPlayerEventLister?.onPlayClick(0)
         })
 
