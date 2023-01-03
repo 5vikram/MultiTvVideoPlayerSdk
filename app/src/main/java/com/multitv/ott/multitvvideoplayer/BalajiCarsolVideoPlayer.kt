@@ -130,16 +130,6 @@ class BalajiCarsolVideoPlayer(
         volumeUnMuteButton.visibility = View.GONE
 
         videoPlayerControllerRealtiveLayout.setOnClickListener {
-            /* if (mMediaPlayer?.isPlaying!!) {
-                 videoPlayButton.visibility = View.VISIBLE
-                 videoPauseButton.visibility = View.GONE
-                 mMediaPlayer?.playWhenReady = false
-             } else {
-                 videoPlayButton.visibility = View.GONE
-                 videoPauseButton.visibility = View.VISIBLE
-                 mMediaPlayer?.playWhenReady = true
-             }*/
-
             bannerVideoPlayerEventLister?.videoPlayerClick(mMediaPlayer!!.isPlaying)
         }
 
@@ -544,10 +534,7 @@ class BalajiCarsolVideoPlayer(
                 val downloadRequest: DownloadRequest? =
                     DownloadUtil.getDownloadTracker(context)
                         .getDownloadRequest(mediaItem.playbackProperties?.uri)
-                VideoPlayerTracer.error(
-                    "Offline Video Url:::",
-                    "" + mediaItem.playbackProperties?.uri
-                )
+
                 val mediaSource = DownloadHelper.createMediaSource(
                     downloadRequest!!,
                     DownloadUtil.getReadOnlyDataSourceFactory(context)
@@ -638,7 +625,7 @@ class BalajiCarsolVideoPlayer(
 
         override fun onLoadingChanged(isLoading: Boolean) {}
         override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
-            mMediaPlayer?.setRepeatMode(Player.REPEAT_MODE_ONE)
+           // mMediaPlayer?.setRepeatMode(Player.REPEAT_MODE_ONE)
             var text = "Main player"
             when (playbackState) {
                 ExoPlayer.STATE_BUFFERING -> {
