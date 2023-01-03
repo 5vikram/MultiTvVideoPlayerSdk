@@ -130,17 +130,17 @@ class BalajiCarsolVideoPlayer(
         volumeUnMuteButton.visibility = View.GONE
 
         videoPlayerControllerRealtiveLayout.setOnClickListener {
-           /* if (mMediaPlayer?.isPlaying!!) {
-                videoPlayButton.visibility = View.VISIBLE
-                videoPauseButton.visibility = View.GONE
-                mMediaPlayer?.playWhenReady = false
-            } else {
-                videoPlayButton.visibility = View.GONE
-                videoPauseButton.visibility = View.VISIBLE
-                mMediaPlayer?.playWhenReady = true
-            }*/
+            /* if (mMediaPlayer?.isPlaying!!) {
+                 videoPlayButton.visibility = View.VISIBLE
+                 videoPauseButton.visibility = View.GONE
+                 mMediaPlayer?.playWhenReady = false
+             } else {
+                 videoPlayButton.visibility = View.GONE
+                 videoPauseButton.visibility = View.VISIBLE
+                 mMediaPlayer?.playWhenReady = true
+             }*/
 
-            bannerVideoPlayerEventLister?.videoPlayerClick()
+            bannerVideoPlayerEventLister?.videoPlayerClick(mMediaPlayer!!.isPlaying)
         }
 
         videoRotationButton.setOnClickListener {

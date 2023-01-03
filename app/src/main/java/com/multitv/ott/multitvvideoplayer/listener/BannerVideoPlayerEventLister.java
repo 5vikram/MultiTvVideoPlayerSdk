@@ -25,5 +25,5 @@ public interface BannerVideoPlayerEventLister {
 
     void onVideoScreenResolution(int width, int height);
 
-    void videoPlayerClick();
+    void videoPlayerClick(boolean isPlay);
 }
