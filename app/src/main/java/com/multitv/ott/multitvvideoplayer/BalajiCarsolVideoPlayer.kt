@@ -115,7 +115,6 @@ class BalajiCarsolVideoPlayer(
         val view =
             LayoutInflater.from(getContext())
                 .inflate(R.layout.banner_video_player, this)
-
         simpleExoPlayerView = view.findViewById(R.id.videoPlayer)
         videoPlayerControllerRealtiveLayout =
             view.findViewById(R.id.videoPlayerControllerRealtiveLayout)
@@ -131,7 +130,7 @@ class BalajiCarsolVideoPlayer(
         volumeUnMuteButton.visibility = View.GONE
 
         videoPlayerControllerRealtiveLayout.setOnClickListener {
-            if (mMediaPlayer?.isPlaying!!) {
+           /* if (mMediaPlayer?.isPlaying!!) {
                 videoPlayButton.visibility = View.VISIBLE
                 videoPauseButton.visibility = View.GONE
                 mMediaPlayer?.playWhenReady = false
@@ -139,7 +138,9 @@ class BalajiCarsolVideoPlayer(
                 videoPlayButton.visibility = View.GONE
                 videoPauseButton.visibility = View.VISIBLE
                 mMediaPlayer?.playWhenReady = true
-            }
+            }*/
+
+            bannerVideoPlayerEventLister?.videoPlayerClick()
         }
 
         videoRotationButton.setOnClickListener {
