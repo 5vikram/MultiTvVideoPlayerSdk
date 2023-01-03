@@ -430,6 +430,8 @@ class BalajiCarsolVideoPlayer(
         if (mMediaPlayer != null && simpleExoPlayerView != null) {
             simpleExoPlayerView!!.onPause()
             mMediaPlayer!!.playWhenReady = false
+            videoPlayButton.visibility = View.VISIBLE
+            videoPauseButton.visibility = View.GONE
         }
     }
 
