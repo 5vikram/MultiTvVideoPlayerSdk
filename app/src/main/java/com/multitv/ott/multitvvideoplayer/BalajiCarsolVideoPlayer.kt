@@ -1,11 +1,9 @@
 package com.multitv.ott.multitvvideoplayer
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
-import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.media.AudioManager
@@ -16,7 +14,6 @@ import android.telephony.PhoneStateListener
 import android.telephony.TelephonyManager
 import android.text.TextUtils
 import android.util.AttributeSet
-import android.util.Log
 import android.view.*
 import android.widget.FrameLayout
 import android.widget.ImageView
@@ -44,7 +41,6 @@ import com.google.common.collect.ImmutableList
 import com.multitv.ott.multitvvideoplayer.database.SharedPreferencePlayer
 import com.multitv.ott.multitvvideoplayer.download.DownloadUtil
 import com.multitv.ott.multitvvideoplayer.listener.BannerVideoPlayerEventLister
-import com.multitv.ott.multitvvideoplayer.listener.MoreInfoListener
 import com.multitv.ott.multitvvideoplayer.utils.CommonUtils
 import com.multitv.ott.multitvvideoplayer.utils.ContentType
 import com.multitv.ott.multitvvideoplayer.utils.ExoUttils
@@ -65,7 +61,6 @@ class BalajiCarsolVideoPlayer(
     private var mMediaPlayer: ExoPlayer? = null
     private var trackSelector: DefaultTrackSelector
     private var bannerVideoPlayerEventLister: BannerVideoPlayerEventLister? = null
-    private var MoreInfoListener: MoreInfoListener? = null
     private var WVMAgent: PallyconWVMSDK? = null
     private var token: String? = null
     private var userId: String? = null
@@ -351,10 +346,6 @@ class BalajiCarsolVideoPlayer(
         this.bannerVideoPlayerEventLister = videoPlayerSdkCallBackListener
     }
 
-    fun setMultiTvMoreInfoVideoListener(listener: MoreInfoListener) {
-        this.MoreInfoListener = listener
-    }
-
 
     fun setContentFilePath(path: String?) {
         mContentUrl = path
@@ -415,11 +406,6 @@ class BalajiCarsolVideoPlayer(
         if (mMediaPlayer != null && simpleExoPlayerView != null) {
             simpleExoPlayerView!!.onResume()
             mMediaPlayer!!.playWhenReady = true
-
-
-            videoPlayButton.visibility = View.VISIBLE
-            videoPauseButton.visibility = View.GONE
-
         }
     }
 
@@ -437,7 +423,6 @@ class BalajiCarsolVideoPlayer(
             }
         }
 
-
     }
 
     // pause video player
@@ -445,8 +430,6 @@ class BalajiCarsolVideoPlayer(
         if (mMediaPlayer != null && simpleExoPlayerView != null) {
             simpleExoPlayerView!!.onPause()
             mMediaPlayer!!.playWhenReady = false
-            videoPlayButton.visibility = View.VISIBLE
-            videoPauseButton.visibility = View.GONE
         }
     }
 
@@ -457,6 +440,19 @@ class BalajiCarsolVideoPlayer(
             mMediaPlayer!!.release()
             if (adsLoader != null) adsLoader!!.setPlayer(null)
         }
+    }
+
+
+    fun videoPlayPauseStatus() {
+        if (mMediaPlayer != null && mMediaPlayer!!.isPlaying) {
+            videoPlayButton.visibility = View.GONE
+            videoPauseButton.visibility = View.VISIBLE
+        } else {
+            videoPlayButton.visibility = View.VISIBLE
+            videoPauseButton.visibility = View.GONE
+        }
+
+
     }
 
 
@@ -599,6 +595,9 @@ class BalajiCarsolVideoPlayer(
             volumeMuteButton.visibility = View.VISIBLE
             volumeUnMuteButton.visibility = View.GONE
 
+            videoPlayButton.visibility = View.GONE
+            videoPauseButton.visibility = View.VISIBLE
+
             //mMediaPlayer?.setRepeatMode(Player.REPEAT_MODE_ONE)
             mMediaPlayer?.prepare()
             if (isNeedToPlayInstantly) {
@@ -664,8 +663,6 @@ class BalajiCarsolVideoPlayer(
                 }
                 ExoPlayer.STATE_READY -> {
                     text += "ready"
-                    videoPlayButton.visibility = View.VISIBLE
-                    videoPauseButton.visibility = View.GONE
                     mMediaPlayer?.audioComponent?.volume = 0f
                     bannerVideoPlayerEventLister?.onVideoStartNow()
                 }
@@ -745,12 +742,6 @@ class BalajiCarsolVideoPlayer(
         override fun onDrmKeysRemoved() {}
     }
 
-
-    companion object {
-        const val DEFAULT_FAST_FORWARD_MS = 10000
-        const val DEFAULT_REWIND_MS = 10000
-        const val DEFAULT_TIMEOUT_MS = 5000
-    }
 
     init {
         trackSelector = DefaultTrackSelector(context)
