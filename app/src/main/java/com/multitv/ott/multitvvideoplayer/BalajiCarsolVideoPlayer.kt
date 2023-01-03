@@ -448,6 +448,11 @@ class BalajiCarsolVideoPlayer(
 
     }
 
+    fun restoreVideoButton() {
+        videoPlayButton.visibility = View.GONE
+        videoPauseButton.visibility = View.VISIBLE
+    }
+
 
     private fun initializeMainPlayer(videoUrl: String?, isNeedToPlayInstantly: Boolean) {
         if (mMediaPlayer != null) {

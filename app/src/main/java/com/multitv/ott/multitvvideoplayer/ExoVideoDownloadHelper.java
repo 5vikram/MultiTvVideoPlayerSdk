@@ -21,11 +21,13 @@ import com.multitv.ott.multitvvideoplayer.download.DownloadVideoListener;
 import com.multitv.ott.multitvvideoplayer.download.MediaItemTag;
 import com.multitv.ott.multitvvideoplayer.download.SdkPopCallbackListner;
 import com.multitv.ott.multitvvideoplayer.fabbutton.FabButton;
+import com.multitv.ott.multitvvideoplayer.listener.DownloadsDetailsListener;
 
 
 public class ExoVideoDownloadHelper implements DownloadTracker.Listener, SdkPopCallbackListner {
     private AppCompatActivity context;
     private DownloadVideoListener downloadVideoListener;
+    private DownloadsDetailsListener downloadsDetailsListener;
     private MediaItem mediaItem;
     private Handler handler = new Handler();
 
@@ -36,6 +38,10 @@ public class ExoVideoDownloadHelper implements DownloadTracker.Listener, SdkPopC
 
     public void setDownloadVideoListener(DownloadVideoListener downloadVideoListener) {
         this.downloadVideoListener = downloadVideoListener;
+    }
+
+    public void setDownloadDetailsCallBack(DownloadsDetailsListener downloadVideoListener) {
+        this.downloadsDetailsListener = downloadVideoListener;
     }
 
     private MediaItem getMediaItem(String uri, String title) {
@@ -62,7 +68,7 @@ public class ExoVideoDownloadHelper implements DownloadTracker.Listener, SdkPopC
 
     public void downloadPopUpMenuOption(View view, String uri) {
         DownloadUtil.INSTANCE.getDownloadTracker(context)
-                .toggleDownloadPopupMenu(context, view, Uri.parse(uri));
+                .toggleDownloadPopupMenu(context, view, Uri.parse(uri),downloadsDetailsListener);
     }
 
 

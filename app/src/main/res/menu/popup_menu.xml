@@ -11,4 +11,7 @@
 
     <item android:id="@+id/delete_download"
         android:title="Delete download"/>
+
+    <item android:id="@+id/downloads"
+        android:title="Downloads"/>
 </menu>

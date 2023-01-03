@@ -25,6 +25,7 @@ import com.google.android.exoplayer2.util.MimeTypes
 import com.google.android.exoplayer2.util.Util
 import com.multitv.ott.multitvvideoplayer.R
 import com.multitv.ott.multitvvideoplayer.download.MyDownloadService
+import com.multitv.ott.multitvvideoplayer.listener.DownloadsDetailsListener
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -114,7 +115,7 @@ class DownloadTracker(
         this.isTrackDailogShowing = isTrackDailogShowing
     }
 
-    fun toggleDownloadPopupMenu(context: Context, anchor: View, uri: Uri?) {
+    fun toggleDownloadPopupMenu(context: Context, anchor: View, uri: Uri?, downloadsDetailsListener:DownloadsDetailsListener) {
         val popupMenu = PopupMenu(context, anchor).apply { inflate(R.menu.popup_menu) }
         val download = downloads[uri]
         download ?: return
@@ -153,6 +154,10 @@ class DownloadTracker(
                         Download.STATE_STOPPED,
                         false
                     )
+                }
+
+                R.id.downloads -> {
+                    downloadsDetailsListener.openDownloadScreen()
                 }
             }
             return@setOnMenuItemClickListener true

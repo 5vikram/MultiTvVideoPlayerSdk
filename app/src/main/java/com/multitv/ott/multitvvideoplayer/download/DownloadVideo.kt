@@ -13,10 +13,10 @@ class DownloadVideo(
     private var dailogShown = false;
 
 
-    fun toggleDownloadPopupMenu(view: View, uri: Uri) {
+    /*fun toggleDownloadPopupMenu(view: View, uri: Uri) {
         DownloadUtil.getDownloadTracker(context)
             .toggleDownloadPopupMenu(context, view, uri)
-    }
+    }*/
 
 
     fun downloadVideo(mediaItem: MediaItem, duration: Long): Boolean {
