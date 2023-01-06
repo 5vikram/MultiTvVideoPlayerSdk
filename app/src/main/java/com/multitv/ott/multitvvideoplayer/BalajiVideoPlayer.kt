@@ -143,6 +143,7 @@ class BalajiVideoPlayer(
     private lateinit var videoTitle: TextView
     private lateinit var epsodeButton: ImageView
     private lateinit var epsodeNextButton: ImageView
+    private lateinit var volumeFullScreenButton: ImageView
 
     private lateinit var seekBarLayout: ConstraintLayout
 
@@ -234,7 +235,7 @@ class BalajiVideoPlayer(
         languageTv = view.findViewById(R.id.languageTv)
         genureTv = view.findViewById(R.id.genureTv)
         videoTitle = view.findViewById(R.id.videoTitle)
-
+        volumeFullScreenButton = view.findViewById(R.id.volumeFullScreenButton)
         volumeMuteAndUnMuteButton = view.findViewById(R.id.volumeMuteAndUnMuteButton)
         overlayImageTransparent = view.findViewById(R.id.overlayImageTransparent)
 
@@ -1578,11 +1579,16 @@ class BalajiVideoPlayer(
         startVolume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) ?: 100
         volumeProgressBar.progress = startVolume
         volumeProgressBar.max = maxVolume
+
+        if (startVolume > 1)
+            volumeFullScreenButton.setImageResource(R.drawable.ic_balaji_volume_on)
+        else
+            volumeFullScreenButton.setImageResource(R.drawable.ic_balaji_volume_off)
+
         volumeProgressBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
                 audioManager?.setStreamVolume(AudioManager.STREAM_MUSIC, p0?.progress!!, 0)
 
-                Log.e("Volume::::", "" + p1)
             }
 
             override fun onStartTrackingTouch(p0: SeekBar?) {
@@ -1590,9 +1596,12 @@ class BalajiVideoPlayer(
             }
 
             override fun onStopTrackingTouch(p0: SeekBar?) {
-                // volumeProgressBar.progress = p0?.progress!!
                 audioManager?.setStreamVolume(AudioManager.STREAM_MUSIC, p0?.progress!!, 0)
-                hideController()
+
+                if (p0!!.progress > 1)
+                    volumeFullScreenButton.setImageResource(R.drawable.ic_balaji_volume_on)
+                else
+                    volumeFullScreenButton.setImageResource(R.drawable.ic_balaji_volume_off)
 
             }
 
