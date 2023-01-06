@@ -317,17 +317,19 @@ class BalajiVideoPlayer(
                 videoRotationButton.setImageResource(R.drawable.ic_balaji_fullscreen)
                 videoLockButton.setVisibility(GONE)
                 videoUnLockButton.setVisibility(GONE)
+                setting.visibility = View.VISIBLE
             } else if (orientation == Configuration.ORIENTATION_PORTRAIT) {
                 (getContext() as Activity).requestedOrientation =
                     ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
                 (getContext() as Activity).window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
                 hideSystemBars()
+                setting.visibility = View.VISIBLE
                 videoRotationButton.setImageResource(R.drawable.ic_minimize)
                 videoLockUnlockStatus()
             }
         })
         volumeMuteAndUnMuteButton.visibility = View.GONE
-
+        setting.visibility = View.GONE
         volumeUnMuteButton.setOnClickListener {
             mMediaPlayer?.audioComponent?.volume = 0f
             volumeMuteAndUnMuteButton.visibility = View.VISIBLE
@@ -354,6 +356,7 @@ class BalajiVideoPlayer(
                     ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
                 (getContext() as Activity).window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
                 showSystemBar()
+                setting.visibility = View.VISIBLE
                 videoRotationButton.setImageResource(R.drawable.ic_balaji_fullscreen)
             } else {
                 context.finish()
@@ -397,21 +400,21 @@ class BalajiVideoPlayer(
                 isPipModeOn = true
             }
         })
-        VideoRenuButton?.setOnClickListener(OnClickListener { rewind() })
-        videoFarwardButton?.setOnClickListener(OnClickListener { fastForward() })
-        videoPlayButton?.setOnClickListener(OnClickListener {
+        VideoRenuButton.setOnClickListener(OnClickListener { rewind() })
+        videoFarwardButton.setOnClickListener(OnClickListener { fastForward() })
+        videoPlayButton.setOnClickListener(OnClickListener {
             if (mMediaPlayer != null) {
                 mMediaPlayer!!.playWhenReady = true
-                videoPlayButton?.setVisibility(GONE)
-                videoPauseButton?.setVisibility(VISIBLE)
+                videoPlayButton.setVisibility(GONE)
+                videoPauseButton.setVisibility(VISIBLE)
                 videoPlayerSdkCallBackListener?.onPlayClick(1)
             }
         })
-        videoPauseButton?.setOnClickListener(OnClickListener {
+        videoPauseButton.setOnClickListener(OnClickListener {
             if (mMediaPlayer != null) {
                 mMediaPlayer!!.playWhenReady = false
-                videoPlayButton?.setVisibility(VISIBLE)
-                videoPauseButton?.setVisibility(GONE)
+                videoPlayButton.setVisibility(VISIBLE)
+                videoPauseButton.setVisibility(GONE)
                 videoPlayerSdkCallBackListener?.onPlayClick(0)
             }
         })
@@ -448,6 +451,12 @@ class BalajiVideoPlayer(
     fun setSkipDuraionArrayList(skipDurationArray: ArrayList<SkipDurationPlayer>) {
         this.skipDurationArray = skipDurationArray;
     }
+
+
+    fun skipVideo(duration: String) {
+        val units = duration.split(":".toRegex()).toTypedArray()
+    }
+
 
     fun setWebSeriesEnable(
         isWebSeries: Boolean,
