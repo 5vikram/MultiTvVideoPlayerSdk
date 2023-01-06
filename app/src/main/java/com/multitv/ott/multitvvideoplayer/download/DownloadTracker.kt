@@ -115,7 +115,12 @@ class DownloadTracker(
         this.isTrackDailogShowing = isTrackDailogShowing
     }
 
-    fun toggleDownloadPopupMenu(context: Context, anchor: View, uri: Uri?, downloadsDetailsListener:DownloadsDetailsListener) {
+    fun toggleDownloadPopupMenu(
+        context: Context,
+        anchor: View,
+        uri: Uri?,
+        downloadsDetailsListener: DownloadsDetailsListener
+    ) {
         val popupMenu = PopupMenu(context, anchor).apply { inflate(R.menu.popup_menu) }
         val download = downloads[uri]
         download ?: return
@@ -145,6 +150,7 @@ class DownloadTracker(
                         Download.STOP_REASON_NONE,
                         true
                     )
+                    downloadsDetailsListener.resumeDownload()
                 }
                 R.id.pause_download -> {
                     DownloadService.sendSetStopReason(
@@ -154,6 +160,8 @@ class DownloadTracker(
                         Download.STATE_STOPPED,
                         false
                     )
+
+                    downloadsDetailsListener.pauseDownload()
                 }
 
                 R.id.downloads -> {
@@ -282,7 +290,7 @@ class DownloadTracker(
         fun release() {
             downloadHelper.release()
             trackSelectionDialog?.dismiss()
-          //  dailogCallbackListener.trackDailogStatus(false)
+            //  dailogCallbackListener.trackDailogStatus(false)
         }
 
         // DownloadHelper.Callback implementation.
@@ -371,14 +379,14 @@ class DownloadTracker(
                             Toast.LENGTH_LONG
                         ).show()
                     }
-                   // dailogCallbackListener.trackDailogStatus(false)
+                    // dailogCallbackListener.trackDailogStatus(false)
                     positiveCallback?.invoke()
                 }.setOnDismissListener {
                     trackSelectionDialog = null
 
                     downloadHelper.release()
                     dismissCallback?.invoke()
-                   // dailogCallbackListener.trackDailogStatus(false)
+                    // dailogCallbackListener.trackDailogStatus(false)
                 }.setNegativeButton("Cancel") { _, _ ->
                     trackSelectionDialog = null
                     downloadHelper.release()

@@ -323,7 +323,7 @@ class BalajiVideoPlayer(
                     ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
                 (getContext() as Activity).window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
                 hideSystemBars()
-                setting.visibility = View.VISIBLE
+                setting.visibility = View.GONE
                 videoRotationButton.setImageResource(R.drawable.ic_minimize)
                 videoLockUnlockStatus()
             }
