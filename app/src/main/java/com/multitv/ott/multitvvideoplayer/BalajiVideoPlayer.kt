@@ -457,6 +457,16 @@ class BalajiVideoPlayer(
         val units = duration.split(":".toRegex()).toTypedArray()
     }
 
+    fun setEnableFullScreenButton(isEnable: Boolean) {
+        if (isEnable) {
+            videoRotationButton.isClickable = true
+            videoRotationButton.isFocusable = true
+        } else {
+            videoRotationButton.isClickable = false
+            videoRotationButton.isFocusable = false
+        }
+    }
+
 
     fun setWebSeriesEnable(
         isWebSeries: Boolean,
