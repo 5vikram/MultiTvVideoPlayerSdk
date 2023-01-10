@@ -57,24 +57,20 @@ import com.multitv.ott.multitvvideoplayer.videoplayer.MyVideoPlayer
 import com.pallycon.widevinelibrary.*
 import java.util.*
 
-class TvPlayer :FrameLayout, PreviewLoader, PreviewBar.OnScrubListener, View.OnClickListener, SessionAvailabilityListener {
-    private lateinit var context: AppCompatActivity
+class TvPlayer(
+    private val context: AppCompatActivity,
+    attrs: AttributeSet?,
+    defStyleAttr: Int
+) : FrameLayout(
+    context, attrs, defStyleAttr
+), PreviewLoader, PreviewBar.OnScrubListener, View.OnClickListener, SessionAvailabilityListener {
 
-    constructor(context: Context) : super(context) {}
-    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {}
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(
-        context,
+
+    constructor(context: Context, attrs: AttributeSet?) : this(
+        context as AppCompatActivity,
         attrs,
-        defStyleAttr
+        0
     ) {
-    }
-
-    constructor(
-        context: Context,
-        attrs: AttributeSet?,
-        defStyleAttr: Int,
-        defStyleRes: Int
-    ) : super(context, attrs, defStyleAttr, defStyleRes) {
     }
 
 
@@ -155,8 +151,6 @@ class TvPlayer :FrameLayout, PreviewLoader, PreviewBar.OnScrubListener, View.OnC
     //    private val context: Context? = null
     private var mCastPlayer: CastPlayer? = null
 //    private val listener: com.google.android.exoplayer2.castdemo.PlayerManager.Listener? = null
-
-
 
 
     /*
@@ -282,14 +276,14 @@ class TvPlayer :FrameLayout, PreviewLoader, PreviewBar.OnScrubListener, View.OnC
         super.onFinishInflate()
     }
 
-    fun setCastSessionAvailabilityListener(sessionAvailabilityListener: SessionAvailabilityListener){
-        if (mCastPlayer != null){
+    fun setCastSessionAvailabilityListener(sessionAvailabilityListener: SessionAvailabilityListener) {
+        if (mCastPlayer != null) {
             mCastPlayer!!.setSessionAvailabilityListener(sessionAvailabilityListener)
         }
     }
 
-    fun setCastPlayer(castPlayer: CastPlayer){
-        if (mCastPlayer == null){
+    fun setCastPlayer(castPlayer: CastPlayer) {
+        if (mCastPlayer == null) {
             mCastPlayer = castPlayer
         }
     }
@@ -581,8 +575,11 @@ class TvPlayer :FrameLayout, PreviewLoader, PreviewBar.OnScrubListener, View.OnC
     }
 
 
-
-    private fun initializeMainPlayer(videoUrl: String?, isNeedToPlayInstantly: Boolean, currentPlayer: Player?) {
+    private fun initializeMainPlayer(
+        videoUrl: String?,
+        isNeedToPlayInstantly: Boolean,
+        currentPlayer: Player?
+    ) {
 //        ToastMessage.showLogs(ToastMessage.LogType.ERROR, "Video Player:::", "initializeMainPlayer");
         if (currentPlayer != null) {
             currentPlayer!!.release()
@@ -627,8 +624,8 @@ class TvPlayer :FrameLayout, PreviewLoader, PreviewBar.OnScrubListener, View.OnC
             )
             val mediaSourceFactory: MediaSourceFactory =
                 DefaultMediaSourceFactory(dataSourceFactory)
-                    .setAdsLoaderProvider {
-                            unusedAdTagUri: MediaItem.AdsConfiguration? -> adsLoader
+                    .setAdsLoaderProvider { unusedAdTagUri: MediaItem.AdsConfiguration? ->
+                        adsLoader
                     }
                     .setAdViewProvider(simpleExoPlayerView)
 
@@ -697,7 +694,9 @@ class TvPlayer :FrameLayout, PreviewLoader, PreviewBar.OnScrubListener, View.OnC
                         MediaItem.Builder()
                             .setSubtitleConfigurations(ImmutableList.of(subtitle))
                             .setUri(videoUrl)
-                            .setAdsConfiguration(MediaItem.AdsConfiguration.Builder(adTagUri).build())
+                            .setAdsConfiguration(
+                                MediaItem.AdsConfiguration.Builder(adTagUri).build()
+                            )
                             .build()
                     } else {
                         MediaItem.Builder()
@@ -712,7 +711,9 @@ class TvPlayer :FrameLayout, PreviewLoader, PreviewBar.OnScrubListener, View.OnC
                         val adTagUri = Uri.parse(adsUrl)
                         MediaItem.Builder()
                             .setUri(videoUrl)
-                            .setAdsConfiguration(MediaItem.AdsConfiguration.Builder(adTagUri).build())
+                            .setAdsConfiguration(
+                                MediaItem.AdsConfiguration.Builder(adTagUri).build()
+                            )
                             .build()
                     } else {
                         MediaItem.Builder()
@@ -836,13 +837,6 @@ class TvPlayer :FrameLayout, PreviewLoader, PreviewBar.OnScrubListener, View.OnC
         override fun onRepeatModeChanged(repeatMode: Int) {}
         override fun onPlaybackParametersChanged(playbackParameters: PlaybackParameters) {}
     }
-
-
-
-
-
-
-
 
 
     private fun startBufferingTimer() {
@@ -1126,7 +1120,8 @@ class TvPlayer :FrameLayout, PreviewLoader, PreviewBar.OnScrubListener, View.OnC
                 var diffBrightness: Float
                 var finalBrightness: Int
 
-                diffBrightness = maxBrightness.toFloat() * diff / (mInitialTextureHeight.toFloat() / 2)
+                diffBrightness =
+                    maxBrightness.toFloat() * diff / (mInitialTextureHeight.toFloat() / 2)
                 if (dir == OnSwipeTouchListener.Direction.DOWN) {
                     diffBrightness = -diffBrightness
                 }
@@ -1143,8 +1138,6 @@ class TvPlayer :FrameLayout, PreviewLoader, PreviewBar.OnScrubListener, View.OnC
 
 
                 brightnessProgressBar.progress = finalBrightness
-
-
 
 
                 /*PreferenceManager.getDefaultSharedPreferences(context)
