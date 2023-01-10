@@ -427,6 +427,8 @@ class BalajiVideoPlayer(
         }
 
 
+
+
         super.onFinishInflate()
     }
 
@@ -1056,6 +1058,9 @@ class BalajiVideoPlayer(
             if (isWatchDurationEnable)
                 seekTo(Math.max(mMediaPlayer!!.currentPosition + watchDuration * 1000, 0))
 
+            if (!isPipModeOn)
+                setTimerOnVideoPlayer(true)
+
         }
     }
 
@@ -1343,10 +1348,10 @@ class BalajiVideoPlayer(
     }
 
     fun showResumedVideoHint(isShow: Boolean) {
-        if (isShow)
-            resumedVideoTv?.visibility = View.VISIBLE
-        else
-            resumedVideoTv?.visibility = View.GONE
+//        if (isShow)
+//            resumedVideoTv?.visibility = View.VISIBLE
+//        else
+//            resumedVideoTv?.visibility = View.GONE
     }
 
     private fun fastForward() {
@@ -1647,7 +1652,7 @@ class BalajiVideoPlayer(
         }
 
         countDownTimer1 =
-            object : CountDownTimerWithPause(5000.toLong(), (tickDuration).toLong(), true) {
+            object : CountDownTimerWithPause(10000.toLong(), (tickDuration).toLong(), true) {
                 override fun onTick(millisUntilFinished: Long) {
 
                 }
