@@ -45,6 +45,8 @@ import com.google.android.exoplayer2.offline.DownloadRequest
 import com.google.android.exoplayer2.source.DefaultMediaSourceFactory
 import com.google.android.exoplayer2.source.MediaSourceFactory
 import com.google.android.exoplayer2.source.TrackGroupArray
+import com.google.android.exoplayer2.source.ads.AdPlaybackState
+import com.google.android.exoplayer2.source.ads.AdsLoader
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray
 import com.google.android.exoplayer2.ui.StyledPlayerView
@@ -929,6 +931,8 @@ class BalajiVideoPlayer(
             mMediaPlayer = ExoPlayer.Builder(context).setMediaSourceFactory(mediaSourceFactory)
                 .setTrackSelector(trackSelector).setLoadControl(customLoadControl).build()
             adsLoader = ImaAdsLoader.Builder( /* context= */context).build()
+
+
         } else {
             mMediaPlayer = ExoPlayer.Builder(context).setTrackSelector(trackSelector)
                 .setLoadControl(customLoadControl).build()

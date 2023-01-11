@@ -39,6 +39,7 @@
         android:padding="5dp"
         android:clickable="true"
         android:focusable="true"
+        android:background="?attr/selectableItemBackground"
         android:src="@mipmap/player_back_btn"/>
 
 
@@ -96,7 +97,7 @@
                 android:layout_height="32dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="15dp"
-                android:background="@android:color/transparent"
+                android:background="?attr/selectableItemBackground"
                 android:src="@drawable/backward" />
 
             <ImageView
@@ -105,6 +106,7 @@
                 android:layout_height="32dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="15dp"
+                android:background="?attr/selectableItemBackground"
                 android:src="@drawable/play" />
 
             <ImageView
@@ -113,6 +115,7 @@
                 android:layout_height="32dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="15dp"
+                android:background="?attr/selectableItemBackground"
                 android:src="@drawable/pause" />
 
             <ImageView
@@ -120,6 +123,7 @@
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_gravity="center_vertical"
+                android:background="?attr/selectableItemBackground"
                 android:layout_marginRight="10dp"
                 android:src="@drawable/forward" />
 
@@ -129,6 +133,7 @@
                 android:layout_height="32dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="10dp"
+                android:background="?attr/selectableItemBackground"
                 android:src="@drawable/next"
                 android:visibility="gone" />
 
@@ -155,8 +160,9 @@
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_gravity="center"
+            android:background="?attr/selectableItemBackground"
             android:layout_marginRight="10dp"
-            android:background="@android:color/transparent"
+            android:focusable="true"
             android:src="@drawable/speed" />
 
         <ImageView
@@ -164,8 +170,9 @@
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_gravity="center"
+            android:background="?attr/selectableItemBackground"
             android:layout_marginRight="10dp"
-            android:background="@android:color/transparent"
+            android:focusable="true"
             android:src="@drawable/menu" />
 
         <ImageView
@@ -221,6 +228,9 @@
             android:layout_marginStart="8dp"
             android:layout_marginEnd="5dp"
             app:previewAnimationEnabled="true"
+            android:background="?attr/selectableItemBackground"
+            android:layout_marginRight="10dp"
+            android:focusable="true"
             app:previewFrameLayout="@id/previewFrameLayout" />
 
         <!--
