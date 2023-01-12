@@ -1064,7 +1064,7 @@ class BalajiVideoPlayer(
                 seekTo(Math.max(mMediaPlayer!!.currentPosition + watchDuration * 1000, 0))
 
 
-            hideController()
+            //hideController()
 
 
 
