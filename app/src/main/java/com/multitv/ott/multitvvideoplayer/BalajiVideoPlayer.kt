@@ -1654,11 +1654,14 @@ class BalajiVideoPlayer(
 
         val tickDuration = 500
         if (isShow) {
-            Log.e("Genure:::", "Show")
             contentRateLayout.visibility = View.VISIBLE
-            hideController()
+            closeVideoPlayerButton!!.visibility = GONE
+            overlayImageTransparent!!.visibility = GONE
+            centerButtonLayout.visibility = GONE
+            videoProgressLayout.visibility = GONE
+            videoMenuLayout.visibility = GONE
+            resumedVideoTv.visibility = View.GONE
         } else {
-            Log.e("Genure:::", "Hide")
             contentRateLayout.visibility = View.GONE
             return
         }
