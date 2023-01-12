@@ -36,6 +36,8 @@ import com.bumptech.glide.request.target.Target
 import com.github.rubensousa.previewseekbar.PreviewBar
 import com.github.rubensousa.previewseekbar.PreviewLoader
 import com.github.rubensousa.previewseekbar.exoplayer.PreviewTimeBar
+import com.google.ads.interactivemedia.v3.api.AdEvent
+import com.google.ads.interactivemedia.v3.api.AdsManagerLoadedEvent
 import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.drm.DrmSessionManager
 import com.google.android.exoplayer2.ext.ima.ImaAdsLoader
@@ -932,7 +934,6 @@ class BalajiVideoPlayer(
                 .setTrackSelector(trackSelector).setLoadControl(customLoadControl).build()
             adsLoader = ImaAdsLoader.Builder( /* context= */context).build()
 
-
         } else {
             mMediaPlayer = ExoPlayer.Builder(context).setTrackSelector(trackSelector)
                 .setLoadControl(customLoadControl).build()
@@ -1052,18 +1053,47 @@ class BalajiVideoPlayer(
             var volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
             mMediaPlayer?.audioComponent?.volume = volume.toFloat()
             if (volume < 1) {
-                volumeMuteAndUnMuteButton?.visibility = View.VISIBLE
-                volumeUnMuteButton?.visibility = View.GONE
+                volumeMuteAndUnMuteButton.visibility = View.VISIBLE
+                volumeUnMuteButton.visibility = View.GONE
             } else {
-                volumeMuteAndUnMuteButton?.visibility = View.GONE
-                volumeUnMuteButton?.visibility = View.VISIBLE
+                volumeMuteAndUnMuteButton.visibility = View.GONE
+                volumeUnMuteButton.visibility = View.VISIBLE
             }
 
             if (isWatchDurationEnable)
                 seekTo(Math.max(mMediaPlayer!!.currentPosition + watchDuration * 1000, 0))
 
-            if (!isPipModeOn)
-                setTimerOnVideoPlayer(true)
+
+            hideController()
+
+
+
+            if (adsUrl != null && !TextUtils.isEmpty(adsUrl)) {
+                adsLoader?.adsLoader?.addAdsLoadedListener(object :
+                    com.google.ads.interactivemedia.v3.api.AdsLoader.AdsLoadedListener {
+                    override fun onAdsManagerLoaded(adsManagerLoadedEvent: AdsManagerLoadedEvent) {
+                        var adsManager = adsManagerLoadedEvent.getAdsManager()
+                        adsManager.addAdEventListener(object : AdEvent.AdEventListener {
+                            override fun onAdEvent(adEvent: AdEvent) {
+                                Log.e("Ads Event:::", "" + adEvent.type)
+                                if (adEvent.type.equals("STARTED")) {
+                                    if (!isPipModeOn)
+                                        setTimerOnVideoPlayer(false)
+                                } else if (adEvent.type.equals("COMPLETED")) {
+                                    if (!isPipModeOn)
+                                        setTimerOnVideoPlayer(true)
+                                }
+                            }
+
+                        })
+                    }
+
+                })
+
+            } else {
+                if (!isPipModeOn)
+                    setTimerOnVideoPlayer(true)
+            }
 
         }
     }
@@ -1099,10 +1129,11 @@ class BalajiVideoPlayer(
             when (playbackState) {
                 ExoPlayer.STATE_BUFFERING -> {
                     text += "buffering"
-                    bufferingProgressBarLayout!!.bringToFront()
-                    bufferingProgressBarLayout!!.visibility = VISIBLE
+                    bufferingProgressBarLayout.bringToFront()
+                    bufferingProgressBarLayout.visibility = VISIBLE
                     centerButtonLayout!!.visibility = GONE
-                    if (contentType == ContentType.LIVE) startBufferingTimer()
+                    //hideController()
+                    startBufferingTimer()
                 }
                 ExoPlayer.STATE_ENDED -> {
                     text += "ended"
@@ -1113,9 +1144,9 @@ class BalajiVideoPlayer(
                         bufferingProgressBarLayout!!.visibility = GONE
                         circularProgressRing =
                             findViewById<View>(R.id.circular_progress_ring) as FabButton
-                        circularProgressRing?.showProgress(true)
-                        circularProgressRing?.setProgress(0f)
-                        circularProgressLayout!!.visibility = VISIBLE
+                        circularProgressRing.showProgress(true)
+                        circularProgressRing.setProgress(0f)
+                        circularProgressLayout.visibility = VISIBLE
                         // circularProgressLayout!!.bringToFront()
                         val totalDuration = 1200
                         val tickDuration = 300
@@ -1128,7 +1159,7 @@ class BalajiVideoPlayer(
                                 var progress = millisUntilFinished.toFloat() / totalDuration
                                 progress = progress * 100
                                 progress = 100 - progress
-                                circularProgressRing?.setProgress(progress)
+                                circularProgressRing.setProgress(progress)
                             }
 
 
@@ -1139,7 +1170,7 @@ class BalajiVideoPlayer(
                                     findViewById<View>(R.id.circular_progress_ring) as FabButton
 
 
-                                circularProgressLayout?.visibility = View.GONE
+                                circularProgressLayout.visibility = View.GONE
 
                                 if (isWebSeries) {
                                     if (userSubscriptionDtatus)
@@ -1165,9 +1196,8 @@ class BalajiVideoPlayer(
                 ExoPlayer.STATE_IDLE -> {
                     text += "idle"
                     if (!checkForAudioFocus()) return
-                    if (bufferingProgressBarLayout != null) bufferingProgressBarLayout!!.visibility =
-                        GONE
-                    centerButtonLayout!!.visibility = VISIBLE
+                    bufferingProgressBarLayout!!.visibility = GONE
+                    //centerButtonLayout!!.visibility = VISIBLE
                     if (mMediaPlayer != null) {
                         contentPlayedTimeInMillis = mMediaPlayer!!.currentPosition
                         if (contentType == ContentType.LIVE) startBufferingTimer()
@@ -1178,10 +1208,10 @@ class BalajiVideoPlayer(
                 }
                 ExoPlayer.STATE_READY -> {
                     text += "ready"
-                    bufferingProgressBarLayout!!.visibility = GONE
-                    centerButtonLayout!!.visibility = VISIBLE
-                    videoNextButton!!.visibility = GONE
-                    videoPerviousButton!!.visibility = GONE
+                    bufferingProgressBarLayout.visibility = GONE
+                    //centerButtonLayout!!.visibility = VISIBLE
+                    videoNextButton.visibility = GONE
+                    videoPerviousButton.visibility = GONE
                     videoPlayerSdkCallBackListener?.onVideoStartNow()
                 }
                 else -> text += "unknown"
@@ -1626,6 +1656,7 @@ class BalajiVideoPlayer(
         if (isShow) {
             Log.e("Genure:::", "Show")
             contentRateLayout.visibility = View.VISIBLE
+            hideController()
         } else {
             Log.e("Genure:::", "Hide")
             contentRateLayout.visibility = View.GONE
