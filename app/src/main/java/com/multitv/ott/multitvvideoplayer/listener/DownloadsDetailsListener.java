@@ -4,4 +4,5 @@ public interface DownloadsDetailsListener {
     void openDownloadScreen();
     void pauseDownload();
     void resumeDownload();
+    void cancelDownloads();
 }

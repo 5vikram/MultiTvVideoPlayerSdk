@@ -141,7 +141,10 @@ class DownloadTracker(
 
         popupMenu.setOnMenuItemClickListener {
             when (it.itemId) {
-                R.id.cancel_download, R.id.delete_download -> removeDownload(download.request.uri)
+                R.id.cancel_download, R.id.delete_download -> {
+                    removeDownload(download.request.uri)
+                    downloadsDetailsListener.cancelDownloads()
+                }
                 R.id.resume_download -> {
                     DownloadService.sendSetStopReason(
                         context,
@@ -182,7 +185,11 @@ class DownloadTracker(
                 download.request.id,
                 false
             )
+
+
         }
+
+
     }
 
     private fun loadDownloads() {
