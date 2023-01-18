@@ -297,7 +297,6 @@ class DownloadTracker(
         fun release() {
             downloadHelper.release()
             trackSelectionDialog?.dismiss()
-            //  dailogCallbackListener.trackDailogStatus(false)
         }
 
         // DownloadHelper.Callback implementation.
