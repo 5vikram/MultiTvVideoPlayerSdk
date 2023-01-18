@@ -1214,7 +1214,7 @@ class BalajiVideoPlayer(
                     videoNextButton.visibility = GONE
                     videoPerviousButton.visibility = GONE
                     videoPlayerSdkCallBackListener?.onVideoStartNow()
-                    startSkipVideoTimer()
+                    //startSkipVideoTimer()
                 }
                 else -> text += "unknown"
             }
