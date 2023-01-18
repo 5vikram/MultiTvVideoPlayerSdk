@@ -540,6 +540,7 @@ class DownloadTracker(
             }
           //  trackSelectionDialog = deleteDialog.create().apply { show() }
             trackSelectionDialog?.show()
+
             deleteDialog.show()
         }
 
