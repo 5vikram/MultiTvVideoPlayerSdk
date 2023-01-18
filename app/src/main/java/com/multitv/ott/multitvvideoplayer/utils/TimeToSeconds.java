@@ -1,6 +1,6 @@
 package com.multitv.ott.multitvvideoplayer.utils;
 
-import com.multitv.ott.multitvvideoplayer.models.SkipDurationPlayer;
+import com.multitv.ott.multitvvideoplayer.models.SkipDuration;
 
 import java.util.ArrayList;
 
@@ -49,7 +49,7 @@ public class TimeToSeconds {
         }
     }
 
-    public static int videoSkipStatus(long tickCurrentDuration, ArrayList<SkipDurationPlayer> skipDurationArray) {
+    public static int videoSkipStatus(long tickCurrentDuration, ArrayList<SkipDuration> skipDurationArray) {
         for (int i = 0; i < skipDurationArray.size(); i++) {
             if (tickCurrentDuration == i) {
                 return i;

@@ -45,8 +45,6 @@ import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector
 import com.google.android.exoplayer2.offline.DownloadHelper
 import com.google.android.exoplayer2.offline.DownloadRequest
 import com.google.android.exoplayer2.source.*
-import com.google.android.exoplayer2.source.ads.AdPlaybackState
-import com.google.android.exoplayer2.source.ads.AdsLoader
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray
 import com.google.android.exoplayer2.ui.StyledPlayerView
@@ -64,7 +62,7 @@ import com.multitv.ott.multitvvideoplayer.download.DownloadUtil
 import com.multitv.ott.multitvvideoplayer.fabbutton.FabButton
 import com.multitv.ott.multitvvideoplayer.listener.VideoPlayPauseCallBackListener
 import com.multitv.ott.multitvvideoplayer.listener.VideoPlayerSdkCallBackListener
-import com.multitv.ott.multitvvideoplayer.models.SkipDurationPlayer
+import com.multitv.ott.multitvvideoplayer.models.SkipDuration
 import com.multitv.ott.multitvvideoplayer.playerglide.GlideThumbnailTransformation
 import com.multitv.ott.multitvvideoplayer.popup.TrackSelectionDialog
 import com.multitv.ott.multitvvideoplayer.utils.*
@@ -183,7 +181,7 @@ class BalajiVideoPlayer(
     private var isWebSeries = false;
     private var userSubscriptionDtatus = false
     private var contentAccessType = ""
-    private var skipDurationArray = ArrayList<SkipDurationPlayer>()
+    private var skipDurationArray = ArrayList<SkipDuration>()
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -458,7 +456,7 @@ class BalajiVideoPlayer(
     }
 
 
-    fun setSkipDuraionArrayList(skipDurationArray: ArrayList<SkipDurationPlayer>) {
+    fun setSkipDuraionArrayList(skipDurationArray: ArrayList<SkipDuration>) {
         this.skipDurationArray = skipDurationArray;
     }
 
@@ -1216,7 +1214,7 @@ class BalajiVideoPlayer(
                     videoNextButton.visibility = GONE
                     videoPerviousButton.visibility = GONE
                     videoPlayerSdkCallBackListener?.onVideoStartNow()
-                    startSkipVideoTimer()
+                    //startSkipVideoTimer()
                 }
                 else -> text += "unknown"
             }
@@ -1396,7 +1394,7 @@ class BalajiVideoPlayer(
         seekTo(Math.max(mMediaPlayer!!.currentPosition + DEFAULT_FAST_FORWARD_MS, 0))
     }
 
-    private fun seekTo(positionMs: Long) {
+    fun seekTo(positionMs: Long) {
         mMediaPlayer!!.seekTo(positionMs)
     }
 
@@ -1761,6 +1759,21 @@ class BalajiVideoPlayer(
         }
     }
 
+
+    fun getSkipButton(): TextView {
+        return skipVideoButton;
+    }
+
+    fun getCurrentDurationTv(): TextView {
+        return exoCurrentPosition;
+    }
+
+
+    fun getTotalDurationTv(): TextView {
+        return exoTotalDuration;
+    }
+
+
     private var skipCountDownTimer: CountDownTimerWithPause? = null
 
     private fun startSkipVideoTimer() {
@@ -1788,7 +1801,7 @@ class BalajiVideoPlayer(
 
                         } else if (tickCurrentDuration.toInt() == endPosition) {
                             skipVideoButton.visibility = View.GONE
-                            Log.e("Video Start Counter:::", "" + endPosition)
+                            Log.e("Video Stop Counter:::", "" + endPosition)
                         } else {
                             skipVideoButton.visibility = View.GONE
                         }
