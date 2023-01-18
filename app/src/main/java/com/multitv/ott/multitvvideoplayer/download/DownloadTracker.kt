@@ -310,14 +310,8 @@ class DownloadTracker(
             }
 
             setTrackDailogStatus(true)
-          //  val dialogBuilder: AlertDialog.Builder = AlertDialog.Builder(context)
-         //   dialogBuilder.setCancelable(false)
-
-            val factory = LayoutInflater.from(context)
-            val deleteDialogView: View = factory.inflate(R.layout.alert_download_dialog, null)
             val dialogBuilder: AlertDialog.Builder = AlertDialog.Builder(context)
-            dialogBuilder.setView(deleteDialogView)
-
+            dialogBuilder.setCancelable(false)
             val formatDownloadable: MutableList<Format> = mutableListOf()
             var qualitySelected: DefaultTrackSelector.Parameters
             val mappedTrackInfo = downloadHelper.getMappedTrackInfo(0)
