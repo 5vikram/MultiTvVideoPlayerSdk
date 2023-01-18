@@ -1759,6 +1759,11 @@ class BalajiVideoPlayer(
         }
     }
 
+
+    fun getSkipButton(): TextView {
+        return skipVideoButton;
+    }
+
     private var skipCountDownTimer: CountDownTimerWithPause? = null
 
     private fun startSkipVideoTimer() {
