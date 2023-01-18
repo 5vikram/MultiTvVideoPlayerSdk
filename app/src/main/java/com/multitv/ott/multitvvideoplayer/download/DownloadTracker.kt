@@ -3,12 +3,14 @@ package com.multitv.ott.multitvvideoplayer.download
 import android.content.Context
 import android.net.Uri
 import android.os.StatFs
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.PopupMenu
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.AppCompatTextView
 import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.DefaultRenderersFactory
 import com.google.android.exoplayer2.Format
@@ -308,7 +310,7 @@ class DownloadTracker(
             }
 
             setTrackDailogStatus(true)
-            val dialogBuilder: AlertDialog.Builder = AlertDialog.Builder(context)
+            /*val dialogBuilder: AlertDialog.Builder = AlertDialog.Builder(context)
             dialogBuilder.setCancelable(false)
             val formatDownloadable: MutableList<Format> = mutableListOf()
             var qualitySelected: DefaultTrackSelector.Parameters
@@ -399,10 +401,146 @@ class DownloadTracker(
                     dismissCallback?.invoke()
                     dailogCallbackListener.trackDailogStatus(false)
                 }
-            trackSelectionDialog = dialogBuilder.create().apply { show() }
+            trackSelectionDialog = dialogBuilder.create().apply { show() }*/
 
             //dailogCallbackListener.trackDailogStatus(true)
 
+
+            // Custom dialog
+            val factory = LayoutInflater.from(context)
+            val deleteDialogView: View = factory.inflate(R.layout.alert_download_dialog, null)
+            val deleteDialog = AlertDialog.Builder(context).create()
+            deleteDialog.setView(deleteDialogView)
+
+            val done = deleteDialogView.findViewById<AppCompatTextView>(R.id.done)
+            val hd_720 = deleteDialogView.findViewById<AppCompatTextView>(R.id.hd_quality)
+            val sd_420 = deleteDialogView.findViewById<AppCompatTextView>(R.id.sd_quality)
+
+            val formatDownloadable: MutableList<Format> = mutableListOf()
+            var qualitySelected: DefaultTrackSelector.Parameters
+            val mappedTrackInfo = downloadHelper.getMappedTrackInfo(0)
+
+            for (i in 0 until mappedTrackInfo.rendererCount) {
+                if (C.TRACK_TYPE_VIDEO == mappedTrackInfo.getRendererType(i)) {
+                    val trackGroups: TrackGroupArray = mappedTrackInfo.getTrackGroups(i)
+                    for (j in 0 until trackGroups.length) {
+                        val trackGroup: TrackGroup = trackGroups[j]
+                        for (k in 0 until trackGroup.length) {
+                            formatDownloadable.add(trackGroup.getFormat(k))
+                        }
+                    }
+                }
+            }
+
+            if (formatDownloadable.isEmpty()) {
+                return
+            }
+
+            // We sort here because later we use formatDownloadable to select track
+            formatDownloadable.sortBy { it.height }
+            val mediaItemTag: MediaItemTag = mediaItem.playbackProperties?.tag as MediaItemTag
+            val optionsDownload: List<String> = formatDownloadable.map {
+                context.getString(
+                    R.string.dialog_option, it.height,
+                    (it.bitrate * mediaItemTag.duration).div(8000).formatFileSize()
+                )
+            }
+
+            //Default quality download
+            qualitySelected = DefaultTrackSelector(context).buildUponParameters()
+                .setMinVideoSize(formatDownloadable[0].width, formatDownloadable[0].height)
+                .setMinVideoBitrate(formatDownloadable[0].bitrate)
+                .setMaxVideoSize(formatDownloadable[0].width, formatDownloadable[0].height)
+                .setMaxVideoBitrate(formatDownloadable[0].bitrate)
+                .build()
+
+
+            hd_720?.text = qualitySelected.toString()
+
+            hd_720?.setOnClickListener {
+                for (item in formatDownloadable.indices) {
+                    val format = formatDownloadable[item]
+                    qualitySelected = DefaultTrackSelector(context).buildUponParameters()
+                        .setMinVideoSize(format.width, format.height)
+                        .setMinVideoBitrate(format.bitrate)
+                        .setMaxVideoSize(format.width, format.height)
+                        .setMaxVideoBitrate(format.bitrate)
+                        .build()
+                    when (formatDownloadable[item].height) {
+                        720 -> {
+                            //   hd_720.text = formatDownloadable[item].height.toString()
+                            hd_720.text = qualitySelected.toString()
+                        }
+                        480 -> {
+                            //   hd_720.text = formatDownloadable[item].height.toString()
+                            hd_720.text = qualitySelected.toString()
+                        }
+                        360 -> {
+                            //  hd_720.text = formatDownloadable[item].height.toString()
+                            hd_720.text = qualitySelected.toString()
+                        }
+                        else -> {
+                            // hd_720.text = formatDownloadable[item].height.toString()
+                            hd_720.text = qualitySelected.toString()
+                        }
+                    }
+                }
+            }
+
+            sd_420?.setOnClickListener {
+                for (item in formatDownloadable.indices) {
+                    val format = formatDownloadable[item]
+                    qualitySelected = DefaultTrackSelector(context).buildUponParameters()
+                        .setMinVideoSize(format.width, format.height)
+                        .setMinVideoBitrate(format.bitrate)
+                        .setMaxVideoSize(format.width, format.height)
+                        .setMaxVideoBitrate(format.bitrate)
+                        .build()
+                    when (formatDownloadable[item].height) {
+                        480 -> {
+                            //  sd_420.text = formatDownloadable[item].height.toString()
+                            sd_420.text = qualitySelected.toString()
+                        }
+                        360 -> {
+                            // sd_420.text = formatDownloadable[item].height.toString()
+                            sd_420.text = qualitySelected.toString()
+                        }
+                        else -> {
+                            //  sd_420.text = formatDownloadable[item].height.toString()
+                            sd_420.text = qualitySelected.toString()
+                        }
+                    }
+                }
+            }
+
+            done?.setOnClickListener {
+                helper.clearTrackSelections(0)
+                helper.addTrackSelection(0, qualitySelected)
+                val estimatedContentLength: Long =
+                    (qualitySelected.maxVideoBitrate * mediaItemTag.duration).div(C.MILLIS_PER_SECOND)
+                        .div(C.BITS_PER_BYTE)
+                if (availableBytesLeft > estimatedContentLength) {
+                    val downloadRequest: DownloadRequest = downloadHelper.getDownloadRequest(
+                        (mediaItem.playbackProperties?.tag as MediaItemTag).title,
+                        Util.getUtf8Bytes(estimatedContentLength.toString())
+                    )
+                    startDownload(downloadRequest)
+                    availableBytesLeft -= estimatedContentLength
+                    Log.e(TAG, "availableBytesLeft after calculation: $availableBytesLeft")
+                } else {
+                    Toast.makeText(
+                        context,
+                        "Not enough space to download this file",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+                // dailogCallbackListener.trackDailogStatus(false)
+
+                positiveCallback?.invoke()
+            }
+          //  trackSelectionDialog = deleteDialog.create().apply { show() }
+            trackSelectionDialog?.show()
+            deleteDialog.show()
         }
 
         override fun onPrepareError(helper: DownloadHelper, e: IOException) {
