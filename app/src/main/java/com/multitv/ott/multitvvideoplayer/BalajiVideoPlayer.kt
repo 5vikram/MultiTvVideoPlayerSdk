@@ -625,8 +625,8 @@ class BalajiVideoPlayer(
 
 
     fun hideController() {
-        closeVideoPlayerButton!!.visibility = GONE
-        overlayImageTransparent!!.visibility = GONE
+        closeVideoPlayerButton.visibility = GONE
+        overlayImageTransparent.visibility = GONE
         centerButtonLayout.visibility = GONE
         videoProgressLayout.visibility = GONE
         videoMenuLayout.visibility = GONE
@@ -1216,6 +1216,7 @@ class BalajiVideoPlayer(
                     videoNextButton.visibility = GONE
                     videoPerviousButton.visibility = GONE
                     videoPlayerSdkCallBackListener?.onVideoStartNow()
+                    startSkipVideoTimer()
                 }
                 else -> text += "unknown"
             }

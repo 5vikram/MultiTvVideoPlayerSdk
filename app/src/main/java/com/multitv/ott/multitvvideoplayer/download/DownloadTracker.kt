@@ -538,8 +538,8 @@ class DownloadTracker(
 
                 positiveCallback?.invoke()
             }
-          //  trackSelectionDialog = deleteDialog.create().apply { show() }
-            trackSelectionDialog?.show()
+            //  trackSelectionDialog = deleteDialog.create().apply { show() }
+            //trackSelectionDialog?.show()
 
             deleteDialog.show()
         }

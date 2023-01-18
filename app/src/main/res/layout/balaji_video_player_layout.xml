@@ -186,7 +186,7 @@
         android:id="@+id/skipVideoButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Title"
+        tools:text="Title"
         android:layout_gravity="bottom|end"
         android:textColor="@color/black"
         android:layout_marginRight="20dp"
@@ -195,6 +195,7 @@
         android:paddingLeft="40dp"
         android:paddingBottom="7dp"
         android:paddingTop="5dp"
+        android:visibility="gone"
         android:background="@drawable/skip_button_bg"
         android:textSize="20sp"/>
 
