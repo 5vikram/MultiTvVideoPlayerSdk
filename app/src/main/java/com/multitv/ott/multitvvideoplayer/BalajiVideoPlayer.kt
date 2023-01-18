@@ -1394,7 +1394,7 @@ class BalajiVideoPlayer(
         seekTo(Math.max(mMediaPlayer!!.currentPosition + DEFAULT_FAST_FORWARD_MS, 0))
     }
 
-    private fun seekTo(positionMs: Long) {
+    fun seekTo(positionMs: Long) {
         mMediaPlayer!!.seekTo(positionMs)
     }
 
