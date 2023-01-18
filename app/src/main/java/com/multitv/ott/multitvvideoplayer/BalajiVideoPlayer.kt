@@ -1764,6 +1764,16 @@ class BalajiVideoPlayer(
         return skipVideoButton;
     }
 
+    fun getCurrentDurationTv(): TextView {
+        return exoCurrentPosition;
+    }
+
+
+    fun getTotalDurationTv(): TextView {
+        return exoTotalDuration;
+    }
+
+
     private var skipCountDownTimer: CountDownTimerWithPause? = null
 
     private fun startSkipVideoTimer() {
