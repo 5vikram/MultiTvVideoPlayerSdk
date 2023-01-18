@@ -44,9 +44,7 @@ import com.google.android.exoplayer2.ext.ima.ImaAdsLoader
 import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector
 import com.google.android.exoplayer2.offline.DownloadHelper
 import com.google.android.exoplayer2.offline.DownloadRequest
-import com.google.android.exoplayer2.source.DefaultMediaSourceFactory
-import com.google.android.exoplayer2.source.MediaSourceFactory
-import com.google.android.exoplayer2.source.TrackGroupArray
+import com.google.android.exoplayer2.source.*
 import com.google.android.exoplayer2.source.ads.AdPlaybackState
 import com.google.android.exoplayer2.source.ads.AdsLoader
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
@@ -148,6 +146,9 @@ class BalajiVideoPlayer(
     private lateinit var epsodeButton: ImageView
     private lateinit var epsodeNextButton: ImageView
     private lateinit var volumeFullScreenButton: ImageView
+    private lateinit var exoTotalDuration: TextView
+    private lateinit var exoCurrentPosition: TextView
+    private lateinit var skipVideoButton: TextView
 
     private lateinit var seekBarLayout: ConstraintLayout
 
@@ -232,7 +233,9 @@ class BalajiVideoPlayer(
                 videoPlayerSdkCallBackListener?.showThumbnailCallback()
         }
 
-
+        exoTotalDuration = view.findViewById(R.id.exo_duration)
+        exoCurrentPosition = view.findViewById(R.id.exo_position)
+        skipVideoButton = view.findViewById(R.id.skipVideoButton)
 
         contentRateLayout = view.findViewById(R.id.contentRateLayout)
         contentRatedTv = view.findViewById(R.id.contentRatedTv)
@@ -907,6 +910,8 @@ class BalajiVideoPlayer(
             if (adsLoader != null) adsLoader!!.setPlayer(null)
             mMediaPlayer = null
         }
+
+        //var subtitleSource = SingleSampleMediaSource(subtitleUri, ...);
         centerButtonLayout!!.visibility = GONE
         videoPlayerSdkCallBackListener?.prepareVideoPlayer()
         //        ToastMessage.showLogs(ToastMessage.LogType.DEBUG, TAG, "Content url is " + videoUrl);
@@ -1023,7 +1028,8 @@ class BalajiVideoPlayer(
                 } else {
                     if (adsUrl != null && !TextUtils.isEmpty(adsUrl)) {
                         adsLoader!!.setPlayer(mMediaPlayer)
-                        //adsLoader.focusSkipButton();
+                        adsLoader!!.skipAd()
+                        adsLoader!!.focusSkipButton();
                         val adTagUri = Uri.parse(adsUrl)
                         MediaItem.Builder()
                             .setUri(videoUrl)
@@ -1045,7 +1051,7 @@ class BalajiVideoPlayer(
                 mMediaPlayer!!.playWhenReady = true
             }
 
-            val mediaSession = MediaSessionCompat(context, ".lionsgacom.multitv.ottteplay")
+            val mediaSession = MediaSessionCompat(context, "com.lionsgacom.multitv.ottteplay")
             val mediaSessionConnector = MediaSessionConnector(mediaSession)
             mediaSessionConnector.setPlayer(mMediaPlayer)
             mediaSession.isActive = true
@@ -1062,9 +1068,6 @@ class BalajiVideoPlayer(
 
             if (isWatchDurationEnable)
                 seekTo(Math.max(mMediaPlayer!!.currentPosition + watchDuration * 1000, 0))
-
-
-            //hideController()
 
 
 
@@ -1733,15 +1736,15 @@ class BalajiVideoPlayer(
                 ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
             (getContext() as Activity).window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
             showSystemBar()
-            videoRotationButton?.setImageResource(R.drawable.ic_balaji_fullscreen)
-            videoLockButton?.setVisibility(GONE)
-            videoUnLockButton?.setVisibility(GONE)
+            videoRotationButton.setImageResource(R.drawable.ic_balaji_fullscreen)
+            videoLockButton.setVisibility(GONE)
+            videoUnLockButton.setVisibility(GONE)
         } else if (orientation == Configuration.ORIENTATION_PORTRAIT) {
             (getContext() as Activity).requestedOrientation =
                 ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
             (getContext() as Activity).window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
             hideSystemBars()
-            videoRotationButton?.setImageResource(R.drawable.ic_minimize)
+            videoRotationButton.setImageResource(R.drawable.ic_minimize)
             videoLockUnlockStatus()
         }
     }
@@ -1757,5 +1760,44 @@ class BalajiVideoPlayer(
         }
     }
 
+    private var skipCountDownTimer: CountDownTimerWithPause? = null
+
+    private fun startSkipVideoTimer() {
+        val tickDuration = TimeToSeconds.parseTimeStringToSeconds(exoTotalDuration.text.toString())
+        skipCountDownTimer =
+            object : CountDownTimerWithPause(tickDuration.toLong(), (1000).toLong(), true) {
+                override fun onTick(millisUntilFinished: Long) {
+                    Log.e("Video Start Counter:::", "" + millisUntilFinished)
+                    val currentTime = exoCurrentPosition.text.toString()
+                    val tickCurrentDuration = TimeToSeconds.parseTimeStringToSeconds(currentTime)
+                    for (items in skipDurationArray) {
+                        val startPosition =
+                            TimeToSeconds.parseTimeStringToSeconds(items.start).toInt()
+                        val endPosition = TimeToSeconds.parseTimeStringToSeconds(items.end).toInt()
+                        val title = items.title
+
+                        if (tickCurrentDuration.toInt() == startPosition) {
+                            Log.e("Video Start Counter:::", "" + startPosition)
+                            skipVideoButton.visibility = View.VISIBLE
+                            skipVideoButton.setText(title)
+                            skipVideoButton.setOnClickListener {
+                                skipVideoButton.visibility = View.GONE
+                                seekTo(endPosition.toLong())
+                            }
+
+                        } else if (tickCurrentDuration.toInt() == endPosition) {
+                            skipVideoButton.visibility = View.GONE
+                            Log.e("Video Start Counter:::", "" + endPosition)
+                        } else {
+                            skipVideoButton.visibility = View.GONE
+                        }
+                    }
+                }
+
+                override fun onFinish() {
+                    skipCountDownTimer?.cancel()
+                }
+            }.create()
+    }
 
 }

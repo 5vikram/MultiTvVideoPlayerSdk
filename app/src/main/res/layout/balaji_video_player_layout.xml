@@ -17,7 +17,6 @@
         app:resize_mode="fill" />
 
 
-
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/contentRateLayout"
         android:layout_width="match_parent"
@@ -33,12 +32,12 @@
             android:id="@+id/contentRatedTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            tools:text="Title"
             android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp"
             android:textColor="@color/white"
             android:textSize="12sp"
-            android:visibility="gone" />
+            android:visibility="gone"
+            tools:text="Title" />
 
 
         <TextView
@@ -46,11 +45,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            tools:text="Title"
             android:layout_centerHorizontal="true"
             android:textColor="@color/white_opycity_swenty_present"
             android:textSize="10sp"
-            android:visibility="gone" />
+            android:visibility="gone"
+            tools:text="Title" />
 
 
         <TextView
@@ -58,12 +57,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_marginTop="2dp"
-            tools:text="Title"
             android:layout_centerHorizontal="true"
+            android:layout_marginTop="2dp"
             android:textColor="@color/white_opycity_swenty_present"
             android:textSize="10sp"
-            android:visibility="gone" />
+            android:visibility="gone"
+            tools:text="Title" />
 
 
     </androidx.appcompat.widget.LinearLayoutCompat>
@@ -148,8 +147,8 @@
         android:layout_marginLeft="40dp"
         android:layout_marginTop="20dp"
         android:layout_marginRight="40dp"
-        android:visibility="gone"
-        android:layout_marginBottom="20dp">
+        android:layout_marginBottom="20dp"
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -182,6 +181,22 @@
                 android:visibility="gone" />
         </LinearLayout>
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/skipVideoButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Title"
+        android:layout_gravity="bottom|end"
+        android:textColor="@color/black"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="20dp"
+        android:paddingRight="40dp"
+        android:paddingLeft="40dp"
+        android:paddingBottom="7dp"
+        android:paddingTop="5dp"
+        android:background="@drawable/skip_button_bg"
+        android:textSize="20sp"/>
 
 
 </FrameLayout>
