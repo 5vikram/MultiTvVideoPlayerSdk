@@ -310,7 +310,7 @@ class DownloadTracker(
             }
 
             setTrackDailogStatus(true)
-            /*val dialogBuilder: AlertDialog.Builder = AlertDialog.Builder(context)
+            val dialogBuilder: AlertDialog.Builder = AlertDialog.Builder(context)
             dialogBuilder.setCancelable(false)
             val formatDownloadable: MutableList<Format> = mutableListOf()
             var qualitySelected: DefaultTrackSelector.Parameters
@@ -401,13 +401,13 @@ class DownloadTracker(
                     dismissCallback?.invoke()
                     dailogCallbackListener.trackDailogStatus(false)
                 }
-            trackSelectionDialog = dialogBuilder.create().apply { show() }*/
+            trackSelectionDialog = dialogBuilder.create().apply { show() }
 
             //dailogCallbackListener.trackDailogStatus(true)
 
 
             // Custom dialog
-            val factory = LayoutInflater.from(context)
+            /*val factory = LayoutInflater.from(context)
             val deleteDialogView: View = factory.inflate(R.layout.alert_download_dialog, null)
             val deleteDialog = AlertDialog.Builder(context).create()
             deleteDialog.setView(deleteDialogView)
@@ -541,7 +541,7 @@ class DownloadTracker(
             //  trackSelectionDialog = deleteDialog.create().apply { show() }
             //trackSelectionDialog?.show()
 
-            deleteDialog.show()
+            deleteDialog.show()*/
         }
 
         override fun onPrepareError(helper: DownloadHelper, e: IOException) {
