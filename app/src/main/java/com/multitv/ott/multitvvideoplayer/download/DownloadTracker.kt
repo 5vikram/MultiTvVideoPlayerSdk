@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.StatFs
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.CheckBox
 import android.widget.LinearLayout
 import android.widget.PopupMenu
 import android.widget.ProgressBar
@@ -427,6 +428,7 @@ class DownloadTracker(
             val sd_420 = deleteDialogView.findViewById<AppCompatTextView>(R.id.sd_quality)
             val cardHd = deleteDialogView.findViewById<CardView>(R.id.cardHd)
             val cardSd = deleteDialogView.findViewById<CardView>(R.id.cardSd)
+            val setDefaultCheckbox = deleteDialogView.findViewById<CheckBox>(R.id.setDefaultCheckbox)
 
             val formatDownloadable: MutableList<Format> = mutableListOf()
             var qualitySelected: DefaultTrackSelector.Parameters
@@ -467,9 +469,7 @@ class DownloadTracker(
                 .setMaxVideoBitrate(formatDownloadable[0].bitrate)
                 .build()
 
-
-           // hd_720?.text = qualitySelected.toString()
-
+            // HD QUALITY
             hd_720?.setOnClickListener {
                 cardHd.setCardBackgroundColor(context.resources.getColor(R.color.button_background_color))
                 cardSd.setCardBackgroundColor(context.resources.getColor(R.color.button_background_color_2))
@@ -506,6 +506,7 @@ class DownloadTracker(
                 }
             }
 
+            // SD QUALITY
             sd_420?.setOnClickListener {
                 cardHd.setCardBackgroundColor(context.resources.getColor(R.color.button_background_color_2))
                 cardSd.setCardBackgroundColor(context.resources.getColor(R.color.button_background_color))
@@ -565,6 +566,12 @@ class DownloadTracker(
             }
             //  trackSelectionDialog = deleteDialog.create().apply { show() }
             //trackSelectionDialog?.show()
+
+            // SET AS DEFAULT
+            setDefaultCheckbox.setOnCheckedChangeListener { buttonView, isChecked ->
+
+            }
+
 
             alertDialog.show()
         }

@@ -33,7 +33,7 @@
     <string name="hd_720p">HD (720p)</string>
     <string name="save_as_default">Save as default</string>
     <string name="done">Done</string>
-    <string name="sd_420p">SD (420P)</string>
+    <string name="sd_420p">SD (480P)</string>
 
 
 </resources>
