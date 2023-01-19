@@ -29,7 +29,7 @@
                     android:textColor="@color/text_color"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:textSize="25sp"
+                    android:textSize="20sp"
                     android:textStyle="bold"
                     android:layout_margin="25dp"/>
 
@@ -80,7 +80,8 @@
                                     android:layout_gravity="start|center"
                                     android:padding="5dp"
                                     android:textStyle="bold"
-                                    android:textSize="20sp"
+                                    android:textSize="15sp"
+                                    android:singleLine="true"
                                     android:textColor="@color/white_opycity_hundred_present"
                                     android:gravity="center|start"
                                     android:text="@string/hd_720p"/>
@@ -117,7 +118,8 @@
                                     android:layout_gravity="start|center"
                                     android:padding="5dp"
                                     android:textStyle="bold"
-                                    android:textSize="20sp"
+                                    android:textSize="15sp"
+                                    android:singleLine="true"
                                     android:textColor="@color/text_color_2"
                                     android:gravity="center|start"
                                     android:text="@string/sd_420p"/>
@@ -129,7 +131,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="20dp">
 
-                            <androidx.appcompat.widget.AppCompatEditText
+                            <androidx.appcompat.widget.AppCompatTextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentStart="true"
@@ -168,7 +170,7 @@
                                     android:layout_gravity="center"
                                     android:padding="5dp"
                                     android:textStyle="bold"
-                                    android:textSize="20sp"
+                                    android:textSize="15sp"
                                     android:textColor="@color/white"
                                     android:gravity="center"
                                     android:text="@string/done"/>

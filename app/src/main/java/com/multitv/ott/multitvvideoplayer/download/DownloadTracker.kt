@@ -533,6 +533,7 @@ class DownloadTracker(
                     startDownload(downloadRequest)
                     availableBytesLeft -= estimatedContentLength
                     Log.e(TAG, "availableBytesLeft after calculation: $availableBytesLeft")
+                    deleteDialog.dismiss()
                 } else {
                     Toast.makeText(
                         context,
