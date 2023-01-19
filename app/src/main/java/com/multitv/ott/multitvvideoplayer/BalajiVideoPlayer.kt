@@ -1412,6 +1412,7 @@ class BalajiVideoPlayer(
 
     override fun onScrubStart(previewBar: PreviewBar) {
         previewFrameLayout.visibility = VISIBLE
+        previewTimeBar.showPreview()
         pauseVideoPlayer()
     }
 
@@ -1437,7 +1438,7 @@ class BalajiVideoPlayer(
         Log.e("Video Sprite::::", "Url:::" + spriteImageUrl)
         pauseVideoPlayer()
         previewFrameLayout.visibility = View.VISIBLE
-        //previewTimeBar.showPreview()
+        previewTimeBar.showPreview()
         Glide.with(previewImageView)
             .load("https://d396a7nqq8wyns.cloudfront.net/multitv/output/HLS/1061_638df3fd9c783/sprite_tv.png")
             .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
