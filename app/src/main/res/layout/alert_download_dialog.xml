@@ -10,7 +10,6 @@
         android:id="@+id/sign_up_layout_step_1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/button_background_color"
         android:orientation="vertical">
 
         <View
