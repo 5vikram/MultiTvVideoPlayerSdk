@@ -17,10 +17,13 @@ dependencyResolutionManagement {
 rootProject.name = "MultiTvVideoPlayer"
 include ':app'
 include ':drmsdk'
+include ':previewseekbar'
+include ':previewseekbar-exoplaye'
 
 /*includeBuild('../source') {
     dependencySubstitution {
         substitute module('com.github.kezong:fat-aar') using project(':')
     }
 }*/
-
+include ':previewseekbar'
+include ':previewseekbar-exoplayer'
