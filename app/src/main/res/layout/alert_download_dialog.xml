@@ -61,6 +61,7 @@
                             android:layout_margin="10dp">
 
                             <androidx.appcompat.widget.AppCompatImageView
+                                android:id="@+id/hdIcon"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
                                 android:layout_gravity="end"
@@ -100,6 +101,7 @@
                             android:layout_margin="10dp">
 
                             <androidx.appcompat.widget.AppCompatImageView
+                                android:id="@+id/sdIcon"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
                                 android:layout_gravity="end"
