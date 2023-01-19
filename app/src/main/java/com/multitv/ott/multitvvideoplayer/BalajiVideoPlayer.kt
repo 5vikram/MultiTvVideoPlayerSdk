@@ -1104,6 +1104,11 @@ class BalajiVideoPlayer(
         override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
             var text = "Main player"
             updatePlayPauseButton()
+
+            if (playbackState == Player.STATE_READY && playWhenReady) {
+                previewTimeBar.hidePreview()
+            }
+
             when (playbackState) {
                 ExoPlayer.STATE_BUFFERING -> {
                     text += "buffering"
@@ -1202,6 +1207,7 @@ class BalajiVideoPlayer(
 
         override fun onRepeatModeChanged(repeatMode: Int) {}
         override fun onPlaybackParametersChanged(playbackParameters: PlaybackParameters) {}
+
     }
 
 
@@ -1411,16 +1417,6 @@ class BalajiVideoPlayer(
     }
 
     override fun onScrubMove(previewBar: PreviewBar, progress: Int, fromUser: Boolean) {
-       /* pauseVideoPlayer()
-        previewFrameLayout.visibility = View.VISIBLE
-        previewTimeBar.showPreview()
-
-        Glide.with(previewImageView)
-            .load("https://d396a7nqq8wyns.cloudfront.net/multitv/output/HLS/1061_638df3fd9c783/sprite_tv.png")
-            .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
-            .transform(GlideThumbnailTransformation(currentPosition))
-            .into(previewImageView)*/
-
         if (currentDurationPlayTv != null) {
             currentDurationPlayTv.text = Util.getStringForTime(
                 formatBuilder,
@@ -1431,7 +1427,7 @@ class BalajiVideoPlayer(
     }
 
     override fun onScrubStop(previewBar: PreviewBar) {
-        previewFrameLayout.visibility = GONE
+        previewFrameLayout.visibility = INVISIBLE
         if (mMediaPlayer != null) {
             seekTo(previewBar.progress.toLong())
         }
