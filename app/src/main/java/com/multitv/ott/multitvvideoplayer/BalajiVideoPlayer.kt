@@ -1354,8 +1354,11 @@ class BalajiVideoPlayer(
         }
     }
 
-    private fun skipVideo(watch: Int) {
-        val seek = watch - mMediaPlayer!!.currentPosition
+    fun skipVideo(watch: Int) {
+        Log.e("Current position:::", "" + mMediaPlayer!!.currentPosition)
+        val seek = watch * 1000 - mMediaPlayer!!.currentPosition
+        Log.e("Seek position:::", "" + seek)
+        Log.e("Total Skip position:::", "" + mMediaPlayer!!.currentPosition + seek)
         seekTo(Math.max(mMediaPlayer!!.currentPosition + seek, 0))
     }
 
@@ -1408,6 +1411,17 @@ class BalajiVideoPlayer(
     }
 
     override fun onScrubMove(previewBar: PreviewBar, progress: Int, fromUser: Boolean) {
+        Log.e("Video Sprite::::", "Url:::" + spriteImageUrl)
+        pauseVideoPlayer()
+        previewFrameLayout.visibility = View.VISIBLE
+        previewTimeBar.showPreview()
+
+        Glide.with(previewImageView)
+            .load("https://d396a7nqq8wyns.cloudfront.net/multitv/output/HLS/1061_638df3fd9c783/sprite_tv.png")
+            .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
+            .transform(GlideThumbnailTransformation(currentPosition))
+            .into(previewImageView)
+
         if (currentDurationPlayTv != null) {
             currentDurationPlayTv.text = Util.getStringForTime(
                 formatBuilder,
@@ -1418,11 +1432,11 @@ class BalajiVideoPlayer(
     }
 
     override fun onScrubStop(previewBar: PreviewBar) {
-       /* previewFrameLayout.visibility = GONE
+        previewFrameLayout.visibility = GONE
         if (mMediaPlayer != null) {
             seekTo(previewBar.progress.toLong())
         }
-        previewTimeBar.hidePreview()*/
+        previewTimeBar.hidePreview()
         resumeVideoPlayer()
     }
 
