@@ -1114,7 +1114,7 @@ class BalajiVideoPlayer(
                     text += "buffering"
                     bufferingProgressBarLayout.bringToFront()
                     bufferingProgressBarLayout.visibility = VISIBLE
-                    centerButtonLayout!!.visibility = GONE
+                    centerButtonLayout.visibility = GONE
                     //hideController()
                     startBufferingTimer()
                 }
@@ -1411,19 +1411,17 @@ class BalajiVideoPlayer(
     }
 
     override fun onScrubStart(previewBar: PreviewBar) {
-        previewFrameLayout!!.visibility = VISIBLE
+        previewFrameLayout.visibility = VISIBLE
         pauseVideoPlayer()
         removeCallbacks(hideAction)
     }
 
     override fun onScrubMove(previewBar: PreviewBar, progress: Int, fromUser: Boolean) {
-        if (currentDurationPlayTv != null) {
-            currentDurationPlayTv.text = Util.getStringForTime(
-                formatBuilder,
-                formatter,
-                progress.toLong()
-            )
-        }
+        currentDurationPlayTv.text = Util.getStringForTime(
+            formatBuilder,
+            formatter,
+            progress.toLong()
+        )
     }
 
     override fun onScrubStop(previewBar: PreviewBar) {
