@@ -1104,12 +1104,17 @@ class BalajiVideoPlayer(
         override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
             var text = "Main player"
             updatePlayPauseButton()
+
+            if (playbackState == Player.STATE_READY && playWhenReady) {
+                previewTimeBar.hidePreview()
+            }
+
             when (playbackState) {
                 ExoPlayer.STATE_BUFFERING -> {
                     text += "buffering"
                     bufferingProgressBarLayout.bringToFront()
                     bufferingProgressBarLayout.visibility = VISIBLE
-                    centerButtonLayout!!.visibility = GONE
+                    centerButtonLayout.visibility = GONE
                     //hideController()
                     startBufferingTimer()
                 }
@@ -1202,6 +1207,7 @@ class BalajiVideoPlayer(
 
         override fun onRepeatModeChanged(repeatMode: Int) {}
         override fun onPlaybackParametersChanged(playbackParameters: PlaybackParameters) {}
+
     }
 
 
@@ -1405,34 +1411,21 @@ class BalajiVideoPlayer(
     }
 
     override fun onScrubStart(previewBar: PreviewBar) {
-        previewFrameLayout!!.visibility = VISIBLE
+        previewFrameLayout.visibility = VISIBLE
         pauseVideoPlayer()
         removeCallbacks(hideAction)
     }
 
     override fun onScrubMove(previewBar: PreviewBar, progress: Int, fromUser: Boolean) {
-        Log.e("Video Sprite::::", "Url:::" + spriteImageUrl)
-       /* pauseVideoPlayer()
-        previewFrameLayout.visibility = View.VISIBLE
-        previewTimeBar.showPreview()
-
-        Glide.with(previewImageView)
-            .load("https://d396a7nqq8wyns.cloudfront.net/multitv/output/HLS/1061_638df3fd9c783/sprite_tv.png")
-            .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
-            .transform(GlideThumbnailTransformation(currentPosition))
-            .into(previewImageView)*/
-
-        if (currentDurationPlayTv != null) {
-            currentDurationPlayTv.text = Util.getStringForTime(
-                formatBuilder,
-                formatter,
-                progress.toLong()
-            )
-        }
+        currentDurationPlayTv.text = Util.getStringForTime(
+            formatBuilder,
+            formatter,
+            progress.toLong()
+        )
     }
 
     override fun onScrubStop(previewBar: PreviewBar) {
-        previewFrameLayout.visibility = GONE
+        previewFrameLayout.visibility = INVISIBLE
         if (mMediaPlayer != null) {
             seekTo(previewBar.progress.toLong())
         }

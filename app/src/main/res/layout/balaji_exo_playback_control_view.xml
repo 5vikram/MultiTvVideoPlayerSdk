@@ -409,7 +409,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintWidth_default="percent"
                 app:layout_constraintWidth_percent="0.35"
-                android:visibility="gone"
+                android:visibility="invisible"
                 tools:visibility="visible"
                 tools:ignore="MissingConstraints">
 
