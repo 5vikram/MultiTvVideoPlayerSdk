@@ -1413,7 +1413,6 @@ class BalajiVideoPlayer(
     override fun onScrubStart(previewBar: PreviewBar) {
         previewFrameLayout.visibility = VISIBLE
         pauseVideoPlayer()
-        removeCallbacks(hideAction)
     }
 
     override fun onScrubMove(previewBar: PreviewBar, progress: Int, fromUser: Boolean) {
