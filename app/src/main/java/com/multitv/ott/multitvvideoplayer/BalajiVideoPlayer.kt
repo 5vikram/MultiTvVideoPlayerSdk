@@ -287,10 +287,6 @@ class BalajiVideoPlayer(
         videoPerviousButton.setVisibility(GONE)
         seekBarLayout = view.findViewById(R.id.seekBarLayout)
 
-        previewTimeBar.setPreviewEnabled(true)
-        previewTimeBar.addOnScrubListener(this)
-        previewTimeBar.setPreviewLoader(this)
-
         videoRotationButton.setOnClickListener(OnClickListener {
             val orientation = getContext().resources.configuration.orientation
             if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
@@ -1046,6 +1042,11 @@ class BalajiVideoPlayer(
                 seekTo(Math.max(mMediaPlayer!!.currentPosition + watchDuration * 1000, 0))
 
 
+            previewTimeBar.setPreviewEnabled(true)
+            previewTimeBar.addOnScrubListener(this)
+            previewTimeBar.setPreviewLoader(this)
+
+
 
             if (adsUrl != null && !TextUtils.isEmpty(adsUrl)) {
                 adsLoader?.adsLoader?.addAdsLoadedListener(object :
@@ -1353,6 +1354,15 @@ class BalajiVideoPlayer(
         }
     }
 
+    fun skipVideo(watch: Int) {
+        Log.e("Current position:::", "" + mMediaPlayer!!.currentPosition)
+        val seek = watch * 1000 - mMediaPlayer!!.currentPosition
+        Log.e("Seek position:::", "" + seek)
+        Log.e("Total Skip position:::", "" + mMediaPlayer!!.currentPosition + seek)
+        seekTo(Math.max(mMediaPlayer!!.currentPosition + seek, 0))
+        showController()
+    }
+
     private var isWatchDurationEnable = false
     private var watchDuration = 0
 
@@ -1397,15 +1407,22 @@ class BalajiVideoPlayer(
     }
 
     override fun onScrubStart(previewBar: PreviewBar) {
-        //findViewById(R.id.centerButtonLayout)?.setVisibility(View.GONE);
-        previewFrameLayout!!.visibility = VISIBLE
         pauseVideoPlayer()
         removeCallbacks(hideAction)
     }
 
     override fun onScrubMove(previewBar: PreviewBar, progress: Int, fromUser: Boolean) {
+        Log.e("Video Sprite::::", "Url:::" + spriteImageUrl)
         pauseVideoPlayer()
         previewFrameLayout.visibility = View.VISIBLE
+        previewTimeBar.showPreview()
+
+        Glide.with(previewImageView)
+            .load("https://d396a7nqq8wyns.cloudfront.net/multitv/output/HLS/1061_638df3fd9c783/sprite_tv.png")
+            .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
+            .transform(GlideThumbnailTransformation(currentPosition))
+            .into(previewImageView)
+
         if (currentDurationPlayTv != null) {
             currentDurationPlayTv.text = Util.getStringForTime(
                 formatBuilder,
@@ -1431,7 +1448,7 @@ class BalajiVideoPlayer(
         previewFrameLayout.visibility = View.VISIBLE
         previewTimeBar.showPreview()
         Glide.with(previewImageView)
-            .load(spriteImageUrl)
+            .load("https://d396a7nqq8wyns.cloudfront.net/multitv/output/HLS/1061_638df3fd9c783/sprite_tv.png")
             .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
             .transform(GlideThumbnailTransformation(currentPosition))
             .into(previewImageView)
