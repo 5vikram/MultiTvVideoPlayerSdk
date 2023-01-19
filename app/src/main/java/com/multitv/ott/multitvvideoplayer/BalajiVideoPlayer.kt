@@ -1360,6 +1360,7 @@ class BalajiVideoPlayer(
         Log.e("Seek position:::", "" + seek)
         Log.e("Total Skip position:::", "" + mMediaPlayer!!.currentPosition + seek)
         seekTo(Math.max(mMediaPlayer!!.currentPosition + seek, 0))
+        showController()
     }
 
     private var isWatchDurationEnable = false
