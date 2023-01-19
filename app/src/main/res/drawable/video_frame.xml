@@ -4,7 +4,7 @@
 
     <stroke
         android:width="@dimen/video_frame_width"
-        android:color="@color/faste_red" />
+        android:color="@color/white" />
 
     <solid android:color="@android:color/black" />
 </shape>

@@ -33,9 +33,7 @@ import com.google.android.exoplayer2.drm.DrmSessionManager
 import com.google.android.exoplayer2.ext.ima.ImaAdsLoader
 import com.google.android.exoplayer2.source.DefaultMediaSourceFactory
 import com.google.android.exoplayer2.source.MediaSourceFactory
-import com.google.android.exoplayer2.source.TrackGroupArray
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
-import com.google.android.exoplayer2.trackselection.TrackSelectionArray
 import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.DefaultAllocator
 import com.google.android.exoplayer2.upstream.DefaultDataSource
@@ -739,12 +737,6 @@ class TvPlayer(
             errorRetryLayout!!.bringToFront()
             errorRetryLayout!!.visibility = VISIBLE
             videoPlayerSdkCallBackListener!!.onPlayerError(error.message)
-        }
-
-        override fun onTracksChanged(
-            trackGroups: TrackGroupArray,
-            trackSelections: TrackSelectionArray
-        ) {
         }
 
 

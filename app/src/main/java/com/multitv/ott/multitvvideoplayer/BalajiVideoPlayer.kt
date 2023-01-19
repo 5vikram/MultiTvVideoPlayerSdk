@@ -46,9 +46,7 @@ import com.google.android.exoplayer2.offline.DownloadHelper
 import com.google.android.exoplayer2.offline.DownloadRequest
 import com.google.android.exoplayer2.source.DefaultMediaSourceFactory
 import com.google.android.exoplayer2.source.MediaSourceFactory
-import com.google.android.exoplayer2.source.TrackGroupArray
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
-import com.google.android.exoplayer2.trackselection.TrackSelectionArray
 import com.google.android.exoplayer2.ui.StyledPlayerView
 import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.DefaultAllocator
@@ -274,7 +272,9 @@ class BalajiVideoPlayer(
         videoPauseButton = view.findViewById(R.id.exo_pause)
         videoLockButton = view.findViewById(R.id.exo_lock)
         videoUnLockButton = view.findViewById(R.id.exo_unlock)
-        previewTimeBar = findViewById<View>(R.id.exo_progress) as PreviewTimeBar
+
+        previewTimeBar = view.findViewById(R.id.exo_progress)
+
         currentDurationPlayTv = view.findViewById(R.id.exo_position)
         previewImageView = view.findViewById(R.id.videoPreviewImageView)
         videoNextButton.setVisibility(GONE)
@@ -1093,12 +1093,6 @@ class BalajiVideoPlayer(
             videoPlayerSdkCallBackListener!!.onPlayerError(error.message)
         }
 
-        override fun onTracksChanged(
-            trackGroups: TrackGroupArray,
-            trackSelections: TrackSelectionArray
-        ) {
-        }
-
 
         override fun onVideoSizeChanged(videoSize: VideoSize) {
             super.onVideoSizeChanged(videoSize)
@@ -1406,12 +1400,11 @@ class BalajiVideoPlayer(
     fun resumeFromPosition(millisecondsForResume: Long) {
         if (millisecondsForResume != 0L) {
             this.millisecondsForResume = millisecondsForResume
-            //isResumeFromPreviousPosition = true;
+
         }
     }
 
     override fun onScrubStart(previewBar: PreviewBar) {
-        //findViewById(R.id.centerButtonLayout)?.setVisibility(View.GONE);
         previewFrameLayout!!.visibility = VISIBLE
         pauseVideoPlayer()
         removeCallbacks(hideAction)
@@ -1419,7 +1412,7 @@ class BalajiVideoPlayer(
 
     override fun onScrubMove(previewBar: PreviewBar, progress: Int, fromUser: Boolean) {
         Log.e("Video Sprite::::", "Url:::" + spriteImageUrl)
-        pauseVideoPlayer()
+       /* pauseVideoPlayer()
         previewFrameLayout.visibility = View.VISIBLE
         previewTimeBar.showPreview()
 
@@ -1427,7 +1420,7 @@ class BalajiVideoPlayer(
             .load("https://d396a7nqq8wyns.cloudfront.net/multitv/output/HLS/1061_638df3fd9c783/sprite_tv.png")
             .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
             .transform(GlideThumbnailTransformation(currentPosition))
-            .into(previewImageView)
+            .into(previewImageView)*/
 
         if (currentDurationPlayTv != null) {
             currentDurationPlayTv.text = Util.getStringForTime(
@@ -1452,7 +1445,7 @@ class BalajiVideoPlayer(
         Log.e("Video Sprite::::", "Url:::" + spriteImageUrl)
         pauseVideoPlayer()
         previewFrameLayout.visibility = View.VISIBLE
-        previewTimeBar.showPreview()
+        //previewTimeBar.showPreview()
         Glide.with(previewImageView)
             .load("https://d396a7nqq8wyns.cloudfront.net/multitv/output/HLS/1061_638df3fd9c783/sprite_tv.png")
             .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)

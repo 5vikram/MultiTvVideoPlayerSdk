@@ -87,6 +87,7 @@ dependencies {
 
     // GMS
     api 'com.google.android.gms:play-services-cast-framework:21.0.1'
+
     implementation project(':previewseekbar')
     implementation project(':previewseekbar-exoplayer')
 }

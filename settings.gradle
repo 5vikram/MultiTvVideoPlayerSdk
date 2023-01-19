@@ -17,6 +17,8 @@ dependencyResolutionManagement {
 rootProject.name = "MultiTvVideoPlayer"
 include ':app'
 include ':drmsdk'
+include ':previewseekbar'
+include ':previewseekbar-exoplaye'
 
 /*includeBuild('../source') {
     dependencySubstitution {
