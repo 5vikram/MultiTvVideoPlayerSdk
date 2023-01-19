@@ -90,9 +90,9 @@ public class PreviewDelegate {
     }
 
     public void onScrubMove(int progress, boolean fromUser) {
-        if (!previewViewAttached) {
+       /* if (!previewViewAttached) {
             return;
-        }
+        }*/
 
         final int targetX = updatePreviewX(progress, previewBar.getMax());
         previewView.setX(targetX);

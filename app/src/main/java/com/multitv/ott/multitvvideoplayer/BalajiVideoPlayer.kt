@@ -1411,7 +1411,6 @@ class BalajiVideoPlayer(
     }
 
     override fun onScrubMove(previewBar: PreviewBar, progress: Int, fromUser: Boolean) {
-        Log.e("Video Sprite::::", "Url:::" + spriteImageUrl)
        /* pauseVideoPlayer()
         previewFrameLayout.visibility = View.VISIBLE
         previewTimeBar.showPreview()
