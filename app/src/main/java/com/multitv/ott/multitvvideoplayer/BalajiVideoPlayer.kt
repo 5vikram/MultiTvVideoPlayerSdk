@@ -46,9 +46,7 @@ import com.google.android.exoplayer2.offline.DownloadHelper
 import com.google.android.exoplayer2.offline.DownloadRequest
 import com.google.android.exoplayer2.source.DefaultMediaSourceFactory
 import com.google.android.exoplayer2.source.MediaSourceFactory
-import com.google.android.exoplayer2.source.TrackGroupArray
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
-import com.google.android.exoplayer2.trackselection.TrackSelectionArray
 import com.google.android.exoplayer2.ui.StyledPlayerView
 import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.DefaultAllocator
@@ -274,7 +272,9 @@ class BalajiVideoPlayer(
         videoPauseButton = view.findViewById(R.id.exo_pause)
         videoLockButton = view.findViewById(R.id.exo_lock)
         videoUnLockButton = view.findViewById(R.id.exo_unlock)
-        previewTimeBar = findViewById<View>(R.id.exo_progress) as PreviewTimeBar
+
+        previewTimeBar = view.findViewById(R.id.exo_progress)
+
         currentDurationPlayTv = view.findViewById(R.id.exo_position)
         previewImageView = view.findViewById(R.id.videoPreviewImageView)
         videoNextButton.setVisibility(GONE)
@@ -1093,12 +1093,6 @@ class BalajiVideoPlayer(
             videoPlayerSdkCallBackListener!!.onPlayerError(error.message)
         }
 
-        override fun onTracksChanged(
-            trackGroups: TrackGroupArray,
-            trackSelections: TrackSelectionArray
-        ) {
-        }
-
 
         override fun onVideoSizeChanged(videoSize: VideoSize) {
             super.onVideoSizeChanged(videoSize)
@@ -1406,12 +1400,11 @@ class BalajiVideoPlayer(
     fun resumeFromPosition(millisecondsForResume: Long) {
         if (millisecondsForResume != 0L) {
             this.millisecondsForResume = millisecondsForResume
-            //isResumeFromPreviousPosition = true;
+
         }
     }
 
     override fun onScrubStart(previewBar: PreviewBar) {
-        //findViewById(R.id.centerButtonLayout)?.setVisibility(View.GONE);
         previewFrameLayout!!.visibility = VISIBLE
         pauseVideoPlayer()
         removeCallbacks(hideAction)

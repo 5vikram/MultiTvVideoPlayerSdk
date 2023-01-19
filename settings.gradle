@@ -23,5 +23,4 @@ include ':drmsdk'
         substitute module('com.github.kezong:fat-aar') using project(':')
     }
 }*/
-include ':previewseekbar'
-include ':previewseekbar-exoplayer'
+

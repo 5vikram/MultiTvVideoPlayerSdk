@@ -45,9 +45,7 @@ import com.google.android.exoplayer2.offline.DownloadHelper
 import com.google.android.exoplayer2.offline.DownloadRequest
 import com.google.android.exoplayer2.source.DefaultMediaSourceFactory
 import com.google.android.exoplayer2.source.MediaSourceFactory
-import com.google.android.exoplayer2.source.TrackGroupArray
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
-import com.google.android.exoplayer2.trackselection.TrackSelectionArray
 import com.google.android.exoplayer2.ui.StyledPlayerView
 import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.DefaultAllocator
@@ -913,12 +911,6 @@ class FullScreenVideoPlayer(
             errorRetryLayout!!.bringToFront()
             errorRetryLayout!!.visibility = VISIBLE
             videoPlayerSdkCallBackListener!!.onPlayerError(error.message)
-        }
-
-        override fun onTracksChanged(
-            trackGroups: TrackGroupArray,
-            trackSelections: TrackSelectionArray
-        ) {
         }
 
 
