@@ -310,14 +310,14 @@ class DownloadTracker(
             }
 
             setTrackDailogStatus(true)
-          //  val dialogBuilder: AlertDialog.Builder = AlertDialog.Builder(context)
-          //  dialogBuilder.setCancelable(false)
+            /*val dialogBuilder: AlertDialog.Builder = AlertDialog.Builder(context)
+            dialogBuilder.setCancelable(false)
 
-            val factory = LayoutInflater.from(context)
+          *//*  val factory = LayoutInflater.from(context)
             val deleteDialogView: View = factory.inflate(R.layout.alert_download_dialog, null)
             val dialogBuilder = AlertDialog.Builder(context).create()
             dialogBuilder.setView(deleteDialogView)
-            dialogBuilder.show()
+            dialogBuilder.show()*//*
 
             val formatDownloadable: MutableList<Format> = mutableListOf()
             var qualitySelected: DefaultTrackSelector.Parameters
@@ -336,9 +336,9 @@ class DownloadTracker(
             }
 
             if (formatDownloadable.isEmpty()) {
-              /*  dialogBuilder.setTitle("An error occurred")
+                dialogBuilder.setTitle("An error occurred")
                     .setPositiveButton("OK", null)
-                    .show()*/
+                    .show()
 
                 return
             }
@@ -361,9 +361,7 @@ class DownloadTracker(
                 .setMaxVideoBitrate(formatDownloadable[0].bitrate)
                 .build()
 
-
-
-           /* dialogBuilder.setTitle("Select Download Format")
+            dialogBuilder.setTitle("Select Download Format")
                 .setSingleChoiceItems(optionsDownload.toTypedArray(), 0) { _, which ->
                     val format = formatDownloadable[which]
                     qualitySelected = DefaultTrackSelector(context).buildUponParameters()
@@ -408,15 +406,14 @@ class DownloadTracker(
                     downloadHelper.release()
                     dismissCallback?.invoke()
                     dailogCallbackListener.trackDailogStatus(false)
-                }*/
-          //  trackSelectionDialog = dialogBuilder.create().apply { show() }
-            trackSelectionDialog = null
+                }
+            trackSelectionDialog = dialogBuilder.create().apply { show() }*/
 
             //dailogCallbackListener.trackDailogStatus(true)
 
 
             // Custom dialog
-            /*val factory = LayoutInflater.from(context)
+            val factory = LayoutInflater.from(context)
             val deleteDialogView: View = factory.inflate(R.layout.alert_download_dialog, null)
             val deleteDialog = AlertDialog.Builder(context).create()
             deleteDialog.setView(deleteDialogView)
@@ -536,6 +533,7 @@ class DownloadTracker(
                     startDownload(downloadRequest)
                     availableBytesLeft -= estimatedContentLength
                     Log.e(TAG, "availableBytesLeft after calculation: $availableBytesLeft")
+                    deleteDialog.dismiss()
                 } else {
                     Toast.makeText(
                         context,
@@ -550,7 +548,7 @@ class DownloadTracker(
             //  trackSelectionDialog = deleteDialog.create().apply { show() }
             //trackSelectionDialog?.show()
 
-            deleteDialog.show()*/
+            deleteDialog.show()
         }
 
         override fun onPrepareError(helper: DownloadHelper, e: IOException) {
