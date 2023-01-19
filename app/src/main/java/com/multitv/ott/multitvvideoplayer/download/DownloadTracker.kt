@@ -5,12 +5,9 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.StatFs
-import android.view.LayoutInflater
-import android.view.View
+import android.view.*
 import android.widget.CheckBox
-import android.widget.LinearLayout
 import android.widget.PopupMenu
-import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AppCompatImageView
@@ -32,7 +29,6 @@ import com.google.android.exoplayer2.util.Log
 import com.google.android.exoplayer2.util.MimeTypes
 import com.google.android.exoplayer2.util.Util
 import com.multitv.ott.multitvvideoplayer.R
-import com.multitv.ott.multitvvideoplayer.download.MyDownloadService
 import com.multitv.ott.multitvvideoplayer.listener.DownloadsDetailsListener
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
@@ -424,6 +420,13 @@ class DownloadTracker(
             val alertDialog = AlertDialog.Builder(context).create()
             alertDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             alertDialog.setView(deleteDialogView)
+
+            val window: Window? = alertDialog.window
+            val wlp: WindowManager.LayoutParams? = window?.attributes
+
+            wlp?.gravity  = Gravity.BOTTOM
+            wlp?.flags = wlp?.flags?.and(WindowManager.LayoutParams.FLAG_DIM_BEHIND.inv())
+            window?.attributes = wlp
 
             val done = deleteDialogView.findViewById<AppCompatTextView>(R.id.done)
             val hd_720 = deleteDialogView.findViewById<AppCompatTextView>(R.id.hd_quality)
