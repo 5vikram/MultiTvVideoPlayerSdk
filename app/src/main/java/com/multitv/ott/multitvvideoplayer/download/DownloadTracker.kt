@@ -1,6 +1,8 @@
 package com.multitv.ott.multitvvideoplayer.download
 
 import android.content.Context
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.StatFs
 import android.view.LayoutInflater
@@ -415,8 +417,9 @@ class DownloadTracker(
             // Custom dialog
             val factory = LayoutInflater.from(context)
             val deleteDialogView: View = factory.inflate(R.layout.alert_download_dialog, null)
-            val deleteDialog = AlertDialog.Builder(context).create()
-            deleteDialog.setView(deleteDialogView)
+            val alertDialog = AlertDialog.Builder(context).create()
+            alertDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            alertDialog.setView(deleteDialogView)
 
             val done = deleteDialogView.findViewById<AppCompatTextView>(R.id.done)
             val hd_720 = deleteDialogView.findViewById<AppCompatTextView>(R.id.hd_quality)
@@ -453,6 +456,7 @@ class DownloadTracker(
             }
 
             //Default quality download
+            formatDownloadable.reverse()
             qualitySelected = DefaultTrackSelector(context).buildUponParameters()
                 .setMinVideoSize(formatDownloadable[0].width, formatDownloadable[0].height)
                 .setMinVideoBitrate(formatDownloadable[0].bitrate)
@@ -476,14 +480,17 @@ class DownloadTracker(
                         720 -> {
                             //   hd_720.text = formatDownloadable[item].height.toString()
                             hd_720.text = qualitySelected.toString()
+                            break
                         }
                         480 -> {
                             //   hd_720.text = formatDownloadable[item].height.toString()
                             hd_720.text = qualitySelected.toString()
+                            break
                         }
                         360 -> {
                             //  hd_720.text = formatDownloadable[item].height.toString()
                             hd_720.text = qualitySelected.toString()
+                            break
                         }
                         else -> {
                             // hd_720.text = formatDownloadable[item].height.toString()
@@ -506,10 +513,12 @@ class DownloadTracker(
                         480 -> {
                             //  sd_420.text = formatDownloadable[item].height.toString()
                             sd_420.text = qualitySelected.toString()
+                            break
                         }
                         360 -> {
                             // sd_420.text = formatDownloadable[item].height.toString()
                             sd_420.text = qualitySelected.toString()
+                            break
                         }
                         else -> {
                             //  sd_420.text = formatDownloadable[item].height.toString()
@@ -533,7 +542,7 @@ class DownloadTracker(
                     startDownload(downloadRequest)
                     availableBytesLeft -= estimatedContentLength
                     Log.e(TAG, "availableBytesLeft after calculation: $availableBytesLeft")
-                    deleteDialog.dismiss()
+                    alertDialog.dismiss()
                 } else {
                     Toast.makeText(
                         context,
@@ -548,7 +557,7 @@ class DownloadTracker(
             //  trackSelectionDialog = deleteDialog.create().apply { show() }
             //trackSelectionDialog?.show()
 
-            deleteDialog.show()
+            alertDialog.show()
         }
 
         override fun onPrepareError(helper: DownloadHelper, e: IOException) {
