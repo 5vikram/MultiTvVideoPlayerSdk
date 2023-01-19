@@ -24,6 +24,10 @@ public interface VideoPlayerSdkCallBackListener {
 
     void onVideoStartNow();
 
+    void onAdPlay();
+
+    void onAdCompleted();
+
 
     //void showSpeedControllMenu();
 }
