@@ -308,8 +308,15 @@ class BalajiVideoPlayer(
                 videoLockUnlockStatus()
             }
         })
+
         volumeMuteAndUnMuteButton.visibility = View.GONE
         setting.visibility = View.GONE
+
+        previewTimeBar.setPreviewEnabled(true)
+        previewTimeBar.addOnScrubListener(this)
+        previewTimeBar.setPreviewLoader(this)
+
+
         volumeUnMuteButton.setOnClickListener {
             mMediaPlayer?.audioComponent?.volume = 0f
             volumeMuteAndUnMuteButton.visibility = View.VISIBLE
@@ -1042,12 +1049,6 @@ class BalajiVideoPlayer(
                 seekTo(Math.max(mMediaPlayer!!.currentPosition + watchDuration * 1000, 0))
 
 
-            previewTimeBar.setPreviewEnabled(true)
-            previewTimeBar.addOnScrubListener(this)
-            previewTimeBar.setPreviewLoader(this)
-
-
-
             if (adsUrl != null && !TextUtils.isEmpty(adsUrl)) {
                 adsLoader?.adsLoader?.addAdsLoadedListener(object :
                     com.google.ads.interactivemedia.v3.api.AdsLoader.AdsLoadedListener {
@@ -1407,6 +1408,8 @@ class BalajiVideoPlayer(
     }
 
     override fun onScrubStart(previewBar: PreviewBar) {
+        //findViewById(R.id.centerButtonLayout)?.setVisibility(View.GONE);
+        previewFrameLayout!!.visibility = VISIBLE
         pauseVideoPlayer()
         removeCallbacks(hideAction)
     }
