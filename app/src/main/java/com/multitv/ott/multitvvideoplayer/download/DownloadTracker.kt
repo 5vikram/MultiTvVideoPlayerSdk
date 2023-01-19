@@ -456,6 +456,7 @@ class DownloadTracker(
             }
 
             //Default quality download
+            formatDownloadable.reverse()
             qualitySelected = DefaultTrackSelector(context).buildUponParameters()
                 .setMinVideoSize(formatDownloadable[0].width, formatDownloadable[0].height)
                 .setMinVideoBitrate(formatDownloadable[0].bitrate)
@@ -467,7 +468,6 @@ class DownloadTracker(
             hd_720?.text = qualitySelected.toString()
 
             hd_720?.setOnClickListener {
-                formatDownloadable.reverse()
                 for (item in formatDownloadable.indices) {
                     val format = formatDownloadable[item]
                     qualitySelected = DefaultTrackSelector(context).buildUponParameters()
@@ -501,7 +501,6 @@ class DownloadTracker(
             }
 
             sd_420?.setOnClickListener {
-                formatDownloadable.reverse()
                 for (item in formatDownloadable.indices) {
                     val format = formatDownloadable[item]
                     qualitySelected = DefaultTrackSelector(context).buildUponParameters()
