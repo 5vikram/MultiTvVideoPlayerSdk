@@ -44,7 +44,9 @@ import com.google.android.exoplayer2.ext.ima.ImaAdsLoader
 import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector
 import com.google.android.exoplayer2.offline.DownloadHelper
 import com.google.android.exoplayer2.offline.DownloadRequest
-import com.google.android.exoplayer2.source.*
+import com.google.android.exoplayer2.source.DefaultMediaSourceFactory
+import com.google.android.exoplayer2.source.MediaSourceFactory
+import com.google.android.exoplayer2.source.TrackGroupArray
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray
 import com.google.android.exoplayer2.ui.StyledPlayerView
@@ -75,7 +77,7 @@ class BalajiVideoPlayer(
     defStyleAttr: Int
 ) : FrameLayout(
     context, attrs, defStyleAttr
-), PreviewBar.OnScrubListener, OnClickListener, SessionAvailabilityListener {
+), PreviewBar.OnScrubListener, PreviewLoader, OnClickListener, SessionAvailabilityListener {
     private val sharedPreferencePlayer: SharedPreferencePlayer
     private var contentType: ContentType? = null
     private var mMediaPlayer: ExoPlayer? = null
@@ -287,31 +289,7 @@ class BalajiVideoPlayer(
 
         previewTimeBar.setPreviewEnabled(true)
         previewTimeBar.addOnScrubListener(this)
-        previewTimeBar.setPreviewLoader(object : PreviewLoader {
-            override fun loadPreview(currentPosition: Long, max: Long) {
-                pauseVideoPlayer()
-                previewFrameLayout.visibility = View.VISIBLE
-                previewTimeBar.showPreview()
-                Log.e("Video Sprite::::", "Url position:::" + currentPosition)
-                if (spriteImageUrl != null && !TextUtils.isEmpty(spriteImageUrl)) {
-                    Log.e("Video Sprite::::", "Url:::" + spriteImageUrl)
-                    Glide.with(previewImageView)
-                        .load(spriteImageUrl)
-                        .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
-                        .transform(GlideThumbnailTransformation(currentPosition))
-                        .into(previewImageView)
-                } else {
-                    Log.e("Video Sprite::::", "Url:::Empty")
-                }
-            }
-
-        })
-
-
-        /*      volumeProgressBar.getProgressDrawable().setColorFilter(
-                  Color.WHITE, android.graphics.PorterDuff.Mode.SRC_IN)*/
-
-
+        previewTimeBar.setPreviewLoader(this)
 
         videoRotationButton.setOnClickListener(OnClickListener {
             val orientation = getContext().resources.configuration.orientation
@@ -1426,23 +1404,8 @@ class BalajiVideoPlayer(
     }
 
     override fun onScrubMove(previewBar: PreviewBar, progress: Int, fromUser: Boolean) {
-
         pauseVideoPlayer()
         previewFrameLayout.visibility = View.VISIBLE
-        previewTimeBar.showPreview()
-        Log.e("Video Sprite::::", "Url position:::" + currentPosition)
-        if (spriteImageUrl != null && !TextUtils.isEmpty(spriteImageUrl)) {
-            Log.e("Video Sprite::::", "Url:::" + spriteImageUrl)
-            Glide.with(previewImageView)
-                .load(spriteImageUrl)
-                .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
-                .transform(GlideThumbnailTransformation(currentPosition))
-                .into(previewImageView)
-        } else {
-            Log.e("Video Sprite::::", "Url:::Empty")
-        }
-
-
         if (currentDurationPlayTv != null) {
             currentDurationPlayTv.text = Util.getStringForTime(
                 formatBuilder,
@@ -1453,12 +1416,25 @@ class BalajiVideoPlayer(
     }
 
     override fun onScrubStop(previewBar: PreviewBar) {
-        previewFrameLayout!!.visibility = GONE
+        previewFrameLayout.visibility = GONE
         if (mMediaPlayer != null) {
             seekTo(previewBar.progress.toLong())
         }
         previewTimeBar.hidePreview()
         resumeVideoPlayer()
+    }
+
+
+    override fun loadPreview(currentPosition: Long, max: Long) {
+        Log.e("Video Sprite::::", "Url:::" + spriteImageUrl)
+        pauseVideoPlayer()
+        previewFrameLayout.visibility = View.VISIBLE
+        previewTimeBar.showPreview()
+        Glide.with(previewImageView)
+            .load(spriteImageUrl)
+            .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
+            .transform(GlideThumbnailTransformation(currentPosition))
+            .into(previewImageView)
     }
 
 
@@ -1813,5 +1789,6 @@ class BalajiVideoPlayer(
                 }
             }.create()
     }
+
 
 }
