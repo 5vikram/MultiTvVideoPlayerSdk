@@ -1058,9 +1058,11 @@ class BalajiVideoPlayer(
                             override fun onAdEvent(adEvent: AdEvent) {
                                 Log.e("Ads Event:::", "" + adEvent.type)
                                 if (adEvent.type.equals("STARTED")) {
+                                    videoPlayerSdkCallBackListener?.onAdPlay()
                                     if (!isPipModeOn)
                                         setTimerOnVideoPlayer(false)
                                 } else if (adEvent.type.equals("COMPLETED")) {
+                                    videoPlayerSdkCallBackListener?.onAdCompleted()
                                     if (!isPipModeOn)
                                         setTimerOnVideoPlayer(true)
                                 }
@@ -1072,6 +1074,7 @@ class BalajiVideoPlayer(
                 })
 
             } else {
+                videoPlayerSdkCallBackListener?.onAdCompleted()
                 if (!isPipModeOn)
                     setTimerOnVideoPlayer(true)
             }
