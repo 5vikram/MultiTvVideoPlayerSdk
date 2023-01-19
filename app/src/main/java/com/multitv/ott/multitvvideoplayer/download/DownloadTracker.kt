@@ -13,6 +13,7 @@ import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.cardview.widget.CardView
 import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.DefaultRenderersFactory
 import com.google.android.exoplayer2.Format
@@ -424,6 +425,8 @@ class DownloadTracker(
             val done = deleteDialogView.findViewById<AppCompatTextView>(R.id.done)
             val hd_720 = deleteDialogView.findViewById<AppCompatTextView>(R.id.hd_quality)
             val sd_420 = deleteDialogView.findViewById<AppCompatTextView>(R.id.sd_quality)
+            val cardHd = deleteDialogView.findViewById<CardView>(R.id.cardHd)
+            val cardSd = deleteDialogView.findViewById<CardView>(R.id.cardSd)
 
             val formatDownloadable: MutableList<Format> = mutableListOf()
             var qualitySelected: DefaultTrackSelector.Parameters
@@ -465,9 +468,11 @@ class DownloadTracker(
                 .build()
 
 
-            hd_720?.text = qualitySelected.toString()
+           // hd_720?.text = qualitySelected.toString()
 
             hd_720?.setOnClickListener {
+                cardHd.setCardBackgroundColor(context.resources.getColor(R.color.button_background_color))
+                cardSd.setCardBackgroundColor(context.resources.getColor(R.color.button_background_color_2))
                 for (item in formatDownloadable.indices) {
                     val format = formatDownloadable[item]
                     qualitySelected = DefaultTrackSelector(context).buildUponParameters()
@@ -479,28 +484,31 @@ class DownloadTracker(
                     when (formatDownloadable[item].height) {
                         720 -> {
                             //   hd_720.text = formatDownloadable[item].height.toString()
-                            hd_720.text = qualitySelected.toString()
+                        //    hd_720.text = qualitySelected.toString()
                             break
                         }
                         480 -> {
                             //   hd_720.text = formatDownloadable[item].height.toString()
-                            hd_720.text = qualitySelected.toString()
+                          //  hd_720.text = qualitySelected.toString()
                             break
                         }
                         360 -> {
                             //  hd_720.text = formatDownloadable[item].height.toString()
-                            hd_720.text = qualitySelected.toString()
+                         //   hd_720.text = qualitySelected.toString()
                             break
                         }
                         else -> {
                             // hd_720.text = formatDownloadable[item].height.toString()
-                            hd_720.text = qualitySelected.toString()
+                        //    hd_720.text = qualitySelected.toString()
+                            continue
                         }
                     }
                 }
             }
 
             sd_420?.setOnClickListener {
+                cardHd.setCardBackgroundColor(context.resources.getColor(R.color.button_background_color_2))
+                cardSd.setCardBackgroundColor(context.resources.getColor(R.color.button_background_color))
                 for (item in formatDownloadable.indices) {
                     val format = formatDownloadable[item]
                     qualitySelected = DefaultTrackSelector(context).buildUponParameters()
@@ -512,17 +520,18 @@ class DownloadTracker(
                     when (formatDownloadable[item].height) {
                         480 -> {
                             //  sd_420.text = formatDownloadable[item].height.toString()
-                            sd_420.text = qualitySelected.toString()
+                          //  sd_420.text = qualitySelected.toString()
                             break
                         }
                         360 -> {
                             // sd_420.text = formatDownloadable[item].height.toString()
-                            sd_420.text = qualitySelected.toString()
+                          //  sd_420.text = qualitySelected.toString()
                             break
                         }
                         else -> {
+                            continue
                             //  sd_420.text = formatDownloadable[item].height.toString()
-                            sd_420.text = qualitySelected.toString()
+                         //   sd_420.text = qualitySelected.toString()
                         }
                     }
                 }

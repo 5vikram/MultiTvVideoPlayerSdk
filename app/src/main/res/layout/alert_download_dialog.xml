@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom"
     android:background="@android:color/transparent">
 
     <androidx.appcompat.widget.LinearLayoutCompat
@@ -14,7 +15,7 @@
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="500dp"
+            android:layout_height="wrap_content"
             app:cardBackgroundColor="@color/download_background_color"
             app:cardCornerRadius="30dp">
 
@@ -48,6 +49,7 @@
                     android:orientation="vertical">
 
                     <androidx.cardview.widget.CardView
+                        android:id="@+id/cardHd"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:cardBackgroundColor="@color/button_background_color"
@@ -85,6 +87,7 @@
                     </androidx.cardview.widget.CardView>
 
                     <androidx.cardview.widget.CardView
+                        android:id="@+id/cardSd"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
