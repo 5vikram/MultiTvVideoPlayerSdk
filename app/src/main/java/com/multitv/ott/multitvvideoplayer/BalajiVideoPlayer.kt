@@ -1196,6 +1196,7 @@ class BalajiVideoPlayer(
                     videoPerviousButton.visibility = GONE
                     videoPlayerSdkCallBackListener?.onVideoStartNow()
                     Log.e("Vikram Content Status::", "" + mMediaPlayer!!.isPlayingAd())
+                    stopBufferingTimer()
                 }
                 else -> text += "unknown"
             }
@@ -1207,6 +1208,11 @@ class BalajiVideoPlayer(
     }
 
 
+    fun isPlayingAds(): Boolean {
+        Log.e("Vikram Content Status::", "" + mMediaPlayer!!.isPlayingAd())
+        return mMediaPlayer!!.isPlayingAd()
+    }
+
     private fun startBufferingTimer() {
         if (bufferingTimeHandler == null) {
             bufferingTimeHandler = Handler()
@@ -1215,18 +1221,18 @@ class BalajiVideoPlayer(
             bufferingTimeRunnable,
             0
         )
+
+        videoPlayerSdkCallBackListener?.onBufferStart()
     }
 
 
-    fun isPlayingAds(): Boolean {
-        Log.e("Vikram Content Status::", "" + mMediaPlayer!!.isPlayingAd())
-        return mMediaPlayer!!.isPlayingAd()
-    }
+
 
     fun stopBufferingTimer() {
         if (bufferingTimeHandler != null && bufferingTimeRunnable != null) {
             bufferingTimeHandler!!.removeCallbacks(bufferingTimeRunnable)
             bufferingTimeHandler!!.removeCallbacksAndMessages(null)
+            videoPlayerSdkCallBackListener?.onBUfferStop(bufferingTimeInMillis)
         }
     }
 

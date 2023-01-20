@@ -28,6 +28,12 @@ public interface VideoPlayerSdkCallBackListener {
 
     void onAdCompleted();
 
+    void onBufferStart();
+
+    void onBUfferStop(long bufferingTimeInMillis);
+
+
+
 
     //void showSpeedControllMenu();
 }
