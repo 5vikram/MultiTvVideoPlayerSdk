@@ -1442,7 +1442,7 @@ class BalajiVideoPlayer(
         previewFrameLayout.visibility = View.VISIBLE
         previewTimeBar.showPreview()
         Glide.with(previewImageView)
-            .load("https://d396a7nqq8wyns.cloudfront.net/multitv/output/HLS/1061_638df3fd9c783/sprite_tv.png")
+            .load(spriteImageUrl)
             .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
             .transform(GlideThumbnailTransformation(currentPosition))
             .into(previewImageView)
