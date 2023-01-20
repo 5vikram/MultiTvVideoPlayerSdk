@@ -138,7 +138,6 @@ class BalajiVideoPlayer(
     private lateinit var videoPlayButton: ImageView
     private lateinit var videoPauseButton: ImageView
     private lateinit var previewTimeBar: PreviewTimeBar
-    private lateinit var currentDurationPlayTv: TextView
     private lateinit var previewFrameLayout: FrameLayout
     private lateinit var videoTitle: TextView
     private lateinit var epsodeButton: ImageView
@@ -275,7 +274,6 @@ class BalajiVideoPlayer(
 
         previewTimeBar = view.findViewById(R.id.exo_progress)
 
-        currentDurationPlayTv = view.findViewById(R.id.exo_position)
         previewImageView = view.findViewById(R.id.videoPreviewImageView)
         videoNextButton.setVisibility(GONE)
         videoPerviousButton.setVisibility(GONE)
@@ -480,7 +478,7 @@ class BalajiVideoPlayer(
 
 
     fun getCurrentDurationFromTextView(): String {
-        return currentDurationPlayTv.text.toString()
+        return exoCurrentPosition.text.toString()
     }
 
 
@@ -891,7 +889,7 @@ class BalajiVideoPlayer(
         }
 
         //var subtitleSource = SingleSampleMediaSource(subtitleUri, ...);
-        centerButtonLayout!!.visibility = GONE
+        videoControllerLayout?.visibility = GONE
         videoPlayerSdkCallBackListener?.prepareVideoPlayer()
         //        ToastMessage.showLogs(ToastMessage.LogType.DEBUG, TAG, "Content url is " + videoUrl);
         val customLoadControl: LoadControl = DefaultLoadControl.Builder()
@@ -1090,8 +1088,9 @@ class BalajiVideoPlayer(
             if (mMediaPlayer != null && mMediaPlayer!!.currentPosition != 0L) seekPlayerTo =
                 mMediaPlayer!!.currentPosition
                     .toInt() / 1000
-            errorRetryLayout!!.bringToFront()
-            errorRetryLayout!!.visibility = VISIBLE
+            errorRetryLayout.bringToFront()
+            errorRetryLayout.visibility = VISIBLE
+            videoControllerLayout?.visibility = GONE
             videoPlayerSdkCallBackListener!!.onPlayerError(error.message)
         }
 
@@ -1116,7 +1115,6 @@ class BalajiVideoPlayer(
                     text += "buffering"
                     bufferingProgressBarLayout.bringToFront()
                     bufferingProgressBarLayout.visibility = VISIBLE
-                    centerButtonLayout.visibility = GONE
                     //hideController()
                     startBufferingTimer()
                 }
@@ -1182,7 +1180,6 @@ class BalajiVideoPlayer(
                     text += "idle"
                     if (!checkForAudioFocus()) return
                     bufferingProgressBarLayout!!.visibility = GONE
-                    //centerButtonLayout!!.visibility = VISIBLE
                     if (mMediaPlayer != null) {
                         contentPlayedTimeInMillis = mMediaPlayer!!.currentPosition
                         if (contentType == ContentType.LIVE) startBufferingTimer()
@@ -1194,17 +1191,14 @@ class BalajiVideoPlayer(
                 ExoPlayer.STATE_READY -> {
                     text += "ready"
                     bufferingProgressBarLayout.visibility = GONE
-                    //centerButtonLayout!!.visibility = VISIBLE
+                    videoControllerLayout?.visibility = VISIBLE
                     videoNextButton.visibility = GONE
                     videoPerviousButton.visibility = GONE
                     videoPlayerSdkCallBackListener?.onVideoStartNow()
-                    //startSkipVideoTimer()
+                    Log.e("Vikram::", "" + exoCurrentPosition.text.toString())
                 }
                 else -> text += "unknown"
             }
-
-//            ToastMessage.showToastMsg(context, text, Toast.LENGTH_SHORT);
-//            ToastMessage.showLogs(ToastMessage.LogType.ERROR, "Video Player:::", text);
         }
 
         override fun onRepeatModeChanged(repeatMode: Int) {}
@@ -1419,7 +1413,7 @@ class BalajiVideoPlayer(
     }
 
     override fun onScrubMove(previewBar: PreviewBar, progress: Int, fromUser: Boolean) {
-        currentDurationPlayTv.text = Util.getStringForTime(
+        exoCurrentPosition.text = Util.getStringForTime(
             formatBuilder,
             formatter,
             progress.toLong()
