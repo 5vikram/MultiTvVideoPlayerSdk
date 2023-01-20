@@ -1195,7 +1195,7 @@ class BalajiVideoPlayer(
                     videoNextButton.visibility = GONE
                     videoPerviousButton.visibility = GONE
                     videoPlayerSdkCallBackListener?.onVideoStartNow()
-                    Log.e("Vikram::", "" + exoCurrentPosition.text.toString())
+                    Log.e("Vikram Content Status::", "" + mMediaPlayer!!.isPlayingAd())
                 }
                 else -> text += "unknown"
             }
@@ -1215,6 +1215,12 @@ class BalajiVideoPlayer(
             bufferingTimeRunnable,
             0
         )
+    }
+
+
+    fun isPlayingAds(): Boolean {
+        Log.e("Vikram Content Status::", "" + mMediaPlayer!!.isPlayingAd())
+        return mMediaPlayer!!.isPlayingAd()
     }
 
     fun stopBufferingTimer() {
