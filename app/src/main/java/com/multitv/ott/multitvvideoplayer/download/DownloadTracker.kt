@@ -92,6 +92,16 @@ class DownloadTracker(
         return download != null && download.state == Download.STATE_DOWNLOADING
     }
 
+    fun isVideoDownloadingPause(mediaItem: MediaItem): Boolean {
+        val download = downloads[mediaItem.playbackProperties?.uri]
+        return download != null && download.state == Download.STATE_RESTARTING
+    }
+
+    fun isVideoDownloadingResume(mediaItem: MediaItem): Boolean {
+        val download = downloads[mediaItem.playbackProperties?.uri]
+        return download != null && download.state == Download.STATE_STOPPED || download!!.state == Download.STATE_RESTARTING
+    }
+
     fun hasDownload(uri: Uri?): Boolean = downloads.keys.contains(uri)
 
     fun getDownloadRequest(uri: Uri?): DownloadRequest? {
@@ -159,7 +169,7 @@ class DownloadTracker(
                         context,
                         MyDownloadService::class.java,
                         download.request.id,
-                        Download.STOP_REASON_NONE,
+                        Download.STATE_RESTARTING,
                         true
                     )
                     downloadsDetailsListener.resumeDownload()
