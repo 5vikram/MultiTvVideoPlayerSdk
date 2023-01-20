@@ -94,7 +94,7 @@ class DownloadTracker(
 
     fun isVideoDownloadingPauseAndResume(mediaItem: MediaItem): Boolean {
         val download = downloads[mediaItem.playbackProperties?.uri]
-        return download != null && download.state == Download.STATE_RESTARTING || download!!.state == Download.STATE_RESTARTING
+        return download != null && download.state == Download.STATE_STOPPED || download!!.state == Download.STATE_RESTARTING
     }
 
     fun isVideoDownloadingResume(mediaItem: MediaItem): Boolean {
