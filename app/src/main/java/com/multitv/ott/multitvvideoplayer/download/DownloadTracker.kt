@@ -87,6 +87,11 @@ class DownloadTracker(
         return download != null && download.state == Download.STATE_COMPLETED
     }
 
+    fun isVideoDownloadingQueue(mediaItem: MediaItem): Boolean {
+        val download = downloads[mediaItem.playbackProperties?.uri]
+        return download != null && download.state == Download.STATE_DOWNLOADING
+    }
+
     fun hasDownload(uri: Uri?): Boolean = downloads.keys.contains(uri)
 
     fun getDownloadRequest(uri: Uri?): DownloadRequest? {
