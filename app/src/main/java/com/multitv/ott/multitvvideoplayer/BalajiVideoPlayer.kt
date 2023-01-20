@@ -138,7 +138,6 @@ class BalajiVideoPlayer(
     private lateinit var videoPlayButton: ImageView
     private lateinit var videoPauseButton: ImageView
     private lateinit var previewTimeBar: PreviewTimeBar
-    private lateinit var currentDurationPlayTv: TextView
     private lateinit var previewFrameLayout: FrameLayout
     private lateinit var videoTitle: TextView
     private lateinit var epsodeButton: ImageView
@@ -275,7 +274,6 @@ class BalajiVideoPlayer(
 
         previewTimeBar = view.findViewById(R.id.exo_progress)
 
-        currentDurationPlayTv = view.findViewById(R.id.exo_position)
         previewImageView = view.findViewById(R.id.videoPreviewImageView)
         videoNextButton.setVisibility(GONE)
         videoPerviousButton.setVisibility(GONE)
@@ -480,7 +478,7 @@ class BalajiVideoPlayer(
 
 
     fun getCurrentDurationFromTextView(): String {
-        return currentDurationPlayTv.text.toString()
+        return exoCurrentPosition.text.toString()
     }
 
 
@@ -891,7 +889,7 @@ class BalajiVideoPlayer(
         }
 
         //var subtitleSource = SingleSampleMediaSource(subtitleUri, ...);
-        centerButtonLayout!!.visibility = GONE
+        videoControllerLayout?.visibility = GONE
         videoPlayerSdkCallBackListener?.prepareVideoPlayer()
         //        ToastMessage.showLogs(ToastMessage.LogType.DEBUG, TAG, "Content url is " + videoUrl);
         val customLoadControl: LoadControl = DefaultLoadControl.Builder()
@@ -1045,6 +1043,7 @@ class BalajiVideoPlayer(
                 volumeUnMuteButton.visibility = View.VISIBLE
             }
 
+
             if (isWatchDurationEnable)
                 seekTo(Math.max(mMediaPlayer!!.currentPosition + watchDuration * 1000, 0))
 
@@ -1053,7 +1052,7 @@ class BalajiVideoPlayer(
                 adsLoader?.adsLoader?.addAdsLoadedListener(object :
                     com.google.ads.interactivemedia.v3.api.AdsLoader.AdsLoadedListener {
                     override fun onAdsManagerLoaded(adsManagerLoadedEvent: AdsManagerLoadedEvent) {
-                        var adsManager = adsManagerLoadedEvent.getAdsManager()
+                        val adsManager = adsManagerLoadedEvent.getAdsManager()
                         adsManager.addAdEventListener(object : AdEvent.AdEventListener {
                             override fun onAdEvent(adEvent: AdEvent) {
                                 Log.e("Ads Event:::", "" + adEvent.type)
@@ -1073,6 +1072,7 @@ class BalajiVideoPlayer(
 
                 })
 
+
             } else {
                 videoPlayerSdkCallBackListener?.onAdCompleted()
                 if (!isPipModeOn)
@@ -1088,8 +1088,9 @@ class BalajiVideoPlayer(
             if (mMediaPlayer != null && mMediaPlayer!!.currentPosition != 0L) seekPlayerTo =
                 mMediaPlayer!!.currentPosition
                     .toInt() / 1000
-            errorRetryLayout!!.bringToFront()
-            errorRetryLayout!!.visibility = VISIBLE
+            errorRetryLayout.bringToFront()
+            errorRetryLayout.visibility = VISIBLE
+            videoControllerLayout?.visibility = GONE
             videoPlayerSdkCallBackListener!!.onPlayerError(error.message)
         }
 
@@ -1114,7 +1115,6 @@ class BalajiVideoPlayer(
                     text += "buffering"
                     bufferingProgressBarLayout.bringToFront()
                     bufferingProgressBarLayout.visibility = VISIBLE
-                    centerButtonLayout.visibility = GONE
                     //hideController()
                     startBufferingTimer()
                 }
@@ -1180,7 +1180,6 @@ class BalajiVideoPlayer(
                     text += "idle"
                     if (!checkForAudioFocus()) return
                     bufferingProgressBarLayout!!.visibility = GONE
-                    //centerButtonLayout!!.visibility = VISIBLE
                     if (mMediaPlayer != null) {
                         contentPlayedTimeInMillis = mMediaPlayer!!.currentPosition
                         if (contentType == ContentType.LIVE) startBufferingTimer()
@@ -1192,17 +1191,14 @@ class BalajiVideoPlayer(
                 ExoPlayer.STATE_READY -> {
                     text += "ready"
                     bufferingProgressBarLayout.visibility = GONE
-                    //centerButtonLayout!!.visibility = VISIBLE
+                    videoControllerLayout?.visibility = VISIBLE
                     videoNextButton.visibility = GONE
                     videoPerviousButton.visibility = GONE
                     videoPlayerSdkCallBackListener?.onVideoStartNow()
-                    //startSkipVideoTimer()
+                    Log.e("Vikram::", "" + exoCurrentPosition.text.toString())
                 }
                 else -> text += "unknown"
             }
-
-//            ToastMessage.showToastMsg(context, text, Toast.LENGTH_SHORT);
-//            ToastMessage.showLogs(ToastMessage.LogType.ERROR, "Video Player:::", text);
         }
 
         override fun onRepeatModeChanged(repeatMode: Int) {}
@@ -1412,12 +1408,12 @@ class BalajiVideoPlayer(
 
     override fun onScrubStart(previewBar: PreviewBar) {
         previewFrameLayout.visibility = VISIBLE
+        previewTimeBar.showPreview()
         pauseVideoPlayer()
-        removeCallbacks(hideAction)
     }
 
     override fun onScrubMove(previewBar: PreviewBar, progress: Int, fromUser: Boolean) {
-        currentDurationPlayTv.text = Util.getStringForTime(
+        exoCurrentPosition.text = Util.getStringForTime(
             formatBuilder,
             formatter,
             progress.toLong()
@@ -1438,9 +1434,9 @@ class BalajiVideoPlayer(
         Log.e("Video Sprite::::", "Url:::" + spriteImageUrl)
         pauseVideoPlayer()
         previewFrameLayout.visibility = View.VISIBLE
-        //previewTimeBar.showPreview()
+        previewTimeBar.showPreview()
         Glide.with(previewImageView)
-            .load("https://d396a7nqq8wyns.cloudfront.net/multitv/output/HLS/1061_638df3fd9c783/sprite_tv.png")
+            .load(spriteImageUrl)
             .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
             .transform(GlideThumbnailTransformation(currentPosition))
             .into(previewImageView)
