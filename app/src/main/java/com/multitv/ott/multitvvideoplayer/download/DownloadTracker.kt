@@ -509,23 +509,15 @@ class DownloadTracker(
                         .build()
                     when (formatDownloadable[item].height) {
                         720 -> {
-                            //   hd_720.text = formatDownloadable[item].height.toString()
-                            //    hd_720.text = qualitySelected.toString()
                             break
                         }
                         480 -> {
-                            //   hd_720.text = formatDownloadable[item].height.toString()
-                            //  hd_720.text = qualitySelected.toString()
                             break
                         }
                         360 -> {
-                            //  hd_720.text = formatDownloadable[item].height.toString()
-                            //   hd_720.text = qualitySelected.toString()
                             break
                         }
                         else -> {
-                            // hd_720.text = formatDownloadable[item].height.toString()
-                            //    hd_720.text = qualitySelected.toString()
                             continue
                         }
                     }
@@ -564,19 +556,13 @@ class DownloadTracker(
                         .build()
                     when (formatDownloadable[item].height) {
                         480 -> {
-                            //  sd_420.text = formatDownloadable[item].height.toString()
-                            //  sd_420.text = qualitySelected.toString()
                             break
                         }
                         360 -> {
-                            // sd_420.text = formatDownloadable[item].height.toString()
-                            //  sd_420.text = qualitySelected.toString()
                             break
                         }
                         else -> {
                             continue
-                            //  sd_420.text = formatDownloadable[item].height.toString()
-                            //   sd_420.text = qualitySelected.toString()
                         }
                     }
                 }
@@ -604,7 +590,7 @@ class DownloadTracker(
                         Toast.LENGTH_LONG
                     ).show()
                 }
-                // dailogCallbackListener.trackDailogStatus(false)
+                 dailogCallbackListener.trackDailogStatus(false)
 
                 positiveCallback?.invoke()
             }
@@ -615,7 +601,6 @@ class DownloadTracker(
             setDefaultCheckbox.setOnCheckedChangeListener { buttonView, isChecked ->
 
             }
-
 
             alertDialog.show()
         }
