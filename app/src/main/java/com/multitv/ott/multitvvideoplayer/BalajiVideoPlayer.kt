@@ -1195,7 +1195,12 @@ class BalajiVideoPlayer(
                     videoNextButton.visibility = GONE
                     videoPerviousButton.visibility = GONE
                     videoPlayerSdkCallBackListener?.onVideoStartNow()
-                    Log.e("Vikram Content Status::", "" + mMediaPlayer!!.isPlayingAd())
+
+                    if (mMediaPlayer!!.isPlayingAd())
+                        videoPlayerSdkCallBackListener?.onAdPlay()
+                    else
+                        videoPlayerSdkCallBackListener?.onAdCompleted()
+
                     stopBufferingTimer()
                 }
                 else -> text += "unknown"
@@ -1224,8 +1229,6 @@ class BalajiVideoPlayer(
 
         videoPlayerSdkCallBackListener?.onBufferStart()
     }
-
-
 
 
     fun stopBufferingTimer() {
