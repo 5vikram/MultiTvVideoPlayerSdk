@@ -147,7 +147,6 @@ class BalajiVideoPlayer(
     private lateinit var exoCurrentPosition: TextView
     private lateinit var skipVideoButton: TextView
 
-    private lateinit var seekBarLayout: ConstraintLayout
 
     private var videoControllerLayout: RelativeLayout? = null
 
@@ -274,7 +273,7 @@ class BalajiVideoPlayer(
 
         previewTimeBar = view.findViewById(R.id.exo_progress)
 
-        previewImageView = view.findViewById(R.id.videoPreviewImageView)
+        previewImageView = view.findViewById(R.id.imageView)
         videoNextButton.setVisibility(GONE)
         videoPerviousButton.setVisibility(GONE)
         simpleExoPlayerView = view.findViewById(R.id.videoPlayer)
@@ -283,7 +282,6 @@ class BalajiVideoPlayer(
         pictureInPicture = view.findViewById(R.id.picture_in_picture)
         videoNextButton.setVisibility(GONE)
         videoPerviousButton.setVisibility(GONE)
-        seekBarLayout = view.findViewById(R.id.seekBarLayout)
 
         videoRotationButton.setOnClickListener(OnClickListener {
             val orientation = getContext().resources.configuration.orientation
