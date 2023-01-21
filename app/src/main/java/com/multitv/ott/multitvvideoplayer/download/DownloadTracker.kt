@@ -94,7 +94,13 @@ class DownloadTracker(
 
     fun isVideoDownloadingPauseAndResume(mediaItem: MediaItem): Boolean {
         val download = downloads[mediaItem.playbackProperties?.uri]
-        return download != null && download.state == Download.STATE_STOPPED || download!!.state == Download.STATE_RESTARTING
+
+        return if (download == null)
+            false
+        else
+            download.state == Download.STATE_STOPPED || download.state == Download.STATE_RESTARTING
+
+
     }
 
     fun isVideoDownloadingResume(mediaItem: MediaItem): Boolean {
@@ -439,7 +445,7 @@ class DownloadTracker(
             val window: Window? = alertDialog.window
             val wlp: WindowManager.LayoutParams? = window?.attributes
 
-            wlp?.gravity  = Gravity.BOTTOM
+            wlp?.gravity = Gravity.BOTTOM
             wlp?.flags = wlp?.flags?.and(WindowManager.LayoutParams.FLAG_DIM_BEHIND.inv())
             window?.attributes = wlp
 
@@ -605,7 +611,7 @@ class DownloadTracker(
                         Toast.LENGTH_LONG
                     ).show()
                 }
-                 dailogCallbackListener.trackDailogStatus(false)
+                dailogCallbackListener.trackDailogStatus(false)
 
                 positiveCallback?.invoke()
             }
