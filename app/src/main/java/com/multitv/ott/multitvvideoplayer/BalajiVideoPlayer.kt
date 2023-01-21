@@ -116,7 +116,7 @@ class BalajiVideoPlayer(
     private lateinit var resumedVideoTv: TextView
     private lateinit var volumeLayout: LinearLayout
     private lateinit var volumeLinearLayout: LinearLayout
-    private lateinit var videoProgressLayout: LinearLayout
+    private lateinit var videoProgressLayout: LinearLayoutCompat
     private lateinit var bufferingProgressBarLayout: LinearLayout
     private lateinit var circularProgressLayout: LinearLayout
     private lateinit var overlayImageTransparent: View
@@ -147,7 +147,6 @@ class BalajiVideoPlayer(
     private lateinit var exoCurrentPosition: TextView
     private lateinit var skipVideoButton: TextView
 
-    private lateinit var seekBarLayout: ConstraintLayout
 
     private var videoControllerLayout: RelativeLayout? = null
 
@@ -274,7 +273,7 @@ class BalajiVideoPlayer(
 
         previewTimeBar = view.findViewById(R.id.exo_progress)
 
-        previewImageView = view.findViewById(R.id.videoPreviewImageView)
+        previewImageView = view.findViewById(R.id.imageView)
         videoNextButton.setVisibility(GONE)
         videoPerviousButton.setVisibility(GONE)
         simpleExoPlayerView = view.findViewById(R.id.videoPlayer)
@@ -283,7 +282,6 @@ class BalajiVideoPlayer(
         pictureInPicture = view.findViewById(R.id.picture_in_picture)
         videoNextButton.setVisibility(GONE)
         videoPerviousButton.setVisibility(GONE)
-        seekBarLayout = view.findViewById(R.id.seekBarLayout)
 
         videoRotationButton.setOnClickListener(OnClickListener {
             val orientation = getContext().resources.configuration.orientation
@@ -1195,7 +1193,13 @@ class BalajiVideoPlayer(
                     videoNextButton.visibility = GONE
                     videoPerviousButton.visibility = GONE
                     videoPlayerSdkCallBackListener?.onVideoStartNow()
-                    Log.e("Vikram::", "" + exoCurrentPosition.text.toString())
+
+                    if (mMediaPlayer!!.isPlayingAd())
+                        videoPlayerSdkCallBackListener?.onAdPlay()
+                    else
+                        videoPlayerSdkCallBackListener?.onAdCompleted()
+
+                    stopBufferingTimer()
                 }
                 else -> text += "unknown"
             }
@@ -1207,6 +1211,11 @@ class BalajiVideoPlayer(
     }
 
 
+    fun isPlayingAds(): Boolean {
+        Log.e("Vikram Content Status::", "" + mMediaPlayer!!.isPlayingAd())
+        return mMediaPlayer!!.isPlayingAd()
+    }
+
     private fun startBufferingTimer() {
         if (bufferingTimeHandler == null) {
             bufferingTimeHandler = Handler()
@@ -1215,12 +1224,16 @@ class BalajiVideoPlayer(
             bufferingTimeRunnable,
             0
         )
+
+        videoPlayerSdkCallBackListener?.onBufferStart()
     }
+
 
     fun stopBufferingTimer() {
         if (bufferingTimeHandler != null && bufferingTimeRunnable != null) {
             bufferingTimeHandler!!.removeCallbacks(bufferingTimeRunnable)
             bufferingTimeHandler!!.removeCallbacksAndMessages(null)
+            videoPlayerSdkCallBackListener?.onBUfferStop(bufferingTimeInMillis)
         }
     }
 
@@ -1407,8 +1420,8 @@ class BalajiVideoPlayer(
     }
 
     override fun onScrubStart(previewBar: PreviewBar) {
-        previewFrameLayout.visibility = VISIBLE
-        previewTimeBar.showPreview()
+      //  previewFrameLayout.visibility = VISIBLE
+       // previewTimeBar.showPreview()
         pauseVideoPlayer()
     }
 
@@ -1421,11 +1434,11 @@ class BalajiVideoPlayer(
     }
 
     override fun onScrubStop(previewBar: PreviewBar) {
-        previewFrameLayout.visibility = INVISIBLE
+       // previewFrameLayout.visibility = INVISIBLE
         if (mMediaPlayer != null) {
             seekTo(previewBar.progress.toLong())
         }
-        previewTimeBar.hidePreview()
+        //previewTimeBar.hidePreview()
         resumeVideoPlayer()
     }
 
@@ -1433,8 +1446,8 @@ class BalajiVideoPlayer(
     override fun loadPreview(currentPosition: Long, max: Long) {
         Log.e("Video Sprite::::", "Url:::" + spriteImageUrl)
         pauseVideoPlayer()
-        previewFrameLayout.visibility = View.VISIBLE
-        previewTimeBar.showPreview()
+       // previewFrameLayout.visibility = View.VISIBLE
+       // previewTimeBar.showPreview()
         Glide.with(previewImageView)
             .load(spriteImageUrl)
             .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)

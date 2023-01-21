@@ -92,9 +92,9 @@ public final class TrackSelectionDialog extends DialogFragment {
    *     dismissed.
    */
   public static TrackSelectionDialog createForTrackSelector(
-      DefaultTrackSelector trackSelector, DialogInterface.OnDismissListener onDismissListener) {
+          DefaultTrackSelector trackSelector, DialogInterface.OnDismissListener onDismissListener) {
     MappedTrackInfo mappedTrackInfo =
-        Assertions.checkNotNull(trackSelector.getCurrentMappedTrackInfo());
+            Assertions.checkNotNull(trackSelector.getCurrentMappedTrackInfo());
     TrackSelectionDialog trackSelectionDialog = new TrackSelectionDialog();
     DefaultTrackSelector.Parameters parameters = trackSelector.getParameters();
 
@@ -102,30 +102,30 @@ public final class TrackSelectionDialog extends DialogFragment {
 
 
     trackSelectionDialog.init(
-        mappedTrackInfo,
-        /* initialParameters = */ parameters,
-        /* allowAdaptiveSelections= */ true,
-        /* allowMultipleOverrides= */ false,
-        /* onClickListener= */ (dialog, which) -> {
-          DefaultTrackSelector.ParametersBuilder builder = parameters.buildUpon();
-          for (int i = 0; i < mappedTrackInfo.getRendererCount(); i++) {
-            builder
-                .clearSelectionOverrides(/* rendererIndex= */ i)
-                .setRendererDisabled(
-                    /* rendererIndex= */ i,
-                    trackSelectionDialog.getIsDisabled(/* rendererIndex= */ i));
-            List<SelectionOverride> overrides =
-                trackSelectionDialog.getOverrides(/* rendererIndex= */ i);
-            if (!overrides.isEmpty()) {
-              builder.setSelectionOverride(
-                  /* rendererIndex= */ i,
-                  mappedTrackInfo.getTrackGroups(/* rendererIndex= */ i),
-                  overrides.get(0));
-            }
-          }
-          trackSelector.setParameters(builder);
-        },
-        onDismissListener);
+            mappedTrackInfo,
+            /* initialParameters = */ parameters,
+            /* allowAdaptiveSelections= */ true,
+            /* allowMultipleOverrides= */ false,
+            /* onClickListener= */ (dialog, which) -> {
+              DefaultTrackSelector.ParametersBuilder builder = parameters.buildUpon();
+              for (int i = 0; i < mappedTrackInfo.getRendererCount(); i++) {
+                builder
+                        .clearSelectionOverrides(/* rendererIndex= */ i)
+                        .setRendererDisabled(
+                                /* rendererIndex= */ i,
+                                trackSelectionDialog.getIsDisabled(/* rendererIndex= */ i));
+                List<SelectionOverride> overrides =
+                        trackSelectionDialog.getOverrides(/* rendererIndex= */ i);
+                if (!overrides.isEmpty()) {
+                  builder.setSelectionOverride(
+                          /* rendererIndex= */ i,
+                          mappedTrackInfo.getTrackGroups(/* rendererIndex= */ i),
+                          overrides.get(0));
+                }
+              }
+              trackSelector.setParameters(builder);
+            },
+            onDismissListener);
     return trackSelectionDialog;
   }
 
@@ -160,12 +160,12 @@ public final class TrackSelectionDialog extends DialogFragment {
   }
 
   private void init(
-      MappedTrackInfo mappedTrackInfo,
-      DefaultTrackSelector.Parameters initialParameters,
-      boolean allowAdaptiveSelections,
-      boolean allowMultipleOverrides,
-      DialogInterface.OnClickListener onClickListener,
-      DialogInterface.OnDismissListener onDismissListener) {
+          MappedTrackInfo mappedTrackInfo,
+          DefaultTrackSelector.Parameters initialParameters,
+          boolean allowAdaptiveSelections,
+          boolean allowMultipleOverrides,
+          DialogInterface.OnClickListener onClickListener,
+          DialogInterface.OnDismissListener onDismissListener) {
     this.onClickListener = onClickListener;
     this.onDismissListener = onDismissListener;
     for (int i = 0; i < mappedTrackInfo.getRendererCount(); i++) {
@@ -174,12 +174,12 @@ public final class TrackSelectionDialog extends DialogFragment {
         TrackGroupArray trackGroupArray = mappedTrackInfo.getTrackGroups(i);
         TrackSelectionViewFragment tabFragment = new TrackSelectionViewFragment();
         tabFragment.init(
-            mappedTrackInfo,
-            /* rendererIndex= */ i,
-            initialParameters.getRendererDisabled(/* rendererIndex= */ i),
-            initialParameters.getSelectionOverride(/* rendererIndex= */ i, trackGroupArray),
-            allowAdaptiveSelections,
-            allowMultipleOverrides);
+                mappedTrackInfo,
+                /* rendererIndex= */ i,
+                initialParameters.getRendererDisabled(/* rendererIndex= */ i),
+                initialParameters.getSelectionOverride(/* rendererIndex= */ i, trackGroupArray),
+                allowAdaptiveSelections,
+                allowMultipleOverrides);
         tabFragments.put(i, tabFragment);
         tabTrackTypes.add(trackType);
       }
@@ -216,7 +216,7 @@ public final class TrackSelectionDialog extends DialogFragment {
     // AlertDialog because it owns the view itself, so we use AppCompatDialog instead, themed using
     // the AlertDialog theme overlay with force-enabled title.
     Dialog dialog =
-        new Dialog(getActivity(), R.style.TrackSelectionDialogThemeOverlay);
+            new Dialog(getActivity(), R.style.TrackSelectionDialogThemeOverlay);
     dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
     dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
     dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
@@ -234,7 +234,7 @@ public final class TrackSelectionDialog extends DialogFragment {
 
   @Override
   public View onCreateView(
-      LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+          LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
     View dialogView = inflater.inflate(R.layout.track_selection_dialog, container, false);
     TabLayout tabLayout = dialogView.findViewById(R.id.track_selection_dialog_tab_layout);
     ViewPager viewPager = dialogView.findViewById(R.id.track_selection_dialog_view_pager);
@@ -245,10 +245,10 @@ public final class TrackSelectionDialog extends DialogFragment {
     tabLayout.setVisibility(tabFragments.size() > 1 ? View.VISIBLE : View.GONE);
     cancelButton.setOnClickListener(view -> dismiss());
     okButton.setOnClickListener(
-        view -> {
-          onClickListener.onClick(getDialog(), DialogInterface.BUTTON_POSITIVE);
-          dismiss();
-        });
+            view -> {
+              onClickListener.onClick(getDialog(), DialogInterface.BUTTON_POSITIVE);
+              dismiss();
+            });
     return dialogView;
   }
 
@@ -310,7 +310,7 @@ public final class TrackSelectionDialog extends DialogFragment {
 
   /** Fragment to show a track selection in tab of the track selection dialog. */
   public static final class TrackSelectionViewFragment extends Fragment
-      implements TrackSelectionView.TrackSelectionListener {
+          implements TrackSelectionView.TrackSelectionListener {
 
     private MappedTrackInfo mappedTrackInfo;
     private int rendererIndex;
@@ -326,49 +326,49 @@ public final class TrackSelectionDialog extends DialogFragment {
     }
 
     public void init(
-        MappedTrackInfo mappedTrackInfo,
-        int rendererIndex,
-        boolean initialIsDisabled,
-        @Nullable SelectionOverride initialOverride,
-        boolean allowAdaptiveSelections,
-        boolean allowMultipleOverrides) {
+            MappedTrackInfo mappedTrackInfo,
+            int rendererIndex,
+            boolean initialIsDisabled,
+            @Nullable SelectionOverride initialOverride,
+            boolean allowAdaptiveSelections,
+            boolean allowMultipleOverrides) {
       this.mappedTrackInfo = mappedTrackInfo;
       this.rendererIndex = rendererIndex;
       this.isDisabled = initialIsDisabled;
       this.overrides =
-          initialOverride == null
-              ? Collections.emptyList()
-              : Collections.singletonList(initialOverride);
+              initialOverride == null
+                      ? Collections.emptyList()
+                      : Collections.singletonList(initialOverride);
       this.allowAdaptiveSelections = allowAdaptiveSelections;
       this.allowMultipleOverrides = allowMultipleOverrides;
     }
 
     @Override
     public View onCreateView(
-        LayoutInflater inflater,
-        @Nullable ViewGroup container,
-        @Nullable Bundle savedInstanceState) {
+            LayoutInflater inflater,
+            @Nullable ViewGroup container,
+            @Nullable Bundle savedInstanceState) {
 
       View rootView =
-          inflater.inflate(
-              R.layout.exo_track_selection_dialog, container, /* attachToRoot= */ false);
+              inflater.inflate(
+                      R.layout.exo_track_selection_dialog, container, /* attachToRoot= */ false);
       TrackSelectionView trackSelectionView = rootView.findViewById(R.id.exo_track_selection_view);
       trackSelectionView.setShowDisableOption(true);
       trackSelectionView.setAllowMultipleOverrides(allowMultipleOverrides);
       trackSelectionView.setAllowAdaptiveSelections(false);
       trackSelectionView.init(
-          mappedTrackInfo,
-          rendererIndex,
-          isDisabled,
-          overrides,
-          /* trackFormatComparator= */ null,
-          /* listener= */ this);
+              mappedTrackInfo,
+              rendererIndex,
+              isDisabled,
+              overrides,
+              /* trackFormatComparator= */ null,
+              /* listener= */ this);
       return rootView;
     }
 
     @Override
     public void onTrackSelectionChanged(
-        boolean isDisabled, @NonNull List<SelectionOverride> overrides) {
+            boolean isDisabled, @NonNull List<SelectionOverride> overrides) {
       this.isDisabled = isDisabled;
       this.overrides = overrides;
     }

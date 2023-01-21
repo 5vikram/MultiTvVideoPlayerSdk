@@ -110,13 +110,21 @@ public class PreviewTimeBar extends DefaultTimeBar implements PreviewBar {
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
-        if (!delegate.isPreviewViewAttached() && !isInEditMode()) {
+        /*if (!delegate.isPreviewViewAttached() && !isInEditMode()) {
             final FrameLayout previewView = PreviewDelegate.findPreviewView(
                     (ViewGroup) getParent(), previewId);
             if (previewView != null) {
                 delegate.attachPreviewView(previewView);
             }
+        }*/
+
+
+        final FrameLayout previewView = PreviewDelegate.findPreviewView(
+                (ViewGroup) getParent(), previewId);
+        if (previewView != null) {
+            delegate.attachPreviewView(previewView);
         }
+
     }
 
     @Override

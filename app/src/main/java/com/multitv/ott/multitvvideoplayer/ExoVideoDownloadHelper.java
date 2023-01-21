@@ -95,6 +95,12 @@ public class ExoVideoDownloadHelper implements DownloadTracker.Listener, SdkPopC
     }
 
 
+    public boolean isVideoStateResumeAndPause(String videoUrl, String videoTitle) {
+        return DownloadUtil.INSTANCE.getDownloadTracker(context).isVideoDownloadingPauseAndResume(getMediaItem(videoUrl, videoTitle));
+    }
+
+
+
     public void removeDownload() {
         DownloadUtil.INSTANCE.getDownloadTracker(context).removeListener(this);
     }

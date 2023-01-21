@@ -53,7 +53,7 @@
     <item name="exo_menu" type="id" />
     <item name="exo_next_video" type="id" />
 
-    <item name="previewSeekBarOverlayViewId" type="id" />
-    <item name="previewSeekBarMorphViewId" type="id" />
+ <!--   <item name="previewSeekBarOverlayViewId" type="id" />
+    <item name="previewSeekBarMorphViewId" type="id" />-->
 
 </resources>

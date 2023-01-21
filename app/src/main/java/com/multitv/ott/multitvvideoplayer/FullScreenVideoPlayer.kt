@@ -109,7 +109,7 @@ class FullScreenVideoPlayer(
     private lateinit var resumedVideoTv: TextView
     private lateinit var volumeLayout: LinearLayout
     private lateinit var volumeLinearLayout: LinearLayout
-    private lateinit var videoProgressLayout: LinearLayout
+    private lateinit var videoProgressLayout: LinearLayoutCompat
     private lateinit var bufferingProgressBarLayout: LinearLayout
     private lateinit var circularProgressLayout: LinearLayout
     private lateinit var overlayImageTransparent: View
@@ -252,7 +252,7 @@ class FullScreenVideoPlayer(
         videoUnLockButton = view.findViewById(R.id.exo_unlock)
         previewTimeBar = findViewById<View>(R.id.exo_progress) as PreviewTimeBar
         currentDurationPlayTv = view.findViewById(R.id.exo_position)
-        previewImageView = view.findViewById(R.id.videoPreviewImageView)
+        previewImageView = view.findViewById(R.id.imageView)
         videoNextButton?.setVisibility(GONE)
         videoPerviousButton?.setVisibility(GONE)
         simpleExoPlayerView = view.findViewById(R.id.videoPlayer)
