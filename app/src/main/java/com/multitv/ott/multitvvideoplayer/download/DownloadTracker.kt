@@ -175,7 +175,7 @@ class DownloadTracker(
                         context,
                         MyDownloadService::class.java,
                         download.request.id,
-                        Download.STATE_RESTARTING,
+                        Download.STOP_REASON_NONE,
                         true
                     )
                     downloadsDetailsListener.resumeDownload()
