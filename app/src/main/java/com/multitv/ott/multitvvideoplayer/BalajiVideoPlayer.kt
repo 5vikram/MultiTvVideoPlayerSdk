@@ -116,7 +116,6 @@ class BalajiVideoPlayer(
     private lateinit var resumedVideoTv: TextView
     private lateinit var volumeLayout: LinearLayout
     private lateinit var volumeLinearLayout: LinearLayout
-    private lateinit var videoProgressLayout: LinearLayoutCompat
     private lateinit var bufferingProgressBarLayout: LinearLayout
     private lateinit var circularProgressLayout: LinearLayout
     private lateinit var overlayImageTransparent: View
@@ -248,7 +247,6 @@ class BalajiVideoPlayer(
         volumeUnMuteButton = view.findViewById(R.id.volumeUnMuteButton)
         bufferingProgressBarLayout = view.findViewById(R.id.bufferingProgressBarLayout)
         circularProgressLayout = view.findViewById(R.id.circularProgressLayout)
-        videoProgressLayout = findViewById(R.id.video_progress_layout)
         setting = view.findViewById(R.id.settings_btn)
         volumeLayout = view.findViewById(R.id.volumeLayout)
         volumeLinearLayout = view.findViewById(R.id.volumeLinearLayout)
@@ -600,7 +598,6 @@ class BalajiVideoPlayer(
         closeVideoPlayerButton.visibility = GONE
         overlayImageTransparent.visibility = GONE
         centerButtonLayout.visibility = GONE
-        videoProgressLayout.visibility = GONE
         videoMenuLayout.visibility = GONE
         resumedVideoTv.visibility = View.GONE
         removeCallbacks(hideAction)
@@ -619,7 +616,6 @@ class BalajiVideoPlayer(
         closeVideoPlayerButton.visibility = VISIBLE
         overlayImageTransparent.visibility = VISIBLE
         centerButtonLayout.visibility = VISIBLE
-        videoProgressLayout.visibility = VISIBLE
         videoMenuLayout.visibility = VISIBLE
         resumedVideoTv.visibility = View.GONE
         updatePlayPauseButton()
@@ -1651,7 +1647,6 @@ class BalajiVideoPlayer(
             closeVideoPlayerButton!!.visibility = GONE
             overlayImageTransparent!!.visibility = GONE
             centerButtonLayout.visibility = GONE
-            videoProgressLayout.visibility = GONE
             videoMenuLayout.visibility = GONE
             resumedVideoTv.visibility = View.GONE
         } else {
