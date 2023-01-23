@@ -19,7 +19,7 @@ package com.github.rubensousa.previewseekbar;
 import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -36,7 +36,7 @@ import java.util.List;
  */
 public class PreviewDelegate {
 
-    private FrameLayout previewView;
+    private LinearLayout previewView;
     private PreviewLoader previewLoader;
     private PreviewAnimator animator;
     private PreviewBar previewBar;
@@ -70,14 +70,14 @@ public class PreviewDelegate {
     }
 
     @Nullable
-    public static FrameLayout findPreviewView(@NonNull ViewGroup parent, int previewViewId) {
+    public static LinearLayout findPreviewView(@NonNull ViewGroup parent, int previewViewId) {
         if (previewViewId == View.NO_ID) {
             return null;
         }
         for (int i = 0; i < parent.getChildCount(); i++) {
             View child = parent.getChildAt(i);
-            if (child.getId() == previewViewId && child instanceof FrameLayout) {
-                return (FrameLayout) child;
+            if (child.getId() == previewViewId && child instanceof LinearLayout) {
+                return (LinearLayout) child;
             }
         }
         return null;
@@ -186,7 +186,7 @@ public class PreviewDelegate {
         this.previewAutoHide = autoHide;
     }
 
-    public void attachPreviewView(@NonNull FrameLayout previewView) {
+    public void attachPreviewView(@NonNull LinearLayout previewView) {
         this.previewView = previewView;
         this.previewView.setVisibility(View.INVISIBLE);
         previewViewAttached = true;

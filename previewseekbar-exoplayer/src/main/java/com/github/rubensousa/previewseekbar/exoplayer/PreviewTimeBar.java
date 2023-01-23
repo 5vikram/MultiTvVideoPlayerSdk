@@ -23,7 +23,7 @@ import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -111,7 +111,7 @@ public class PreviewTimeBar extends DefaultTimeBar implements PreviewBar {
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
         if (!delegate.isPreviewViewAttached() && !isInEditMode()) {
-            final FrameLayout previewView = PreviewDelegate.findPreviewView(
+            final LinearLayout previewView = PreviewDelegate.findPreviewView(
                     (ViewGroup) getParent(), previewId);
             if (previewView != null) {
                 delegate.attachPreviewView(previewView);
@@ -119,7 +119,7 @@ public class PreviewTimeBar extends DefaultTimeBar implements PreviewBar {
         }
 
 
-        final FrameLayout previewView = PreviewDelegate.findPreviewView(
+        final LinearLayout previewView = PreviewDelegate.findPreviewView(
                 (ViewGroup) getParent(), previewId);
         if (previewView != null) {
             delegate.attachPreviewView(previewView);
@@ -144,7 +144,7 @@ public class PreviewTimeBar extends DefaultTimeBar implements PreviewBar {
     }
 
     @Override
-    public void attachPreviewView(@NonNull FrameLayout previewView) {
+    public void attachPreviewView(@NonNull LinearLayout previewView) {
         delegate.attachPreviewView(previewView);
     }
 

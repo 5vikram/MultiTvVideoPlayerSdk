@@ -16,12 +16,12 @@
 
 package com.github.rubensousa.previewseekbar.animator;
 
-import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
 import com.github.rubensousa.previewseekbar.PreviewBar;
 
 /**
- * Animates the FrameLayout container that has the View responsible for showing a preview.
+ * Animates the LinearLayout container that has the View responsible for showing a preview.
  * <p>
  * Default implementations: {@link PreviewFadeAnimator} and {@link PreviewMorphAnimator}
  */
@@ -34,42 +34,42 @@ public interface PreviewAnimator {
      * @param previewView The view that displays the preview
      * @param previewBar  The PreviewBar that's responsible for this preview
      */
-    void move(FrameLayout previewView, PreviewBar previewBar);
+    void move(LinearLayout previewView, PreviewBar previewBar);
 
     /**
      * Animates the preview appearance.
      * <p>
      * Please note that any animations started by
-     * {@link PreviewAnimator#move(FrameLayout, PreviewBar)}
-     * or {@link PreviewAnimator#hide(FrameLayout, PreviewBar)} might still be running
+     * {@link PreviewAnimator#move(LinearLayout, PreviewBar)}
+     * or {@link PreviewAnimator#hide(LinearLayout, PreviewBar)} might still be running
      * <p>
      *
      * @param previewView The view that displays the preview
      * @param previewBar  The PreviewBar that's responsible for this preview
      */
-    void show(FrameLayout previewView, PreviewBar previewBar);
+    void show(LinearLayout previewView, PreviewBar previewBar);
 
     /**
      * Animates the preview disappearance.
      * <p>
      * Please note that any animations started by
-     * {@link PreviewAnimator#move(FrameLayout, PreviewBar)}
-     * or {@link PreviewAnimator#show(FrameLayout, PreviewBar)} might still be running
+     * {@link PreviewAnimator#move(LinearLayout, PreviewBar)}
+     * or {@link PreviewAnimator#show(LinearLayout, PreviewBar)} might still be running
      * <p>
      *
      * @param previewView The view that displays the preview
      * @param previewBar  The PreviewBar that's responsible for this preview
      */
-    void hide(FrameLayout previewView, PreviewBar previewBar);
+    void hide(LinearLayout previewView, PreviewBar previewBar);
 
     /**
-     * Cancels any animation started by {@link PreviewAnimator#move(FrameLayout, PreviewBar)},
-     * {@link PreviewAnimator#show(FrameLayout, PreviewBar)}
-     * or {@link PreviewAnimator#hide(FrameLayout, PreviewBar)}
+     * Cancels any animation started by {@link PreviewAnimator#move(LinearLayout, PreviewBar)},
+     * {@link PreviewAnimator#show(LinearLayout, PreviewBar)}
+     * or {@link PreviewAnimator#hide(LinearLayout, PreviewBar)}
      *
      * @param previewView The view that displays the preview
      * @param previewBar  The PreviewBar that's responsible for this preview
      */
-    void cancel(FrameLayout previewView, PreviewBar previewBar);
+    void cancel(LinearLayout previewView, PreviewBar previewBar);
 
 }

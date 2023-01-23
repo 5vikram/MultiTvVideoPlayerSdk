@@ -22,6 +22,7 @@
         <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/drawable/thumb.xml" value="0.1595" />
         <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/drawable/video_frame.xml" value="0.1355" />
         <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/layout/alert_download_dialog.xml" value="0.18084651560495937" />
+        <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/layout/alt_player.xml" value="0.1923899102180419" />
         <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/layout/balaji_exo_playback_control_view.xml" value="0.1923899102180419" />
         <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/layout/balaji_no_controller_video_player_layout.xml" value="0.12375339981867634" />
         <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/layout/balaji_video_player_layout.xml" value="0.15904232578024796" />
@@ -29,6 +30,7 @@
         <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/layout/banner_video_player.xml" value="0.18554938007695596" />
         <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/layout/exo_playback_control_view.xml" value="0.16800337695230055" />
         <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/layout/player_layout.xml" value="0.16800337695230055" />
+        <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/layout/short_video_playback_control_view.xml" value="0.1923899102180419" />
         <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/layout/short_video_player_layout.xml" value="0.18319966230476994" />
         <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/layout/track_selection_dialog.xml" value="0.1" />
         <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/layout/vvvvvvvvvvvvvvvvvvvvv.xml" value="0.264" />
@@ -37,7 +39,7 @@
     </option>
   </component>
   <component name="ExternalStorageConfigurationManager" enabled="true" />
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_15" default="true" project-jdk-name="15" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_15_PREVIEW" project-jdk-name="15" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
 </project>

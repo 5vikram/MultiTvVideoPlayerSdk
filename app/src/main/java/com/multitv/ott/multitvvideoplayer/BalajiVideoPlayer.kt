@@ -138,7 +138,7 @@ class BalajiVideoPlayer(
     private lateinit var videoPlayButton: ImageView
     private lateinit var videoPauseButton: ImageView
     private lateinit var previewTimeBar: PreviewTimeBar
-    private lateinit var previewFrameLayout: FrameLayout
+    private lateinit var previewFrameLayout: LinearLayout
     private lateinit var videoTitle: TextView
     private lateinit var epsodeButton: ImageView
     private lateinit var epsodeNextButton: ImageView
@@ -187,9 +187,8 @@ class BalajiVideoPlayer(
     private var spriteImageUrl = ""
 
 
-    private lateinit var progressBarParent: FrameLayout
     private lateinit var volumeProgressBar: SeekBar
-    private lateinit var brightnessProgressBar: ProgressBar
+
 
     private var isPipModeOn = false
 
@@ -209,7 +208,7 @@ class BalajiVideoPlayer(
     }*/
     override fun onFinishInflate() {
         val view =
-            LayoutInflater.from(getContext()).inflate(R.layout.balaji_video_player_layout, this)
+            LayoutInflater.from(getContext()).inflate(R.layout.alt_player, this)
 
         epsodeButton = view.findViewById(R.id.epsodeButton)
         epsodeNextButton = view.findViewById(R.id.epsodeNextButton)
@@ -243,9 +242,7 @@ class BalajiVideoPlayer(
         overlayImageTransparent = view.findViewById(R.id.overlayImageTransparent)
 
         resumedVideoTv = view.findViewById(R.id.resumedVideoTv)
-        progressBarParent = view.findViewById(R.id.progress_bar_parent)
         volumeProgressBar = view.findViewById(R.id.exo_volume_progress)
-        brightnessProgressBar = view.findViewById(R.id.brightness_progress_bar)
         errorRetryLayout = view.findViewById(R.id.errorRetryLayout)
         videoMenuLayout = view.findViewById(R.id.videoMenuLayout)
         volumeUnMuteButton = view.findViewById(R.id.volumeUnMuteButton)
@@ -308,7 +305,7 @@ class BalajiVideoPlayer(
         volumeMuteAndUnMuteButton.visibility = View.GONE
         setting.visibility = View.GONE
 
-        previewTimeBar.setPreviewEnabled(true)
+        //previewTimeBar.setPreviewEnabled(true)
         previewTimeBar.addOnScrubListener(this)
         previewTimeBar.setPreviewLoader(this)
 
