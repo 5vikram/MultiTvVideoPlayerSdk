@@ -270,8 +270,6 @@ class BalajiVideoPlayer(
         previewTimeBar = view.findViewById(R.id.exo_progress)
 
         previewImageView = view.findViewById(R.id.imageView)
-        videoNextButton.setVisibility(GONE)
-        videoPerviousButton.setVisibility(GONE)
         simpleExoPlayerView = view.findViewById(R.id.videoPlayer)
         videoRotationButton = view.findViewById(R.id.enter_full_screen)
         closeVideoPlayerButton = view.findViewById(R.id.closeButton);
@@ -886,6 +884,8 @@ class BalajiVideoPlayer(
 
         //var subtitleSource = SingleSampleMediaSource(subtitleUri, ...);
         videoControllerLayout?.visibility = GONE
+        previewTimeBar.visibility = GONE
+        durationLinearLayout.visibility = GONE
         videoPlayerSdkCallBackListener?.prepareVideoPlayer()
         //        ToastMessage.showLogs(ToastMessage.LogType.DEBUG, TAG, "Content url is " + videoUrl);
         val customLoadControl: LoadControl = DefaultLoadControl.Builder()
@@ -1650,25 +1650,27 @@ class BalajiVideoPlayer(
         val tickDuration = 500
         if (isShow) {
             contentRateLayout.visibility = View.VISIBLE
-            closeVideoPlayerButton!!.visibility = GONE
-            overlayImageTransparent!!.visibility = GONE
+            closeVideoPlayerButton.visibility = GONE
+            overlayImageTransparent.visibility = GONE
             centerButtonLayout.visibility = GONE
             videoMenuLayout.visibility = GONE
             resumedVideoTv.visibility = View.GONE
+            previewTimeBar.visibility = GONE
+            durationLinearLayout.visibility = GONE
         } else {
             contentRateLayout.visibility = View.GONE
             return
         }
 
 
-        if (parentalAge != null && !TextUtils.isEmpty(parentalAge)) {
+        if (!TextUtils.isEmpty(parentalAge)) {
             contentRatedTv.setText("Rated U/A " + parentalAge + "+")
             contentRatedTv.visibility = View.VISIBLE
         } else {
             contentRatedTv.visibility = View.GONE
         }
 
-        if (genure != null && !TextUtils.isEmpty(genure)) {
+        if (!TextUtils.isEmpty(genure)) {
             genureTv.setText(genure)
             genureTv.visibility = View.VISIBLE
         } else {
@@ -1676,7 +1678,7 @@ class BalajiVideoPlayer(
         }
 
 
-        if (language != null && !TextUtils.isEmpty(language)) {
+        if (!TextUtils.isEmpty(language)) {
             languageTv.setText("Language : " + language)
             languageTv.visibility = View.VISIBLE
         } else {
