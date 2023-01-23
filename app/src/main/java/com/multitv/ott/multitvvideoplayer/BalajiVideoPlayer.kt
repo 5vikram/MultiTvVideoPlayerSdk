@@ -116,7 +116,6 @@ class BalajiVideoPlayer(
     private lateinit var resumedVideoTv: TextView
     private lateinit var volumeLayout: LinearLayout
     private lateinit var volumeLinearLayout: LinearLayout
-    private lateinit var videoProgressLayout: LinearLayoutCompat
     private lateinit var bufferingProgressBarLayout: LinearLayout
     private lateinit var circularProgressLayout: LinearLayout
     private lateinit var overlayImageTransparent: View
@@ -138,7 +137,7 @@ class BalajiVideoPlayer(
     private lateinit var videoPlayButton: ImageView
     private lateinit var videoPauseButton: ImageView
     private lateinit var previewTimeBar: PreviewTimeBar
-    private lateinit var previewFrameLayout: FrameLayout
+    private lateinit var previewFrameLayout: LinearLayout
     private lateinit var videoTitle: TextView
     private lateinit var epsodeButton: ImageView
     private lateinit var epsodeNextButton: ImageView
@@ -146,9 +145,10 @@ class BalajiVideoPlayer(
     private lateinit var exoTotalDuration: TextView
     private lateinit var exoCurrentPosition: TextView
     private lateinit var skipVideoButton: TextView
+    private lateinit var durationLinearLayout: LinearLayoutCompat
 
 
-    private var videoControllerLayout: RelativeLayout? = null
+    private var videoControllerLayout: ConstraintLayout? = null
 
 
     private val formatBuilder: StringBuilder
@@ -187,9 +187,8 @@ class BalajiVideoPlayer(
     private var spriteImageUrl = ""
 
 
-    private lateinit var progressBarParent: FrameLayout
     private lateinit var volumeProgressBar: SeekBar
-    private lateinit var brightnessProgressBar: ProgressBar
+
 
     private var isPipModeOn = false
 
@@ -213,7 +212,7 @@ class BalajiVideoPlayer(
 
         epsodeButton = view.findViewById(R.id.epsodeButton)
         epsodeNextButton = view.findViewById(R.id.epsodeNextButton)
-
+        durationLinearLayout = view.findViewById(R.id.durationLinearLayout)
         epsodeButton.setOnClickListener {
             videoPlayerSdkCallBackListener?.showEpisodeListData()
         }
@@ -243,15 +242,12 @@ class BalajiVideoPlayer(
         overlayImageTransparent = view.findViewById(R.id.overlayImageTransparent)
 
         resumedVideoTv = view.findViewById(R.id.resumedVideoTv)
-        progressBarParent = view.findViewById(R.id.progress_bar_parent)
         volumeProgressBar = view.findViewById(R.id.exo_volume_progress)
-        brightnessProgressBar = view.findViewById(R.id.brightness_progress_bar)
         errorRetryLayout = view.findViewById(R.id.errorRetryLayout)
         videoMenuLayout = view.findViewById(R.id.videoMenuLayout)
         volumeUnMuteButton = view.findViewById(R.id.volumeUnMuteButton)
         bufferingProgressBarLayout = view.findViewById(R.id.bufferingProgressBarLayout)
         circularProgressLayout = view.findViewById(R.id.circularProgressLayout)
-        videoProgressLayout = findViewById(R.id.video_progress_layout)
         setting = view.findViewById(R.id.settings_btn)
         volumeLayout = view.findViewById(R.id.volumeLayout)
         volumeLinearLayout = view.findViewById(R.id.volumeLinearLayout)
@@ -308,7 +304,7 @@ class BalajiVideoPlayer(
         volumeMuteAndUnMuteButton.visibility = View.GONE
         setting.visibility = View.GONE
 
-        previewTimeBar.setPreviewEnabled(true)
+        //previewTimeBar.setPreviewEnabled(true)
         previewTimeBar.addOnScrubListener(this)
         previewTimeBar.setPreviewLoader(this)
 
@@ -600,12 +596,13 @@ class BalajiVideoPlayer(
 
 
     fun hideController() {
+        previewTimeBar.visibility = GONE
+        durationLinearLayout.visibility = GONE
         closeVideoPlayerButton.visibility = GONE
         overlayImageTransparent.visibility = GONE
         centerButtonLayout.visibility = GONE
-        videoProgressLayout.visibility = GONE
         videoMenuLayout.visibility = GONE
-        resumedVideoTv.visibility = View.GONE
+        resumedVideoTv.visibility = GONE
         removeCallbacks(hideAction)
         hideAtMs = C.TIME_UNSET
         isControllerShown = false
@@ -614,17 +611,18 @@ class BalajiVideoPlayer(
             setTimerOnVideoPlayer(true)
 
         updatePlayPauseButton()
-        contentRateLayout.visibility = View.VISIBLE
+        contentRateLayout.visibility = VISIBLE
 
     }
 
     fun showController() {
+        previewTimeBar.visibility = VISIBLE
+        durationLinearLayout.visibility = VISIBLE
         closeVideoPlayerButton.visibility = VISIBLE
         overlayImageTransparent.visibility = VISIBLE
         centerButtonLayout.visibility = VISIBLE
-        videoProgressLayout.visibility = VISIBLE
         videoMenuLayout.visibility = VISIBLE
-        resumedVideoTv.visibility = View.GONE
+        resumedVideoTv.visibility = GONE
         updatePlayPauseButton()
         hideAfterTimeout()
         isControllerShown = true
@@ -1431,10 +1429,11 @@ class BalajiVideoPlayer(
             formatter,
             progress.toLong()
         )
+        pauseVideoPlayer()
     }
 
     override fun onScrubStop(previewBar: PreviewBar) {
-       // previewFrameLayout.visibility = INVISIBLE
+        // previewFrameLayout.visibility = INVISIBLE
         if (mMediaPlayer != null) {
             seekTo(previewBar.progress.toLong())
         }
@@ -1445,9 +1444,9 @@ class BalajiVideoPlayer(
 
     override fun loadPreview(currentPosition: Long, max: Long) {
         Log.e("Video Sprite::::", "Url:::" + spriteImageUrl)
-        pauseVideoPlayer()
-        previewFrameLayout.visibility = View.VISIBLE
-        previewTimeBar.showPreview()
+
+        // previewFrameLayout.visibility = View.VISIBLE
+        // previewTimeBar.showPreview()
         Glide.with(previewImageView)
             .load(spriteImageUrl)
             .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
@@ -1654,7 +1653,6 @@ class BalajiVideoPlayer(
             closeVideoPlayerButton!!.visibility = GONE
             overlayImageTransparent!!.visibility = GONE
             centerButtonLayout.visibility = GONE
-            videoProgressLayout.visibility = GONE
             videoMenuLayout.visibility = GONE
             resumedVideoTv.visibility = View.GONE
         } else {

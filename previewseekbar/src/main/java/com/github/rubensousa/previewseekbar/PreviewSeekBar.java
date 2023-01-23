@@ -6,7 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 
 import androidx.annotation.ColorInt;
@@ -92,7 +92,7 @@ public class PreviewSeekBar extends AppCompatSeekBar implements PreviewBar {
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
         if (!delegate.isPreviewViewAttached() && !isInEditMode()) {
-            final FrameLayout previewView = PreviewDelegate.findPreviewView(
+            final LinearLayout previewView = PreviewDelegate.findPreviewView(
                     (ViewGroup) getParent(), previewId);
             if (previewView != null) {
                 delegate.attachPreviewView(previewView);
@@ -128,7 +128,7 @@ public class PreviewSeekBar extends AppCompatSeekBar implements PreviewBar {
     }
 
     @Override
-    public void attachPreviewView(@NonNull FrameLayout previewView) {
+    public void attachPreviewView(@NonNull LinearLayout previewView) {
         delegate.attachPreviewView(previewView);
     }
 

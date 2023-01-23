@@ -17,7 +17,7 @@
 package com.github.rubensousa.previewseekbar;
 
 
-import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.ColorRes;
@@ -118,7 +118,7 @@ public interface PreviewBar {
      *
      * @param previewView the preview that's displayed when this PreviewBar is scrubbed.
      */
-    void attachPreviewView(@NonNull FrameLayout previewView);
+    void attachPreviewView(@NonNull LinearLayout previewView);
 
     void addOnScrubListener(OnScrubListener listener);
 
