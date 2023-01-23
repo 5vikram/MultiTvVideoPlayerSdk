@@ -145,6 +145,7 @@ class BalajiVideoPlayer(
     private lateinit var exoTotalDuration: TextView
     private lateinit var exoCurrentPosition: TextView
     private lateinit var skipVideoButton: TextView
+    private lateinit var durationLinearLayout: LinearLayoutCompat
 
 
     private var videoControllerLayout: ConstraintLayout? = null
@@ -211,7 +212,7 @@ class BalajiVideoPlayer(
 
         epsodeButton = view.findViewById(R.id.epsodeButton)
         epsodeNextButton = view.findViewById(R.id.epsodeNextButton)
-
+        durationLinearLayout = view.findViewById(R.id.durationLinearLayout)
         epsodeButton.setOnClickListener {
             videoPlayerSdkCallBackListener?.showEpisodeListData()
         }
@@ -595,11 +596,13 @@ class BalajiVideoPlayer(
 
 
     fun hideController() {
+        previewTimeBar.visibility = GONE
+        durationLinearLayout.visibility = GONE
         closeVideoPlayerButton.visibility = GONE
         overlayImageTransparent.visibility = GONE
         centerButtonLayout.visibility = GONE
         videoMenuLayout.visibility = GONE
-        resumedVideoTv.visibility = View.GONE
+        resumedVideoTv.visibility = GONE
         removeCallbacks(hideAction)
         hideAtMs = C.TIME_UNSET
         isControllerShown = false
@@ -608,16 +611,18 @@ class BalajiVideoPlayer(
             setTimerOnVideoPlayer(true)
 
         updatePlayPauseButton()
-        contentRateLayout.visibility = View.VISIBLE
+        contentRateLayout.visibility = VISIBLE
 
     }
 
     fun showController() {
+        previewTimeBar.visibility = VISIBLE
+        durationLinearLayout.visibility = VISIBLE
         closeVideoPlayerButton.visibility = VISIBLE
         overlayImageTransparent.visibility = VISIBLE
         centerButtonLayout.visibility = VISIBLE
         videoMenuLayout.visibility = VISIBLE
-        resumedVideoTv.visibility = View.GONE
+        resumedVideoTv.visibility = GONE
         updatePlayPauseButton()
         hideAfterTimeout()
         isControllerShown = true
@@ -1428,7 +1433,7 @@ class BalajiVideoPlayer(
     }
 
     override fun onScrubStop(previewBar: PreviewBar) {
-       // previewFrameLayout.visibility = INVISIBLE
+        // previewFrameLayout.visibility = INVISIBLE
         if (mMediaPlayer != null) {
             seekTo(previewBar.progress.toLong())
         }
@@ -1440,8 +1445,8 @@ class BalajiVideoPlayer(
     override fun loadPreview(currentPosition: Long, max: Long) {
         Log.e("Video Sprite::::", "Url:::" + spriteImageUrl)
 
-       // previewFrameLayout.visibility = View.VISIBLE
-       // previewTimeBar.showPreview()
+        // previewFrameLayout.visibility = View.VISIBLE
+        // previewTimeBar.showPreview()
         Glide.with(previewImageView)
             .load(spriteImageUrl)
             .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
