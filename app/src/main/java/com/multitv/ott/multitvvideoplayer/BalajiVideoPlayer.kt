@@ -208,7 +208,7 @@ class BalajiVideoPlayer(
     }*/
     override fun onFinishInflate() {
         val view =
-            LayoutInflater.from(getContext()).inflate(R.layout.alt_player, this)
+            LayoutInflater.from(getContext()).inflate(R.layout.balaji_video_player_layout, this)
 
         epsodeButton = view.findViewById(R.id.epsodeButton)
         epsodeNextButton = view.findViewById(R.id.epsodeNextButton)
