@@ -34,7 +34,6 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import java.io.IOException
-import java.util.*
 import java.util.concurrent.CopyOnWriteArraySet
 
 
@@ -171,23 +170,37 @@ class DownloadTracker(
                     downloadsDetailsListener.cancelDownloads()
                 }
                 R.id.resume_download -> {
-                    DownloadService.sendSetStopReason(
+                   /* DownloadService.sendSetStopReason(
                         context,
                         MyDownloadService::class.java,
                         download.request.id,
                         Download.STATE_RESTARTING,
                         true
+                    )*/
+                    // Resume all downloads.
+
+                    // Resume all downloads.
+                    DownloadService.sendResumeDownloads(
+                        context,
+                        MyDownloadService::class.java,
+                        false
                     )
+
                     downloadsDetailsListener.resumeDownload()
                 }
                 R.id.pause_download -> {
-                    DownloadService.sendSetStopReason(
+                    DownloadService.sendPauseDownloads(
+                        context,
+                        MyDownloadService::class.java,
+                        false
+                    )
+                    /*DownloadService.sendSetStopReason(
                         context,
                         MyDownloadService::class.java,
                         download.request.id,
                         Download.STATE_STOPPED,
                         false
-                    )
+                    )*/
 
                     downloadsDetailsListener.pauseDownload()
                 }
