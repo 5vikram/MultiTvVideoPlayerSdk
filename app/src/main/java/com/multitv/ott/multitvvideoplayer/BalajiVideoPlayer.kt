@@ -147,7 +147,7 @@ class BalajiVideoPlayer(
     private lateinit var skipVideoButton: TextView
 
 
-    private var videoControllerLayout: RelativeLayout? = null
+    private var videoControllerLayout: ConstraintLayout? = null
 
 
     private val formatBuilder: StringBuilder
