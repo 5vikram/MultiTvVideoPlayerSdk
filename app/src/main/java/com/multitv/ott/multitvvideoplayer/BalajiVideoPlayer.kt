@@ -1424,6 +1424,7 @@ class BalajiVideoPlayer(
             formatter,
             progress.toLong()
         )
+        pauseVideoPlayer()
     }
 
     override fun onScrubStop(previewBar: PreviewBar) {
@@ -1438,9 +1439,9 @@ class BalajiVideoPlayer(
 
     override fun loadPreview(currentPosition: Long, max: Long) {
         Log.e("Video Sprite::::", "Url:::" + spriteImageUrl)
-        pauseVideoPlayer()
-        previewFrameLayout.visibility = View.VISIBLE
-        previewTimeBar.showPreview()
+
+       // previewFrameLayout.visibility = View.VISIBLE
+       // previewTimeBar.showPreview()
         Glide.with(previewImageView)
             .load(spriteImageUrl)
             .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
