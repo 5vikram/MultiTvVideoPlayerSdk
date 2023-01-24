@@ -141,7 +141,7 @@ class BalajiVideoPlayer(
     private lateinit var videoPlayButton: ImageView
     private lateinit var videoPauseButton: ImageView
     private lateinit var previewTimeBar: PreviewTimeBar
-    private lateinit var previewFrameLayout: LinearLayout
+    private lateinit var previewFrameLayout: FrameLayout
     private lateinit var videoTitle: TextView
     private lateinit var epsodeButton: ImageView
     private lateinit var epsodeNextButton: ImageView
