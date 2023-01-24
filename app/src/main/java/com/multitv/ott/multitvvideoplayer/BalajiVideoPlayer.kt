@@ -1449,8 +1449,6 @@ class BalajiVideoPlayer(
 
 
     override fun loadPreview(currentPosition: Long, max: Long) {
-        Log.e("Video Sprite::::", "Url:::" + spriteImageUrl)
-        previewFrameLayout.visibility = View.VISIBLE
         /*    previewFrameLayout.visibility = View.VISIBLE
             val targetX = updatePreviewX(currentPosition.toInt(), mMediaPlayer!!.duration.toInt())
             previewFrameLayout.x = targetX.toFloat()
