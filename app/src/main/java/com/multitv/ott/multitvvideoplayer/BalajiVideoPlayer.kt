@@ -20,6 +20,7 @@ import android.telephony.PhoneStateListener
 import android.telephony.TelephonyManager
 import android.text.TextUtils
 import android.util.AttributeSet
+import android.util.DisplayMetrics
 import android.util.Log
 import android.util.Rational
 import android.view.*
@@ -32,6 +33,7 @@ import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.Target
 import com.github.rubensousa.previewseekbar.PreviewBar
 import com.github.rubensousa.previewseekbar.PreviewLoader
@@ -47,6 +49,7 @@ import com.google.android.exoplayer2.offline.DownloadRequest
 import com.google.android.exoplayer2.source.DefaultMediaSourceFactory
 import com.google.android.exoplayer2.source.MediaSourceFactory
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
+import com.google.android.exoplayer2.ui.DefaultTimeBar
 import com.google.android.exoplayer2.ui.StyledPlayerView
 import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.DefaultAllocator
@@ -63,6 +66,7 @@ import com.multitv.ott.multitvvideoplayer.fabbutton.FabButton
 import com.multitv.ott.multitvvideoplayer.listener.VideoPlayPauseCallBackListener
 import com.multitv.ott.multitvvideoplayer.listener.VideoPlayerSdkCallBackListener
 import com.multitv.ott.multitvvideoplayer.models.SkipDuration
+import com.multitv.ott.multitvvideoplayer.playerglide.GlideApp
 import com.multitv.ott.multitvvideoplayer.playerglide.GlideThumbnailTransformation
 import com.multitv.ott.multitvvideoplayer.popup.TrackSelectionDialog
 import com.multitv.ott.multitvvideoplayer.utils.*
@@ -1430,28 +1434,72 @@ class BalajiVideoPlayer(
             progress.toLong()
         )
         pauseVideoPlayer()
+        Log.e("Video Sprite::::", "Url:::" + spriteImageUrl)
+        previewFrameLayout.visibility = View.VISIBLE
+        val targetX = updatePreviewX(progress, mMediaPlayer!!.duration.toInt())
+        previewFrameLayout.x = targetX.toFloat()
+        GlideApp.with(previewImageView)
+            .load(spriteImageUrl)
+            .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
+            .transform(GlideThumbnailTransformation(progress.toLong()))
+            .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+            .into(previewImageView)
     }
 
     override fun onScrubStop(previewBar: PreviewBar) {
-        // previewFrameLayout.visibility = INVISIBLE
+        previewFrameLayout.visibility = INVISIBLE
         if (mMediaPlayer != null) {
             seekTo(previewBar.progress.toLong())
         }
-        //previewTimeBar.hidePreview()
+
         resumeVideoPlayer()
     }
 
 
     override fun loadPreview(currentPosition: Long, max: Long) {
-        Log.e("Video Sprite::::", "Url:::" + spriteImageUrl)
 
-        // previewFrameLayout.visibility = View.VISIBLE
-        // previewTimeBar.showPreview()
-        Glide.with(previewImageView)
+       /* Glide.with(previewImageView)
             .load(spriteImageUrl)
             .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
             .transform(GlideThumbnailTransformation(currentPosition))
-            .into(previewImageView)
+            .into(previewImageView)*/
+    }
+
+
+    private fun updatePreviewX(progress: Int, max: Int): Int {
+        if (max == 0) {
+            return 0
+        }
+
+        val parent = previewFrameLayout.parent as ViewGroup
+        val layoutParams = previewFrameLayout.layoutParams as MarginLayoutParams
+        val offset = progress.toFloat() / max
+        val minimumX: Int = previewFrameLayout.left
+        val maximumX = (parent.width - parent.paddingRight - layoutParams.rightMargin)
+
+// We remove the padding of the scrubbing, if you have a custom size juste use dimen to calculate this
+        val previewPaddingRadius: Int =
+            dpToPx(resources.displayMetrics, DefaultTimeBar.DEFAULT_SCRUBBER_DRAGGED_SIZE_DP).div(2)
+        val previewLeftX = (previewTimeBar as View).left.toFloat()
+        val previewRightX = (previewTimeBar as View).right.toFloat()
+        val previewSeekBarStartX: Float = previewLeftX + previewPaddingRadius
+        val previewSeekBarEndX: Float = previewRightX - previewPaddingRadius
+        val currentX = (previewSeekBarStartX + (previewSeekBarEndX - previewSeekBarStartX) * offset)
+        val startX: Float = currentX - previewFrameLayout.width / 2f
+        val endX: Float = startX + previewFrameLayout.width
+
+        // Clamp the moves
+        return if (startX >= minimumX && endX <= maximumX) {
+            startX.toInt()
+        } else if (startX < minimumX) {
+            minimumX
+        } else {
+            maximumX - previewFrameLayout.width
+        }
+    }
+
+    private fun dpToPx(displayMetrics: DisplayMetrics, dps: Int): Int {
+        return (dps * displayMetrics.density).toInt()
     }
 
 
