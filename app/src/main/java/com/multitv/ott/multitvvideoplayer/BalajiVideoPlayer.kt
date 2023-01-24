@@ -9,8 +9,10 @@ import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.content.res.Configuration
+import android.graphics.Bitmap
 import android.graphics.drawable.Icon
 import android.media.AudioManager
+import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.os.Build
 import android.os.Handler
@@ -33,7 +35,6 @@ import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.Target
 import com.github.rubensousa.previewseekbar.PreviewBar
 import com.github.rubensousa.previewseekbar.PreviewLoader
@@ -66,7 +67,6 @@ import com.multitv.ott.multitvvideoplayer.fabbutton.FabButton
 import com.multitv.ott.multitvvideoplayer.listener.VideoPlayPauseCallBackListener
 import com.multitv.ott.multitvvideoplayer.listener.VideoPlayerSdkCallBackListener
 import com.multitv.ott.multitvvideoplayer.models.SkipDuration
-
 import com.multitv.ott.multitvvideoplayer.playerglide.GlideThumbnailTransformation
 import com.multitv.ott.multitvvideoplayer.popup.TrackSelectionDialog
 import com.multitv.ott.multitvvideoplayer.utils.*
@@ -1449,21 +1449,43 @@ class BalajiVideoPlayer(
 
     override fun loadPreview(currentPosition: Long, max: Long) {
         Log.e("Video Sprite::::", "Url:::" + spriteImageUrl)
-    /*    previewFrameLayout.visibility = View.VISIBLE
-        val targetX = updatePreviewX(currentPosition.toInt(), mMediaPlayer!!.duration.toInt())
-        previewFrameLayout.x = targetX.toFloat()
-        Glide.with(previewImageView)
+        previewFrameLayout.visibility = View.VISIBLE
+        /*    previewFrameLayout.visibility = View.VISIBLE
+            val targetX = updatePreviewX(currentPosition.toInt(), mMediaPlayer!!.duration.toInt())
+            previewFrameLayout.x = targetX.toFloat()
+            Glide.with(previewImageView)
+                .load(spriteImageUrl)
+                .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
+                .transform(GlideThumbnailTransformation(currentPosition))
+                .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+                .into(previewImageView)*/
+
+        /*Glide.with(previewImageView)
             .load(spriteImageUrl)
             .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
             .transform(GlideThumbnailTransformation(currentPosition))
-            .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
             .into(previewImageView)*/
 
-        Glide.with(previewImageView)
-            .load(spriteImageUrl)
-            .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
-            .transform(GlideThumbnailTransformation(currentPosition))
-            .into(previewImageView)
+        previewImageView.setImageBitmap(getVideoFrame(getVideoUrl(), currentPosition))
+    }
+
+
+    fun getVideoFrame(uri: Uri?, time: Long): Bitmap? {
+        var bitmap: Bitmap? = null
+        val retriever = MediaMetadataRetriever()
+        try {
+            retriever.setDataSource(context, uri)
+            bitmap = retriever.getFrameAtTime(time)
+        } catch (ex: RuntimeException) {
+            ex.printStackTrace()
+        } finally {
+            try {
+                retriever.release()
+            } catch (ex: RuntimeException) {
+                ex.printStackTrace()
+            }
+        }
+        return bitmap
     }
 
 
