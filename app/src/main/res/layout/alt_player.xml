@@ -475,7 +475,7 @@
 
 
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/previewFrameLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -493,13 +493,13 @@
         app:layout_constraintWidth_percent="0.35"
         tools:visibility="visible">
 
-        <ImageView
+        <FrameLayout
             android:id="@+id/imageView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="@dimen/video_frame_width"
             android:scaleType="fitXY" />
-    </LinearLayout>
+    </RelativeLayout>
 
 
 

@@ -20,7 +20,7 @@ package com.github.rubensousa.previewseekbar.animator;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.view.View;
-import android.widget.LinearLayout;
+import android.widget.FrameLayout;
 
 import com.github.rubensousa.previewseekbar.PreviewBar;
 
@@ -44,12 +44,12 @@ public class PreviewFadeAnimator implements PreviewAnimator {
     }
 
     @Override
-    public void move(LinearLayout previewView, PreviewBar previewBar) {
+    public void move(FrameLayout previewView, PreviewBar previewBar) {
 
     }
 
     @Override
-    public void show(LinearLayout previewView, PreviewBar previewBar) {
+    public void show(FrameLayout previewView, PreviewBar previewBar) {
         previewView.animate().setListener(null);
         previewView.animate().cancel();
         previewView.setAlpha(0f);
@@ -60,7 +60,7 @@ public class PreviewFadeAnimator implements PreviewAnimator {
     }
 
     @Override
-    public void hide(final LinearLayout previewView, PreviewBar previewBar) {
+    public void hide(final FrameLayout previewView, PreviewBar previewBar) {
         previewView.animate().setListener(null);
         previewView.animate().cancel();
         previewView.setVisibility(View.VISIBLE);
@@ -86,7 +86,7 @@ public class PreviewFadeAnimator implements PreviewAnimator {
     }
 
     @Override
-    public void cancel(LinearLayout previewView, PreviewBar previewBar) {
+    public void cancel(FrameLayout previewView, PreviewBar previewBar) {
         previewView.animate().setListener(null);
         previewView.animate().cancel();
     }

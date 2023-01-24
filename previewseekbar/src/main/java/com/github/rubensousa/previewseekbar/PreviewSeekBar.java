@@ -6,7 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
+import android.widget.FrameLayout;
 import android.widget.SeekBar;
 
 import androidx.annotation.ColorInt;
@@ -32,7 +32,7 @@ public class PreviewSeekBar extends AppCompatSeekBar implements PreviewBar {
     }
 
     public PreviewSeekBar(Context context, AttributeSet attrs) {
-        this(context, attrs, androidx.appcompat.R.attr.seekBarStyle);
+        this(context, attrs,androidx.appcompat.R.attr.seekBarStyle);
     }
 
     public PreviewSeekBar(Context context, AttributeSet attrs, int defStyleAttr) {
@@ -92,7 +92,7 @@ public class PreviewSeekBar extends AppCompatSeekBar implements PreviewBar {
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
         if (!delegate.isPreviewViewAttached() && !isInEditMode()) {
-            final LinearLayout previewView = PreviewDelegate.findPreviewView(
+            final FrameLayout previewView = PreviewDelegate.findPreviewView(
                     (ViewGroup) getParent(), previewId);
             if (previewView != null) {
                 delegate.attachPreviewView(previewView);
@@ -128,7 +128,7 @@ public class PreviewSeekBar extends AppCompatSeekBar implements PreviewBar {
     }
 
     @Override
-    public void attachPreviewView(@NonNull LinearLayout previewView) {
+    public void attachPreviewView(@NonNull FrameLayout previewView) {
         delegate.attachPreviewView(previewView);
     }
 
@@ -186,22 +186,22 @@ public class PreviewSeekBar extends AppCompatSeekBar implements PreviewBar {
     }
 
     @Override
-    public void addOnScrubListener(PreviewBar.OnScrubListener listener) {
+    public void addOnScrubListener(OnScrubListener listener) {
         delegate.addOnScrubListener(listener);
     }
 
     @Override
-    public void removeOnScrubListener(PreviewBar.OnScrubListener listener) {
+    public void removeOnScrubListener(OnScrubListener listener) {
         delegate.removeOnScrubListener(listener);
     }
 
     @Override
-    public void addOnPreviewVisibilityListener(PreviewBar.OnPreviewVisibilityListener listener) {
+    public void addOnPreviewVisibilityListener(OnPreviewVisibilityListener listener) {
         delegate.addOnPreviewVisibilityListener(listener);
     }
 
     @Override
-    public void removeOnPreviewVisibilityListener(PreviewBar.OnPreviewVisibilityListener listener) {
+    public void removeOnPreviewVisibilityListener(OnPreviewVisibilityListener listener) {
         delegate.removeOnPreviewVisibilityListener(listener);
     }
 

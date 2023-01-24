@@ -1448,10 +1448,8 @@ class BalajiVideoPlayer(
 
 
     override fun loadPreview(currentPosition: Long, max: Long) {
-
-
         Log.e("Video Sprite::::", "Url:::" + spriteImageUrl)
-        previewFrameLayout.visibility = View.VISIBLE
+    /*    previewFrameLayout.visibility = View.VISIBLE
         val targetX = updatePreviewX(currentPosition.toInt(), mMediaPlayer!!.duration.toInt())
         previewFrameLayout.x = targetX.toFloat()
         Glide.with(previewImageView)
@@ -1459,13 +1457,13 @@ class BalajiVideoPlayer(
             .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
             .transform(GlideThumbnailTransformation(currentPosition))
             .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-            .into(previewImageView)
+            .into(previewImageView)*/
 
-       /* Glide.with(previewImageView)
+        Glide.with(previewImageView)
             .load(spriteImageUrl)
             .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
             .transform(GlideThumbnailTransformation(currentPosition))
-            .into(previewImageView)*/
+            .into(previewImageView)
     }
 
 
