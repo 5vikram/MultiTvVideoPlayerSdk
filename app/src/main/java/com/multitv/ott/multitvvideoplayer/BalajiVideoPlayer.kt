@@ -66,7 +66,7 @@ import com.multitv.ott.multitvvideoplayer.fabbutton.FabButton
 import com.multitv.ott.multitvvideoplayer.listener.VideoPlayPauseCallBackListener
 import com.multitv.ott.multitvvideoplayer.listener.VideoPlayerSdkCallBackListener
 import com.multitv.ott.multitvvideoplayer.models.SkipDuration
-import com.multitv.ott.multitvvideoplayer.playerglide.GlideApp
+
 import com.multitv.ott.multitvvideoplayer.playerglide.GlideThumbnailTransformation
 import com.multitv.ott.multitvvideoplayer.popup.TrackSelectionDialog
 import com.multitv.ott.multitvvideoplayer.utils.*
@@ -1438,7 +1438,7 @@ class BalajiVideoPlayer(
         previewFrameLayout.visibility = View.VISIBLE
         val targetX = updatePreviewX(progress, mMediaPlayer!!.duration.toInt())
         previewFrameLayout.x = targetX.toFloat()
-        GlideApp.with(previewImageView)
+        Glide.with(previewImageView)
             .load(spriteImageUrl)
             .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
             .transform(GlideThumbnailTransformation(progress.toLong()))
