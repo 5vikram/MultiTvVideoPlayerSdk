@@ -1434,16 +1434,7 @@ class BalajiVideoPlayer(
             progress.toLong()
         )
         pauseVideoPlayer()
-        Log.e("Video Sprite::::", "Url:::" + spriteImageUrl)
-        previewFrameLayout.visibility = View.VISIBLE
-        val targetX = updatePreviewX(progress, mMediaPlayer!!.duration.toInt())
-        previewFrameLayout.x = targetX.toFloat()
-        Glide.with(previewImageView)
-            .load(spriteImageUrl)
-            .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
-            .transform(GlideThumbnailTransformation(progress.toLong()))
-            .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-            .into(previewImageView)
+
     }
 
     override fun onScrubStop(previewBar: PreviewBar) {
@@ -1457,6 +1448,18 @@ class BalajiVideoPlayer(
 
 
     override fun loadPreview(currentPosition: Long, max: Long) {
+
+
+        Log.e("Video Sprite::::", "Url:::" + spriteImageUrl)
+        previewFrameLayout.visibility = View.VISIBLE
+        val targetX = updatePreviewX(currentPosition.toInt(), mMediaPlayer!!.duration.toInt())
+        previewFrameLayout.x = targetX.toFloat()
+        Glide.with(previewImageView)
+            .load(spriteImageUrl)
+            .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
+            .transform(GlideThumbnailTransformation(currentPosition))
+            .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+            .into(previewImageView)
 
        /* Glide.with(previewImageView)
             .load(spriteImageUrl)
