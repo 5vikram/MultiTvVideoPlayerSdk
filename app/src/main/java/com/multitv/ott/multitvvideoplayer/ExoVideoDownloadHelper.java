@@ -55,6 +55,11 @@ public class ExoVideoDownloadHelper implements DownloadTracker.Listener, SdkPopC
 
     }
 
+
+    public boolean getDownloadRequestCount() {
+        return DownloadUtil.INSTANCE.getDownloadTracker(context).isMediaDownloadRequestInQueue();
+    }
+
     public void downloadVideo(String url, String videoTitle, Long videoDurationInSeconds) {
         mediaItem = getMediaItem(url, videoTitle);
         if (DownloadUtil.INSTANCE.getDownloadTracker(context).isDownloaded(getMediaItem(url, videoTitle))) {
@@ -68,7 +73,7 @@ public class ExoVideoDownloadHelper implements DownloadTracker.Listener, SdkPopC
 
     public void downloadPopUpMenuOption(View view, String uri) {
         DownloadUtil.INSTANCE.getDownloadTracker(context)
-                .toggleDownloadPopupMenu(context, view, Uri.parse(uri),downloadsDetailsListener);
+                .toggleDownloadPopupMenu(context, view, Uri.parse(uri), downloadsDetailsListener);
     }
 
 
@@ -98,7 +103,6 @@ public class ExoVideoDownloadHelper implements DownloadTracker.Listener, SdkPopC
     public boolean isVideoStateResumeAndPause(String videoUrl, String videoTitle) {
         return DownloadUtil.INSTANCE.getDownloadTracker(context).isVideoDownloadingPauseAndResume(getMediaItem(videoUrl, videoTitle));
     }
-
 
 
     public void removeDownload() {
