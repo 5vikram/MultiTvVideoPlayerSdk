@@ -1428,6 +1428,7 @@ class BalajiVideoPlayer(
     }
 
     override fun onScrubMove(previewBar: PreviewBar, progress: Int, fromUser: Boolean) {
+        previewFrameLayout.visibility = View.VISIBLE
         exoCurrentPosition.text = Util.getStringForTime(
             formatBuilder,
             formatter,
@@ -1459,34 +1460,15 @@ class BalajiVideoPlayer(
                 .transform(GlideThumbnailTransformation(currentPosition))
                 .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
                 .into(previewImageView)*/
-
-        /*Glide.with(previewImageView)
+        previewFrameLayout.visibility = View.VISIBLE
+        Glide.with(previewImageView)
             .load(spriteImageUrl)
             .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
             .transform(GlideThumbnailTransformation(currentPosition))
-            .into(previewImageView)*/
+            .into(previewImageView)
 
-        previewImageView.setImageBitmap(getVideoFrame(getVideoUrl(), currentPosition))
     }
 
-
-    fun getVideoFrame(uri: Uri?, time: Long): Bitmap? {
-        var bitmap: Bitmap? = null
-        val retriever = MediaMetadataRetriever()
-        try {
-            retriever.setDataSource(context, uri)
-            bitmap = retriever.getFrameAtTime(time)
-        } catch (ex: RuntimeException) {
-            ex.printStackTrace()
-        } finally {
-            try {
-                retriever.release()
-            } catch (ex: RuntimeException) {
-                ex.printStackTrace()
-            }
-        }
-        return bitmap
-    }
 
 
     private fun updatePreviewX(progress: Int, max: Int): Int {
