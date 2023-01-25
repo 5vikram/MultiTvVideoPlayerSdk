@@ -35,6 +35,7 @@
             android:background="?attr/selectableItemBackground"
             android:clickable="true"
             android:focusable="true"
+            android:focusableInTouchMode="true"
             android:padding="5dp"
             android:src="@mipmap/player_back_btn" />
 
@@ -141,6 +142,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginRight="5dp"
                     android:focusable="true"
+                    android:focusableInTouchMode="true"
                     android:background="?attr/selectableItemBackground"
                     android:src="@drawable/ic_balaji_backward_10_sec" />
 
@@ -162,6 +164,7 @@
                 android:layout_gravity="center_vertical"
                 android:padding="5dp"
                 android:focusable="true"
+                android:focusableInTouchMode="true"
                 android:background="?attr/selectableItemBackground"
                 android:src="@drawable/ic_balaji_pause" />
 
@@ -172,6 +175,7 @@
                 android:layout_gravity="center_vertical"
                 android:padding="5dp"
                 android:focusable="true"
+                android:focusableInTouchMode="true"
                 android:background="?attr/selectableItemBackground"
                 android:src="@drawable/ic_balaji_play" />
 
@@ -198,6 +202,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="10dp"
                     android:focusable="true"
+                    android:focusableInTouchMode="true"
                     android:background="?attr/selectableItemBackground"
                     android:src="@drawable/ic_balaji_farward_10_sec" />
 
@@ -213,6 +218,7 @@
                 android:layout_marginRight="10dp"
                 android:src="@drawable/next"
                 android:focusable="true"
+                android:focusableInTouchMode="true"
                 android:background="?attr/selectableItemBackground"
                 android:visibility="gone" />
 
@@ -228,9 +234,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginLeft="7dp"
+        android:layout_marginLeft="15dp"
         android:layout_marginTop="2dp"
-        android:layout_marginRight="10dp"
+        android:layout_marginRight="15dp"
         android:layout_marginBottom="3dp"
         android:orientation="horizontal">
 
@@ -256,6 +262,7 @@
                 android:layout_marginRight="5dp"
                 android:padding="5dp"
                 android:focusable="true"
+                android:focusableInTouchMode="true"
                 android:background="?attr/selectableItemBackground"
                 android:src="@drawable/webseries"
                 android:visibility="gone" />
@@ -270,6 +277,7 @@
                 android:background="?attr/selectableItemBackground"
                 android:padding="5dp"
                 android:focusable="true"
+                android:focusableInTouchMode="true"
                 android:src="@drawable/next_epsode"
                 android:visibility="gone" />
 
@@ -283,6 +291,7 @@
                 android:background="?attr/selectableItemBackground"
                 android:padding="5dp"
                 android:focusable="true"
+                android:focusableInTouchMode="true"
                 android:src="@drawable/ic_balaji_volume_on" />
 
             <SeekBar
@@ -293,6 +302,7 @@
                 android:layout_marginRight="40dp"
                 android:maxHeight="8dp"
                 android:focusable="true"
+                android:focusableInTouchMode="true"
                 android:background="?attr/selectableItemBackground"
                 android:progressDrawable="@drawable/seekbar_progress_style"
                 android:thumb="@drawable/seekbar_thumb"
@@ -337,6 +347,7 @@
                     android:layout_marginRight="5dp"
                     android:padding="5dp"
                     android:focusable="true"
+                    android:focusableInTouchMode="true"
                     android:background="?attr/selectableItemBackground"
                     android:src="@drawable/ic_balaji_volume_on" />
 
@@ -349,6 +360,7 @@
                     android:layout_marginRight="5dp"
                     android:padding="5dp"
                     android:focusable="true"
+                    android:focusableInTouchMode="true"
                     android:background="?attr/selectableItemBackground"
                     android:src="@drawable/ic_balaji_volume_off"
                     android:visibility="gone" />
@@ -365,6 +377,7 @@
                 android:background="@android:color/transparent"
                 android:padding="5dp"
                 android:focusable="true"
+                android:focusableInTouchMode="true"
                 android:src="@drawable/ic_balaji_setting" />
 
             <ImageView
@@ -409,7 +422,7 @@
         android:id="@+id/exo_progress"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="15dp"
         android:layout_marginEnd="8dp"
         app:layout_constraintBottom_toBottomOf="@id/vvvvvvvvvv"
         app:layout_constraintEnd_toStartOf="@id/durationLinearLayout"
@@ -418,6 +431,8 @@
         app:previewAnimationEnabled="true"
         app:previewFrameLayout="@id/previewFrameLayout"
         app:scrubber_dragged_size="24dp"
+        android:focusableInTouchMode="true"
+        android:focusable="true"
         android:background="?attr/selectableItemBackground"
         app:scrubber_enabled_size="16dp" />
 
@@ -443,6 +458,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:gravity="bottom"
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="5dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toTopOf="@id/videoMenuLayout"
         app:layout_constraintEnd_toEndOf="parent">

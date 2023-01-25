@@ -507,11 +507,11 @@ class AltbalajiTvVideoPlayer (
 
     private fun hideAfterTimeout() {
         removeCallbacks(hideAction)
-        if (5000 > 0) {
+        if (10000 > 0) {
             VideoPlayerTracer.error("Controller Listener:::", "Start Timer")
-            hideAtMs = SystemClock.uptimeMillis() + 5000
+            hideAtMs = SystemClock.uptimeMillis() + 10000
             if (isAttachedToWindow) {
-                postDelayed(hideAction, 5000)
+                postDelayed(hideAction, 10000)
             }
         } else {
             hideAtMs = C.TIME_UNSET
@@ -801,19 +801,16 @@ class AltbalajiTvVideoPlayer (
 
 
     private fun initializeMainPlayer(videoUrl: String?, isNeedToPlayInstantly: Boolean) {
-//        ToastMessage.showLogs(ToastMessage.LogType.ERROR, "Video Player:::", "initializeMainPlayer");
+
         if (mMediaPlayer != null) {
             mMediaPlayer!!.release()
             if (adsLoader != null) adsLoader!!.setPlayer(null)
             mMediaPlayer = null
         }
 
-        //var subtitleSource = SingleSampleMediaSource(subtitleUri, ...);
-        videoControllerLayout?.visibility = GONE
-        previewTimeBar.visibility = GONE
-        durationLinearLayout.visibility = GONE
+
         videoPlayerSdkCallBackListener?.prepareVideoPlayer()
-        //        ToastMessage.showLogs(ToastMessage.LogType.DEBUG, TAG, "Content url is " + videoUrl);
+
         val customLoadControl: LoadControl = DefaultLoadControl.Builder()
             .setBufferDurationsMs(1000, 50000, 1000, 1)
             .setAllocator(DefaultAllocator(true, 32 * 1024))
@@ -955,7 +952,7 @@ class AltbalajiTvVideoPlayer (
             mediaSessionConnector.setPlayer(mMediaPlayer)
             mediaSession.isActive = true
 
-            var volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
+            val volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
             mMediaPlayer?.audioComponent?.volume = volume.toFloat()
             if (volume < 1) {
                 volumeMuteAndUnMuteButton.visibility = View.VISIBLE
