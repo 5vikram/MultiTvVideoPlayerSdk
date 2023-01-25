@@ -30,7 +30,7 @@ class GlideThumbnailTransformation(position: Long) : BitmapTransformation() {
         val width = toTransform.width / MAX_COLUMNS
         val height = toTransform.height / MAX_LINES
 
-        return Bitmap.createBitmap(toTransform, x * width, y * height, width, height)
+        return Bitmap.createBitmap(toTransform, x * width, 0, width, height)
     }
 
     override fun updateDiskCacheKey(messageDigest: MessageDigest) {
