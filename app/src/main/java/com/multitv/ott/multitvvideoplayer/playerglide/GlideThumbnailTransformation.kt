@@ -6,9 +6,9 @@ import com.bumptech.glide.load.resource.bitmap.BitmapTransformation
 import java.nio.ByteBuffer
 import java.security.MessageDigest
 
-private const val MAX_LINES = 7
-private const val MAX_COLUMNS = 7
-private const val THUMBNAILS_EACH = 5000 // milliseconds
+private const val MAX_LINES = 26
+private const val MAX_COLUMNS = 10
+private const val THUMBNAILS_EACH = 1000 // milliseconds
 
 class GlideThumbnailTransformation(position: Long) : BitmapTransformation() {
 

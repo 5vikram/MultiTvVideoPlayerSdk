@@ -6,13 +6,10 @@ import android.app.*
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
-import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.content.res.Configuration
-import android.graphics.Bitmap
 import android.graphics.drawable.Icon
 import android.media.AudioManager
-import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.os.Build
 import android.os.Handler
@@ -24,7 +21,6 @@ import android.text.TextUtils
 import android.util.AttributeSet
 import android.util.DisplayMetrics
 import android.util.Log
-import android.util.Rational
 import android.view.*
 import android.view.View.OnClickListener
 import android.widget.*
@@ -71,20 +67,21 @@ import com.multitv.ott.multitvvideoplayer.models.SkipDuration
 import com.multitv.ott.multitvvideoplayer.playerglide.GlideThumbnailTransformation
 import com.multitv.ott.multitvvideoplayer.popup.TrackSelectionDialog
 import com.multitv.ott.multitvvideoplayer.utils.*
+import com.multitv.ott.multitvvideoplayer.videoplayer.MyVideoPlayer
 import com.pallycon.widevinelibrary.*
 import java.util.*
 
-class BalajiVideoPlayer(
+class AltbalajiTvVideoPlayer (
     private val context: AppCompatActivity,
     attrs: AttributeSet?,
     defStyleAttr: Int
 ) : FrameLayout(
     context, attrs, defStyleAttr
-), PreviewBar.OnScrubListener, PreviewLoader, OnClickListener, SessionAvailabilityListener {
+), PreviewBar.OnScrubListener, PreviewLoader, View.OnClickListener, SessionAvailabilityListener {
     private val sharedPreferencePlayer: SharedPreferencePlayer
     private var contentType: ContentType? = null
     private var mMediaPlayer: ExoPlayer? = null
-    private var simpleExoPlayerView: StyledPlayerView? = null
+    private var simpleExoPlayerView: MyVideoPlayer? = null
     private var trackSelector: DefaultTrackSelector
 
     private var videoPlayPauseCallBackListener: VideoPlayPauseCallBackListener? = null
@@ -126,7 +123,6 @@ class BalajiVideoPlayer(
     private lateinit var overlayImageTransparent: View
     private lateinit var circularProgressRing: FabButton
     private lateinit var centerButtonLayout: LinearLayout
-    private lateinit var pictureInPicture: ImageView
     private lateinit var previewImageView: ImageView
     private lateinit var videoLockButton: ImageView
     private lateinit var videoUnLockButton: ImageView
@@ -134,7 +130,6 @@ class BalajiVideoPlayer(
     private lateinit var volumeUnMuteButton: ImageView
     private lateinit var closeVideoPlayerButton: ImageView
     private lateinit var setting: ImageView
-    private lateinit var videoRotationButton: ImageView
     private lateinit var videoPerviousButton: ImageView
     private lateinit var videoNextButton: ImageView
     private lateinit var VideoRenuButton: ImageView
@@ -213,7 +208,7 @@ class BalajiVideoPlayer(
     }*/
     override fun onFinishInflate() {
         val view =
-            LayoutInflater.from(getContext()).inflate(R.layout.balaji_video_player_layout, this)
+            LayoutInflater.from(getContext()).inflate(R.layout.alt_balaji_tv_video_player, this)
 
         epsodeButton = view.findViewById(R.id.epsodeButton)
         epsodeNextButton = view.findViewById(R.id.epsodeNextButton)
@@ -276,36 +271,11 @@ class BalajiVideoPlayer(
 
         previewImageView = view.findViewById(R.id.imageView)
         simpleExoPlayerView = view.findViewById(R.id.videoPlayer)
-        videoRotationButton = view.findViewById(R.id.enter_full_screen)
-        closeVideoPlayerButton = view.findViewById(R.id.closeButton);
-        pictureInPicture = view.findViewById(R.id.picture_in_picture)
+        closeVideoPlayerButton = view.findViewById(R.id.closeButton)
         videoNextButton.setVisibility(GONE)
         videoPerviousButton.setVisibility(GONE)
 
-        videoRotationButton.setOnClickListener(OnClickListener {
-            val orientation = getContext().resources.configuration.orientation
-            if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                (getContext() as Activity).requestedOrientation =
-                    ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-                (getContext() as Activity).window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
-                showSystemBar()
-                videoRotationButton.setImageResource(R.drawable.ic_balaji_fullscreen)
-                videoLockButton.setVisibility(GONE)
-                videoUnLockButton.setVisibility(GONE)
-                setting.visibility = View.GONE
-            } else if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-                (getContext() as Activity).requestedOrientation =
-                    ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-                (getContext() as Activity).window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
-                hideSystemBars()
-                setting.visibility = View.VISIBLE
-                videoRotationButton.setImageResource(R.drawable.ic_minimize)
-                videoLockUnlockStatus()
-            }
-        })
-
         volumeMuteAndUnMuteButton.visibility = View.GONE
-        setting.visibility = View.GONE
 
         //previewTimeBar.setPreviewEnabled(true)
         previewTimeBar.addOnScrubListener(this)
@@ -331,18 +301,7 @@ class BalajiVideoPlayer(
 
 
         closeVideoPlayerButton.setOnClickListener {
-            val orientation = getContext().resources.configuration.orientation
-
-            if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                (getContext() as Activity).requestedOrientation =
-                    ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-                (getContext() as Activity).window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
-                showSystemBar()
-                setting.visibility = View.GONE
-                videoRotationButton.setImageResource(R.drawable.ic_balaji_fullscreen)
-            } else {
-                context.finish()
-            }
+            context.finish()
         }
 
 
@@ -360,28 +319,6 @@ class BalajiVideoPlayer(
             initializeMainPlayer(mContentUrl, true)
         })
 
-        pictureInPicture.setOnClickListener(OnClickListener {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                hideController()
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    val aspectRatio = Rational(16, 9)
-                    val actions: ArrayList<RemoteAction> = ArrayList()
-
-                    videoTitle.visibility = View.VISIBLE
-                    contentRateLayout.visibility = View.GONE
-                    //actions.add(remoteAction)
-                    mPictureInPictureParamsBuilder.setAspectRatio(aspectRatio)
-                        .build()
-                    context.enterPictureInPictureMode(mPictureInPictureParamsBuilder.build())
-
-                } else {
-                    context.enterPictureInPictureMode()
-                }
-
-                isPipModeOn = true
-            }
-        })
         VideoRenuButton.setOnClickListener(OnClickListener { rewind() })
         videoFarwardButton.setOnClickListener(OnClickListener { fastForward() })
         videoPlayButton.setOnClickListener(OnClickListener {
@@ -441,15 +378,6 @@ class BalajiVideoPlayer(
         val units = duration.split(":".toRegex()).toTypedArray()
     }
 
-    fun setEnableFullScreenButton(isEnable: Boolean) {
-        if (isEnable) {
-            videoRotationButton.isClickable = true
-            videoRotationButton.isFocusable = true
-        } else {
-            videoRotationButton.isClickable = false
-            videoRotationButton.isFocusable = false
-        }
-    }
 
 
     fun setWebSeriesEnable(
@@ -496,13 +424,6 @@ class BalajiVideoPlayer(
         volumeLinearLayout.visibility = View.GONE
     }
 
-    fun showRotateButton() {
-        videoRotationButton.visibility = View.VISIBLE
-    }
-
-    fun hideRotateButton() {
-        videoRotationButton.visibility = View.GONE
-    }
 
 
     fun showBackButton() {
@@ -586,11 +507,11 @@ class BalajiVideoPlayer(
 
     private fun hideAfterTimeout() {
         removeCallbacks(hideAction)
-        if (5000 > 0) {
+        if (10000 > 0) {
             VideoPlayerTracer.error("Controller Listener:::", "Start Timer")
-            hideAtMs = SystemClock.uptimeMillis() + 5000
+            hideAtMs = SystemClock.uptimeMillis() + 10000
             if (isAttachedToWindow) {
-                postDelayed(hideAction, 5000)
+                postDelayed(hideAction, 10000)
             }
         } else {
             hideAtMs = C.TIME_UNSET
@@ -880,19 +801,21 @@ class BalajiVideoPlayer(
 
 
     private fun initializeMainPlayer(videoUrl: String?, isNeedToPlayInstantly: Boolean) {
-//        ToastMessage.showLogs(ToastMessage.LogType.ERROR, "Video Player:::", "initializeMainPlayer");
+
         if (mMediaPlayer != null) {
             mMediaPlayer!!.release()
             if (adsLoader != null) adsLoader!!.setPlayer(null)
             mMediaPlayer = null
         }
 
-        //var subtitleSource = SingleSampleMediaSource(subtitleUri, ...);
-        videoControllerLayout?.visibility = GONE
-        previewTimeBar.visibility = GONE
-        durationLinearLayout.visibility = GONE
+        isFocusable = true
+        isFocusableInTouchMode = true
+        descendantFocusability = FOCUS_AFTER_DESCENDANTS
+        requestFocus()
+        isEnabled = true
+
         videoPlayerSdkCallBackListener?.prepareVideoPlayer()
-        //        ToastMessage.showLogs(ToastMessage.LogType.DEBUG, TAG, "Content url is " + videoUrl);
+
         val customLoadControl: LoadControl = DefaultLoadControl.Builder()
             .setBufferDurationsMs(1000, 50000, 1000, 1)
             .setAllocator(DefaultAllocator(true, 32 * 1024))
@@ -1034,7 +957,7 @@ class BalajiVideoPlayer(
             mediaSessionConnector.setPlayer(mMediaPlayer)
             mediaSession.isActive = true
 
-            var volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
+            val volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
             mMediaPlayer?.audioComponent?.volume = volume.toFloat()
             if (volume < 1) {
                 volumeMuteAndUnMuteButton.visibility = View.VISIBLE
@@ -1776,23 +1699,7 @@ class BalajiVideoPlayer(
     }
 
     fun onBackButtonPress() {
-        val orientation = getContext().resources.configuration.orientation
-        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            (getContext() as Activity).requestedOrientation =
-                ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-            (getContext() as Activity).window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
-            showSystemBar()
-            videoRotationButton.setImageResource(R.drawable.ic_balaji_fullscreen)
-            videoLockButton.setVisibility(GONE)
-            videoUnLockButton.setVisibility(GONE)
-        } else if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-            (getContext() as Activity).requestedOrientation =
-                ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-            (getContext() as Activity).window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
-            hideSystemBars()
-            videoRotationButton.setImageResource(R.drawable.ic_minimize)
-            videoLockUnlockStatus()
-        }
+        showSystemBar()
     }
 
 
