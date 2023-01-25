@@ -66,6 +66,7 @@ import com.multitv.ott.multitvvideoplayer.models.SkipDuration
 import com.multitv.ott.multitvvideoplayer.playerglide.GlideThumbnailTransformation
 import com.multitv.ott.multitvvideoplayer.popup.TrackSelectionDialog
 import com.multitv.ott.multitvvideoplayer.utils.*
+import com.multitv.ott.multitvvideoplayer.videoplayer.MyVideoPlayer
 import com.pallycon.widevinelibrary.*
 import java.util.*
 
@@ -79,7 +80,7 @@ class AltbalajiTvVideoPlayer (
     private val sharedPreferencePlayer: SharedPreferencePlayer
     private var contentType: ContentType? = null
     private var mMediaPlayer: ExoPlayer? = null
-    private var simpleExoPlayerView: StyledPlayerView? = null
+    private var simpleExoPlayerView: MyVideoPlayer? = null
     private var trackSelector: DefaultTrackSelector
 
     private var videoPlayPauseCallBackListener: VideoPlayPauseCallBackListener? = null
@@ -274,7 +275,6 @@ class AltbalajiTvVideoPlayer (
         videoPerviousButton.setVisibility(GONE)
 
         volumeMuteAndUnMuteButton.visibility = View.GONE
-        setting.visibility = View.GONE
 
         //previewTimeBar.setPreviewEnabled(true)
         previewTimeBar.addOnScrubListener(this)
