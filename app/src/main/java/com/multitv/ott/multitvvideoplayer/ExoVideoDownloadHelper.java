@@ -55,9 +55,12 @@ public class ExoVideoDownloadHelper implements DownloadTracker.Listener, SdkPopC
 
     }
 
-
     public boolean getDownloadRequestCount() {
         return DownloadUtil.INSTANCE.getDownloadTracker(context).isMediaDownloadRequestInQueue();
+    }
+
+    public int getDownloadRequestTotalCount() {
+        return DownloadUtil.INSTANCE.getDownloadTracker(context).getDownloadRequestCount();
     }
 
     public void downloadVideo(String url, String videoTitle, Long videoDurationInSeconds) {

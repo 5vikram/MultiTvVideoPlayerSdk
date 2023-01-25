@@ -89,6 +89,15 @@ class DownloadTracker(
             return false
     }
 
+
+
+    fun getDownloadRequestCount(): Int {
+        if (downloadManager != null && downloadManager.currentDownloads != null && downloadManager.currentDownloads.size > 0)
+            return downloadManager.currentDownloads.size
+        else
+            return 0
+    }
+
     fun isDownloaded(mediaItem: MediaItem): Boolean {
         val download = downloads[mediaItem.playbackProperties?.uri]
         return download != null && download.state == Download.STATE_COMPLETED
