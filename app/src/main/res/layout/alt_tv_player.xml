@@ -33,9 +33,6 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:background="?attr/selectableItemBackground"
-            android:clickable="true"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
             android:padding="5dp"
             android:src="@mipmap/player_back_btn" />
 
@@ -141,8 +138,6 @@
                     android:layout_height="25dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginRight="5dp"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
                     android:background="?attr/selectableItemBackground"
                     android:src="@drawable/ic_balaji_backward_10_sec" />
 
@@ -163,8 +158,6 @@
                 android:layout_height="40dp"
                 android:layout_gravity="center_vertical"
                 android:padding="5dp"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
                 android:background="?attr/selectableItemBackground"
                 android:src="@drawable/ic_balaji_pause" />
 
@@ -174,8 +167,6 @@
                 android:layout_height="40dp"
                 android:layout_gravity="center_vertical"
                 android:padding="5dp"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
                 android:background="?attr/selectableItemBackground"
                 android:src="@drawable/ic_balaji_play" />
 
@@ -201,8 +192,6 @@
                     android:layout_height="25dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="10dp"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
                     android:background="?attr/selectableItemBackground"
                     android:src="@drawable/ic_balaji_farward_10_sec" />
 
@@ -217,8 +206,6 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="10dp"
                 android:src="@drawable/next"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
                 android:background="?attr/selectableItemBackground"
                 android:visibility="gone" />
 
@@ -261,8 +248,6 @@
                 android:layout_gravity="center"
                 android:layout_marginRight="5dp"
                 android:padding="5dp"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
                 android:background="?attr/selectableItemBackground"
                 android:src="@drawable/webseries"
                 android:visibility="gone" />
@@ -276,8 +261,6 @@
                 android:layout_marginRight="5dp"
                 android:background="?attr/selectableItemBackground"
                 android:padding="5dp"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
                 android:src="@drawable/next_epsode"
                 android:visibility="gone" />
 
@@ -290,8 +273,6 @@
                 android:layout_marginRight="10dp"
                 android:background="?attr/selectableItemBackground"
                 android:padding="5dp"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
                 android:src="@drawable/ic_balaji_volume_on" />
 
             <SeekBar
@@ -301,8 +282,6 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="40dp"
                 android:maxHeight="8dp"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
                 android:background="?attr/selectableItemBackground"
                 android:progressDrawable="@drawable/seekbar_progress_style"
                 android:thumb="@drawable/seekbar_thumb"
@@ -346,8 +325,6 @@
                     android:layout_gravity="center"
                     android:layout_marginRight="5dp"
                     android:padding="5dp"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
                     android:background="?attr/selectableItemBackground"
                     android:src="@drawable/ic_balaji_volume_on" />
 
@@ -359,8 +336,6 @@
                     android:layout_gravity="center"
                     android:layout_marginRight="5dp"
                     android:padding="5dp"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
                     android:background="?attr/selectableItemBackground"
                     android:src="@drawable/ic_balaji_volume_off"
                     android:visibility="gone" />
@@ -376,8 +351,6 @@
                 android:layout_marginRight="5dp"
                 android:background="@android:color/transparent"
                 android:padding="5dp"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
                 android:src="@drawable/ic_balaji_setting" />
 
             <ImageView
@@ -431,8 +404,6 @@
         app:previewAnimationEnabled="true"
         app:previewFrameLayout="@id/previewFrameLayout"
         app:scrubber_dragged_size="24dp"
-        android:focusableInTouchMode="true"
-        android:focusable="true"
         android:background="?attr/selectableItemBackground"
         app:scrubber_enabled_size="16dp" />
 
