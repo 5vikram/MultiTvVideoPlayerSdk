@@ -457,6 +457,7 @@ class DownloadTracker(
             val alertDialog = AlertDialog.Builder(context).create()
             alertDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             alertDialog.setView(deleteDialogView)
+            alertDialog.setCancelable(false)
 
             val window: Window? = alertDialog.window
             val wlp: WindowManager.LayoutParams? = window?.attributes
