@@ -7,6 +7,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_gravity="bottom"
+    android:descendantFocusability="blocksDescendants"
     android:layoutDirection="ltr">
 
     <View
@@ -14,6 +15,7 @@
         android:layout_height="match_parent"
         android:alpha=".6"
         android:focusable="false"
+        android:descendantFocusability="blocksDescendants"
         android:background="#CC212121"/>
 
     <ImageView
