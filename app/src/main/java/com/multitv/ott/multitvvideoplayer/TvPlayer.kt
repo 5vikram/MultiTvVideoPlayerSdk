@@ -197,6 +197,8 @@ class TvPlayer(
         videoRotationButton?.setVisibility(GONE)
         frameLayout = view.findViewById(R.id.frameLayout)
 
+        VideoRenuButton?.requestFocus()
+
 
         playerProgress!!.setAdMarkerColor(Color.argb(0x00, 0xFF, 0xFF, 0xFF))
         playerProgress!!.setPlayedAdMarkerColor(Color.argb(0x98, 0xFF, 0xFF, 0xFF))
@@ -253,7 +255,10 @@ class TvPlayer(
                 context.enterPictureInPictureMode()
             }
         })
-        VideoRenuButton?.setOnClickListener(OnClickListener { rewind() })
+        VideoRenuButton?.setOnClickListener(OnClickListener {
+            Toast.makeText(context,"vvvvvvvvvvvvv",Toast.LENGTH_SHORT).show()
+            rewind()
+        })
         videoFarwardButton?.setOnClickListener(OnClickListener { fastForward() })
         videoPlayButton?.setOnClickListener(OnClickListener {
             if (mMediaPlayer != null) {
