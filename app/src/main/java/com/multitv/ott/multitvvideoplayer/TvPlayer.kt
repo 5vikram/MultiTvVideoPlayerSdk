@@ -197,8 +197,6 @@ class TvPlayer(
         videoRotationButton?.setVisibility(GONE)
         frameLayout = view.findViewById(R.id.frameLayout)
 
-        VideoRenuButton?.requestFocus()
-
 
         playerProgress!!.setAdMarkerColor(Color.argb(0x00, 0xFF, 0xFF, 0xFF))
         playerProgress!!.setPlayedAdMarkerColor(Color.argb(0x98, 0xFF, 0xFF, 0xFF))
