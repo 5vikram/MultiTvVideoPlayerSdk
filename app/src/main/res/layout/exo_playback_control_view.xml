@@ -19,7 +19,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_gravity="bottom"
-    android:focusable="true"
     android:layoutDirection="ltr">
 
     <View
@@ -38,8 +37,6 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:padding="5dp"
-        android:clickable="true"
-        android:focusable="true"
         android:background="?attr/selectableItemBackground"
         android:src="@mipmap/player_back_btn"/>
 
@@ -98,7 +95,6 @@
                 android:layout_height="32dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="15dp"
-                android:focusable="true"
                 android:background="?attr/selectableItemBackground"
                 android:src="@drawable/backward" />
 
@@ -108,7 +104,6 @@
                 android:layout_height="32dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="15dp"
-                android:focusable="true"
                 android:background="?attr/selectableItemBackground"
                 android:src="@drawable/play" />
 
@@ -118,7 +113,6 @@
                 android:layout_height="32dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="15dp"
-                android:focusable="true"
                 android:background="?attr/selectableItemBackground"
                 android:src="@drawable/pause" />
 
@@ -129,7 +123,6 @@
                 android:layout_gravity="center_vertical"
                 android:background="?attr/selectableItemBackground"
                 android:layout_marginRight="10dp"
-                android:focusable="true"
                 android:src="@drawable/forward" />
 
             <ImageView
@@ -167,7 +160,6 @@
             android:layout_gravity="center"
             android:background="?attr/selectableItemBackground"
             android:layout_marginRight="10dp"
-            android:focusable="true"
             android:src="@drawable/speed" />
 
         <ImageView
@@ -177,7 +169,6 @@
             android:layout_gravity="center"
             android:background="?attr/selectableItemBackground"
             android:layout_marginRight="10dp"
-            android:focusable="true"
             android:src="@drawable/menu" />
 
         <ImageView
@@ -235,7 +226,6 @@
             app:previewAnimationEnabled="true"
             android:background="?attr/selectableItemBackground"
             android:layout_marginRight="10dp"
-            android:focusable="true"
             app:previewFrameLayout="@id/previewFrameLayout" />
 
         <!--
