@@ -19,12 +19,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_gravity="bottom"
+    android:focusable="false"
     android:layoutDirection="ltr">
 
     <View
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:alpha=".6"
+        android:focusable="false"
         android:background="#CC212121"/>
 
     <ImageView
@@ -97,6 +99,7 @@
                 android:layout_height="32dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="15dp"
+                android:focusable="true"
                 android:background="?attr/selectableItemBackground"
                 android:src="@drawable/backward" />
 
@@ -106,6 +109,7 @@
                 android:layout_height="32dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="15dp"
+                android:focusable="true"
                 android:background="?attr/selectableItemBackground"
                 android:src="@drawable/play" />
 
@@ -115,6 +119,7 @@
                 android:layout_height="32dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="15dp"
+                android:focusable="true"
                 android:background="?attr/selectableItemBackground"
                 android:src="@drawable/pause" />
 
@@ -125,6 +130,7 @@
                 android:layout_gravity="center_vertical"
                 android:background="?attr/selectableItemBackground"
                 android:layout_marginRight="10dp"
+                android:focusable="true"
                 android:src="@drawable/forward" />
 
             <ImageView
@@ -316,18 +322,18 @@
             style="@style/Widget.ProgressBar.Vertical"
             android:layout_width="12dp"
             android:layout_height="100dp"
-            android:visibility="gone"
             android:layout_gravity="center_vertical|start"
-            android:layout_marginStart="16dp" />
+            android:layout_marginStart="16dp"
+            android:visibility="gone" />
 
         <ProgressBar
             android:id="@+id/volume_progress_bar"
             style="@style/Widget.ProgressBar.Vertical"
             android:layout_width="12dp"
             android:layout_height="100dp"
-            android:visibility="gone"
             android:layout_gravity="center_vertical|end"
-            android:layout_marginEnd="16dp" />
+            android:layout_marginEnd="16dp"
+            android:visibility="gone" />
 
     </FrameLayout>
 
