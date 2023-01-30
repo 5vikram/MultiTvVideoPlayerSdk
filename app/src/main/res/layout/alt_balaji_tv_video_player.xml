@@ -14,8 +14,6 @@
         android:layout_height="match_parent"
         app:animation_enabled="false"
         android:focusable="true"
-        android:focusedByDefault="true"
-        android:focusableInTouchMode="true"
         app:controller_layout_id="@layout/alt_tv_player"
         app:resize_mode="fill" />
 

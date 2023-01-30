@@ -37,8 +37,6 @@
             android:background="?attr/selectableItemBackground"
             android:padding="5dp"
             android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:focusedByDefault="true"
             android:src="@mipmap/player_back_btn" />
 
 
