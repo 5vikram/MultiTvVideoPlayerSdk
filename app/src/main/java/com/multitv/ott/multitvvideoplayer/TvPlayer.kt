@@ -34,6 +34,7 @@ import com.google.android.exoplayer2.ext.ima.ImaAdsLoader
 import com.google.android.exoplayer2.source.DefaultMediaSourceFactory
 import com.google.android.exoplayer2.source.MediaSourceFactory
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
+import com.google.android.exoplayer2.ui.StyledPlayerView
 import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.DefaultAllocator
 import com.google.android.exoplayer2.upstream.DefaultDataSource
@@ -75,7 +76,7 @@ class TvPlayer(
     private val sharedPreferencePlayer: SharedPreferencePlayer
     private var contentType: ContentType? = null
     private var mMediaPlayer: ExoPlayer? = null
-    private var simpleExoPlayerView: MyVideoPlayer? = null
+    private var simpleExoPlayerView: StyledPlayerView? = null
     private var trackSelector: DefaultTrackSelector
     private var videoPlayerSdkCallBackListener: VideoPlayerSdkCallBackListener? = null
     private var isShowingTrackSelectionDialog = false
@@ -123,6 +124,9 @@ class TvPlayer(
     private var playerProgress: PreviewTimeBar? = null
     private var currentDurationPlayTv: TextView? = null
     private var previewFrameLayout: FrameLayout? = null
+
+    private lateinit var frameLayout: RelativeLayout
+
     private val formatBuilder: StringBuilder
     private val formatter: Formatter
     private var isDrmContent = false
@@ -191,7 +195,7 @@ class TvPlayer(
         videoPerviousButton?.setVisibility(GONE)
         pictureInPicture?.setVisibility(GONE)
         videoRotationButton?.setVisibility(GONE)
-
+        frameLayout = view.findViewById(R.id.frameLayout)
 
 
         playerProgress!!.setAdMarkerColor(Color.argb(0x00, 0xFF, 0xFF, 0xFF))
@@ -216,7 +220,16 @@ class TvPlayer(
             }
         })
 
-        findViewById<View>(R.id.frameLayout)?.setOnTouchListener(clickFrameSwipeListener)
+        frameLayout.setOnClickListener {
+            if (isControllerShown)
+                hideController()
+            else
+                showController()
+        }
+
+
+
+
         findViewById<View>(R.id.speed_btn)?.setOnClickListener { showSpeedControlDailog() }
         // simpleExoPlayerView.set
         errorRetryLayout?.setOnClickListener(OnClickListener {
@@ -240,7 +253,10 @@ class TvPlayer(
                 context.enterPictureInPictureMode()
             }
         })
-        VideoRenuButton?.setOnClickListener(OnClickListener { rewind() })
+        VideoRenuButton?.setOnClickListener(OnClickListener {
+            Toast.makeText(context,"vvvvvvvvvvvvv",Toast.LENGTH_SHORT).show()
+            rewind()
+        })
         videoFarwardButton?.setOnClickListener(OnClickListener { fastForward() })
         videoPlayButton?.setOnClickListener(OnClickListener {
             if (mMediaPlayer != null) {
@@ -1071,6 +1087,7 @@ class TvPlayer(
     }
 
 
+/*
     private var clickFrameSwipeListener = object : OnSwipeTouchListener(true) {
         // mGestureType=
         var diffTime = -1f
@@ -1099,9 +1116,11 @@ class TvPlayer(
                 else if (finalVolume > maxVolume)
                     finalVolume = maxVolume
 
-                /*val progressText = String.format(
+                */
+/*val progressText = String.format(
                     resources.getString(R.string.volume), finalVolume
-                )*/
+                )*//*
+
                 // mPositionTextView.text = progressText
                 volumeProgressBar.progress = finalVolume
                 audioManager?.setStreamVolume(AudioManager.STREAM_MUSIC, finalVolume, 0)
@@ -1132,10 +1151,12 @@ class TvPlayer(
                 brightnessProgressBar.progress = finalBrightness
 
 
-                /*PreferenceManager.getDefaultSharedPreferences(context)
+                */
+/*PreferenceManager.getDefaultSharedPreferences(context)
                     .edit()
                     .putInt(BETTER_VIDEO_PLAYER_BRIGHTNESS, finalBrightness)
-                    .apply()*/
+                    .apply()*//*
+
             }
         }
 
@@ -1147,6 +1168,7 @@ class TvPlayer(
         }
 
         override fun onDoubleTap(event: MotionEvent) {
+*/
 /*
             if (mGestureType == GestureType.DoubleTapGesture) {
                 val seekSec = mDoubleTapSeekDuration / 1000
@@ -1170,12 +1192,15 @@ class TvPlayer(
                     seekTo(getCurrentPosition() - mDoubleTapSeekDuration)
                 }
             }
-*/
+*//*
+
         }
 
         override fun onAfterMove() {
-            /* if (finalTime >= 0 && mGestureType == GestureType.SwipeGesture) {
-                 seekTo(finalTime.toLong())*/
+            */
+/* if (finalTime >= 0 && mGestureType == GestureType.SwipeGesture) {
+                 seekTo(finalTime.toLong())*//*
+
             //if (mWasPlaying) mPlayer?.start()
             //  }
             //  mPositionTextView.visibility = View.GONE
@@ -1228,6 +1253,7 @@ class TvPlayer(
 
         }
     }
+*/
 
     enum class GestureType {
         NoGesture, SwipeGesture, DoubleTapGesture

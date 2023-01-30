@@ -5,10 +5,9 @@
     android:id="@+id/frame"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:focusable="true"
     android:orientation="vertical">
 
-    <com.multitv.ott.multitvvideoplayer.videoplayer.MyVideoPlayer
+    <com.google.android.exoplayer2.ui.StyledPlayerView
         android:id="@+id/videoPlayer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

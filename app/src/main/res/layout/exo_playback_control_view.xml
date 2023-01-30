@@ -1,17 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2016 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?>
 
-     Licensed under the Apache License, Version 2.0 (the "License");
-     you may not use this file except in compliance with the License.
-     You may obtain a copy of the License at
-
-          http://www.apache.org/licenses/LICENSE-2.0
-
-     Unless required by applicable law or agreed to in writing, software
-     distributed under the License is distributed on an "AS IS" BASIS,
-     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-     See the License for the specific language governing permissions and
-     limitations under the License.
--->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/frameLayout"
     android:layout_width="match_parent"
@@ -25,6 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:alpha=".6"
+        android:focusable="false"
         android:background="#CC212121"/>
 
     <ImageView
@@ -37,8 +26,9 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:padding="5dp"
-        android:clickable="true"
         android:focusable="true"
+        android:clickable="true"
+        android:focusableInTouchMode="true"
         android:background="?attr/selectableItemBackground"
         android:src="@mipmap/player_back_btn"/>
 
@@ -86,7 +76,7 @@
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_gravity="center_vertical"
-                android:layout_marginRight="10dp"
+                android:layout_marginEnd="10dp"
                 android:background="@android:color/transparent"
                 android:src="@drawable/pervious"
                 android:visibility="gone" />
@@ -96,7 +86,10 @@
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_gravity="center_vertical"
-                android:layout_marginRight="15dp"
+                android:layout_marginEnd="15dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:clickable="true"
                 android:background="?attr/selectableItemBackground"
                 android:src="@drawable/backward" />
 
@@ -105,7 +98,10 @@
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_gravity="center_vertical"
-                android:layout_marginRight="15dp"
+                android:layout_marginEnd="15dp"
+                android:focusable="true"
+                android:clickable="true"
+                android:focusableInTouchMode="true"
                 android:background="?attr/selectableItemBackground"
                 android:src="@drawable/play" />
 
@@ -114,7 +110,10 @@
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_gravity="center_vertical"
-                android:layout_marginRight="15dp"
+                android:layout_marginEnd="15dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:clickable="true"
                 android:background="?attr/selectableItemBackground"
                 android:src="@drawable/pause" />
 
@@ -124,7 +123,10 @@
                 android:layout_height="32dp"
                 android:layout_gravity="center_vertical"
                 android:background="?attr/selectableItemBackground"
-                android:layout_marginRight="10dp"
+                android:layout_marginEnd="10dp"
+                android:focusable="true"
+                android:clickable="true"
+                android:focusableInTouchMode="true"
                 android:src="@drawable/forward" />
 
             <ImageView
@@ -132,7 +134,9 @@
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_gravity="center_vertical"
-                android:layout_marginRight="10dp"
+                android:layout_marginEnd="10dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
                 android:background="?attr/selectableItemBackground"
                 android:src="@drawable/next"
                 android:visibility="gone" />
@@ -163,6 +167,7 @@
             android:background="?attr/selectableItemBackground"
             android:layout_marginRight="10dp"
             android:focusable="true"
+            android:focusableInTouchMode="true"
             android:src="@drawable/speed" />
 
         <ImageView
@@ -173,6 +178,7 @@
             android:background="?attr/selectableItemBackground"
             android:layout_marginRight="10dp"
             android:focusable="true"
+            android:focusableInTouchMode="true"
             android:src="@drawable/menu" />
 
         <ImageView
@@ -181,6 +187,8 @@
             android:layout_height="25dp"
             android:layout_gravity="center_vertical"
             android:layout_marginRight="10dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:background="@android:color/transparent"
             android:src="@drawable/picture_in_picture" />
 
@@ -190,6 +198,8 @@
             android:layout_height="20dp"
             android:layout_gravity="center_vertical"
             android:layout_marginRight="10dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:background="@android:color/transparent"
             android:src="@drawable/rotate" />
 
@@ -230,7 +240,8 @@
             app:previewAnimationEnabled="true"
             android:background="?attr/selectableItemBackground"
             android:layout_marginRight="10dp"
-            android:focusable="true"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
             app:previewFrameLayout="@id/previewFrameLayout" />
 
         <!--
@@ -316,18 +327,18 @@
             style="@style/Widget.ProgressBar.Vertical"
             android:layout_width="12dp"
             android:layout_height="100dp"
-            android:visibility="gone"
             android:layout_gravity="center_vertical|start"
-            android:layout_marginStart="16dp" />
+            android:layout_marginStart="16dp"
+            android:visibility="gone" />
 
         <ProgressBar
             android:id="@+id/volume_progress_bar"
             style="@style/Widget.ProgressBar.Vertical"
             android:layout_width="12dp"
             android:layout_height="100dp"
-            android:visibility="gone"
             android:layout_gravity="center_vertical|end"
-            android:layout_marginEnd="16dp" />
+            android:layout_marginEnd="16dp"
+            android:visibility="gone" />
 
     </FrameLayout>
 
