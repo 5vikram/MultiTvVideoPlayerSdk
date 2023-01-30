@@ -85,6 +85,8 @@ public class ExoVideoDownloadHelper implements DownloadTracker.Listener, SdkPopC
         if (DownloadUtil.INSTANCE.getDownloadTracker(context).isDownloaded(getMediaItem(url, videoTitle))) {
             new DownloadVideo(context, this).removeVideoFromDownload(mediaItem.playbackProperties.uri);
             new DownloadVideo(context, this).downloadVideo(mediaItem, imageView, videoDurationInSeconds);
+        } else if (DownloadUtil.INSTANCE.getDownloadTracker(context).isVideoDownloadingQueue(mediaItem)){
+           Toast.makeText(context, "Please wait", Toast.LENGTH_SHORT).show();
         } else {
             new DownloadVideo(context, this).downloadVideo(mediaItem, imageView, videoDurationInSeconds);
         }
