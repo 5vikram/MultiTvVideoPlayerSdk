@@ -6,9 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="bottom"
-    android:focusable="true"
-    android:focusableInTouchMode="true"
-    android:focusedByDefault="true"
     android:layoutDirection="ltr">
 
     <View
@@ -16,9 +13,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:alpha=".6"
-        android:focusable="false"
-        android:visibility="gone"
-        android:focusableInTouchMode="false"
         android:background="#CC212121" />
 
     <RelativeLayout
@@ -30,25 +24,8 @@
         app:layout_constraintTop_toTopOf="parent">
 
 
-        <Button
-            android:id="@+id/closeButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:padding="5dp"
-            android:focusable="true"
-            android:clickable="true"
-            android:focusedByDefault="true"
-            android:focusableInTouchMode="true"
-            android:text="VIKRAM SHARMA"
-            android:textSize="20sp" />
 
-
-       <!-- <ImageButton
+        <ImageButton
             android:id="@+id/closeButton"
             android:layout_width="30dp"
             android:layout_height="28dp"
@@ -59,7 +36,10 @@
             android:layout_marginEnd="16dp"
             android:background="?attr/selectableItemBackground"
             android:padding="5dp"
-            android:src="@mipmap/player_back_btn" />-->
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:focusedByDefault="true"
+            android:src="@mipmap/player_back_btn" />
 
 
         <TextView
@@ -147,6 +127,9 @@
                 android:layout_marginRight="10dp"
                 android:background="@android:color/transparent"
                 android:src="@drawable/pervious"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:focusedByDefault="true"
                 android:visibility="gone" />
 
 
@@ -163,6 +146,9 @@
                     android:layout_height="25dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginRight="5dp"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:focusedByDefault="true"
                     android:background="?attr/selectableItemBackground"
                     android:src="@drawable/ic_balaji_backward_10_sec" />
 
@@ -183,6 +169,9 @@
                 android:layout_height="40dp"
                 android:layout_gravity="center_vertical"
                 android:padding="5dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:focusedByDefault="true"
                 android:background="?attr/selectableItemBackground"
                 android:src="@drawable/ic_balaji_pause" />
 
@@ -192,6 +181,9 @@
                 android:layout_height="40dp"
                 android:layout_gravity="center_vertical"
                 android:padding="5dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:focusedByDefault="true"
                 android:background="?attr/selectableItemBackground"
                 android:src="@drawable/ic_balaji_play" />
 
@@ -217,6 +209,9 @@
                     android:layout_height="25dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="10dp"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:focusedByDefault="true"
                     android:background="?attr/selectableItemBackground"
                     android:src="@drawable/ic_balaji_farward_10_sec" />
 
@@ -231,6 +226,9 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="10dp"
                 android:src="@drawable/next"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:focusedByDefault="true"
                 android:background="?attr/selectableItemBackground"
                 android:visibility="gone" />
 
@@ -273,6 +271,9 @@
                 android:layout_gravity="center"
                 android:layout_marginRight="5dp"
                 android:padding="5dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:focusedByDefault="true"
                 android:background="?attr/selectableItemBackground"
                 android:src="@drawable/webseries"
                 android:visibility="gone" />
@@ -286,6 +287,9 @@
                 android:layout_marginRight="5dp"
                 android:background="?attr/selectableItemBackground"
                 android:padding="5dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:focusedByDefault="true"
                 android:src="@drawable/next_epsode"
                 android:visibility="gone" />
 
@@ -298,6 +302,9 @@
                 android:layout_marginRight="10dp"
                 android:background="?attr/selectableItemBackground"
                 android:padding="5dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:focusedByDefault="true"
                 android:src="@drawable/ic_balaji_volume_on" />
 
             <SeekBar
@@ -307,6 +314,9 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="40dp"
                 android:maxHeight="8dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:focusedByDefault="true"
                 android:background="?attr/selectableItemBackground"
                 android:progressDrawable="@drawable/seekbar_progress_style"
                 android:thumb="@drawable/seekbar_thumb"
@@ -350,6 +360,9 @@
                     android:layout_gravity="center"
                     android:layout_marginRight="5dp"
                     android:padding="5dp"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:focusedByDefault="true"
                     android:background="?attr/selectableItemBackground"
                     android:src="@drawable/ic_balaji_volume_on" />
 
@@ -361,6 +374,9 @@
                     android:layout_gravity="center"
                     android:layout_marginRight="5dp"
                     android:padding="5dp"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:focusedByDefault="true"
                     android:background="?attr/selectableItemBackground"
                     android:src="@drawable/ic_balaji_volume_off"
                     android:visibility="gone" />
@@ -376,6 +392,9 @@
                 android:layout_marginRight="5dp"
                 android:background="@android:color/transparent"
                 android:padding="5dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:focusedByDefault="true"
                 android:src="@drawable/ic_balaji_setting" />
 
             <ImageView
@@ -386,6 +405,9 @@
                 android:layout_marginRight="5dp"
                 android:background="@android:color/transparent"
                 android:padding="5dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:focusedByDefault="true"
                 android:visibility="gone"
                 android:src="@drawable/ic_balaji_pip" />
 
@@ -395,6 +417,9 @@
                 android:layout_height="35dp"
                 android:layout_gravity="center_vertical"
                 android:padding="5dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:focusedByDefault="true"
                 android:visibility="gone"
                 android:background="?attr/selectableItemBackground"
                 android:src="@drawable/ic_balaji_fullscreen" />
@@ -426,7 +451,7 @@
         app:layout_constraintEnd_toStartOf="@id/durationLinearLayout"
         app:layout_constraintStart_toEndOf="@+id/vvvvvvvvvv"
         app:layout_constraintTop_toTopOf="@+id/vvvvvvvvvv"
-        app:previewAnimationEnabled="true"
+        app:previewAnimationEnabled="false"
         app:previewFrameLayout="@id/previewFrameLayout"
         app:scrubber_dragged_size="24dp"
         android:background="?attr/selectableItemBackground"
