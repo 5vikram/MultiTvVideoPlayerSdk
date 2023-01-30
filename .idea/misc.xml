@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/drawable/background_fill.xml" value="0.1355" />
+        <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/drawable/button_focus.xml" value="0.184" />
         <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/drawable/custom_progressbar_bg.xml" value="0.1355" />
         <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/drawable/ic_balaji_fullscreen.xml" value="0.1595" />
         <entry key="..\:/2020 Project/AndroidStudioProject/MultiTvVideoPlayerLatestGithub/app/src/main/res/drawable/ic_balaji_pause.xml" value="0.1355" />
@@ -45,7 +46,7 @@
     </option>
   </component>
   <component name="ExternalStorageConfigurationManager" enabled="true" />
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="15" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_15_PREVIEW" project-jdk-name="15" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
 </project>
