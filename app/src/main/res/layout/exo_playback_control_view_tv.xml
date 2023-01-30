@@ -80,6 +80,7 @@
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            android:focusable="true"
             android:gravity="center_horizontal"
             android:orientation="horizontal">
 
@@ -159,6 +160,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="7dp"
+        android:focusable="true"
         android:orientation="horizontal">
 
         <ImageView
@@ -209,6 +211,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/videoMenuLayout"
         android:layout_marginBottom="2dp"
+        android:focusable="true"
         android:orientation="vertical">
 
 
