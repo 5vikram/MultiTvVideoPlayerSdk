@@ -125,6 +125,8 @@ class TvPlayer(
     private var currentDurationPlayTv: TextView? = null
     private var previewFrameLayout: FrameLayout? = null
 
+    private lateinit var closeButton: ImageView
+
     private lateinit var frameLayout: RelativeLayout
 
     private val formatBuilder: StringBuilder
@@ -172,6 +174,9 @@ class TvPlayer(
         circularProgressLayout = view.findViewById(R.id.circularProgressLayout)
         videoProgressLayout = findViewById(R.id.video_progress_layout)
         setting = view.findViewById(R.id.settings_btn)
+
+        closeButton = view.findViewById(R.id.closeButton)
+
         previewFrameLayout = view.findViewById(R.id.previewFrameLayout)
         setting?.setOnClickListener(this)
         centerButtonLayout = view.findViewById(R.id.centerButtonLayout)
@@ -197,6 +202,10 @@ class TvPlayer(
         videoRotationButton?.setVisibility(GONE)
         frameLayout = view.findViewById(R.id.frameLayout)
 
+
+        closeButton.setOnClickListener {
+            context.finish()
+        }
 
         playerProgress!!.setAdMarkerColor(Color.argb(0x00, 0xFF, 0xFF, 0xFF))
         playerProgress!!.setPlayedAdMarkerColor(Color.argb(0x98, 0xFF, 0xFF, 0xFF))
@@ -254,7 +263,7 @@ class TvPlayer(
             }
         })
         VideoRenuButton?.setOnClickListener(OnClickListener {
-            Toast.makeText(context,"vvvvvvvvvvvvv",Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "vvvvvvvvvvvvv", Toast.LENGTH_SHORT).show()
             rewind()
         })
         videoFarwardButton?.setOnClickListener(OnClickListener { fastForward() })
