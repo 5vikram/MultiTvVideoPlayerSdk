@@ -28,8 +28,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:alpha=".6"
-        android:visibility="gone"
-        android:background="@android:color/black"/>
+        android:background="@android:color/transparent"/>
 
 
     <ImageView
@@ -42,8 +41,6 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:padding="5dp"
-        android:focusable="true"
-        android:background="?attr/selectableItemBackground"
         android:src="@mipmap/player_back_btn"/>
 
 
@@ -81,7 +78,6 @@
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:focusable="true"
             android:gravity="center_horizontal"
             android:orientation="horizontal">
 
@@ -102,8 +98,6 @@
                 android:layout_height="32dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="15dp"
-                android:focusable="true"
-                android:background="@drawable/button_selector"
                 android:src="@drawable/backward" />
 
             <ImageView
@@ -112,8 +106,6 @@
                 android:layout_height="32dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="15dp"
-                android:focusable="true"
-                android:background="@drawable/button_selector"
                 android:src="@drawable/pause" />
 
             <ImageView
@@ -122,8 +114,6 @@
                 android:layout_height="32dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="15dp"
-                android:focusable="true"
-                android:background="@drawable/button_selector"
                 android:src="@drawable/play" />
 
             <ImageView
@@ -132,8 +122,6 @@
                 android:layout_height="32dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="10dp"
-                android:focusable="true"
-                android:background="@drawable/button_selector"
                 android:src="@drawable/forward" />
 
             <ImageView
@@ -161,7 +149,6 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="7dp"
-        android:focusable="true"
         android:orientation="horizontal">
 
         <ImageView
@@ -170,8 +157,6 @@
             android:layout_height="25dp"
             android:layout_gravity="center"
             android:layout_marginRight="10dp"
-            android:focusable="true"
-            android:background="@drawable/button_selector"
             android:src="@drawable/speed" />
 
         <ImageView
@@ -180,8 +165,6 @@
             android:layout_height="25dp"
             android:layout_gravity="center"
             android:layout_marginRight="10dp"
-            android:focusable="true"
-            android:background="@drawable/button_selector"
             android:src="@drawable/menu" />
 
         <ImageView
@@ -212,7 +195,6 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/videoMenuLayout"
         android:layout_marginBottom="2dp"
-        android:focusable="true"
         android:orientation="vertical">
 
 
@@ -237,7 +219,6 @@
             android:layout_marginStart="8dp"
             android:layout_marginEnd="5dp"
             app:previewAnimationEnabled="true"
-            android:focusable="true"
             android:background="@drawable/seek_bar_focus"
             app:previewFrameLayout="@id/previewFrameLayout" />
 
