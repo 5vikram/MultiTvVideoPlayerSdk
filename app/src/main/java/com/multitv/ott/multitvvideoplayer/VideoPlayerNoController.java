@@ -3,6 +3,7 @@ package com.multitv.ott.multitvvideoplayer;
 import static android.content.Context.TELEPHONY_SERVICE;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -64,7 +65,7 @@ import java.util.UUID;
 
 public class VideoPlayerNoController extends FrameLayout implements View.OnClickListener {
 
-    private AppCompatActivity context;
+    private Activity context;
     private SharedPreferencePlayer sharedPreferencePlayer;
     private ContentType contentType;
     private ExoPlayer mMediaPlayer;

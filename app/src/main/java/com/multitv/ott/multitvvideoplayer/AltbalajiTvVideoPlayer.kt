@@ -808,11 +808,7 @@ class AltbalajiTvVideoPlayer (
             mMediaPlayer = null
         }
 
-        isFocusable = true
-        isFocusableInTouchMode = true
-        descendantFocusability = FOCUS_AFTER_DESCENDANTS
-        requestFocus()
-        isEnabled = true
+
 
         videoPlayerSdkCallBackListener?.prepareVideoPlayer()
 

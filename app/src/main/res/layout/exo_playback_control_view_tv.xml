@@ -30,6 +30,20 @@
         android:alpha=".6"
         android:background="@android:color/transparent"/>
 
+
+    <ImageView
+        android:id="@+id/closeButton"
+        android:layout_width="30dp"
+        android:layout_height="28dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:padding="5dp"
+        android:src="@mipmap/player_back_btn"/>
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -84,8 +98,6 @@
                 android:layout_height="32dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="15dp"
-                android:focusable="true"
-                android:background="@drawable/button_selector"
                 android:src="@drawable/backward" />
 
             <ImageView
@@ -94,8 +106,6 @@
                 android:layout_height="32dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="15dp"
-                android:focusable="true"
-                android:background="@drawable/button_selector"
                 android:src="@drawable/pause" />
 
             <ImageView
@@ -104,8 +114,6 @@
                 android:layout_height="32dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="15dp"
-                android:focusable="true"
-                android:background="@drawable/button_selector"
                 android:src="@drawable/play" />
 
             <ImageView
@@ -114,8 +122,6 @@
                 android:layout_height="32dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="10dp"
-                android:focusable="true"
-                android:background="@drawable/button_selector"
                 android:src="@drawable/forward" />
 
             <ImageView
@@ -151,8 +157,6 @@
             android:layout_height="25dp"
             android:layout_gravity="center"
             android:layout_marginRight="10dp"
-            android:focusable="true"
-            android:background="@drawable/button_selector"
             android:src="@drawable/speed" />
 
         <ImageView
@@ -161,8 +165,6 @@
             android:layout_height="25dp"
             android:layout_gravity="center"
             android:layout_marginRight="10dp"
-            android:focusable="true"
-            android:background="@drawable/button_selector"
             android:src="@drawable/menu" />
 
         <ImageView
@@ -210,14 +212,13 @@
 
         </FrameLayout>
 
-        <com.multitv.ott.multitvvideoplayer.timebar.PreviewTimeBar
+        <com.github.rubensousa.previewseekbar.exoplayer.PreviewTimeBar
             android:id="@+id/exo_progress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="5dp"
             app:previewAnimationEnabled="true"
-            android:focusable="true"
             android:background="@drawable/seek_bar_focus"
             app:previewFrameLayout="@id/previewFrameLayout" />
 
