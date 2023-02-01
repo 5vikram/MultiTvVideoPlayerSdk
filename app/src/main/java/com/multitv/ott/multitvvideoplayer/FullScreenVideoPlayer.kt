@@ -172,7 +172,7 @@ class FullScreenVideoPlayer(
 
   //  private lateinit var progressBarParent: FrameLayout
     private lateinit var volumeProgressBar: SeekBar
-    private lateinit var brightnessProgressBar: ProgressBar
+  //  private lateinit var brightnessProgressBar: ProgressBar
 
     private var isPipModeOn = false
 
@@ -225,7 +225,7 @@ class FullScreenVideoPlayer(
         resumedVideoTv = view.findViewById(R.id.resumedVideoTv)
      //   progressBarParent = view.findViewById(R.id.progress_bar_parent)
         volumeProgressBar = view.findViewById(R.id.exo_volume_progress)
-        brightnessProgressBar = view.findViewById(R.id.brightness_progress_bar)
+      //  brightnessProgressBar = view.findViewById(R.id.brightness_progress_bar)
         errorRetryLayout = view.findViewById(R.id.errorRetryLayout)
         videoMenuLayout = view.findViewById(R.id.videoMenuLayout)
         volumeUnMuteButton = view.findViewById(R.id.volumeUnMuteButton)
