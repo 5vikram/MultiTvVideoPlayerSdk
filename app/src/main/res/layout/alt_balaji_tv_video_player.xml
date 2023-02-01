@@ -13,6 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:animation_enabled="false"
+        android:descendantFocusability="blocksDescendants"
         app:controller_layout_id="@layout/alt_tv_player"
         app:resize_mode="fill" />
 
