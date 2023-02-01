@@ -170,7 +170,7 @@ class FullScreenVideoPlayer(
     private var spriteImageUrl = ""
 
 
-    private lateinit var progressBarParent: FrameLayout
+  //  private lateinit var progressBarParent: FrameLayout
     private lateinit var volumeProgressBar: SeekBar
     private lateinit var brightnessProgressBar: ProgressBar
 
@@ -223,7 +223,7 @@ class FullScreenVideoPlayer(
         overlayImageTransparent = view.findViewById(R.id.overlayImageTransparent)
 
         resumedVideoTv = view.findViewById(R.id.resumedVideoTv)
-        progressBarParent = view.findViewById(R.id.progress_bar_parent)
+     //   progressBarParent = view.findViewById(R.id.progress_bar_parent)
         volumeProgressBar = view.findViewById(R.id.exo_volume_progress)
         brightnessProgressBar = view.findViewById(R.id.brightness_progress_bar)
         errorRetryLayout = view.findViewById(R.id.errorRetryLayout)
