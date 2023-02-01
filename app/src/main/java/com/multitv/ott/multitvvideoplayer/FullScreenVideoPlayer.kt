@@ -137,7 +137,7 @@ class FullScreenVideoPlayer(
     private lateinit var epsodeButton: ImageView
     private lateinit var epsodeNextButton: ImageView
    // private lateinit var seekBarLayout: ConstraintLayout
-    private var videoControllerLayout: RelativeLayout? = null
+    private var videoControllerLayout: ConstraintLayout? = null
 
 
     private val formatBuilder: StringBuilder
