@@ -1539,7 +1539,7 @@ class FullScreenVideoPlayer(
         closeVideoPlayerButton!!.visibility = GONE
         overlayImageTransparent!!.visibility = GONE
         centerButtonLayout.visibility = GONE
-        videoProgressLayout.visibility = GONE
+    //    videoProgressLayout.visibility = GONE
         videoMenuLayout.visibility = GONE
         resumedVideoTv.visibility = View.GONE
         removeCallbacks(hideAction)
@@ -1553,7 +1553,7 @@ class FullScreenVideoPlayer(
         closeVideoPlayerButton.visibility = VISIBLE
         overlayImageTransparent.visibility = VISIBLE
         centerButtonLayout.visibility = VISIBLE
-        videoProgressLayout.visibility = VISIBLE
+       // videoProgressLayout.visibility = VISIBLE
         videoMenuLayout.visibility = VISIBLE
         resumedVideoTv.visibility = View.GONE
         updatePlayPauseButton()
