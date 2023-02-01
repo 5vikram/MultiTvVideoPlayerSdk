@@ -206,6 +206,7 @@ class AltbalajiTvVideoPlayer (
     public boolean onTouchEvent(MotionEvent event) {
         return super.onTouchEvent(event);
     }*/
+    @SuppressLint("MissingInflatedId")
     override fun onFinishInflate() {
         val view =
             LayoutInflater.from(getContext()).inflate(R.layout.alt_balaji_tv_video_player, this)
