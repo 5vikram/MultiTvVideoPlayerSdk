@@ -34,11 +34,9 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
-            android:foreground="?attr/selectableItemBackground"
+            android:background="?attr/selectableItemBackground"
             android:padding="5dp"
             android:focusable="true"
-            android:focusedByDefault="true"
-            android:focusableInTouchMode="true"
             android:src="@mipmap/player_back_btn" />
 
 
@@ -129,6 +127,7 @@
                 android:src="@drawable/pervious"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
+                android:focusedByDefault="true"
                 android:visibility="gone" />
 
 
@@ -141,13 +140,14 @@
 
                 <ImageView
                     android:id="@id/exo_rew"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginRight="5dp"
                     android:focusable="true"
                     android:focusableInTouchMode="true"
-                    android:foreground="?attr/selectableItemBackground"
+                    android:focusedByDefault="true"
+                    android:background="?attr/selectableItemBackground"
                     android:src="@drawable/ic_balaji_backward_10_sec" />
 
                 <TextView
@@ -169,7 +169,8 @@
                 android:padding="5dp"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
-                android:foreground="?attr/selectableItemBackground"
+                android:focusedByDefault="true"
+                android:background="?attr/selectableItemBackground"
                 android:src="@drawable/ic_balaji_pause" />
 
             <ImageView
@@ -180,7 +181,8 @@
                 android:padding="5dp"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
-                android:foreground="?attr/selectableItemBackground"
+                android:focusedByDefault="true"
+                android:background="?attr/selectableItemBackground"
                 android:src="@drawable/ic_balaji_play" />
 
 
@@ -207,7 +209,8 @@
                     android:layout_marginLeft="10dp"
                     android:focusable="true"
                     android:focusableInTouchMode="true"
-                    android:foreground="?attr/selectableItemBackground"
+                    android:focusedByDefault="true"
+                    android:background="?attr/selectableItemBackground"
                     android:src="@drawable/ic_balaji_farward_10_sec" />
 
 
@@ -223,7 +226,8 @@
                 android:src="@drawable/next"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
-                android:foreground="?attr/selectableItemBackground"
+                android:focusedByDefault="true"
+                android:background="?attr/selectableItemBackground"
                 android:visibility="gone" />
 
         </LinearLayout>
@@ -267,7 +271,8 @@
                 android:padding="5dp"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
-                android:foreground="?attr/selectableItemBackground"
+                android:focusedByDefault="true"
+                android:background="?attr/selectableItemBackground"
                 android:src="@drawable/webseries"
                 android:visibility="gone" />
 
@@ -278,10 +283,11 @@
                 android:layout_height="45dp"
                 android:layout_gravity="center"
                 android:layout_marginRight="5dp"
-                android:foreground="?attr/selectableItemBackground"
+                android:background="?attr/selectableItemBackground"
                 android:padding="5dp"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
+                android:focusedByDefault="true"
                 android:src="@drawable/next_epsode"
                 android:visibility="gone" />
 
@@ -292,10 +298,11 @@
                 android:layout_height="35dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="10dp"
-                android:foreground="?attr/selectableItemBackground"
+                android:background="?attr/selectableItemBackground"
                 android:padding="5dp"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
+                android:focusedByDefault="true"
                 android:src="@drawable/ic_balaji_volume_on" />
 
             <SeekBar
@@ -307,7 +314,8 @@
                 android:maxHeight="8dp"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
-                android:foreground="?attr/selectableItemBackground"
+                android:focusedByDefault="true"
+                android:background="?attr/selectableItemBackground"
                 android:progressDrawable="@drawable/seekbar_progress_style"
                 android:thumb="@drawable/seekbar_thumb"
                 android:thumbOffset="0dp" />
@@ -352,7 +360,8 @@
                     android:padding="5dp"
                     android:focusable="true"
                     android:focusableInTouchMode="true"
-                    android:foreground="?attr/selectableItemBackground"
+                    android:focusedByDefault="true"
+                    android:background="?attr/selectableItemBackground"
                     android:src="@drawable/ic_balaji_volume_on" />
 
 
@@ -365,7 +374,8 @@
                     android:padding="5dp"
                     android:focusable="true"
                     android:focusableInTouchMode="true"
-                    android:foreground="?attr/selectableItemBackground"
+                    android:focusedByDefault="true"
+                    android:background="?attr/selectableItemBackground"
                     android:src="@drawable/ic_balaji_volume_off"
                     android:visibility="gone" />
 
@@ -382,6 +392,7 @@
                 android:padding="5dp"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
+                android:focusedByDefault="true"
                 android:src="@drawable/ic_balaji_setting" />
 
             <ImageView
@@ -394,6 +405,7 @@
                 android:padding="5dp"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
+                android:focusedByDefault="true"
                 android:visibility="gone"
                 android:src="@drawable/ic_balaji_pip" />
 
@@ -405,8 +417,9 @@
                 android:padding="5dp"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
+                android:focusedByDefault="true"
                 android:visibility="gone"
-                android:foreground="?attr/selectableItemBackground"
+                android:background="?attr/selectableItemBackground"
                 android:src="@drawable/ic_balaji_fullscreen" />
 
 
@@ -439,7 +452,7 @@
         app:previewAnimationEnabled="false"
         app:previewFrameLayout="@id/previewFrameLayout"
         app:scrubber_dragged_size="24dp"
-        android:foreground="?attr/selectableItemBackground"
+        android:background="?attr/selectableItemBackground"
         app:scrubber_enabled_size="16dp" />
 
     <!--    <TextView-->
