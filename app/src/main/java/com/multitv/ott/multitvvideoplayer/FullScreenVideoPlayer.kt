@@ -109,7 +109,7 @@ class FullScreenVideoPlayer(
     private lateinit var resumedVideoTv: TextView
     private lateinit var volumeLayout: LinearLayout
     private lateinit var volumeLinearLayout: LinearLayout
-    private lateinit var videoProgressLayout: LinearLayoutCompat
+  //  private lateinit var videoProgressLayout: LinearLayoutCompat
     private lateinit var bufferingProgressBarLayout: LinearLayout
     private lateinit var circularProgressLayout: LinearLayout
     private lateinit var overlayImageTransparent: View
@@ -136,7 +136,7 @@ class FullScreenVideoPlayer(
     private lateinit var videoTitle: TextView
     private lateinit var epsodeButton: ImageView
     private lateinit var epsodeNextButton: ImageView
-    private lateinit var seekBarLayout: ConstraintLayout
+   // private lateinit var seekBarLayout: ConstraintLayout
     private var videoControllerLayout: RelativeLayout? = null
 
 
@@ -231,14 +231,14 @@ class FullScreenVideoPlayer(
         volumeUnMuteButton = view.findViewById(R.id.volumeUnMuteButton)
         bufferingProgressBarLayout = view.findViewById(R.id.bufferingProgressBarLayout)
         circularProgressLayout = view.findViewById(R.id.circularProgressLayout)
-        videoProgressLayout = findViewById(R.id.video_progress_layout)
+     //   videoProgressLayout = findViewById(R.id.video_progress_layout)
         setting = view.findViewById(R.id.settings_btn)
         volumeLayout = view.findViewById(R.id.volumeLayout)
         volumeLinearLayout = view.findViewById(R.id.volumeLinearLayout)
 
         videoControllerLayout = view.findViewById(R.id.videoControllerLayout)
         previewFrameLayout = view.findViewById(R.id.previewFrameLayout)
-        seekBarLayout = view.findViewById(R.id.seekBarLayout)
+     //   seekBarLayout = view.findViewById(R.id.seekBarLayout)
 
         setting?.setOnClickListener(this)
         centerButtonLayout = view.findViewById(R.id.centerButtonLayout)
