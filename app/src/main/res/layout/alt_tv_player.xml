@@ -8,6 +8,7 @@
     android:layout_gravity="bottom"
     android:layoutDirection="ltr">
 
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -34,6 +35,7 @@
             android:defaultFocusHighlightEnabled="true"
             android:focusedByDefault="true"
             android:src="@mipmap/player_back_btn">
+            <requestFocus />
         </ImageView>
 
 
@@ -132,7 +134,7 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                   android:id="@+id/backword"
+                   android:id="@+id/exo_rew"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:layout_gravity="center_vertical"
@@ -194,7 +196,7 @@
                     android:textSize="11sp" />
 
                 <ImageView
-                    android:id="@+id/forword"
+                    android:id="@+id/exo_ffwd"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:layout_gravity="center_vertical"
@@ -245,6 +247,7 @@
             android:layout_centerVertical="true"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="10dp"
+            android:layout_weight="1"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
