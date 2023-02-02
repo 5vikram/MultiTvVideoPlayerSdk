@@ -16,7 +16,7 @@
         android:layout_height="match_parent"
         app:animation_enabled="true"
         android:focusable="true"
-        app:controller_layout_id="@layout/alt_player"
+        app:controller_layout_id="@layout/alt_tv_player"
         app:resize_mode="fill" />
 
     <androidx.appcompat.widget.LinearLayoutCompat
