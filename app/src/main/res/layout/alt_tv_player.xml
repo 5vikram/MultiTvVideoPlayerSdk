@@ -24,7 +24,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
 
-        <Button
+        <ImageView
             android:id="@+id/closeButton"
             android:layout_width="30dp"
             android:layout_height="28dp"
@@ -41,7 +41,8 @@
             android:defaultFocusHighlightEnabled="true"
             android:focusedByDefault="true"
             android:src="@mipmap/player_back_btn">
-        </Button>
+            <requestFocus />
+        </ImageView>
 
 
         <TextView
@@ -140,7 +141,7 @@
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:id="@id/exo_rew"
+                   android:id="@+id/backword"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:layout_gravity="center_vertical"
@@ -202,7 +203,7 @@
                     android:textSize="11sp" />
 
                 <ImageView
-                    android:id="@id/exo_ffwd"
+                    android:id="@+id/forword"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:layout_gravity="center_vertical"

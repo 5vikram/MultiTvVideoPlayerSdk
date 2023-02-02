@@ -128,7 +128,7 @@ class AltbalajiTvVideoPlayer (
     private lateinit var videoUnLockButton: ImageView
     private lateinit var volumeMuteAndUnMuteButton: ImageView
     private lateinit var volumeUnMuteButton: ImageView
-    private lateinit var closeVideoPlayerButton: Button
+    private lateinit var closeVideoPlayerButton: ImageView
     private lateinit var setting: ImageView
     private lateinit var videoPerviousButton: ImageView
     private lateinit var videoNextButton: ImageView
@@ -261,8 +261,8 @@ class AltbalajiTvVideoPlayer (
         centerButtonLayout = view.findViewById(R.id.centerButtonLayout)
         videoPerviousButton = view.findViewById(R.id.exo_prev)
         videoNextButton = view.findViewById(R.id.exo_next)
-        VideoRenuButton = view.findViewById(R.id.exo_rew)
-        videoFarwardButton = view.findViewById(R.id.exo_ffwd)
+        VideoRenuButton = view.findViewById(R.id.backword)
+        videoFarwardButton = view.findViewById(R.id.forword)
         videoPlayButton = view.findViewById(R.id.exo_play)
         videoPauseButton = view.findViewById(R.id.exo_pause)
         videoLockButton = view.findViewById(R.id.exo_lock)
