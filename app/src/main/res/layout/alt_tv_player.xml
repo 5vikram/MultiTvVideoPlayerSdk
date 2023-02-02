@@ -34,10 +34,12 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
-            android:background="?attr/selectableItemBackground"
+            android:background="@drawable/button_selector"
             android:padding="5dp"
             android:focusable="true"
-            android:src="@mipmap/player_back_btn" />
+            android:src="@mipmap/player_back_btn" >
+            <requestFocus />
+        </ImageButton>
 
 
         <TextView
@@ -143,11 +145,10 @@
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginRight="5dp"
+                    android:layout_marginEnd="5dp"
                     android:focusable="true"
                     android:focusableInTouchMode="true"
-                    android:focusedByDefault="true"
-                    android:background="?attr/selectableItemBackground"
+                    android:background="@drawable/button_selector"
                     android:src="@drawable/ic_balaji_backward_10_sec" />
 
                 <TextView
@@ -170,7 +171,7 @@
                 android:focusable="true"
                 android:focusableInTouchMode="true"
                 android:focusedByDefault="true"
-                android:background="?attr/selectableItemBackground"
+                android:background="@drawable/button_selector"
                 android:src="@drawable/ic_balaji_pause" />
 
             <ImageView
@@ -210,7 +211,7 @@
                     android:focusable="true"
                     android:focusableInTouchMode="true"
                     android:focusedByDefault="true"
-                    android:background="?attr/selectableItemBackground"
+                    android:background="@drawable/button_selector"
                     android:src="@drawable/ic_balaji_farward_10_sec" />
 
 
@@ -388,7 +389,7 @@
                 android:layout_height="30dp"
                 android:layout_gravity="center"
                 android:layout_marginRight="5dp"
-                android:background="@android:color/transparent"
+                android:background="@drawable/button_selector"
                 android:padding="5dp"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
