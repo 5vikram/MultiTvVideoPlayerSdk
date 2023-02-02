@@ -6,14 +6,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="bottom"
-    android:focusable="true"
     android:layoutDirection="ltr">
 
     <View
         android:id="@+id/overlayImageTransparent"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:alpha=".6"
         android:background="#CC212121" />
 
     <RelativeLayout
@@ -41,7 +39,7 @@
             android:nextFocusDown="@id/exo_rew"
             android:defaultFocusHighlightEnabled="true"
             android:focusedByDefault="true"
-            android:src="@mipmap/player_back_btn">
+            android:src="@drawable/ic_balaji_backward_10_sec">
         </ImageView>
 
 
