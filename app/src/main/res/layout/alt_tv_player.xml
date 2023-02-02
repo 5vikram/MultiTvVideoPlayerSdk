@@ -8,7 +8,6 @@
     android:layout_gravity="bottom"
     android:layoutDirection="ltr">
 
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -35,7 +34,6 @@
             android:defaultFocusHighlightEnabled="true"
             android:focusedByDefault="true"
             android:src="@mipmap/player_back_btn">
-            <requestFocus />
         </ImageView>
 
 
@@ -72,7 +70,6 @@
             android:textSize="12sp"
             android:visibility="gone" />
     </RelativeLayout>
-
 
     <LinearLayout
         android:id="@+id/midLayout"
@@ -227,7 +224,6 @@
 
     </LinearLayout>
 
-
     <RelativeLayout
         android:id="@+id/videoMenuLayout"
         android:layout_width="match_parent"
@@ -249,7 +245,6 @@
             android:layout_centerVertical="true"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="10dp"
-            android:layout_weight="1"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
@@ -408,7 +403,6 @@
 
     </RelativeLayout>
 
-
     <TextView
         android:id="@id/vvvvvvvvvv"
         android:layout_width="wrap_content"
@@ -436,21 +430,6 @@
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:nextFocusDown="@id/volumeFullScreenButton"/>
-
-    <!--    <TextView-->
-    <!--        android:id="@id/exo_duration"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_gravity="bottom"-->
-    <!--        android:layout_margin="8dp"-->
-    <!--        android:includeFontPadding="false"-->
-    <!--        android:textColor="#FFBEBEBE"-->
-    <!--        android:textSize="12sp"-->
-    <!--        android:textStyle="bold"-->
-    <!--        app:layout_constraintBaseline_toBaselineOf="@id/exo_position"-->
-    <!--        app:layout_constraintEnd_toEndOf="parent"-->
-    <!--        tools:text="25:23" />-->
-
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/durationLinearLayout"
@@ -510,7 +489,6 @@
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
-
     <FrameLayout
         android:id="@+id/previewFrameLayout"
         android:layout_width="0dp"
@@ -536,6 +514,5 @@
             android:layout_margin="@dimen/video_frame_width"
             android:scaleType="fitXY" />
     </FrameLayout>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
