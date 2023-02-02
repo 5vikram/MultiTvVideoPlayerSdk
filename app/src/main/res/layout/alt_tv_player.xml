@@ -33,8 +33,8 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
-            android:background="@drawable/button_selector"
-            android:focusable="true"
+            android:background="@drawable/button"
+            android:focusable="false"
             android:padding="5dp"
             android:nextFocusDown="@id/exo_rew"
             android:defaultFocusHighlightEnabled="true"
@@ -144,8 +144,8 @@
                     android:layout_height="25dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginEnd="5dp"
-                    android:background="@drawable/button_selector"
-                    android:focusable="true"
+                    android:background="@drawable/button"
+                    android:focusable="false"
                     android:nextFocusDown="@id/exo_play"
                     android:src="@drawable/ic_balaji_backward_10_sec" />
 
@@ -165,8 +165,8 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_gravity="center_vertical"
-                android:background="@drawable/button_selector"
-                android:focusable="true"
+                android:background="@drawable/button"
+                android:focusable="false"
                 android:padding="5dp"
                 android:nextFocusDown="@id/exo_ffwd"
                 android:src="@drawable/ic_balaji_pause" />
@@ -177,7 +177,7 @@
                 android:layout_height="40dp"
                 android:layout_gravity="center_vertical"
                 android:background="?attr/selectableItemBackground"
-                android:focusable="true"
+                android:focusable="false"
                 android:padding="5dp"
                 android:src="@drawable/ic_balaji_play" />
 
@@ -203,8 +203,8 @@
                     android:layout_height="25dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="10dp"
-                    android:background="@drawable/button_selector"
-                    android:focusable="true"
+                    android:background="@drawable/button"
+                    android:focusable="false"
                     android:nextFocusDown="@id/exo_progress"
                     android:src="@drawable/ic_balaji_farward_10_sec" />
 
@@ -261,7 +261,7 @@
                 android:layout_gravity="center"
                 android:layout_marginEnd="5dp"
                 android:background="?attr/selectableItemBackground"
-                android:focusable="true"
+                android:focusable="false"
                 android:padding="5dp"
                 android:src="@drawable/webseries"
                 android:visibility="gone" />
@@ -285,8 +285,8 @@
                 android:layout_height="35dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginEnd="10dp"
-                android:background="@drawable/button_selector"
-                android:focusable="true"
+                android:background="@drawable/button"
+                android:focusable="false"
                 android:padding="5dp"
                 android:src="@drawable/ic_balaji_volume_on"
                 android:nextFocusDown="@id/exo_volume_progress"/>
@@ -297,8 +297,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginEnd="40dp"
-                android:background="@drawable/button_selector"
-                android:focusable="true"
+                android:background="@drawable/button"
+                android:focusable="false"
                 android:maxHeight="8dp"
                 android:progressDrawable="@drawable/seekbar_progress_style"
                 android:thumb="@drawable/seekbar_thumb"
@@ -342,8 +342,8 @@
                     android:layout_height="30dp"
                     android:layout_gravity="center"
                     android:layout_marginEnd="5dp"
-                    android:background="@drawable/button_selector"
-                    android:focusable="true"
+                    android:background="@drawable/button"
+                    android:focusable="false"
                     android:padding="5dp"
                     android:src="@drawable/ic_balaji_volume_on"
                     android:nextFocusDown="@id/settings_btn"/>
@@ -356,7 +356,7 @@
                     android:layout_gravity="center"
                     android:layout_marginEnd="5dp"
                     android:background="?attr/selectableItemBackground"
-                    android:focusable="true"
+                    android:focusable="false"
                     android:padding="5dp"
                     android:src="@drawable/ic_balaji_volume_off"
                     android:visibility="gone" />
@@ -370,8 +370,8 @@
                 android:layout_height="30dp"
                 android:layout_gravity="center"
                 android:layout_marginEnd="5dp"
-                android:background="@drawable/button_selector"
-                android:focusable="true"
+                android:background="@drawable/button"
+                android:focusable="false"
                 android:padding="5dp"
                 android:src="@drawable/ic_balaji_setting" />
 
@@ -392,7 +392,7 @@
                 android:layout_height="35dp"
                 android:layout_gravity="center_vertical"
                 android:background="?attr/selectableItemBackground"
-                android:focusable="true"
+                android:focusable="false"
                 android:padding="5dp"
                 android:src="@drawable/ic_balaji_fullscreen"
                 android:visibility="gone" />
@@ -419,7 +419,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
         android:layout_marginEnd="8dp"
-        android:background="@drawable/button_selector"
+        android:background="@drawable/button"
         app:layout_constraintBottom_toBottomOf="@id/vvvvvvvvvv"
         app:layout_constraintEnd_toStartOf="@id/durationLinearLayout"
         app:layout_constraintStart_toEndOf="@+id/vvvvvvvvvv"
@@ -428,7 +428,7 @@
         app:previewFrameLayout="@id/previewFrameLayout"
         app:scrubber_dragged_size="24dp"
         app:scrubber_enabled_size="16dp"
-        android:focusable="true"
+        android:focusable="false"
         android:nextFocusDown="@id/volumeFullScreenButton"/>
 
     <!--    <TextView-->
