@@ -1,6 +1,7 @@
 package com.multitv.ott.multitvvideoplayer
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
@@ -162,6 +163,7 @@ class TvPlayer(
     public boolean onTouchEvent(MotionEvent event) {
         return super.onTouchEvent(event);
     }*/
+    @SuppressLint("MissingInflatedId")
     override fun onFinishInflate() {
         val view = LayoutInflater.from(getContext()).inflate(R.layout.player_layout, this)
         progressBarParent = view.findViewById(R.id.progress_bar_parent)
