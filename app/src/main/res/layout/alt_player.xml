@@ -88,7 +88,7 @@
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_marginStart="20dp"
-            android:background="@android:color/transparent"
+            android:background="@drawable/button"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
             android:src="@drawable/lock"
@@ -100,7 +100,7 @@
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_marginStart="20dp"
-            android:background="@android:color/transparent"
+            android:background="@drawable/button"
             android:src="@drawable/unlock"
             android:visibility="gone" />
 
@@ -121,7 +121,7 @@
                 android:layout_height="32dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="10dp"
-                android:background="@android:color/transparent"
+                android:background="@drawable/button"
                 android:src="@drawable/pervious"
                 android:visibility="gone" />
 
@@ -139,7 +139,7 @@
                     android:layout_height="25dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginRight="5dp"
-                    android:background="@android:color/transparent"
+                    android:background="@drawable/button"
                     android:src="@drawable/ic_balaji_backward_10_sec" />
 
                 <TextView
@@ -244,7 +244,7 @@
                 android:layout_height="45dp"
                 android:layout_gravity="center"
                 android:layout_marginRight="5dp"
-                android:background="@android:color/transparent"
+                android:background="@drawable/button"
                 android:padding="5dp"
                 android:src="@drawable/webseries"
                 android:visibility="gone" />
@@ -256,7 +256,7 @@
                 android:layout_height="45dp"
                 android:layout_gravity="center"
                 android:layout_marginRight="5dp"
-                android:background="@android:color/transparent"
+                android:background="@drawable/button"
                 android:padding="5dp"
                 android:src="@drawable/next_epsode"
                 android:visibility="gone" />
@@ -268,7 +268,7 @@
                 android:layout_height="35dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="10dp"
-                android:background="@android:color/transparent"
+                android:background="@drawable/button"
                 android:padding="5dp"
                 android:src="@drawable/ic_balaji_volume_on" />
 
@@ -301,7 +301,7 @@
                 android:layout_height="35dp"
                 android:layout_gravity="center"
                 android:layout_marginRight="10dp"
-                android:background="@android:color/transparent"
+                android:background="@drawable/button"
                 android:src="@drawable/speed"
                 android:visibility="gone" />
 
@@ -320,7 +320,7 @@
                     android:layout_height="30dp"
                     android:layout_gravity="center"
                     android:layout_marginRight="5dp"
-                    android:background="@android:color/transparent"
+                    android:background="@drawable/button"
                     android:padding="5dp"
                     android:src="@drawable/ic_balaji_volume_on" />
 
@@ -331,7 +331,7 @@
                     android:layout_height="30dp"
                     android:layout_gravity="center"
                     android:layout_marginRight="5dp"
-                    android:background="@android:color/transparent"
+                    android:background="@drawable/button"
                     android:padding="5dp"
                     android:src="@drawable/ic_balaji_volume_off"
                     android:visibility="gone" />
@@ -345,7 +345,7 @@
                 android:layout_height="30dp"
                 android:layout_gravity="center"
                 android:layout_marginRight="5dp"
-                android:background="@android:color/transparent"
+                android:background="@drawable/button"
                 android:padding="5dp"
                 android:src="@drawable/ic_balaji_setting" />
 
@@ -355,7 +355,7 @@
                 android:layout_height="30dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="5dp"
-                android:background="@android:color/transparent"
+                android:background="@drawable/button"
                 android:padding="5dp"
                 android:src="@drawable/ic_balaji_pip" />
 
@@ -364,7 +364,7 @@
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:layout_gravity="center_vertical"
-                android:background="@android:color/transparent"
+                android:background="@drawable/button"
                 android:padding="5dp"
                 android:src="@drawable/ic_balaji_fullscreen" />
 
