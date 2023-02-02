@@ -35,7 +35,7 @@
             android:layout_marginEnd="16dp"
             android:background="@drawable/button"
             
-            android:focusableInTouchMode="true"
+            
             android:padding="5dp"
             android:nextFocusDown="@id/exo_rew"
             android:defaultFocusHighlightEnabled="true"
@@ -147,7 +147,7 @@
                     android:layout_marginEnd="5dp"
                     android:background="@drawable/button"
                     
-                    android:focusableInTouchMode="true"
+                    
                     android:nextFocusDown="@id/exo_play"
                     android:src="@drawable/ic_balaji_backward_10_sec" />
 
@@ -169,7 +169,7 @@
                 android:layout_gravity="center_vertical"
                 android:background="@drawable/button"
                 
-                android:focusableInTouchMode="true"
+                
                 android:padding="5dp"
                 android:nextFocusDown="@id/exo_ffwd"
                 android:src="@drawable/ic_balaji_pause" />
@@ -181,7 +181,7 @@
                 android:layout_gravity="center_vertical"
                 android:background="?attr/selectableItemBackground"
                 
-                android:focusableInTouchMode="true"
+                
                 android:padding="5dp"
                 android:src="@drawable/ic_balaji_play" />
 
@@ -209,7 +209,7 @@
                     android:layout_marginStart="10dp"
                     android:background="@drawable/button"
                     
-                    android:focusableInTouchMode="true"
+                    
                     android:nextFocusDown="@id/exo_progress"
                     android:src="@drawable/ic_balaji_farward_10_sec" />
 
@@ -267,7 +267,7 @@
                 android:layout_marginEnd="5dp"
                 android:background="?attr/selectableItemBackground"
                 
-                android:focusableInTouchMode="true"
+                
                 android:padding="5dp"
                 android:src="@drawable/webseries"
                 android:visibility="gone" />
@@ -293,7 +293,7 @@
                 android:layout_marginEnd="10dp"
                 android:background="@drawable/button"
                 
-                android:focusableInTouchMode="true"
+                
                 android:padding="5dp"
                 android:src="@drawable/ic_balaji_volume_on"
                 android:nextFocusDown="@id/exo_volume_progress"/>
@@ -306,7 +306,7 @@
                 android:layout_marginEnd="40dp"
                 android:background="@drawable/button"
                 
-                android:focusableInTouchMode="true"
+                
                 android:maxHeight="8dp"
                 android:progressDrawable="@drawable/seekbar_progress_style"
                 android:thumb="@drawable/seekbar_thumb"
@@ -352,7 +352,7 @@
                     android:layout_marginEnd="5dp"
                     android:background="@drawable/button"
                     
-                    android:focusableInTouchMode="true"
+                    
                     android:padding="5dp"
                     android:src="@drawable/ic_balaji_volume_on"
                     android:nextFocusDown="@id/settings_btn"/>
@@ -380,7 +380,7 @@
                 android:layout_marginEnd="5dp"
                 android:background="@drawable/button"
                 
-                android:focusableInTouchMode="true"
+                
                 android:padding="5dp"
                 android:src="@drawable/ic_balaji_setting" />
 
@@ -402,7 +402,7 @@
                 android:layout_gravity="center_vertical"
                 android:background="?attr/selectableItemBackground"
                 
-                android:focusableInTouchMode="true"
+                
                 android:padding="5dp"
                 android:src="@drawable/ic_balaji_fullscreen"
                 android:visibility="gone" />
@@ -439,7 +439,7 @@
         app:scrubber_dragged_size="24dp"
         app:scrubber_enabled_size="16dp"
         
-        android:focusableInTouchMode="true"
+        
         android:nextFocusDown="@id/volumeFullScreenButton"/>
 
     <!--    <TextView-->
