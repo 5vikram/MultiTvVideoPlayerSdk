@@ -8,12 +8,6 @@
     android:layout_gravity="bottom"
     android:layoutDirection="ltr">
 
-    <View
-        android:id="@+id/overlayImageTransparent"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:alpha=".6"
-        android:background="#CC212121" />
 
     <RelativeLayout
         android:layout_width="match_parent"
