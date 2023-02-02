@@ -128,7 +128,7 @@ class AltbalajiTvVideoPlayer (
     private lateinit var videoUnLockButton: ImageView
     private lateinit var volumeMuteAndUnMuteButton: ImageView
     private lateinit var volumeUnMuteButton: ImageView
-    private lateinit var closeVideoPlayerButton: ImageView
+    private lateinit var closeVideoPlayerButton: Button
     private lateinit var setting: ImageView
     private lateinit var videoPerviousButton: ImageView
     private lateinit var videoNextButton: ImageView

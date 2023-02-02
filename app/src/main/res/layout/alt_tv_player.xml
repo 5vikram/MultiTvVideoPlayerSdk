@@ -24,7 +24,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
 
-        <ImageButton
+        <Button
             android:id="@+id/closeButton"
             android:layout_width="30dp"
             android:layout_height="28dp"
@@ -41,7 +41,7 @@
             android:defaultFocusHighlightEnabled="true"
             android:focusedByDefault="true"
             android:src="@mipmap/player_back_btn">
-        </ImageButton>
+        </Button>
 
 
         <TextView
