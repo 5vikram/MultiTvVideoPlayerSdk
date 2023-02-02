@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_pressed="true"
-        android:drawable="@color/colorAccent" /> <!-- pressed -->
+        android:drawable="@color/download_background_color" /> <!-- pressed -->
     <item android:state_focused="true"
         android:drawable="@color/done_button_color" /> <!-- focused -->
     <item android:state_hovered="true"
-        android:drawable="@color/ad_marker" /> <!-- hovered -->
-    <item android:drawable="@color/black" /> <!-- default -->
+        android:drawable="@color/button_background_color" /> <!-- hovered -->
+    <item android:drawable="@android:color/transparent" /> <!-- default -->
 </selector>
