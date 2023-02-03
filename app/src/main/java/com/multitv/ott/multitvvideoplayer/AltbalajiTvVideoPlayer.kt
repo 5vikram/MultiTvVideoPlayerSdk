@@ -301,6 +301,7 @@ class AltbalajiTvVideoPlayer (
 
 
 
+        closeVideoPlayerButton.requestFocus()
         closeVideoPlayerButton.setOnClickListener {
             context.finish()
         }

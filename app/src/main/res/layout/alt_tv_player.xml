@@ -41,6 +41,7 @@
             android:nextFocusDown="@id/exo_rew"
             android:defaultFocusHighlightEnabled="true"
             android:focusedByDefault="true"
+
             android:src="@mipmap/player_back_btn">
         </ImageView>
 
