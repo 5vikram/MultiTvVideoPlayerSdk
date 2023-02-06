@@ -84,7 +84,7 @@ class BalajiVideoPlayer(
     private val sharedPreferencePlayer: SharedPreferencePlayer
     private var contentType: ContentType? = null
     private var mMediaPlayer: ExoPlayer? = null
-    private var simpleExoPlayerView: StyledPlayerView? = null
+    var simpleExoPlayerView: StyledPlayerView? = null
     private var trackSelector: DefaultTrackSelector
 
     private var videoPlayPauseCallBackListener: VideoPlayPauseCallBackListener? = null
