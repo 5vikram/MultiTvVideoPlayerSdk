@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/pause_download"
+        android:title="Pause"/>
+
+    <item android:id="@+id/resume_download"
+        android:title="Resume"/>
+
+    <item android:id="@+id/cancel_download"
+        android:title="Cancel"/>
+
+    <item android:id="@+id/delete_download"
+        android:title="Delete"/>
+
+    <item android:id="@+id/downloads"
+        android:title="Downloads"/>
+</menu>

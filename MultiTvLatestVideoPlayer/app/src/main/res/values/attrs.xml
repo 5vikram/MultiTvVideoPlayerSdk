@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2016 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources>
+
+
+
+    <!-- Must be kept in sync with AspectRatioFrameLayout -->
+    <attr name="resize_mode" format="enum">
+        <enum name="fit" value="0" />
+        <enum name="fixed_width" value="1" />
+        <enum name="fixed_height" value="2" />
+        <enum name="fill" value="3" />
+    </attr>
+
+    <!-- Must be kept in sync with SimpleExoPlayerView -->
+    <attr name="surface_type" format="enum">
+        <enum name="none" value="0" />
+        <enum name="surface_view" value="1" />
+        <enum name="texture_view" value="2" />
+    </attr>
+    <attr name="show_timeout" format="integer" />
+    <attr name="rewind_increment" format="integer" />
+    <attr name="fastforward_increment" format="integer" />
+    <attr name="player_layout_id" format="reference" />
+    <attr name="controller_layout_id" format="reference" />
+    <attr name="repeat_toggle_modes">
+        <flag name="none" value="0" />
+        <flag name="one" value="1" />
+        <flag name="all" value="2" />
+    </attr>
+
+    <declare-styleable name="SimpleExoPlayerView">
+        <attr name="use_artwork" format="boolean" />
+        <attr name="default_artwork" format="reference" />
+        <attr name="use_controller" format="boolean" />
+        <attr name="hide_on_touch" format="boolean" />
+        <attr name="auto_show" format="boolean" />
+        <attr name="resize_mode" />
+        <attr name="surface_type" />
+        <attr name="show_timeout" />
+        <attr name="rewind_increment" />
+        <attr name="fastforward_increment" />
+        <attr name="player_layout_id" />
+        <attr name="controller_layout_id" />
+    </declare-styleable>
+
+    <declare-styleable name="AspectRatioFrameLayout">
+        <attr name="resize_mode" />
+    </declare-styleable>
+
+    <declare-styleable name="PlaybackControlView">
+        <attr name="show_timeout" />
+        <attr name="rewind_increment" />
+        <attr name="fastforward_increment" />
+        <attr name="repeat_toggle_modes" />
+        <attr name="controller_layout_id" />
+    </declare-styleable>
+
+<!--
+    <declare-styleable name="DefaultTimeBar">
+        <attr name="bar_height_sdk" format="dimension" />
+        <attr name="touch_target_height" format="dimension" />
+        <attr name="ad_marker_width" format="dimension" />
+        <attr name="scrubber_enabled_size" format="dimension" />
+        <attr name="scrubber_disabled_size" format="dimension" />
+        <attr name="scrubber_dragged_size" format="dimension" />
+        <attr name="played_color" format="color" />
+        <attr name="scrubber_color" format="color" />
+        <attr name="buffered_color" format="color" />
+        <attr name="unplayed_color" format="color" />
+        <attr name="ad_marker_color" format="color" />
+        <attr name="played_ad_marker_color" format="color" />
+    </declare-styleable>
+-->
+
+
+    <declare-styleable name="CircleImageView">
+        <attr name="android:src" />
+        <attr name="android:color" />
+        <attr name="android:indeterminate"/>
+        <attr name="android:progress"/>
+        <attr name="android:max"/>
+        <attr name="android:shadowDx"/>
+        <attr name="android:shadowDy"/>
+        <attr name="android:shadowRadius"/>
+        <attr name="android:shadowColor"/>
+        <attr name="android:indeterminateDuration"/>
+        <attr name="fbb_progressColor" format="reference|color"/>
+        <attr name="fbb_autoStart" format="boolean" />
+        <attr name="fbb_animSteps" format="integer" />
+        <attr name="fbb_progressWidthRatio" format="float" />
+        <attr name="fbb_endBitmap" format="reference" />
+        <attr name="fbb_showEndBitmap" format="boolean" />
+        <attr name="fbb_hideProgressOnComplete" format="boolean" />
+        <attr name="fbb_showShadow" format="boolean" />
+    </declare-styleable>
+
+
+<!--
+    <declare-styleable name="BubbleSeekBar">
+        <attr name="bsb_min" format="float|reference"/> &lt;!&ndash;min < max, default: 0.0f&ndash;&gt;
+        <attr name="bsb_max" format="float|reference"/> &lt;!&ndash;min < max, default: 100.0f&ndash;&gt;
+        <attr name="bsb_progress" format="float|reference"/> &lt;!&ndash;real time progress value, default: min&ndash;&gt;
+        <attr name="bsb_is_float_type" format="boolean"/> &lt;!&ndash;support for float type&ndash;&gt;
+        <attr name="bsb_track_size" format="dimension|reference"/> &lt;!&ndash;height of right-track(on the right of thumb), default: 2dp&ndash;&gt;
+        &lt;!&ndash;height of left-track(on the left of thumb), default: 2dp higher than right-track's height&ndash;&gt;
+        <attr name="bsb_second_track_size" format="dimension|reference"/>
+        <attr name="bsb_thumb_radius" format="dimension|reference"/> &lt;!&ndash;radius of thumb, default: 2dp higher than left-track's height&ndash;&gt;
+        &lt;!&ndash;radius of thumb when be dragging, default: 2 times of left-track's height&ndash;&gt;
+        <attr name="bsb_thumb_radius_on_dragging" format="dimension|reference"/>
+        <attr name="bsb_track_color" format="color|reference"/> &lt;!&ndash;color of right-track, default: R.color.colorPrimary&ndash;&gt;
+        <attr name="bsb_second_track_color" format="color|reference"/> &lt;!&ndash;color of left-track, default: R.color.colorAccent&ndash;&gt;
+        <attr name="bsb_thumb_color" format="color|reference"/> &lt;!&ndash;color of thumb, default: same as left-track's color&ndash;&gt;
+        <attr name="bsb_section_count" format="integer|reference"/> &lt;!&ndash;shares of whole progress(max - min), default: 10&ndash;&gt;
+        <attr name="bsb_show_section_mark" format="boolean"/> &lt;!&ndash;show demarcation points or not, default: false&ndash;&gt;
+        <attr name="bsb_auto_adjust_section_mark" format="boolean"/> &lt;!&ndash;auto scroll to the nearest section_mark or not, default: false&ndash;&gt;
+        <attr name="bsb_show_section_text" format="boolean"/> &lt;!&ndash;show section-text or not, default: false&ndash;&gt;
+        <attr name="bsb_section_text_size" format="dimension|reference"/> &lt;!&ndash;text size of section-text, default: 14sp&ndash;&gt;
+        <attr name="bsb_section_text_color" format="color|reference"/> &lt;!&ndash;text color of section-text, default: same as right-track's color&ndash;&gt;
+        &lt;!&ndash;text position of section-text relative to track, sides, bottom_sides, below_section_mark, default: sides&ndash;&gt;
+        <attr name="bsb_section_text_position">
+            <enum name="sides" value="0"/>
+            <enum name="bottom_sides" value="1"/>
+            <enum name="below_section_mark" value="2"/>
+        </attr>
+        <attr name="bsb_section_text_interval" format="integer"/> &lt;!&ndash;the interval of two section-text, default: 1&ndash;&gt;
+        <attr name="bsb_show_thumb_text" format="boolean"/> &lt;!&ndash;show real time progress-text under thumb or not, default: false&ndash;&gt;
+        <attr name="bsb_thumb_text_size" format="dimension|reference"/> &lt;!&ndash;text size of progress-text, default: 14sp&ndash;&gt;
+        <attr name="bsb_thumb_text_color" format="color|reference"/> &lt;!&ndash;text color of progress-text, default: same as left-track's color&ndash;&gt;
+        <attr name="bsb_show_progress_in_float" format="boolean"/> &lt;!&ndash;show bubble-progress in float or not, default: false&ndash;&gt;
+        <attr name="bsb_touch_to_seek" format="boolean"/> &lt;!&ndash;touch anywhere on track to quickly seek, default: false&ndash;&gt;
+        <attr name="bsb_seek_step_section" format="boolean"/> &lt;!&ndash;seek one step by one section, the progress is discrete, default: false&ndash;&gt;
+        <attr name="bsb_seek_by_section" format="boolean"/> &lt;!&ndash;seek by section, the progress may not be linear, default: false&ndash;&gt;
+        <attr name="bsb_bubble_color" format="color|reference"/> &lt;!&ndash;color of bubble, default: same as left-track's color&ndash;&gt;
+        <attr name="bsb_bubble_text_size" format="dimension|reference"/> &lt;!&ndash;text size of bubble-progress, default: 14sp&ndash;&gt;
+        <attr name="bsb_bubble_text_color" format="color|reference"/> &lt;!&ndash;text color of bubble-progress, default: #ffffffff&ndash;&gt;
+        <attr name="bsb_anim_duration" format="integer"/> &lt;!&ndash;duration of animation, default: 200ms&ndash;&gt;
+        <attr name="bsb_always_show_bubble" format="boolean"/> &lt;!&ndash;bubble shows all time, default: false&ndash;&gt;
+        <attr name="bsb_always_show_bubble_delay" format="integer"/> &lt;!&ndash;the delay duration before bubble shows all the time, default: 200ms&ndash;&gt;
+        <attr name="bsb_hide_bubble" format="boolean"/> &lt;!&ndash;hide bubble, default: false&ndash;&gt;
+        <attr name="bsb_rtl" format="boolean"/> &lt;!&ndash;right to left, default: false&ndash;&gt;
+        <attr name="android:enabled"/>
+    </declare-styleable>
+-->
+
+</resources>
