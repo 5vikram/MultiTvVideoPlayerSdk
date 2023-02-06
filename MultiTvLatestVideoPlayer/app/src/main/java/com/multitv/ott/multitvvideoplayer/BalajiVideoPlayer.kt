@@ -436,9 +436,12 @@ class BalajiVideoPlayer(
         this.skipDurationArray = skipDurationArray;
     }
 
+    // get simple exoplayer view
     fun getExoPlayer():StyledPlayerView{
         return simpleExoPlayerView!!
     }
+
+
 
 
     fun skipVideo(duration: String) {
