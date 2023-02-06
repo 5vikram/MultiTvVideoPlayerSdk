@@ -437,6 +437,11 @@ class BalajiVideoPlayer(
     }
 
 
+    fun getExoPlayer():StyledPlayerView{
+        return simpleExoPlayerView!!
+    }
+
+
     fun skipVideo(duration: String) {
         val units = duration.split(":".toRegex()).toTypedArray()
     }
