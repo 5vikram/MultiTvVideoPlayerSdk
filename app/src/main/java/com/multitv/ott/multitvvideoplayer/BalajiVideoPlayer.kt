@@ -453,16 +453,19 @@ class BalajiVideoPlayer(
 
 
     fun initAdSession() {
-        VideoPlayerTracer.error("CONVIVA SDK ADS:::", "AD PLAYING")
-        adAnalytics = ConvivaAnalytics.buildAdAnalytics(context, videoAnalytics)
-//        val tags: MutableMap<String, Any> = HashMap()
-//        tags[ConvivaSdkConstants.IS_LIVE] = "false"
-//        tags[ConvivaSdkConstants.ENCODED_FRAMERATE] = "30"
-//        tags["c3.ad.adManagerVersion"] = "3.18.1"
-//        adAnalytics?.setAdInfo(tags)
+
+        if (adsLoader == null)
+            VideoPlayerTracer.error("CONVIVA SDK ADS:::", "AD Loader Null")
+        else
+            VideoPlayerTracer.error("CONVIVA SDK ADS:::", "AD PLAYING")
+
+
+        if (adAnalytics == null)
+            adAnalytics = ConvivaAnalytics.buildAdAnalytics(context, videoAnalytics)
+
         val adMetadata: MutableMap<String, Any> = HashMap()
         adMetadata[ConvivaSdkConstants.AD_TAG_URL] = adsUrl!!
-        adMetadata[ConvivaSdkConstants.AD_PLAYER] = ConvivaSdkConstants.AdPlayer.SEPARATE.toString()
+        adMetadata[ConvivaSdkConstants.AD_PLAYER] = ConvivaSdkConstants.AdPlayer.CONTENT.toString()
         adAnalytics?.setAdListener(adsLoader, adMetadata)
     }
 
