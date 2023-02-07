@@ -405,12 +405,6 @@ class BalajiVideoPlayer(
                 videoPlayerSdkCallBackListener?.onPlayClick(0)
             }
         })
-        previewTimeBar.addOnPreviewVisibilityListener { previewBar, isPreviewShowing ->
-            Log.d(
-                "PreviewShowing::::",
-                isPreviewShowing.toString()
-            )
-        }
 
         val settings: MutableMap<String, Any> = HashMap()
         val gatewayUrl = "https://altbalaji-test.testonly.conviva.com"
@@ -434,10 +428,12 @@ class BalajiVideoPlayer(
 
 
     fun releaseVideoAnalatics() {
+        VideoPlayerTracer.error("CONVIVA SDK ADS:::","releaseVideoAnalatics")
         videoAnalytics?.release()
     }
 
     fun onContentPlaybackStart(userId: String, contentTitle: String, url: String) {
+        VideoPlayerTracer.error("CONVIVA SDK ADS:::","onContentPlaybackStart")
         val contentInfo: MutableMap<String, Any> = HashMap()
         contentInfo[ConvivaSdkConstants.ASSET_NAME] = contentTitle
         contentInfo[ConvivaSdkConstants.STREAM_URL] = url
@@ -451,11 +447,13 @@ class BalajiVideoPlayer(
     }
 
     fun onContentPlaybackEnded() {
+        VideoPlayerTracer.error("CONVIVA SDK ADS:::","onContentPlaybackEnded")
         videoAnalytics?.reportPlaybackEnded()
     }
 
 
     fun initAdSession(url: String) {
+        VideoPlayerTracer.error("CONVIVA SDK ADS:::","AD PLAYING")
         adAnalytics = ConvivaAnalytics.buildAdAnalytics(context, videoAnalytics)
         val tags: MutableMap<String, Any> = HashMap()
         tags[ConvivaSdkConstants.IS_LIVE] = "false"
@@ -473,6 +471,7 @@ class BalajiVideoPlayer(
      */
     fun releaseAdSession() {
         if (adAnalytics != null) {
+            VideoPlayerTracer.error("CONVIVA SDK ADS:::","releaseAdSession")
             adAnalytics!!.release()
         }
     }
