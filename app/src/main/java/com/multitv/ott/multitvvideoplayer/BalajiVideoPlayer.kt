@@ -461,7 +461,7 @@ class BalajiVideoPlayer(
 //        tags["c3.ad.adManagerVersion"] = "3.18.1"
 //        adAnalytics?.setAdInfo(tags)
         val adMetadata: MutableMap<String, Any> = HashMap()
-        adMetadata[ConvivaSdkConstants.AD_TAG_URL] = adsUrl
+        adMetadata[ConvivaSdkConstants.AD_TAG_URL] = adsUrl!!
         adMetadata[ConvivaSdkConstants.AD_PLAYER] = ConvivaSdkConstants.AdPlayer.SEPARATE.toString()
         adAnalytics?.setAdListener(adsLoader, adMetadata)
     }
