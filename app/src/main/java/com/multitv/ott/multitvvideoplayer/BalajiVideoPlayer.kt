@@ -420,11 +420,11 @@ class BalajiVideoPlayer(
     }
 
 
-    fun sendDeviceInfo() {
+   /* fun sendDeviceInfo() {
         val deviceInfo: MutableMap<String, Any> = HashMap()
         deviceInfo[ConvivaSdkConstants.DEVICEINFO.DEVICE_TYPE] = "Android"
         ConvivaAnalytics.setDeviceInfo(deviceInfo)
-    }
+    }*/
 
 
     fun releaseVideoAnalatics() {
@@ -441,7 +441,7 @@ class BalajiVideoPlayer(
         contentInfo[ConvivaSdkConstants.DURATION] = getDuration()
         contentInfo[ConvivaSdkConstants.IS_LIVE] = "VOD"
         contentInfo[ConvivaSdkConstants.VIEWER_ID] = userId
-        videoAnalytics?.setPlayer(simpleExoPlayerView)
+        videoAnalytics?.setPlayer(simpleExoPlayerView!!.player)
         videoAnalytics?.setContentInfo(contentInfo)
         videoAnalytics?.reportPlaybackRequested(contentInfo)
     }
@@ -455,11 +455,11 @@ class BalajiVideoPlayer(
     fun initAdSession(url: String) {
         VideoPlayerTracer.error("CONVIVA SDK ADS:::","AD PLAYING")
         adAnalytics = ConvivaAnalytics.buildAdAnalytics(context, videoAnalytics)
-        val tags: MutableMap<String, Any> = HashMap()
-        tags[ConvivaSdkConstants.IS_LIVE] = "false"
-        tags[ConvivaSdkConstants.ENCODED_FRAMERATE] = "30"
-        tags["c3.ad.adManagerVersion"] = "3.18.1"
-        adAnalytics?.setAdInfo(tags)
+//        val tags: MutableMap<String, Any> = HashMap()
+//        tags[ConvivaSdkConstants.IS_LIVE] = "false"
+//        tags[ConvivaSdkConstants.ENCODED_FRAMERATE] = "30"
+//        tags["c3.ad.adManagerVersion"] = "3.18.1"
+//        adAnalytics?.setAdInfo(tags)
         val adMetadata: MutableMap<String, Any> = HashMap()
         adMetadata[ConvivaSdkConstants.AD_TAG_URL] = url
         adMetadata[ConvivaSdkConstants.AD_PLAYER] = ConvivaSdkConstants.AdPlayer.SEPARATE.toString()
@@ -1273,7 +1273,6 @@ class BalajiVideoPlayer(
                         initAdSession(adsUrl!!)
                     } else {
                         videoPlayerSdkCallBackListener?.onAdCompleted()
-                        releaseAdSession()
                     }
 
                     stopBufferingTimer()
