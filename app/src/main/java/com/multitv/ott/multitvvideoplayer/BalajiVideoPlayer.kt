@@ -9,10 +9,8 @@ import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.content.res.Configuration
-import android.graphics.Bitmap
 import android.graphics.drawable.Icon
 import android.media.AudioManager
-import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.os.Build
 import android.os.Handler
@@ -37,6 +35,10 @@ import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.Target
+import com.conviva.sdk.ConvivaAdAnalytics
+import com.conviva.sdk.ConvivaAnalytics
+import com.conviva.sdk.ConvivaSdkConstants
+import com.conviva.sdk.ConvivaVideoAnalytics
 import com.github.rubensousa.previewseekbar.PreviewBar
 import com.github.rubensousa.previewseekbar.PreviewLoader
 import com.github.rubensousa.previewseekbar.exoplayer.PreviewTimeBar
@@ -114,6 +116,9 @@ class BalajiVideoPlayer(
     private var bufferingTimeHandler: Handler? = null
     private var countDownTimer: CountDownTimerWithPause? = null
     private val TAG = "VikramExoVideoPlayer"
+
+    private var videoAnalytics: ConvivaVideoAnalytics? = null
+    private var adAnalytics: ConvivaAdAnalytics? = null
 
 
     private lateinit var errorRetryLayout: LinearLayout
@@ -407,11 +412,74 @@ class BalajiVideoPlayer(
             )
         }
 
+        val settings: MutableMap<String, Any> = HashMap()
+        val gatewayUrl = "https://altbalaji-test.testonly.conviva.com"
+        settings[ConvivaSdkConstants.GATEWAY_URL] = gatewayUrl
+        settings[ConvivaSdkConstants.LOG_LEVEL] = ConvivaSdkConstants.LogLevel.DEBUG
 
 
+        ConvivaAnalytics.init(context, "673e04f72dc817c2aedb7ff945d663eef99d1b5b", settings)
+        videoAnalytics = ConvivaAnalytics.buildVideoAnalytics(context)
+        adAnalytics = ConvivaAnalytics.buildAdAnalytics(context, videoAnalytics)
 
         super.onFinishInflate()
     }
+
+
+    fun sendDeviceInfo() {
+        val deviceInfo: MutableMap<String, Any> = HashMap()
+        deviceInfo[ConvivaSdkConstants.DEVICEINFO.DEVICE_TYPE] = "Android"
+        ConvivaAnalytics.setDeviceInfo(deviceInfo)
+    }
+
+
+    fun releaseVideoAnalatics() {
+        videoAnalytics?.release()
+    }
+
+    fun onContentPlaybackStart(userId: String, contentTitle: String, url: String) {
+        val contentInfo: MutableMap<String, Any> = HashMap()
+        contentInfo[ConvivaSdkConstants.ASSET_NAME] = contentTitle
+        contentInfo[ConvivaSdkConstants.STREAM_URL] = url
+        contentInfo[ConvivaSdkConstants.PLAYER_NAME] = "ExoPlayer"
+        contentInfo[ConvivaSdkConstants.DURATION] = getDuration()
+        contentInfo[ConvivaSdkConstants.IS_LIVE] = "VOD"
+        contentInfo[ConvivaSdkConstants.VIEWER_ID] = userId
+        videoAnalytics?.setPlayer(simpleExoPlayerView)
+        videoAnalytics?.setContentInfo(contentInfo)
+        videoAnalytics?.reportPlaybackRequested(contentInfo)
+    }
+
+    fun onContentPlaybackEnded() {
+        videoAnalytics?.reportPlaybackEnded()
+    }
+
+
+    fun initAdSession(url: String) {
+        adAnalytics = ConvivaAnalytics.buildAdAnalytics(context, videoAnalytics)
+        val tags: MutableMap<String, Any> = HashMap()
+        tags[ConvivaSdkConstants.IS_LIVE] = "false"
+        tags[ConvivaSdkConstants.ENCODED_FRAMERATE] = "30"
+        tags["c3.ad.adManagerVersion"] = "3.18.1"
+        adAnalytics?.setAdInfo(tags)
+        val adMetadata: MutableMap<String, Any> = HashMap()
+        adMetadata[ConvivaSdkConstants.AD_TAG_URL] = url
+        adMetadata[ConvivaSdkConstants.AD_PLAYER] = ConvivaSdkConstants.AdPlayer.SEPARATE.toString()
+        adAnalytics?.setAdListener(adsLoader, adMetadata)
+    }
+
+    /**
+     * Demonstration of ConvivaAdAnalytics cleanup.
+     */
+    fun releaseAdSession() {
+        if (adAnalytics != null) {
+            adAnalytics!!.release()
+        }
+    }
+
+
+
+
 
 
     fun updatePictureInPictureActions(
@@ -437,7 +505,7 @@ class BalajiVideoPlayer(
     }
 
 
-    fun getExoPlayer():StyledPlayerView{
+    fun getExoPlayer(): StyledPlayerView {
         return simpleExoPlayerView!!
     }
 
@@ -1158,7 +1226,6 @@ class BalajiVideoPlayer(
                                 circularProgressRing =
                                     findViewById<View>(R.id.circular_progress_ring) as FabButton
 
-
                                 circularProgressLayout.visibility = View.GONE
 
                                 if (isWebSeries) {
@@ -1202,10 +1269,13 @@ class BalajiVideoPlayer(
                     videoPerviousButton.visibility = GONE
                     videoPlayerSdkCallBackListener?.onVideoStartNow()
 
-                    if (mMediaPlayer!!.isPlayingAd())
+                    if (mMediaPlayer!!.isPlayingAd()) {
                         videoPlayerSdkCallBackListener?.onAdPlay()
-                    else
+                        initAdSession(adsUrl!!)
+                    } else {
                         videoPlayerSdkCallBackListener?.onAdCompleted()
+                        releaseAdSession()
+                    }
 
                     stopBufferingTimer()
                 }
@@ -1473,7 +1543,6 @@ class BalajiVideoPlayer(
             .into(previewImageView)
 
     }
-
 
 
     private fun updatePreviewX(progress: Int, max: Int): Int {
