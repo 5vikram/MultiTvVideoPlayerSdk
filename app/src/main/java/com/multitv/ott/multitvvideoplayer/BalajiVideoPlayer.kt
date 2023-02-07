@@ -420,20 +420,20 @@ class BalajiVideoPlayer(
     }
 
 
-   /* fun sendDeviceInfo() {
-        val deviceInfo: MutableMap<String, Any> = HashMap()
-        deviceInfo[ConvivaSdkConstants.DEVICEINFO.DEVICE_TYPE] = "Android"
-        ConvivaAnalytics.setDeviceInfo(deviceInfo)
-    }*/
+    /* fun sendDeviceInfo() {
+         val deviceInfo: MutableMap<String, Any> = HashMap()
+         deviceInfo[ConvivaSdkConstants.DEVICEINFO.DEVICE_TYPE] = "Android"
+         ConvivaAnalytics.setDeviceInfo(deviceInfo)
+     }*/
 
 
     fun releaseVideoAnalatics() {
-        VideoPlayerTracer.error("CONVIVA SDK ADS:::","releaseVideoAnalatics")
+        VideoPlayerTracer.error("CONVIVA SDK ADS:::", "releaseVideoAnalatics")
         videoAnalytics?.release()
     }
 
     fun onContentPlaybackStart(userId: String, contentTitle: String, url: String) {
-        VideoPlayerTracer.error("CONVIVA SDK ADS:::","onContentPlaybackStart")
+        VideoPlayerTracer.error("CONVIVA SDK ADS:::", "onContentPlaybackStart")
         val contentInfo: MutableMap<String, Any> = HashMap()
         contentInfo[ConvivaSdkConstants.ASSET_NAME] = contentTitle
         contentInfo[ConvivaSdkConstants.STREAM_URL] = url
@@ -447,13 +447,13 @@ class BalajiVideoPlayer(
     }
 
     fun onContentPlaybackEnded() {
-        VideoPlayerTracer.error("CONVIVA SDK ADS:::","onContentPlaybackEnded")
+        VideoPlayerTracer.error("CONVIVA SDK ADS:::", "onContentPlaybackEnded")
         videoAnalytics?.reportPlaybackEnded()
     }
 
 
     fun initAdSession(url: String) {
-        VideoPlayerTracer.error("CONVIVA SDK ADS:::","AD PLAYING")
+        VideoPlayerTracer.error("CONVIVA SDK ADS:::", "AD PLAYING")
         adAnalytics = ConvivaAnalytics.buildAdAnalytics(context, videoAnalytics)
 //        val tags: MutableMap<String, Any> = HashMap()
 //        tags[ConvivaSdkConstants.IS_LIVE] = "false"
@@ -471,14 +471,10 @@ class BalajiVideoPlayer(
      */
     fun releaseAdSession() {
         if (adAnalytics != null) {
-            VideoPlayerTracer.error("CONVIVA SDK ADS:::","releaseAdSession")
+            VideoPlayerTracer.error("CONVIVA SDK ADS:::", "releaseAdSession")
             adAnalytics!!.release()
         }
     }
-
-
-
-
 
 
     fun updatePictureInPictureActions(
@@ -1081,12 +1077,17 @@ class BalajiVideoPlayer(
                         adsLoader!!.skipAd()
                         adsLoader!!.focusSkipButton();
                         val adTagUri = Uri.parse(adsUrl)
+                        initAdSession(adsUrl!!)
+
                         MediaItem.Builder()
                             .setUri(videoUrl)
                             .setAdsConfiguration(
                                 MediaItem.AdsConfiguration.Builder(adTagUri).build()
                             )
                             .build()
+
+
+
                     } else {
                         MediaItem.Builder()
                             .setUri(videoUrl)
@@ -1270,7 +1271,6 @@ class BalajiVideoPlayer(
 
                     if (mMediaPlayer!!.isPlayingAd()) {
                         videoPlayerSdkCallBackListener?.onAdPlay()
-                        initAdSession(adsUrl!!)
                     } else {
                         videoPlayerSdkCallBackListener?.onAdCompleted()
                     }
