@@ -262,15 +262,33 @@
                 android:visibility="gone" />
 
 
-            <ImageView
-                android:id="@+id/volumeFullScreenButton"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginRight="10dp"
-                android:background="@android:color/transparent"
-                android:padding="5dp"
-                android:src="@drawable/ic_balaji_volume_on" />
+           <FrameLayout
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content">
+
+               <ImageView
+                   android:id="@+id/volumeFullScreenButton"
+                   android:layout_width="35dp"
+                   android:layout_height="35dp"
+                   android:layout_gravity="center_vertical"
+                   android:layout_marginRight="10dp"
+                   android:background="@android:color/transparent"
+                   android:padding="5dp"
+                   android:src="@drawable/ic_balaji_volume_on" />
+
+
+               <ImageView
+                   android:id="@+id/volumeFullScreenUnMuteButton"
+                   android:layout_width="35dp"
+                   android:layout_height="35dp"
+                   android:layout_gravity="center"
+                   android:layout_marginRight="5dp"
+                   android:background="@android:color/transparent"
+                   android:padding="5dp"
+                   android:src="@drawable/ic_balaji_volume_off"
+                   android:visibility="gone" />
+           </FrameLayout>
+
 
             <SeekBar
                 android:id="@+id/exo_volume_progress"

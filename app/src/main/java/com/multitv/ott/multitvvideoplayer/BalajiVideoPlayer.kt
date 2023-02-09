@@ -156,6 +156,7 @@ class BalajiVideoPlayer(
     private lateinit var exoCurrentPosition: TextView
     private lateinit var skipVideoButton: TextView
     private lateinit var durationLinearLayout: LinearLayoutCompat
+    private lateinit var volumeFullScreenUnMuteButton:ImageView
 
 
     private var videoControllerLayout: ConstraintLayout? = null
@@ -247,7 +248,7 @@ class BalajiVideoPlayer(
         languageTv = view.findViewById(R.id.languageTv)
         genureTv = view.findViewById(R.id.genureTv)
         videoTitle = view.findViewById(R.id.videoTitle)
-        volumeFullScreenButton = view.findViewById(R.id.volumeFullScreenButton)
+
         volumeMuteAndUnMuteButton = view.findViewById(R.id.volumeMuteAndUnMuteButton)
         overlayImageTransparent = view.findViewById(R.id.overlayImageTransparent)
 
@@ -286,6 +287,30 @@ class BalajiVideoPlayer(
         pictureInPicture = view.findViewById(R.id.picture_in_picture)
         videoNextButton.setVisibility(GONE)
         videoPerviousButton.setVisibility(GONE)
+
+
+
+
+        volumeFullScreenButton = view.findViewById(R.id.volumeFullScreenButton)
+        volumeFullScreenUnMuteButton = view.findViewById(R.id.volumeFullScreenUnMuteButton)
+
+        volumeFullScreenButton.setOnClickListener {
+            mMediaPlayer?.audioComponent?.volume = 0f
+            volumeFullScreenButton.visibility = View.GONE
+            volumeFullScreenUnMuteButton.visibility = View.VISIBLE
+        }
+
+
+        volumeFullScreenUnMuteButton.setOnClickListener {
+            mMediaPlayer?.audioComponent?.volume = 0f
+            mMediaPlayer?.audioComponent?.volume = mMediaPlayer?.audioComponent?.volume!!
+            mMediaPlayer?.audioComponent?.volume = 2f
+            volumeFullScreenUnMuteButton.visibility = View.GONE
+            volumeFullScreenButton.visibility = View.VISIBLE
+        }
+
+
+
 
         videoRotationButton.setOnClickListener(OnClickListener {
             val orientation = getContext().resources.configuration.orientation

@@ -48,6 +48,7 @@ import com.multitv.ott.multitvvideoplayer.cast.SessionAvailabilityListener
 import com.multitv.ott.multitvvideoplayer.custom.CountDownTimerWithPause
 import com.multitv.ott.multitvvideoplayer.database.SharedPreferencePlayer
 import com.multitv.ott.multitvvideoplayer.fabbutton.FabButton
+import com.multitv.ott.multitvvideoplayer.listener.VideoPlayerErrorListener
 import com.multitv.ott.multitvvideoplayer.listener.VideoPlayerSdkCallBackListener
 import com.multitv.ott.multitvvideoplayer.playerglide.GlideThumbnailTransformation
 import com.multitv.ott.multitvvideoplayer.popup.TrackSelectionDialog
@@ -80,6 +81,7 @@ class TvPlayer(
     private var simpleExoPlayerView: StyledPlayerView? = null
     private var trackSelector: DefaultTrackSelector
     private var videoPlayerSdkCallBackListener: VideoPlayerSdkCallBackListener? = null
+    private var videoPlayerErrorListener: VideoPlayerErrorListener? = null
     private var isShowingTrackSelectionDialog = false
     private var WVMAgent: PallyconWVMSDK? = null
     private var analaticsUrl: String? = null
@@ -499,6 +501,10 @@ class TvPlayer(
         this.videoPlayerSdkCallBackListener = videoPlayerSdkCallBackListener
     }
 
+    fun setMultiTvErrorListenr(errorListener: VideoPlayerErrorListener) {
+        this.videoPlayerErrorListener = errorListener;
+    }
+
     fun setContentFilePath(path: String?) {
         mContentUrl = path
     }
@@ -764,6 +770,11 @@ class TvPlayer(
             errorRetryLayout!!.bringToFront()
             errorRetryLayout!!.visibility = VISIBLE
             videoPlayerSdkCallBackListener!!.onPlayerError(error.message)
+
+            if (error.errorCode != 200)
+                videoPlayerErrorListener?.onErrorEvent(false)
+            else
+                videoPlayerErrorListener?.onErrorEvent(true)
         }
 
 
