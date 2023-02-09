@@ -767,8 +767,8 @@ class TvPlayer(
             if (mMediaPlayer != null && mMediaPlayer!!.currentPosition != 0L) seekPlayerTo =
                 mMediaPlayer!!.currentPosition
                     .toInt() / 1000
-            errorRetryLayout!!.bringToFront()
-            errorRetryLayout!!.visibility = VISIBLE
+//            errorRetryLayout!!.bringToFront()
+//            errorRetryLayout!!.visibility = VISIBLE
             videoPlayerSdkCallBackListener!!.onPlayerError(error.message)
 
             if (error.errorCode != 200)
