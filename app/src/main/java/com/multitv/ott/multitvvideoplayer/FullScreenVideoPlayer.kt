@@ -138,6 +138,8 @@ class FullScreenVideoPlayer(
     private lateinit var epsodeNextButton: ImageView
    // private lateinit var seekBarLayout: ConstraintLayout
     private var videoControllerLayout: ConstraintLayout? = null
+    private lateinit var exoRewLinearLayout:LinearLayout
+    private lateinit var exoFfwdLinearLayout:LinearLayout
 
 
     private val formatBuilder: StringBuilder
@@ -238,7 +240,10 @@ class FullScreenVideoPlayer(
 
         videoControllerLayout = view.findViewById(R.id.videoControllerLayout)
         previewFrameLayout = view.findViewById(R.id.previewFrameLayout)
-     //   seekBarLayout = view.findViewById(R.id.seekBarLayout)
+
+
+        exoFfwdLinearLayout= view.findViewById(R.id.exoFfwdLinearLayout)
+        exoRewLinearLayout= view.findViewById(R.id.exoRewLinearLayout)
 
         setting?.setOnClickListener(this)
         centerButtonLayout = view.findViewById(R.id.centerButtonLayout)
@@ -339,8 +344,17 @@ class FullScreenVideoPlayer(
                 isPipModeOn = true
             }
         })
-        VideoRenuButton.setOnClickListener(OnClickListener { rewind() })
-        videoFarwardButton.setOnClickListener(OnClickListener { fastForward() })
+
+
+
+        exoRewLinearLayout.setOnClickListener(OnClickListener { rewind() })
+
+        exoFfwdLinearLayout.setOnClickListener {
+            fastForward()
+        }
+
+
+
         videoPlayButton.setOnClickListener(OnClickListener {
             if (mMediaPlayer != null) {
                 mMediaPlayer!!.playWhenReady = true

@@ -158,7 +158,8 @@ class OfflineVIdeoPlayer (
     private lateinit var durationLinearLayout: LinearLayoutCompat
     private lateinit var volumeFullScreenUnMuteButton: ImageView
 
-
+    private lateinit var exoRewLinearLayout:LinearLayout
+    private lateinit var exoFfwdLinearLayout:LinearLayout
     private var videoControllerLayout: ConstraintLayout? = null
 
 
@@ -280,7 +281,8 @@ class OfflineVIdeoPlayer (
         videoPauseButton = view.findViewById(R.id.exo_pause)
         videoLockButton = view.findViewById(R.id.exo_lock)
         videoUnLockButton = view.findViewById(R.id.exo_unlock)
-
+        exoFfwdLinearLayout= view.findViewById(R.id.exoFfwdLinearLayout)
+        exoRewLinearLayout= view.findViewById(R.id.exoRewLinearLayout)
         previewTimeBar = view.findViewById(R.id.exo_progress)
 
         previewImageView = view.findViewById(R.id.imageView)
@@ -380,8 +382,17 @@ class OfflineVIdeoPlayer (
                 isPipModeOn = true
             }
         })
-        VideoRenuButton.setOnClickListener(OnClickListener { rewind() })
-        videoFarwardButton.setOnClickListener(OnClickListener { fastForward() })
+
+
+        exoRewLinearLayout.setOnClickListener(OnClickListener { rewind() })
+
+        exoFfwdLinearLayout.setOnClickListener {
+            fastForward()
+        }
+
+
+
+
         videoPlayButton.setOnClickListener(OnClickListener {
             if (mMediaPlayer != null) {
                 mMediaPlayer!!.playWhenReady = true
