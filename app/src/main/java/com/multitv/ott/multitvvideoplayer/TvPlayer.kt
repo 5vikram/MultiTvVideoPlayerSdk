@@ -803,38 +803,7 @@ class TvPlayer(
                             mMediaPlayer!!.currentPosition
                         releaseVideoPlayer()
                         bufferingProgressBarLayout!!.visibility = GONE
-                        val circularProgressRing =
-                            circularProgressLayout!!.findViewById<View>(R.id.circular_progress_ring) as FabButton
-                        circularProgressRing.showProgress(true)
-                        circularProgressRing.setProgress(0f)
-                        circularProgressLayout!!.visibility = VISIBLE
-                        circularProgressLayout!!.bringToFront()
-                        val totalDuration = 10000
-                        val tickDuration = 1000
-                        countDownTimer = object : CountDownTimerWithPause(
-                            totalDuration.toLong(),
-                            (tickDuration / 10).toLong(),
-                            true
-                        ) {
-                            override fun onTick(millisUntilFinished: Long) {
-                                var progress = millisUntilFinished.toFloat() / totalDuration
-                                progress = progress * 100
-                                progress = 100 - progress
-                                circularProgressRing.setProgress(progress)
-                            }
-
-                            override fun onFinish() {
-                                if (circularProgressLayout != null) circularProgressLayout!!.visibility =
-                                    GONE
-                                try {
-                                    prepareVideoPlayer()
-                                } catch (e: Exception) {
-                                    e.printStackTrace()
-                                    centerButtonLayout!!.visibility = VISIBLE
-                                }
-                            }
-                        }.create()
-                    }
+                        videoPlayerSdkCallBackListener.onPlayNextVideo()
                 }
                 ExoPlayer.STATE_IDLE -> {
                     text += "idle"
