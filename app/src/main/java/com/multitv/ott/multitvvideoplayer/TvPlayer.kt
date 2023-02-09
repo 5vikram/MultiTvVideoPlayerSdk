@@ -486,7 +486,7 @@ class TvPlayer(
 
     // init view and view group here
     private fun initViews() {
-//        ToastMessage.showLogs(ToastMessage.LogType.ERROR, "Video Player:::", "initViews()");
+
         trackSelector = DefaultTrackSelector(context)
         audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
