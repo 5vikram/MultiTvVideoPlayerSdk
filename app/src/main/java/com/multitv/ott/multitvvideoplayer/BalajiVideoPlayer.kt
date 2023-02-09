@@ -158,8 +158,8 @@ class BalajiVideoPlayer(
     private lateinit var durationLinearLayout: LinearLayoutCompat
     private lateinit var volumeFullScreenUnMuteButton: ImageView
 
-    private lateinit var exoRewLinearLayout:LinearLayout
-    private lateinit var exoFfwdLinearLayout:LinearLayout
+    private lateinit var exoRewLinearLayout: LinearLayout
+    private lateinit var exoFfwdLinearLayout: LinearLayout
 
     private var videoControllerLayout: ConstraintLayout? = null
 
@@ -268,8 +268,8 @@ class BalajiVideoPlayer(
         videoControllerLayout = view.findViewById(R.id.videoControllerLayout)
         previewFrameLayout = view.findViewById(R.id.previewFrameLayout)
 
-        exoFfwdLinearLayout= view.findViewById(R.id.exoFfwdLinearLayout)
-        exoRewLinearLayout= view.findViewById(R.id.exoRewLinearLayout)
+        exoFfwdLinearLayout = view.findViewById(R.id.exoFfwdLinearLayout)
+        exoRewLinearLayout = view.findViewById(R.id.exoRewLinearLayout)
 
         setting.setOnClickListener(this)
         centerButtonLayout = view.findViewById(R.id.centerButtonLayout)
@@ -327,6 +327,7 @@ class BalajiVideoPlayer(
                 videoLockButton.setVisibility(GONE)
                 videoUnLockButton.setVisibility(GONE)
                 setting.visibility = View.GONE
+                hideSeekBarLayout()
             } else if (orientation == Configuration.ORIENTATION_PORTRAIT) {
                 (getContext() as Activity).requestedOrientation =
                     ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
@@ -335,6 +336,7 @@ class BalajiVideoPlayer(
                 setting.visibility = View.VISIBLE
                 videoRotationButton.setImageResource(R.drawable.ic_minimize)
                 videoLockUnlockStatus()
+                showSeekBarLayout()
             }
         })
 
@@ -373,6 +375,7 @@ class BalajiVideoPlayer(
                 (getContext() as Activity).window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
                 showSystemBar()
                 setting.visibility = View.GONE
+                showSeekBarLayout()
                 videoRotationButton.setImageResource(R.drawable.ic_balaji_fullscreen)
             } else {
                 context.finish()
@@ -459,6 +462,17 @@ class BalajiVideoPlayer(
          deviceInfo[ConvivaSdkConstants.DEVICEINFO.DEVICE_TYPE] = "Android"
          ConvivaAnalytics.setDeviceInfo(deviceInfo)
      }*/
+
+
+    fun hideSeekBarLayout() {
+        previewTimeBar.visibility = View.GONE
+        durationLinearLayout.visibility = View.GONE
+    }
+
+    fun showSeekBarLayout() {
+        previewTimeBar.visibility = View.VISIBLE
+        durationLinearLayout.visibility = View.VISIBLE
+    }
 
 
     fun releaseVideoAnalatics() {
@@ -678,6 +692,7 @@ class BalajiVideoPlayer(
     override fun onConfigurationChanged(newConfig: Configuration) {
         val orientation = resources.configuration.orientation
         if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            showSeekBarLayout()
             if (contentTitle != null && !TextUtils.isEmpty(contentTitle)) {
                 videoTitle.visibility = View.VISIBLE
                 videoTitle.setText(contentTitle)
@@ -685,6 +700,7 @@ class BalajiVideoPlayer(
                 videoTitle.visibility = View.GONE
         } else if (orientation == Configuration.ORIENTATION_PORTRAIT) {
             videoTitle.visibility = View.GONE
+            hideSeekBarLayout()
         }
         super.onConfigurationChanged(newConfig)
     }
@@ -724,8 +740,6 @@ class BalajiVideoPlayer(
     }
 
     fun showController() {
-        previewTimeBar.visibility = VISIBLE
-        durationLinearLayout.visibility = VISIBLE
         closeVideoPlayerButton.visibility = VISIBLE
         overlayImageTransparent.visibility = VISIBLE
         centerButtonLayout.visibility = VISIBLE
@@ -737,6 +751,13 @@ class BalajiVideoPlayer(
         setTimerOnVideoPlayer(false)
         updatePlayPauseButton()
         contentRateLayout.visibility = View.GONE
+
+        val orientation = getContext().resources.configuration.orientation
+
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE)
+            showSeekBarLayout()
+        else
+            hideSeekBarLayout()
     }
 
     private fun updatePlayPauseButton() {
