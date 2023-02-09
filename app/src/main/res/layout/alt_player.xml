@@ -234,6 +234,7 @@
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="10dp"
             android:layout_weight="1"
+            android:visibility="gone"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 

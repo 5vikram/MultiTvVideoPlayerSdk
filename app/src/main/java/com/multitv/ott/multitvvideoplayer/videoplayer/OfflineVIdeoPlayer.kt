@@ -1,4 +1,4 @@
-package com.multitv.ott.multitvvideoplayer
+package com.multitv.ott.multitvvideoplayer.videoplayer
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -24,7 +24,6 @@ import android.util.DisplayMetrics
 import android.util.Log
 import android.util.Rational
 import android.view.*
-import android.view.View.OnClickListener
 import android.widget.*
 import androidx.annotation.DrawableRes
 import androidx.annotation.RequiresApi
@@ -62,6 +61,7 @@ import com.google.android.exoplayer2.util.MimeTypes
 import com.google.android.exoplayer2.util.Util
 import com.google.android.exoplayer2.video.VideoSize
 import com.google.common.collect.ImmutableList
+import com.multitv.ott.multitvvideoplayer.R
 import com.multitv.ott.multitvvideoplayer.cast.SessionAvailabilityListener
 import com.multitv.ott.multitvvideoplayer.custom.CountDownTimerWithPause
 import com.multitv.ott.multitvvideoplayer.database.SharedPreferencePlayer
@@ -76,13 +76,13 @@ import com.multitv.ott.multitvvideoplayer.utils.*
 import com.pallycon.widevinelibrary.*
 import java.util.*
 
-class BalajiVideoPlayer(
+class OfflineVIdeoPlayer (
     private val context: AppCompatActivity,
     attrs: AttributeSet?,
     defStyleAttr: Int
 ) : FrameLayout(
     context, attrs, defStyleAttr
-), PreviewBar.OnScrubListener, PreviewLoader, OnClickListener, SessionAvailabilityListener {
+), PreviewBar.OnScrubListener, PreviewLoader, View.OnClickListener, SessionAvailabilityListener {
     private val sharedPreferencePlayer: SharedPreferencePlayer
     private var contentType: ContentType? = null
     private var mMediaPlayer: ExoPlayer? = null
@@ -228,6 +228,9 @@ class BalajiVideoPlayer(
             videoPlayerSdkCallBackListener?.showEpisodeListData()
         }
 
+        epsodeNextButton.visibility=View.GONE
+        epsodeButton.visibility=View.GONE
+
         epsodeNextButton.setOnClickListener {
             if (userSubscriptionDtatus)
                 videoPlayerSdkCallBackListener?.onPlayNextVideo()
@@ -287,8 +290,8 @@ class BalajiVideoPlayer(
         pictureInPicture = view.findViewById(R.id.picture_in_picture)
         videoNextButton.setVisibility(GONE)
         videoPerviousButton.setVisibility(GONE)
-
-
+        pictureInPicture.setVisibility(GONE)
+        videoRotationButton.setVisibility(GONE)
 
 
         volumeFullScreenButton = view.findViewById(R.id.volumeFullScreenButton)
@@ -361,18 +364,7 @@ class BalajiVideoPlayer(
 
 
         closeVideoPlayerButton.setOnClickListener {
-            val orientation = getContext().resources.configuration.orientation
-
-            if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                (getContext() as Activity).requestedOrientation =
-                    ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-                (getContext() as Activity).window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
-                showSystemBar()
-                setting.visibility = View.GONE
-                videoRotationButton.setImageResource(R.drawable.ic_balaji_fullscreen)
-            } else {
-                context.finish()
-            }
+            context.finish()
         }
 
 
