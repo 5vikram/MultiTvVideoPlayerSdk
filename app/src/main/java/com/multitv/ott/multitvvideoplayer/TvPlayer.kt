@@ -803,7 +803,8 @@ class TvPlayer(
                             mMediaPlayer!!.currentPosition
                         releaseVideoPlayer()
                         bufferingProgressBarLayout!!.visibility = GONE
-                        videoPlayerSdkCallBackListener.onPlayNextVideo()
+                        videoPlayerSdkCallBackListener?.onPlayNextVideo()
+                    }
                 }
                 ExoPlayer.STATE_IDLE -> {
                     text += "idle"
