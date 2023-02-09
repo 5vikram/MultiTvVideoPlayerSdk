@@ -293,7 +293,7 @@ class OfflineVIdeoPlayer (
         videoNextButton.setVisibility(GONE)
         videoPerviousButton.setVisibility(GONE)
         videoRotationButton.setVisibility(GONE)
-
+        pictureInPicture.setVisibility(GONE)
 
         volumeFullScreenButton = view.findViewById(R.id.volumeFullScreenButton)
         volumeFullScreenUnMuteButton = view.findViewById(R.id.volumeFullScreenUnMuteButton)
@@ -360,6 +360,7 @@ class OfflineVIdeoPlayer (
             initializeMainPlayer(mContentUrl, true)
         })
 
+/*
         pictureInPicture.setOnClickListener(OnClickListener {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 hideController()
@@ -382,6 +383,7 @@ class OfflineVIdeoPlayer (
                 isPipModeOn = true
             }
         })
+*/
 
 
         exoRewLinearLayout.setOnClickListener(OnClickListener { rewind() })
