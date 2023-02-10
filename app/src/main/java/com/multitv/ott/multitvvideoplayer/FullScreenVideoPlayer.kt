@@ -1524,7 +1524,7 @@ class FullScreenVideoPlayer(
                 ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
             (getContext() as Activity).window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
             showSystemBar()
-            videoRotationButton?.setImageResource(R.drawable.ic_balaji_fullscreen)
+          //  videoRotationButton?.setImageResource(R.drawable.ic_balaji_fullscreen)
             videoLockButton?.setVisibility(GONE)
             videoUnLockButton?.setVisibility(GONE)
         } else if (orientation == Configuration.ORIENTATION_PORTRAIT) {
@@ -1532,7 +1532,7 @@ class FullScreenVideoPlayer(
                 ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
             (getContext() as Activity).window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
             hideSystemBars()
-            videoRotationButton?.setImageResource(R.drawable.ic_minimize)
+          //  videoRotationButton?.setImageResource(R.drawable.ic_minimize)
             videoLockUnlockStatus()
         }
     }
