@@ -25,8 +25,8 @@
 
         <ImageView
             android:id="@+id/closeButton"
-            android:layout_width="30dp"
-            android:layout_height="28dp"
+            android:layout_width="40dp"
+            android:layout_height="38dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_marginStart="16dp"
@@ -136,8 +136,8 @@
 
                 <ImageView
                     android:id="@id/exo_rew"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginRight="5dp"
                     android:background="@android:color/transparent"
@@ -149,7 +149,7 @@
                     android:layout_gravity="center_vertical"
                     android:text="10s"
                     android:textColor="@color/white"
-                    android:textSize="10sp" />
+                    android:textSize="14sp" />
 
             </LinearLayout>
 
@@ -185,12 +185,12 @@
                     android:layout_gravity="center_vertical"
                     android:text="10s"
                     android:textColor="@color/white"
-                    android:textSize="10sp" />
+                    android:textSize="14sp" />
 
                 <ImageView
                     android:id="@id/exo_ffwd"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="10dp"
                     android:src="@drawable/ic_balaji_farward_10_sec" />
@@ -299,7 +299,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="40dp"
-                android:maxHeight="8dp"
+                android:maxHeight="5dp"
                 android:progressDrawable="@drawable/seekbar_progress_style"
                 android:thumb="@drawable/seekbar_thumb"
                 android:thumbOffset="0dp" />
@@ -337,8 +337,8 @@
 
                 <ImageView
                     android:id="@+id/volumeUnMuteButton"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:layout_gravity="center"
                     android:layout_marginRight="5dp"
                     android:background="@android:color/transparent"
@@ -362,8 +362,8 @@
 
             <ImageView
                 android:id="@+id/settings_btn"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_gravity="center"
                 android:layout_marginRight="5dp"
                 android:background="@android:color/transparent"
@@ -372,8 +372,8 @@
 
             <ImageView
                 android:id="@+id/picture_in_picture"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="5dp"
                 android:background="@android:color/transparent"
@@ -382,8 +382,8 @@
 
             <ImageView
                 android:id="@+id/enter_full_screen"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
                 android:layout_gravity="center_vertical"
                 android:background="@android:color/transparent"
                 android:padding="5dp"
