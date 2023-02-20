@@ -81,7 +81,7 @@ class AltbalajiTvVideoPlayer (
     private val sharedPreferencePlayer: SharedPreferencePlayer
     private var contentType: ContentType? = null
     private var mMediaPlayer: ExoPlayer? = null
-    private var simpleExoPlayerView: MyVideoPlayer? = null
+    private var simpleExoPlayerView: StyledPlayerView? = null
     private var trackSelector: DefaultTrackSelector
 
     private var videoPlayPauseCallBackListener: VideoPlayPauseCallBackListener? = null
@@ -292,8 +292,8 @@ class AltbalajiTvVideoPlayer (
 
         volumeMuteAndUnMuteButton.setOnClickListener {
             mMediaPlayer?.audioComponent?.volume = 0f
-            mMediaPlayer?.audioComponent?.volume = mMediaPlayer?.audioComponent?.volume!!
             mMediaPlayer?.audioComponent?.volume = 2f
+            mMediaPlayer?.audioComponent?.volume = mMediaPlayer?.audioComponent?.volume!!
             volumeMuteAndUnMuteButton.visibility = View.GONE
             volumeUnMuteButton.visibility = View.VISIBLE
 
@@ -301,13 +301,12 @@ class AltbalajiTvVideoPlayer (
 
 
 
-        closeVideoPlayerButton.requestFocus()
         closeVideoPlayerButton.setOnClickListener {
             context.finish()
         }
 
 
-        videoControllerLayout?.setOnClickListener {
+        simpleExoPlayerView?.setOnClickListener {
             if (isControllerShown)
                 hideController()
             else
@@ -452,7 +451,7 @@ class AltbalajiTvVideoPlayer (
         if (hideAtMs != C.TIME_UNSET) {
             val delayMs = hideAtMs - SystemClock.uptimeMillis()
             if (delayMs <= 0) {
-                hideController()
+              //  hideController()
             } else {
                 postDelayed(hideAction, delayMs)
             }
@@ -1101,7 +1100,7 @@ class AltbalajiTvVideoPlayer (
                 ExoPlayer.STATE_IDLE -> {
                     text += "idle"
                     if (!checkForAudioFocus()) return
-                    bufferingProgressBarLayout!!.visibility = GONE
+                    bufferingProgressBarLayout.visibility = GONE
                     if (mMediaPlayer != null) {
                         contentPlayedTimeInMillis = mMediaPlayer!!.currentPosition
                         if (contentType == ContentType.LIVE) startBufferingTimer()

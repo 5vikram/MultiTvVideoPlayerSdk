@@ -2,8 +2,13 @@ pluginManagement {
     repositories {
         gradlePluginPortal()
         google()
+        jcenter()
         mavenCentral()
         maven { url "https://plugins.gradle.org/m2/" }
+        maven { url "https://jitpack.io" }
+        flatDir {
+            dirs("libs")
+        }
     }
 }
 dependencyResolutionManagement {
@@ -11,19 +16,15 @@ dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
     repositories {
         google()
+        jcenter()
         mavenCentral()
+        flatDir {
+            dirs("libs")
+        }
+        maven { url "https://jitpack.io" }
     }
 }
 rootProject.name = "MultiTvVideoPlayer"
 include ':app'
-include ':drmsdk'
-include ':previewseekbar'
-include ':previewseekbar-exoplaye'
-
-/*includeBuild('../source') {
-    dependencySubstitution {
-        substitute module('com.github.kezong:fat-aar') using project(':')
-    }
-}*/
 include ':previewseekbar'
 include ':previewseekbar-exoplayer'

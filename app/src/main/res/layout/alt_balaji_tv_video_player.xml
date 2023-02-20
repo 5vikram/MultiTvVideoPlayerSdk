@@ -8,15 +8,12 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.multitv.ott.multitvvideoplayer.videoplayer.MyVideoPlayer
+    <com.google.android.exoplayer2.ui.StyledPlayerView
         android:id="@+id/videoPlayer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:animation_enabled="false"
         android:focusable="true"
-        app:auto_show="true"
-        app:surface_type="surface_view"
-        app:use_controller="true"
         app:controller_layout_id="@layout/alt_tv_player"
         app:resize_mode="fill" />
 
