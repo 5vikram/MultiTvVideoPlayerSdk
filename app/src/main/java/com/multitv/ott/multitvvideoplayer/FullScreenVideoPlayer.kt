@@ -1234,7 +1234,7 @@ class FullScreenVideoPlayer(
             Glide.with(previewImageView)
                 .load(spriteImageUrl)
                 .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
-                .transform(GlideThumbnailTransformation(currentPosition))
+                .transform(GlideThumbnailTransformation(currentPosition,1000))
                 .into(previewImageView)
         } else {
             Log.e("Video Sprite::::", "Url:::Empty")
@@ -1267,7 +1267,7 @@ class FullScreenVideoPlayer(
             Glide.with(context)
                 .load(spriteImageUrl)
                 .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
-                .transform(GlideThumbnailTransformation(currentPosition))
+                .transform(GlideThumbnailTransformation(currentPosition,1000))
                 .into(previewImageView)
         }
 

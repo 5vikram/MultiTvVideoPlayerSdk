@@ -1149,13 +1149,13 @@ class MultiTvPlayerSdk(
         if (spriteImageUrl != null && !TextUtils.isEmpty(spriteImageUrl)) {
             Glide.with(previewImageView!!)
                 .load(spriteImageUrl)
-                .transform(GlideThumbnailTransformation(currentPosition))
+                .transform(GlideThumbnailTransformation(currentPosition,1000))
                 .into(previewImageView!!)
         } else {
             Glide.with(previewImageView!!)
                 .load("https://d2i2fx2s3ubjwq.cloudfront.net/converted_demo/SAW4TRAILERY2007M_4500/sprite.png")
                 .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
-                .transform(GlideThumbnailTransformation(currentPosition))
+                .transform(GlideThumbnailTransformation(currentPosition,1000))
                 .into(previewImageView!!)
         }
 

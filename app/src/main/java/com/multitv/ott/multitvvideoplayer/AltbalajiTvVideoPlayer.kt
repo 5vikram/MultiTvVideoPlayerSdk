@@ -71,7 +71,7 @@ import com.multitv.ott.multitvvideoplayer.videoplayer.MyVideoPlayer
 import com.pallycon.widevinelibrary.*
 import java.util.*
 
-class AltbalajiTvVideoPlayer (
+class AltbalajiTvVideoPlayer(
     private val context: AppCompatActivity,
     attrs: AttributeSet?,
     defStyleAttr: Int
@@ -380,7 +380,6 @@ class AltbalajiTvVideoPlayer (
     }
 
 
-
     fun setWebSeriesEnable(
         isWebSeries: Boolean,
         UserLoginStatus: Boolean,
@@ -426,7 +425,6 @@ class AltbalajiTvVideoPlayer (
     }
 
 
-
     fun showBackButton() {
         if (closeVideoPlayerButton != null)
             closeVideoPlayerButton.visibility = View.VISIBLE
@@ -451,7 +449,7 @@ class AltbalajiTvVideoPlayer (
         if (hideAtMs != C.TIME_UNSET) {
             val delayMs = hideAtMs - SystemClock.uptimeMillis()
             if (delayMs <= 0) {
-              //  hideController()
+                //  hideController()
             } else {
                 postDelayed(hideAction, delayMs)
             }
@@ -1383,12 +1381,11 @@ class AltbalajiTvVideoPlayer (
         Glide.with(previewImageView)
             .load(spriteImageUrl)
             .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
-            .transform(GlideThumbnailTransformation(currentPosition))
+            .transform(GlideThumbnailTransformation(currentPosition, 60 * 1000))
             .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
             .into(previewImageView)
 
     }
-
 
 
     private fun updatePreviewX(progress: Int, max: Int): Int {

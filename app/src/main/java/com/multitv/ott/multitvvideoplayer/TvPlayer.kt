@@ -1000,7 +1000,7 @@ class TvPlayer(
         Glide.with(previewImageView!!)
             .load("http://103.253.175.13/rahuls/output-160x90-thumb-001.jpg")
             .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
-            .transform(GlideThumbnailTransformation(currentPosition))
+            .transform(GlideThumbnailTransformation(currentPosition,1000))
             .into(previewImageView!!)
     }
 
