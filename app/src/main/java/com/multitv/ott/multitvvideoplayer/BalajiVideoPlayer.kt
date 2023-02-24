@@ -323,7 +323,7 @@ class BalajiVideoPlayer(
                     ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
                 (getContext() as Activity).window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
                 showSystemBar()
-               // videoRotationButton.setImageResource(R.drawable.ic_balaji_fullscreen)
+                // videoRotationButton.setImageResource(R.drawable.ic_balaji_fullscreen)
                 videoLockButton.setVisibility(GONE)
                 videoUnLockButton.setVisibility(GONE)
                 setting.visibility = View.GONE
@@ -334,7 +334,7 @@ class BalajiVideoPlayer(
                 (getContext() as Activity).window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
                 hideSystemBars()
                 setting.visibility = View.VISIBLE
-             //   videoRotationButton.setImageResource(R.drawable.ic_minimize)
+                //   videoRotationButton.setImageResource(R.drawable.ic_minimize)
                 videoLockUnlockStatus()
                 showSeekBarLayout()
             }
@@ -376,7 +376,7 @@ class BalajiVideoPlayer(
                 showSystemBar()
                 setting.visibility = View.GONE
                 showSeekBarLayout()
-               // videoRotationButton.setImageResource(R.drawable.ic_balaji_fullscreen)
+                // videoRotationButton.setImageResource(R.drawable.ic_balaji_fullscreen)
             } else {
                 context.finish()
             }
@@ -1456,10 +1456,10 @@ class BalajiVideoPlayer(
         decorView.systemUiVisibility = uiOptions
 
         if (contentTitle != null && !TextUtils.isEmpty(contentTitle)) {
-            videoTitle?.visibility = View.VISIBLE
-            videoTitle?.setText(contentTitle)
+            videoTitle.visibility = View.VISIBLE
+            videoTitle.setText(contentTitle)
         } else
-            videoTitle?.visibility = View.GONE
+            videoTitle.visibility = View.GONE
     }
 
     private fun showSystemBar() {
@@ -1468,25 +1468,25 @@ class BalajiVideoPlayer(
         decorView.systemUiVisibility = uiOptions
         //hideSystemUiFullScreen()
 
-        videoTitle?.visibility = View.GONE
+        videoTitle.visibility = View.GONE
 
         if (contentTitle != null && !TextUtils.isEmpty(contentTitle)) {
-            videoTitle?.visibility = View.VISIBLE
-            videoTitle?.setText(contentTitle)
+            videoTitle.visibility = View.VISIBLE
+            videoTitle.setText(contentTitle)
         } else
-            videoTitle?.visibility = View.GONE
+            videoTitle.visibility = View.GONE
     }
 
-    @SuppressLint("InlinedApi")
-    private fun hideSystemUiFullScreen() {
+    /*  @SuppressLint("InlinedApi")
+      private fun hideSystemUiFullScreen() {
 
-        simpleExoPlayerView!!.systemUiVisibility = (View.SYSTEM_UI_FLAG_LOW_PROFILE
-                or View.SYSTEM_UI_FLAG_FULLSCREEN
-                or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
-    }
+          simpleExoPlayerView!!.systemUiVisibility = (View.SYSTEM_UI_FLAG_LOW_PROFILE
+                  or View.SYSTEM_UI_FLAG_FULLSCREEN
+                  or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                  or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                  or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                  or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
+      }*/
 
 
     private fun rewind() {
@@ -1592,7 +1592,7 @@ class BalajiVideoPlayer(
         Glide.with(previewImageView)
             .load(spriteImageUrl)
             .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
-            .transform(GlideThumbnailTransformation(currentPosition,1000))
+            .transform(GlideThumbnailTransformation(currentPosition, 1000))
             .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
             .into(previewImageView)
 
@@ -1725,37 +1725,37 @@ class BalajiVideoPlayer(
 
 
     fun onKeyDownEvent() {
-        if (volumeProgressBar != null)
-            volumeProgressBar.setProgress(audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC)!!)
 
-        var volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
+        volumeProgressBar.setProgress(audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC)!!)
+
+        val volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
 
 
         mMediaPlayer?.audioComponent?.volume = volume.toFloat()
 
         if (volume < 1) {
-            volumeMuteAndUnMuteButton?.visibility = View.VISIBLE
-            volumeUnMuteButton?.visibility = View.GONE
+            volumeMuteAndUnMuteButton.visibility = View.VISIBLE
+            volumeUnMuteButton.visibility = View.GONE
         } else {
-            volumeMuteAndUnMuteButton?.visibility = View.GONE
-            volumeUnMuteButton?.visibility = View.VISIBLE
+            volumeMuteAndUnMuteButton.visibility = View.GONE
+            volumeUnMuteButton.visibility = View.VISIBLE
         }
     }
 
     fun onKeyUpEvent() {
-        if (volumeProgressBar != null)
-            volumeProgressBar.setProgress(audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC)!!)
 
-        var volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
+        volumeProgressBar.setProgress(audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC)!!)
+
+        val volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
 
         mMediaPlayer?.audioComponent?.volume = volume.toFloat()
 
         if (volume < 1) {
-            volumeMuteAndUnMuteButton?.visibility = View.VISIBLE
+            volumeMuteAndUnMuteButton.visibility = View.VISIBLE
             volumeUnMuteButton?.visibility = View.GONE
         } else {
-            volumeMuteAndUnMuteButton?.visibility = View.GONE
-            volumeUnMuteButton?.visibility = View.VISIBLE
+            volumeMuteAndUnMuteButton.visibility = View.GONE
+            volumeUnMuteButton.visibility = View.VISIBLE
         }
     }
 
@@ -1767,7 +1767,7 @@ class BalajiVideoPlayer(
                 "Volume::::",
                 "KEYCODE_VOLUME_DOWN:::" + audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC)
             )
-            volumeMuteAndUnMuteButton?.visibility = View.VISIBLE
+            volumeMuteAndUnMuteButton.visibility = View.VISIBLE
             volumeUnMuteButton.visibility = View.GONE
         }
         return super.onKeyDown(keyCode, event)
@@ -1916,7 +1916,7 @@ class BalajiVideoPlayer(
                 ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
             (getContext() as Activity).window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
             showSystemBar()
-          //  videoRotationButton.setImageResource(R.drawable.ic_balaji_fullscreen)
+            //  videoRotationButton.setImageResource(R.drawable.ic_balaji_fullscreen)
             videoLockButton.setVisibility(GONE)
             videoUnLockButton.setVisibility(GONE)
         } else if (orientation == Configuration.ORIENTATION_PORTRAIT) {
@@ -1924,7 +1924,7 @@ class BalajiVideoPlayer(
                 ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
             (getContext() as Activity).window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
             hideSystemBars()
-           // videoRotationButton.setImageResource(R.drawable.ic_minimize)
+            // videoRotationButton.setImageResource(R.drawable.ic_minimize)
             videoLockUnlockStatus()
         }
     }
