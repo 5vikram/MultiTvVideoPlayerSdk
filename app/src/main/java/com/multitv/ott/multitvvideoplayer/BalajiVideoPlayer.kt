@@ -400,6 +400,8 @@ class BalajiVideoPlayer(
         pictureInPicture.setOnClickListener(OnClickListener {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 hideController()
+                videoTitle.visibility = View.GONE
+                contentRateLayout.visibility = View.GONE
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     val aspectRatio = Rational(16, 9)
@@ -413,6 +415,8 @@ class BalajiVideoPlayer(
                     context.enterPictureInPictureMode(mPictureInPictureParamsBuilder.build())
 
                 } else {
+                    videoTitle.visibility = View.GONE
+                    contentRateLayout.visibility = View.GONE
                     context.enterPictureInPictureMode()
                 }
 
