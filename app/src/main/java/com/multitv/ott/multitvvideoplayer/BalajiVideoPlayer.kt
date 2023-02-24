@@ -405,7 +405,7 @@ class BalajiVideoPlayer(
                     val aspectRatio = Rational(16, 9)
                     val actions: ArrayList<RemoteAction> = ArrayList()
 
-                    videoTitle.visibility = View.VISIBLE
+                    videoTitle.visibility = View.GONE
                     contentRateLayout.visibility = View.GONE
                     //actions.add(remoteAction)
                     mPictureInPictureParamsBuilder.setAspectRatio(aspectRatio)
