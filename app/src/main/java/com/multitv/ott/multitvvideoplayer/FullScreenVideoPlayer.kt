@@ -109,7 +109,8 @@ class FullScreenVideoPlayer(
     private lateinit var resumedVideoTv: TextView
     private lateinit var volumeLayout: LinearLayout
     private lateinit var volumeLinearLayout: LinearLayout
-  //  private lateinit var videoProgressLayout: LinearLayoutCompat
+
+    //  private lateinit var videoProgressLayout: LinearLayoutCompat
     private lateinit var bufferingProgressBarLayout: LinearLayout
     private lateinit var circularProgressLayout: LinearLayout
     private lateinit var overlayImageTransparent: View
@@ -136,10 +137,11 @@ class FullScreenVideoPlayer(
     private lateinit var videoTitle: TextView
     private lateinit var epsodeButton: ImageView
     private lateinit var epsodeNextButton: ImageView
-   // private lateinit var seekBarLayout: ConstraintLayout
+
+    // private lateinit var seekBarLayout: ConstraintLayout
     private var videoControllerLayout: ConstraintLayout? = null
-    private lateinit var exoRewLinearLayout:LinearLayout
-    private lateinit var exoFfwdLinearLayout:LinearLayout
+    private lateinit var exoRewLinearLayout: LinearLayout
+    private lateinit var exoFfwdLinearLayout: LinearLayout
 
 
     private val formatBuilder: StringBuilder
@@ -172,9 +174,9 @@ class FullScreenVideoPlayer(
     private var spriteImageUrl = ""
 
 
-  //  private lateinit var progressBarParent: FrameLayout
+    //  private lateinit var progressBarParent: FrameLayout
     private lateinit var volumeProgressBar: SeekBar
-  //  private lateinit var brightnessProgressBar: ProgressBar
+    //  private lateinit var brightnessProgressBar: ProgressBar
 
     private var isPipModeOn = false
 
@@ -225,15 +227,15 @@ class FullScreenVideoPlayer(
         overlayImageTransparent = view.findViewById(R.id.overlayImageTransparent)
 
         resumedVideoTv = view.findViewById(R.id.resumedVideoTv)
-     //   progressBarParent = view.findViewById(R.id.progress_bar_parent)
+        //   progressBarParent = view.findViewById(R.id.progress_bar_parent)
         volumeProgressBar = view.findViewById(R.id.exo_volume_progress)
-      //  brightnessProgressBar = view.findViewById(R.id.brightness_progress_bar)
+        //  brightnessProgressBar = view.findViewById(R.id.brightness_progress_bar)
         errorRetryLayout = view.findViewById(R.id.errorRetryLayout)
         videoMenuLayout = view.findViewById(R.id.videoMenuLayout)
         volumeUnMuteButton = view.findViewById(R.id.volumeUnMuteButton)
         bufferingProgressBarLayout = view.findViewById(R.id.bufferingProgressBarLayout)
         circularProgressLayout = view.findViewById(R.id.circularProgressLayout)
-     //   videoProgressLayout = findViewById(R.id.video_progress_layout)
+        //   videoProgressLayout = findViewById(R.id.video_progress_layout)
         setting = view.findViewById(R.id.settings_btn)
         volumeLayout = view.findViewById(R.id.volumeLayout)
         volumeLinearLayout = view.findViewById(R.id.volumeLinearLayout)
@@ -242,69 +244,71 @@ class FullScreenVideoPlayer(
         previewFrameLayout = view.findViewById(R.id.previewFrameLayout)
 
 
-        exoFfwdLinearLayout= view.findViewById(R.id.exoFfwdLinearLayout)
-        exoRewLinearLayout= view.findViewById(R.id.exoRewLinearLayout)
+        exoFfwdLinearLayout = view.findViewById(R.id.exoFfwdLinearLayout)
+        exoRewLinearLayout = view.findViewById(R.id.exoRewLinearLayout)
 
-        setting?.setOnClickListener(this)
+        setting.setOnClickListener(this)
         centerButtonLayout = view.findViewById(R.id.centerButtonLayout)
         videoPerviousButton = view.findViewById(R.id.exo_prev)
         videoNextButton = view.findViewById(R.id.exo_next)
         VideoRenuButton = view.findViewById(R.id.exo_rew)
         videoFarwardButton = view.findViewById(R.id.exo_ffwd)
+
         videoPlayButton = view.findViewById(R.id.exo_play)
         videoPauseButton = view.findViewById(R.id.exo_pause)
+
         videoLockButton = view.findViewById(R.id.exo_lock)
         videoUnLockButton = view.findViewById(R.id.exo_unlock)
         previewTimeBar = findViewById<View>(R.id.exo_progress) as PreviewTimeBar
         currentDurationPlayTv = view.findViewById(R.id.exo_position)
         previewImageView = view.findViewById(R.id.imageView)
-        videoNextButton?.setVisibility(GONE)
-        videoPerviousButton?.setVisibility(GONE)
+        videoNextButton.setVisibility(GONE)
+        videoPerviousButton.setVisibility(GONE)
         simpleExoPlayerView = view.findViewById(R.id.videoPlayer)
         videoRotationButton = view.findViewById(R.id.enter_full_screen)
         closeVideoPlayerButton = view.findViewById(R.id.closeButton);
         pictureInPicture = view.findViewById(R.id.picture_in_picture)
-        pictureInPicture?.setVisibility(GONE)
-        videoNextButton?.setVisibility(GONE)
-        videoPerviousButton?.setVisibility(GONE)
+        pictureInPicture.setVisibility(GONE)
+        videoNextButton.setVisibility(GONE)
+        videoPerviousButton.setVisibility(GONE)
 
 
-        previewTimeBar?.setPreviewEnabled(true)
-        previewTimeBar?.setAutoHidePreview(true)
-        previewTimeBar?.setPreviewAnimator(PreviewMorphAnimator())
-        previewTimeBar?.setPreviewAnimationEnabled(true)
-        previewTimeBar!!.setAdMarkerColor(Color.argb(0x00, 0xFF, 0xFF, 0xFF))
-        previewTimeBar!!.setPlayedAdMarkerColor(Color.argb(0x98, 0xFF, 0xFF, 0xFF))
-        previewTimeBar!!.addOnScrubListener(this)
-        previewTimeBar!!.setPreviewLoader(this)
+        previewTimeBar.setPreviewEnabled(true)
+        previewTimeBar.setAutoHidePreview(true)
+        previewTimeBar.setPreviewAnimator(PreviewMorphAnimator())
+        previewTimeBar.setPreviewAnimationEnabled(true)
+        previewTimeBar.setAdMarkerColor(Color.argb(0x00, 0xFF, 0xFF, 0xFF))
+        previewTimeBar.setPlayedAdMarkerColor(Color.argb(0x98, 0xFF, 0xFF, 0xFF))
+        previewTimeBar.addOnScrubListener(this)
+        previewTimeBar.setPreviewLoader(this)
 
 
 
 
-        videoRotationButton?.setOnClickListener(OnClickListener {
+        videoRotationButton.setOnClickListener(OnClickListener {
             context.finish()
         })
         volumeMuteAndUnMuteButton?.visibility = View.GONE
 
-        volumeUnMuteButton?.setOnClickListener {
+        volumeUnMuteButton.setOnClickListener {
             mMediaPlayer?.audioComponent?.volume = 0f
             volumeMuteAndUnMuteButton?.visibility = View.VISIBLE
             volumeUnMuteButton?.visibility = View.GONE
         }
 
 
-        volumeMuteAndUnMuteButton?.setOnClickListener {
+        volumeMuteAndUnMuteButton.setOnClickListener {
             mMediaPlayer?.audioComponent?.volume = 0f
             mMediaPlayer?.audioComponent?.volume = mMediaPlayer?.audioComponent?.volume!!
             mMediaPlayer?.audioComponent?.volume = 2f
             volumeMuteAndUnMuteButton?.visibility = View.GONE
-            volumeUnMuteButton?.visibility = View.VISIBLE
+            volumeUnMuteButton.visibility = View.VISIBLE
 
         }
 
 
 
-        closeVideoPlayerButton?.setOnClickListener {
+        closeVideoPlayerButton.setOnClickListener {
             context.finish()
         }
 
@@ -320,12 +324,12 @@ class FullScreenVideoPlayer(
 
 
         findViewById<View>(R.id.speed_btn)?.setOnClickListener { showSpeedControlDailog() }
-        errorRetryLayout?.setOnClickListener(OnClickListener {
+        errorRetryLayout.setOnClickListener(OnClickListener {
             errorRetryLayout?.setVisibility(GONE)
             initializeMainPlayer(mContentUrl, true)
         })
 
-        pictureInPicture?.setOnClickListener(OnClickListener {
+        pictureInPicture.setOnClickListener(OnClickListener {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 hideController()
 
@@ -358,19 +362,21 @@ class FullScreenVideoPlayer(
         videoPlayButton.setOnClickListener(OnClickListener {
             if (mMediaPlayer != null) {
                 mMediaPlayer!!.playWhenReady = true
+                simpleExoPlayerView.player.setPlayWhenReady(true)
                 videoPlayButton.setVisibility(GONE)
                 videoPauseButton.setVisibility(VISIBLE)
                 videoPlayerSdkCallBackListener?.onPlayClick(1)
-               resumeVideoPlayer()
+
             }
         })
         videoPauseButton.setOnClickListener(OnClickListener {
             if (mMediaPlayer != null) {
                 mMediaPlayer!!.playWhenReady = false
+                simpleExoPlayerView.player.setPlayWhenReady(false)
                 videoPlayButton.setVisibility(VISIBLE)
                 videoPauseButton.setVisibility(GONE)
                 videoPlayerSdkCallBackListener?.onPlayClick(0)
-                pauseVideoPlayer()
+
             }
         })
         previewTimeBar.addOnPreviewVisibilityListener { previewBar, isPreviewShowing ->
@@ -1236,7 +1242,7 @@ class FullScreenVideoPlayer(
             Glide.with(previewImageView)
                 .load(spriteImageUrl)
                 .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
-                .transform(GlideThumbnailTransformation(currentPosition,1000))
+                .transform(GlideThumbnailTransformation(currentPosition, 1000))
                 .into(previewImageView)
         } else {
             Log.e("Video Sprite::::", "Url:::Empty")
@@ -1269,7 +1275,7 @@ class FullScreenVideoPlayer(
             Glide.with(context)
                 .load(spriteImageUrl)
                 .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
-                .transform(GlideThumbnailTransformation(currentPosition,1000))
+                .transform(GlideThumbnailTransformation(currentPosition, 1000))
                 .into(previewImageView)
         }
 
@@ -1526,7 +1532,7 @@ class FullScreenVideoPlayer(
                 ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
             (getContext() as Activity).window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
             showSystemBar()
-          //  videoRotationButton?.setImageResource(R.drawable.ic_balaji_fullscreen)
+            //  videoRotationButton?.setImageResource(R.drawable.ic_balaji_fullscreen)
             videoLockButton?.setVisibility(GONE)
             videoUnLockButton?.setVisibility(GONE)
         } else if (orientation == Configuration.ORIENTATION_PORTRAIT) {
@@ -1534,7 +1540,7 @@ class FullScreenVideoPlayer(
                 ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
             (getContext() as Activity).window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
             hideSystemBars()
-          //  videoRotationButton?.setImageResource(R.drawable.ic_minimize)
+            //  videoRotationButton?.setImageResource(R.drawable.ic_minimize)
             videoLockUnlockStatus()
         }
     }
@@ -1555,7 +1561,7 @@ class FullScreenVideoPlayer(
         closeVideoPlayerButton!!.visibility = GONE
         overlayImageTransparent!!.visibility = GONE
         centerButtonLayout.visibility = GONE
-    //    videoProgressLayout.visibility = GONE
+        //    videoProgressLayout.visibility = GONE
         videoMenuLayout.visibility = GONE
         resumedVideoTv.visibility = View.GONE
         removeCallbacks(hideAction)
@@ -1569,7 +1575,7 @@ class FullScreenVideoPlayer(
         closeVideoPlayerButton.visibility = VISIBLE
         overlayImageTransparent.visibility = VISIBLE
         centerButtonLayout.visibility = VISIBLE
-       // videoProgressLayout.visibility = VISIBLE
+        // videoProgressLayout.visibility = VISIBLE
         videoMenuLayout.visibility = VISIBLE
         resumedVideoTv.visibility = View.GONE
         updatePlayPauseButton()
