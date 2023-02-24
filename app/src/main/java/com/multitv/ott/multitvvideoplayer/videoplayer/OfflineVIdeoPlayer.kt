@@ -1530,15 +1530,7 @@ class OfflineVIdeoPlayer (
 
 
     override fun loadPreview(currentPosition: Long, max: Long) {
-        /*    previewFrameLayout.visibility = View.VISIBLE
-            val targetX = updatePreviewX(currentPosition.toInt(), mMediaPlayer!!.duration.toInt())
-            previewFrameLayout.x = targetX.toFloat()
-            Glide.with(previewImageView)
-                .load(spriteImageUrl)
-                .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
-                .transform(GlideThumbnailTransformation(currentPosition))
-                .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-                .into(previewImageView)*/
+
         previewFrameLayout.visibility = View.VISIBLE
         Glide.with(previewImageView)
             .load(spriteImageUrl)
