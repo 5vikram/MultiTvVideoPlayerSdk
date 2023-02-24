@@ -361,6 +361,7 @@ class FullScreenVideoPlayer(
                 videoPlayButton.setVisibility(GONE)
                 videoPauseButton.setVisibility(VISIBLE)
                 videoPlayerSdkCallBackListener?.onPlayClick(1)
+               resumeVideoPlayer()
             }
         })
         videoPauseButton.setOnClickListener(OnClickListener {
@@ -369,9 +370,10 @@ class FullScreenVideoPlayer(
                 videoPlayButton.setVisibility(VISIBLE)
                 videoPauseButton.setVisibility(GONE)
                 videoPlayerSdkCallBackListener?.onPlayClick(0)
+                pauseVideoPlayer()
             }
         })
-        previewTimeBar!!.addOnPreviewVisibilityListener { previewBar, isPreviewShowing ->
+        previewTimeBar.addOnPreviewVisibilityListener { previewBar, isPreviewShowing ->
             Log.d(
                 "PreviewShowing::::",
                 isPreviewShowing.toString()
