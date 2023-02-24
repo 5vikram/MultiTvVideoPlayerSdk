@@ -360,24 +360,18 @@ class FullScreenVideoPlayer(
 
 
         videoPlayButton.setOnClickListener(OnClickListener {
-            if (mMediaPlayer != null) {
-                mMediaPlayer!!.playWhenReady = true
-                simpleExoPlayerView.player.setPlayWhenReady(true)
-                videoPlayButton.setVisibility(GONE)
-                videoPauseButton.setVisibility(VISIBLE)
-                videoPlayerSdkCallBackListener?.onPlayClick(1)
-
-            }
+            mMediaPlayer?.playWhenReady = true
+            simpleExoPlayerView?.player?.setPlayWhenReady(true)
+            videoPlayButton.setVisibility(GONE)
+            videoPauseButton.setVisibility(VISIBLE)
+            videoPlayerSdkCallBackListener?.onPlayClick(1)
         })
         videoPauseButton.setOnClickListener(OnClickListener {
-            if (mMediaPlayer != null) {
-                mMediaPlayer!!.playWhenReady = false
-                simpleExoPlayerView.player.setPlayWhenReady(false)
-                videoPlayButton.setVisibility(VISIBLE)
-                videoPauseButton.setVisibility(GONE)
-                videoPlayerSdkCallBackListener?.onPlayClick(0)
-
-            }
+            mMediaPlayer?.playWhenReady = false
+            simpleExoPlayerView?.player?.setPlayWhenReady(false)
+            videoPlayButton.setVisibility(VISIBLE)
+            videoPauseButton.setVisibility(GONE)
+            videoPlayerSdkCallBackListener?.onPlayClick(0)
         })
         previewTimeBar.addOnPreviewVisibilityListener { previewBar, isPreviewShowing ->
             Log.d(
