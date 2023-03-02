@@ -194,6 +194,7 @@
         android:paddingLeft="30dp"
         android:paddingBottom="7dp"
         android:paddingTop="5dp"
+        android:focusable="true"
         android:visibility="visible"
         android:alpha="0.7"
         android:background="@drawable/skip_button_bg"
