@@ -46,6 +46,8 @@
         <entry key="..\:/MultiTvVideoPlayerSdk/app/src/main/res/drawable/ic_balaji_pause.xml" value="0.21" />
         <entry key="..\:/MultiTvVideoPlayerSdk/app/src/main/res/drawable/ic_balaji_volume_off.xml" value="0.184" />
         <entry key="..\:/MultiTvVideoPlayerSdk/app/src/main/res/drawable/ic_balaji_volume_on.xml" value="0.184" />
+        <entry key="..\:/MultiTvVideoPlayerSdk/app/src/main/res/drawable/skip_button_bg.xml" value="0.238" />
+        <entry key="..\:/MultiTvVideoPlayerSdk/app/src/main/res/layout/alt_balaji_tv_video_player.xml" value="0.16844805472424113" />
         <entry key="..\:/MultiTvVideoPlayerSdk/app/src/main/res/layout/alt_player.xml" value="0.234375" />
         <entry key="..\:/MultiTvVideoPlayerSdk/app/src/main/res/layout/alt_tv_player.xml" value="0.1171875" />
         <entry key="..\:/MultiTvVideoPlayerSdk/app/src/main/res/layout/balaji_video_player_layout.xml" value="0.234375" />

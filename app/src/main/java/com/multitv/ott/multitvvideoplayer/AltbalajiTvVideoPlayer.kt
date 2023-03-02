@@ -1740,6 +1740,7 @@ class AltbalajiTvVideoPlayer(
 
                         if (tickCurrentDuration.toInt() == startPosition) {
                             Log.e("Video Start Counter:::", "" + startPosition)
+                            hideController()
                             skipVideoButton.visibility = View.VISIBLE
                             skipVideoButton.setText(title)
                             skipVideoButton.setOnClickListener {

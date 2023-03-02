@@ -165,6 +165,7 @@
                 android:layout_gravity="center_vertical"
                 android:background="?attr/selectableItemBackground"
                 android:focusable="true"
+                android:focusedByDefault="true"
                 android:focusableInTouchMode="true"
                 android:padding="5dp"
                 android:src="@drawable/ic_balaji_pause"
@@ -179,6 +180,7 @@
                 android:focusable="true"
                 android:focusableInTouchMode="true"
                 android:padding="5dp"
+                android:focusedByDefault="true"
                 android:src="@drawable/ic_balaji_play" />
 
 

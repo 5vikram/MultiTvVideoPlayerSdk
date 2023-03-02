@@ -1,7 +1,6 @@
 package com.multitv.ott.multitvvideoplayer
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.app.*
 import android.content.Context
 import android.content.DialogInterface
@@ -42,6 +41,7 @@ import com.conviva.sdk.ConvivaVideoAnalytics
 import com.github.rubensousa.previewseekbar.PreviewBar
 import com.github.rubensousa.previewseekbar.PreviewLoader
 import com.github.rubensousa.previewseekbar.exoplayer.PreviewTimeBar
+import com.google.ads.interactivemedia.v3.api.Ad
 import com.google.ads.interactivemedia.v3.api.AdEvent
 import com.google.ads.interactivemedia.v3.api.AdsManagerLoadedEvent
 import com.google.android.exoplayer2.*
@@ -75,6 +75,7 @@ import com.multitv.ott.multitvvideoplayer.popup.TrackSelectionDialog
 import com.multitv.ott.multitvvideoplayer.utils.*
 import com.pallycon.widevinelibrary.*
 import java.util.*
+
 
 class BalajiVideoPlayer(
     private val context: AppCompatActivity,
@@ -520,6 +521,107 @@ class BalajiVideoPlayer(
         adMetadata[ConvivaSdkConstants.AD_PLAYER] = ConvivaSdkConstants.AdPlayer.CONTENT.toString()
         adAnalytics?.setAdListener(adsLoader, adMetadata)
     }
+
+
+    fun adBreakStarted() {
+        videoAnalytics?.reportAdBreakStarted(
+            ConvivaSdkConstants.AdPlayer.CONTENT,
+            ConvivaSdkConstants.AdType.CLIENT_SIDE
+        )
+    }
+
+    fun adBreakEnded() {
+        videoAnalytics?.reportAdBreakEnded()
+    }
+
+    fun reportAdLoaded(mAd: Ad) {
+        adAnalytics?.reportAdLoaded(getAdInfo(mAd))
+    }
+
+    fun reportAdStarted(mAd: Ad) {
+        adAnalytics?.reportAdStarted(getAdInfo(mAd))
+    }
+
+    fun closeAdSession() {
+        adAnalytics?.reportAdEnded()
+    }
+
+    fun skipAdSession() {
+        adAnalytics?.reportAdSkipped()
+    }
+
+    fun reportAdError(message: String?) {
+        //logic should be implemented to figure out the error severity
+        adAnalytics?.reportAdError(message, ConvivaSdkConstants.ErrorSeverity.FATAL)
+    }
+
+    //Can be called directly if we want to report a ad fatal error and end the ad session together
+    fun reportAdFailed(message: String?, mAd: Ad) {
+        adAnalytics?.reportAdFailed(message, getAdInfo(mAd))
+    }
+
+    fun setAdPlayerState(key: String?, value: Enum<*>?) {
+        adAnalytics?.reportAdMetric(key, value)
+    }
+
+    fun setAdBitrate(key: String?, value: Any?) {
+        adAnalytics?.reportAdMetric(key, value)
+    }
+
+    fun setAdResolution(key: String?, width: Any?, height: Any?) {
+        adAnalytics?.reportAdMetric(key, width, height)
+    }
+
+    fun setAdPlayerInfo() {
+        val adPlayerInfo: MutableMap<String, Any> = HashMap()
+        adPlayerInfo[ConvivaSdkConstants.FRAMEWORK_NAME] = "Google IMA"
+        adPlayerInfo[ConvivaSdkConstants.FRAMEWORK_VERSION] = "3.23.0"
+        adAnalytics?.setAdPlayerInfo(adPlayerInfo)
+    }
+
+
+    fun getAdInfo(ad: Ad): Map<String, Any> {
+        //verify ad metadata w.r.t learning center documentation's instructions.
+        val adInfo: MutableMap<String, Any> = HashMap()
+        adInfo[ConvivaSdkConstants.ASSET_NAME] = ad.title
+        //pass ad tag url for STREAM_URL
+        adInfo[ConvivaSdkConstants.STREAM_URL] = adsUrl!!
+        adInfo[ConvivaSdkConstants.IS_LIVE] = false
+        adInfo[ConvivaSdkConstants.DEFAULT_RESOURCE] = "AD_AKAMAI"
+        adInfo[ConvivaSdkConstants.DURATION] = ad.duration.toString()
+        adInfo[ConvivaSdkConstants.ENCODED_FRAMERATE] = 25
+
+        val podInfo = ad.adPodInfo
+        val podPosition =
+            if (podInfo.podIndex == 0) ConvivaSdkConstants.AdPosition.PREROLL.toString() else if (podInfo.podIndex == -1) ConvivaSdkConstants.AdPosition.POSTROLL.toString() else ConvivaSdkConstants.AdPosition.MIDROLL.toString()
+        val firstAdSystem: String
+        val firstAdId: String
+        val firstCreativeId: String
+        if (ad.adWrapperIds.size != 0) {
+            val len = ad.adWrapperIds.size
+            firstAdSystem = ad.adWrapperSystems[len - 1]
+            firstAdId = ad.adWrapperIds[len - 1]
+            firstCreativeId = ad.adWrapperCreativeIds[len - 1]
+        } else {
+            firstAdSystem = ad.adSystem
+            firstAdId = ad.adId
+            firstCreativeId = ad.creativeId
+        }
+        adInfo["c3.ad.technology"] = "Client Side"
+        adInfo["c3.ad.id"] = ad.adId
+        adInfo["c3.ad.system"] = ad.adSystem
+        adInfo["c3.ad.position"] = podPosition
+        adInfo["c3.ad.isSlate"] = "NA"
+        adInfo["c3.ad.mediaFileApiFramework"] = "NA"
+        adInfo["c3.ad.adStitcher"] = "NA"
+        adInfo["c3.ad.firstAdSystem"] = firstAdSystem
+        adInfo["c3.ad.firstAdId"] = firstAdId
+        adInfo["c3.ad.firstCreativeId"] = firstCreativeId
+        adInfo["c3.ad.creativeId"] = ad.creativeId
+        setAdPlayerInfo()
+        return adInfo
+    }
+
 
     /**
      * Demonstration of ConvivaAdAnalytics cleanup.
@@ -1976,6 +2078,7 @@ class BalajiVideoPlayer(
                         val title = items.title
 
                         if (tickCurrentDuration.toInt() == startPosition) {
+                            hideController()
                             Log.e("Video Start Counter:::", "" + startPosition)
                             skipVideoButton.visibility = View.VISIBLE
                             skipVideoButton.setText(title)

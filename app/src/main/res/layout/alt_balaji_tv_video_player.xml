@@ -187,16 +187,17 @@
         android:layout_height="wrap_content"
         tools:text="Title"
         android:layout_gravity="bottom|end"
-        android:textColor="@color/black"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="20dp"
-        android:paddingRight="40dp"
-        android:paddingLeft="40dp"
+        android:textColor="@color/white"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:paddingRight="30dp"
+        android:paddingLeft="30dp"
         android:paddingBottom="7dp"
         android:paddingTop="5dp"
-        android:visibility="gone"
+        android:visibility="visible"
+        android:alpha="0.7"
         android:background="@drawable/skip_button_bg"
-        android:textSize="20sp"/>
+        android:textSize="15sp"/>
 
 
 </FrameLayout>
