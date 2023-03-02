@@ -181,24 +181,6 @@
         </LinearLayout>
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/skipVideoButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:text="Title"
-        android:layout_gravity="bottom|end"
-        android:textColor="@color/white"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="10dp"
-        android:paddingRight="30dp"
-        android:paddingLeft="30dp"
-        android:paddingBottom="7dp"
-        android:paddingTop="5dp"
-        android:focusable="true"
-        android:visibility="visible"
-        android:alpha="0.7"
-        android:background="@drawable/skip_button_bg"
-        android:textSize="15sp"/>
 
 
 </FrameLayout>
