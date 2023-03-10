@@ -1523,28 +1523,27 @@ class AltbalajiTvVideoPlayer(
         mMediaPlayer?.audioComponent?.volume = volume.toFloat()
 
         if (volume < 1) {
-            volumeMuteAndUnMuteButton?.visibility = View.VISIBLE
+            volumeMuteAndUnMuteButton.visibility = View.VISIBLE
             volumeUnMuteButton?.visibility = View.GONE
         } else {
-            volumeMuteAndUnMuteButton?.visibility = View.GONE
-            volumeUnMuteButton?.visibility = View.VISIBLE
+            volumeMuteAndUnMuteButton.visibility = View.GONE
+            volumeUnMuteButton.visibility = View.VISIBLE
         }
     }
 
     fun onKeyUpEvent() {
-        if (volumeProgressBar != null)
-            volumeProgressBar.setProgress(audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC)!!)
 
-        var volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
+        volumeProgressBar.setProgress(audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC)!!)
+        val volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
 
         mMediaPlayer?.audioComponent?.volume = volume.toFloat()
 
         if (volume < 1) {
-            volumeMuteAndUnMuteButton?.visibility = View.VISIBLE
-            volumeUnMuteButton?.visibility = View.GONE
+            volumeMuteAndUnMuteButton.visibility = View.VISIBLE
+            volumeUnMuteButton.visibility = View.GONE
         } else {
-            volumeMuteAndUnMuteButton?.visibility = View.GONE
-            volumeUnMuteButton?.visibility = View.VISIBLE
+            volumeMuteAndUnMuteButton.visibility = View.GONE
+            volumeUnMuteButton.visibility = View.VISIBLE
         }
     }
 
@@ -1556,7 +1555,7 @@ class AltbalajiTvVideoPlayer(
                 "Volume::::",
                 "KEYCODE_VOLUME_DOWN:::" + audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC)
             )
-            volumeMuteAndUnMuteButton?.visibility = View.VISIBLE
+            volumeMuteAndUnMuteButton.visibility = View.VISIBLE
             volumeUnMuteButton.visibility = View.GONE
         }
         return super.onKeyDown(keyCode, event)

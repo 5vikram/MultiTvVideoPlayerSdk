@@ -504,6 +504,10 @@ class BalajiVideoPlayer(
         videoAnalytics?.reportPlaybackEnded()
     }
 
+    fun setPictureInPictureModeEnable(isEnable: Boolean) {
+        isPipModeOn = isEnable
+    }
+
 
     fun initAdSession() {
 
