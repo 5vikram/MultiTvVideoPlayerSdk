@@ -422,6 +422,9 @@ class BalajiVideoPlayer(
                 }
 
                 isPipModeOn = true
+                videoTitle.visibility = View.GONE
+                contentRateLayout.visibility = View.GONE
+                countDownTimer1?.cancel()
             }
         })
         exoRewLinearLayout.setOnClickListener(OnClickListener { rewind() })
@@ -506,6 +509,13 @@ class BalajiVideoPlayer(
 
     fun setPictureInPictureModeEnable(isEnable: Boolean) {
         isPipModeOn = isEnable
+
+        if (isEnable) {
+            countDownTimer1?.cancel()
+            setTimerOnVideoPlayer(false)
+            videoTitle.visibility = View.GONE
+            contentRateLayout.visibility = View.GONE
+        }
     }
 
 
@@ -777,7 +787,14 @@ class BalajiVideoPlayer(
     }
 
     fun disablePipMode(isPipModeOn: Boolean) {
-        this.isPipModeOn = isPipModeOn;
+        this.isPipModeOn = isPipModeOn
+
+        if (isPipModeOn) {
+            countDownTimer1?.cancel()
+            videoTitle.visibility = View.GONE
+            contentRateLayout.visibility = View.GONE
+        }
+
     }
 
 
@@ -841,11 +858,16 @@ class BalajiVideoPlayer(
         hideAtMs = C.TIME_UNSET
         isControllerShown = false
 
-        if (!isPipModeOn)
+        if (!isPipModeOn) {
+            contentRateLayout.visibility = VISIBLE
             setTimerOnVideoPlayer(true)
+        } else {
+            videoTitle.visibility = View.GONE
+            contentRateLayout.visibility = View.GONE
+        }
 
         updatePlayPauseButton()
-        contentRateLayout.visibility = VISIBLE
+
 
     }
 
@@ -1315,8 +1337,11 @@ class BalajiVideoPlayer(
 
             } else {
                 videoPlayerSdkCallBackListener?.onAdCompleted()
-                if (!isPipModeOn)
+                if (!isPipModeOn) {
                     setTimerOnVideoPlayer(true)
+                } else {
+                    countDownTimer1?.cancel()
+                }
             }
 
         }
