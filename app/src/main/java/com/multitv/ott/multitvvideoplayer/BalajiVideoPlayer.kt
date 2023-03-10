@@ -1986,7 +1986,7 @@ class BalajiVideoPlayer(
 
 
         if (!TextUtils.isEmpty(parentalAge)) {
-            contentRatedTv.setText("Rated U/A " + parentalAge + "+")
+            contentRatedTv.setText("Rated U/A " + parentalAge)
             contentRatedTv.visibility = View.VISIBLE
         } else {
             contentRatedTv.visibility = View.GONE
