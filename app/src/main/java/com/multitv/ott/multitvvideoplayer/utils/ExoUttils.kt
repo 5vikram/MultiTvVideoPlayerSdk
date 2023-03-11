@@ -64,12 +64,13 @@ class ExoUttils {
         drmSessionManager: DrmSessionManager
     ): MediaSource? {
 
-        var uriData = Uri.parse(uri)
+        val uriData = Uri.parse(uri)
         val type: Int = Util.inferContentType(uriData.lastPathSegment.toString())
         val dataSourceFactory: DataSource.Factory = DefaultDataSource.Factory(context)
         val dataSourceFactory1 = DefaultHttpDataSource.Factory()
         return when (type) {
-            C.TYPE_HLS -> HlsMediaSource.Factory(dataSourceFactory1).setAllowChunklessPreparation(true)
+            C.TYPE_HLS -> HlsMediaSource.Factory(dataSourceFactory1)
+                .setAllowChunklessPreparation(true)
                 .createMediaSource(mediaItem)
             C.TYPE_DASH -> DashMediaSource.Factory(dataSourceFactory)
                 .setDrmSessionManagerProvider { unusedMediaItem: MediaItem? -> drmSessionManager }

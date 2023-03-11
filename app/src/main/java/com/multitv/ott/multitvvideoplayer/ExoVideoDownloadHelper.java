@@ -68,7 +68,7 @@ public class ExoVideoDownloadHelper implements DownloadTracker.Listener, SdkPopC
         if (DownloadUtil.INSTANCE.getDownloadTracker(context).isDownloaded(getMediaItem(url, videoTitle))) {
             new DownloadVideo(context, this).removeVideoFromDownload(mediaItem.playbackProperties.uri);
             new DownloadVideo(context, this).downloadVideo(mediaItem, videoDurationInSeconds);
-        }else if (!DownloadUtil.INSTANCE.getDownloadTracker(context).isMediaDownloadRequestInQueue()){
+        } else if (!DownloadUtil.INSTANCE.getDownloadTracker(context).isMediaDownloadRequestInQueue()) {
             new DownloadVideo(context, this).downloadVideo(mediaItem, videoDurationInSeconds);
         }
     }
@@ -85,8 +85,8 @@ public class ExoVideoDownloadHelper implements DownloadTracker.Listener, SdkPopC
         if (DownloadUtil.INSTANCE.getDownloadTracker(context).isDownloaded(getMediaItem(url, videoTitle))) {
             new DownloadVideo(context, this).removeVideoFromDownload(mediaItem.playbackProperties.uri);
             new DownloadVideo(context, this).downloadVideo(mediaItem, imageView, videoDurationInSeconds);
-        } else if (DownloadUtil.INSTANCE.getDownloadTracker(context).isMediaDownloadRequestInQueue()){
-           Toast.makeText(context, "Please wait", Toast.LENGTH_SHORT).show();
+        } else if (DownloadUtil.INSTANCE.getDownloadTracker(context).isMediaDownloadRequestInQueue()) {
+            Toast.makeText(context, "Please wait", Toast.LENGTH_SHORT).show();
         } else {
             new DownloadVideo(context, this).downloadVideo(mediaItem, imageView, videoDurationInSeconds);
         }

@@ -129,6 +129,7 @@ class BalajiVideoPlayer(
     private lateinit var volumeLinearLayout: LinearLayout
     private lateinit var bufferingProgressBarLayout: LinearLayout
     private lateinit var circularProgressLayout: LinearLayout
+    private lateinit var repeatVideoLinearLayout: LinearLayout
     private lateinit var overlayImageTransparent: View
     private lateinit var circularProgressRing: FabButton
     private lateinit var centerButtonLayout: LinearLayout
@@ -262,6 +263,7 @@ class BalajiVideoPlayer(
         volumeUnMuteButton = view.findViewById(R.id.volumeUnMuteButton)
         bufferingProgressBarLayout = view.findViewById(R.id.bufferingProgressBarLayout)
         circularProgressLayout = view.findViewById(R.id.circularProgressLayout)
+        repeatVideoLinearLayout = view.findViewById(R.id.repeatVideoLinearLayout)
         setting = view.findViewById(R.id.settings_btn)
         volumeLayout = view.findViewById(R.id.volumeLayout)
         volumeLinearLayout = view.findViewById(R.id.volumeLinearLayout)
@@ -1295,7 +1297,7 @@ class BalajiVideoPlayer(
             mediaSessionConnector.setPlayer(mMediaPlayer)
             mediaSession.isActive = true
 
-            var volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
+            val volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
             mMediaPlayer?.audioComponent?.volume = volume.toFloat()
             if (volume < 1) {
                 volumeMuteAndUnMuteButton.visibility = View.VISIBLE
@@ -1385,60 +1387,73 @@ class BalajiVideoPlayer(
                 }
                 ExoPlayer.STATE_ENDED -> {
                     text += "ended"
-                    if (contentType == ContentType.VOD) {
-                        if (mMediaPlayer != null) contentPlayedTimeInMillis =
-                            mMediaPlayer!!.currentPosition
-                        releaseVideoPlayer()
-                        bufferingProgressBarLayout!!.visibility = GONE
-                        circularProgressRing =
-                            findViewById<View>(R.id.circular_progress_ring) as FabButton
-                        circularProgressRing.showProgress(true)
-                        circularProgressRing.setProgress(0f)
-                        circularProgressLayout.visibility = VISIBLE
-                        // circularProgressLayout!!.bringToFront()
-                        val totalDuration = 1200
-                        val tickDuration = 300
-                        countDownTimer = object : CountDownTimerWithPause(
-                            totalDuration.toLong(),
-                            (tickDuration / 10).toLong(),
-                            true
-                        ) {
-                            override fun onTick(millisUntilFinished: Long) {
-                                var progress = millisUntilFinished.toFloat() / totalDuration
-                                progress = progress * 100
-                                progress = 100 - progress
-                                circularProgressRing.setProgress(progress)
-                            }
 
 
-                            // comment
+                    if (isContentRepetPlaying) {
+                        repeatVideoLinearLayout.visibility = View.VISIBLE
+                        repeatVideoLinearLayout.setOnClickListener {
+                            initializeMainPlayer(mContentUrl, true)
+                        }
+                    } else {
+                        if (contentType == ContentType.VOD) {
+                            repeatVideoLinearLayout.visibility = View.GONE
 
-                            override fun onFinish() {
-                                circularProgressRing =
-                                    findViewById<View>(R.id.circular_progress_ring) as FabButton
-
-                                circularProgressLayout.visibility = View.GONE
-
-                                if (isWebSeries) {
-                                    if (userSubscriptionDtatus)
-                                        videoPlayerSdkCallBackListener?.onPlayNextVideo()
-                                    else if (contentAccessType.equals("paid") && !userSubscriptionDtatus)
-                                        videoPlayerSdkCallBackListener?.subscriptionCallBack()
-                                    else if (contentAccessType.equals("free"))
-                                        videoPlayerSdkCallBackListener?.onPlayNextVideo()
-                                    else
-                                        videoPlayerSdkCallBackListener?.showThumbnailCallback()
-
-                                } else {
-                                    if (contentAccessType.equals("free"))
-                                        videoPlayerSdkCallBackListener?.onPlayNextVideo()
-                                    else
-                                        videoPlayerSdkCallBackListener?.subscriptionCallBack()
+                            if (mMediaPlayer != null) contentPlayedTimeInMillis =
+                                mMediaPlayer!!.currentPosition
+                            releaseVideoPlayer()
+                            bufferingProgressBarLayout.visibility = GONE
+                            circularProgressRing =
+                                findViewById<View>(R.id.circular_progress_ring) as FabButton
+                            circularProgressRing.showProgress(true)
+                            circularProgressRing.setProgress(0f)
+                            circularProgressLayout.visibility = VISIBLE
+                            // circularProgressLayout!!.bringToFront()
+                            val totalDuration = 1200
+                            val tickDuration = 300
+                            countDownTimer = object : CountDownTimerWithPause(
+                                totalDuration.toLong(),
+                                (tickDuration / 10).toLong(),
+                                true
+                            ) {
+                                override fun onTick(millisUntilFinished: Long) {
+                                    var progress = millisUntilFinished.toFloat() / totalDuration
+                                    progress = progress * 100
+                                    progress = 100 - progress
+                                    circularProgressRing.setProgress(progress)
                                 }
 
-                            }
-                        }.create()
+
+                                // comment
+
+                                override fun onFinish() {
+                                    circularProgressRing =
+                                        findViewById<View>(R.id.circular_progress_ring) as FabButton
+
+                                    circularProgressLayout.visibility = View.GONE
+
+                                    if (isWebSeries) {
+                                        if (userSubscriptionDtatus)
+                                            videoPlayerSdkCallBackListener?.onPlayNextVideo()
+                                        else if (contentAccessType.equals("paid") && !userSubscriptionDtatus)
+                                            videoPlayerSdkCallBackListener?.subscriptionCallBack()
+                                        else if (contentAccessType.equals("free"))
+                                            videoPlayerSdkCallBackListener?.onPlayNextVideo()
+                                        else
+                                            videoPlayerSdkCallBackListener?.showThumbnailCallback()
+
+                                    } else {
+                                        if (contentAccessType.equals("free"))
+                                            videoPlayerSdkCallBackListener?.onPlayNextVideo()
+                                        else
+                                            videoPlayerSdkCallBackListener?.subscriptionCallBack()
+                                    }
+
+                                }
+                            }.create()
+                        }
+
                     }
+
                 }
                 ExoPlayer.STATE_IDLE -> {
                     text += "idle"
@@ -2028,9 +2043,17 @@ class BalajiVideoPlayer(
     private lateinit var languageTv: TextView
     private lateinit var contentRatedTv: TextView
 
+    private var isContentRepetPlaying = false
+
     fun setGenure(genure: String) {
         this.genure = genure
     }
+
+
+    fun setContentRepeatModeEnabled(repeat: Boolean) {
+        this.isContentRepetPlaying = repeat
+    }
+
 
     fun setLanguage(language: String) {
         this.language = language;
