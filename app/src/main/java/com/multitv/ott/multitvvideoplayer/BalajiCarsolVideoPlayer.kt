@@ -461,6 +461,9 @@ class BalajiCarsolVideoPlayer(
 
 
     private fun initializeMainPlayer(videoUrl: String?, isNeedToPlayInstantly: Boolean) {
+
+        repeatVideoLinearLayout.visibility = View.GONE
+
         if (mMediaPlayer != null) {
             mMediaPlayer!!.release()
             if (adsLoader != null) adsLoader!!.setPlayer(null)
