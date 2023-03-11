@@ -17,6 +17,7 @@ import android.util.AttributeSet
 import android.view.*
 import android.widget.FrameLayout
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.LinearLayoutCompat
@@ -90,6 +91,7 @@ class BalajiCarsolVideoPlayer(
     private var isAttachedToWindowStatus = false
     private var mWindow: Window? = null
     private var isPipModeOn = false
+    private var isContentRepetPlaying = false
 
     private var simpleExoPlayerView: StyledPlayerView? = null
     private lateinit var videoRotationButton: ImageView
@@ -99,6 +101,7 @@ class BalajiCarsolVideoPlayer(
     private lateinit var volumeMuteButton: ImageView
     private lateinit var volumeUnMuteButton: ImageView
     private lateinit var videoPlayerControllerRealtiveLayout: RelativeLayout
+    private lateinit var repeatVideoLinearLayout: LinearLayout
 
 
     constructor(context: Context, attrs: AttributeSet?) : this(
@@ -106,6 +109,11 @@ class BalajiCarsolVideoPlayer(
         attrs,
         0
     ) {
+    }
+
+
+    fun setContentRepeatModeEnabled(repeat: Boolean) {
+        this.isContentRepetPlaying = repeat
     }
 
 
@@ -122,7 +130,7 @@ class BalajiCarsolVideoPlayer(
         videoPauseButton = view.findViewById(R.id.exo_pause)
         volumeMuteButton = view.findViewById(R.id.volumeMuteButton)
         volumeUnMuteButton = view.findViewById(R.id.volumeUnMuteButton)
-
+        repeatVideoLinearLayout = view.findViewById(R.id.repeatVideoLinearLayout)
 
         volumeMuteButton.visibility = View.VISIBLE
         volumeUnMuteButton.visibility = View.GONE
@@ -610,8 +618,6 @@ class BalajiCarsolVideoPlayer(
         }
 
 
-
-
         override fun onVideoSizeChanged(videoSize: VideoSize) {
             super.onVideoSizeChanged(videoSize)
             mInitialTextureWidth = videoSize.width
@@ -624,7 +630,7 @@ class BalajiCarsolVideoPlayer(
 
         override fun onLoadingChanged(isLoading: Boolean) {}
         override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
-           // mMediaPlayer?.setRepeatMode(Player.REPEAT_MODE_ONE)
+            // mMediaPlayer?.setRepeatMode(Player.REPEAT_MODE_ONE)
             var text = "Main player"
             when (playbackState) {
                 ExoPlayer.STATE_BUFFERING -> {
@@ -633,11 +639,19 @@ class BalajiCarsolVideoPlayer(
                 }
                 ExoPlayer.STATE_ENDED -> {
                     text += "ended"
-                    if (contentType == ContentType.VOD) {
+
+                    if (isContentRepetPlaying) {
+                        repeatVideoLinearLayout.visibility = View.VISIBLE
+                        repeatVideoLinearLayout.setOnClickListener {
+                            initializeMainPlayer(mContentUrl, true)
+                        }
+                    } else {
+                        repeatVideoLinearLayout.visibility = View.GONE
                         releaseVideoPlayer()
                         bannerVideoPlayerEventLister?.onPlayNextVideo()
                         //mMediaPlayer?.setRepeatMode(Player.REPEAT_MODE_ONE)
                     }
+
                 }
                 ExoPlayer.STATE_IDLE -> {
                     text += "idle"

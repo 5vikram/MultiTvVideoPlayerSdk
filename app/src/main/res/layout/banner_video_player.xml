@@ -10,8 +10,8 @@
         android:id="@+id/videoPlayer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:use_controller="false"
-        app:resize_mode="fill" />
+        app:resize_mode="fill"
+        app:use_controller="false" />
 
 
     <RelativeLayout
@@ -76,10 +76,10 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="15dp"
-                    android:paddingTop="5dp"
-                    android:padding="5dp"
                     android:gravity="center_vertical"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:padding="5dp"
+                    android:paddingTop="5dp">
 
 
                     <ImageView
@@ -163,6 +163,25 @@
         </RelativeLayout>
 
     </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/repeatVideoLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/black"
+        android:clickable="true"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="centerCrop"
+            android:src="@drawable/replay" />
+
+
+    </LinearLayout>
 
 
 </FrameLayout>
