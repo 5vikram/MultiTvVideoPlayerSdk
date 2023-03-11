@@ -371,7 +371,7 @@
             <ImageView
                 android:id="@+id/picture_in_picture"
                 android:layout_width="30dp"
-                android:layout_height="26dp"
+                android:layout_height="24dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="10dp"
                 android:background="@android:color/transparent"
