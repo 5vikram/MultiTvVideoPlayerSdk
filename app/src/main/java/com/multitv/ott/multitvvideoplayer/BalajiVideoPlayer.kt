@@ -2022,8 +2022,16 @@ class BalajiVideoPlayer(
             languageTv.visibility = View.GONE
         }
 
+        var timerTotalSec = 0
+
+        if (conentRatingTime > 0)
+            timerTotalSec = timerTotalSec * 1000
+        else
+            timerTotalSec = 5 * 1000
+
         countDownTimer1 =
-            object : CountDownTimerWithPause(10000.toLong(), (tickDuration).toLong(), true) {
+            object :
+                CountDownTimerWithPause(timerTotalSec.toLong(), (tickDuration).toLong(), true) {
                 override fun onTick(millisUntilFinished: Long) {
 
                 }
@@ -2035,9 +2043,16 @@ class BalajiVideoPlayer(
             }.create()
     }
 
+
+    fun setUATimeDuration(conentratingTime: Int) {
+        this.conentRatingTime = conentratingTime;
+    }
+
+
     private var parentalAge = ""
     private var genure = ""
     private var language = ""
+    private var conentRatingTime = 0
     private lateinit var contentRateLayout: LinearLayoutCompat
     private lateinit var genureTv: TextView
     private lateinit var languageTv: TextView

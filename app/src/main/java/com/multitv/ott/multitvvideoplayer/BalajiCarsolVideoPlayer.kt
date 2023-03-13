@@ -553,7 +553,7 @@ class BalajiCarsolVideoPlayer(
                     downloadRequest!!,
                     DownloadUtil.getReadOnlyDataSourceFactory(context)
                 )
-                mMediaPlayer?.setMediaSource(mediaSource!!)
+                mMediaPlayer?.setMediaSource(mediaSource)
 
             } else {
                 mediaItem = if (subtitle != null) {
