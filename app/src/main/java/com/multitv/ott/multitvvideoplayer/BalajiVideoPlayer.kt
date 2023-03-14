@@ -822,7 +822,7 @@ class BalajiVideoPlayer(
         val orientation = resources.configuration.orientation
         if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
             showSeekBarLayout()
-            if (contentTitle != null && !TextUtils.isEmpty(contentTitle)) {
+            if (contentTitle != null && !TextUtils.isEmpty(contentTitle) && !isPipModeOn) {
                 videoTitle.visibility = View.VISIBLE
                 videoTitle.setText(contentTitle)
             } else
@@ -1605,7 +1605,7 @@ class BalajiVideoPlayer(
                 or SYSTEM_UI_FLAG_FULLSCREEN)
         decorView.systemUiVisibility = uiOptions
 
-        if (contentTitle != null && !TextUtils.isEmpty(contentTitle)) {
+        if (contentTitle != null && !TextUtils.isEmpty(contentTitle) && !isPipModeOn) {
             videoTitle.visibility = View.VISIBLE
             videoTitle.setText(contentTitle)
         } else
@@ -1620,7 +1620,7 @@ class BalajiVideoPlayer(
 
         videoTitle.visibility = View.GONE
 
-        if (contentTitle != null && !TextUtils.isEmpty(contentTitle)) {
+        if (contentTitle != null && !TextUtils.isEmpty(contentTitle) && !isPipModeOn) {
             videoTitle.visibility = View.VISIBLE
             videoTitle.setText(contentTitle)
         } else
@@ -1938,10 +1938,8 @@ class BalajiVideoPlayer(
     }
 
     private fun volumeProgressBarSetUp() {
-        var startVolume: Int = 0
-        var maxVolume: Int = 0
-        maxVolume = audioManager?.getStreamMaxVolume(AudioManager.STREAM_MUSIC) ?: 100
-        startVolume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) ?: 100
+        val maxVolume = audioManager?.getStreamMaxVolume(AudioManager.STREAM_MUSIC) ?: 100
+        val startVolume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) ?: 100
         volumeProgressBar.progress = startVolume
         volumeProgressBar.max = maxVolume
 
