@@ -2023,7 +2023,7 @@ class BalajiVideoPlayer(
         var timerTotalSec = 0
 
         if (conentRatingTime > 0)
-            timerTotalSec = timerTotalSec * 1000
+            timerTotalSec = conentRatingTime * 1000
         else
             timerTotalSec = 5 * 1000
 
