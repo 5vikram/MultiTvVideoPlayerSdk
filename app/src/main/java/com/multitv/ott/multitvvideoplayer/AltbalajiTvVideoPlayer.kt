@@ -287,15 +287,16 @@ class AltbalajiTvVideoPlayer(
             mMediaPlayer?.audioComponent?.volume = 0f
             volumeMuteAndUnMuteButton.visibility = View.VISIBLE
             volumeUnMuteButton.visibility = View.GONE
+            updateLandscapeVolumeButtonAndSeekBar(1)
         }
 
 
         volumeMuteAndUnMuteButton.setOnClickListener {
-            mMediaPlayer?.audioComponent?.volume = 0f
-            mMediaPlayer?.audioComponent?.volume = 2f
+            mMediaPlayer?.audioComponent?.volume = 3f
             mMediaPlayer?.audioComponent?.volume = mMediaPlayer?.audioComponent?.volume!!
             volumeMuteAndUnMuteButton.visibility = View.GONE
             volumeUnMuteButton.visibility = View.VISIBLE
+            updateLandscapeVolumeButtonAndSeekBar(2)
 
         }
 
@@ -408,11 +409,11 @@ class AltbalajiTvVideoPlayer(
 
 
     fun showVolumeProgressBarButton() {
-        volumeLayout?.visibility = View.VISIBLE
+        volumeLayout.visibility = View.VISIBLE
     }
 
     fun hideVolumeProgressBarButton() {
-        volumeLayout?.visibility = View.GONE
+        volumeLayout.visibility = View.GONE
     }
 
 
@@ -426,13 +427,11 @@ class AltbalajiTvVideoPlayer(
 
 
     fun showBackButton() {
-        if (closeVideoPlayerButton != null)
-            closeVideoPlayerButton.visibility = View.VISIBLE
+        closeVideoPlayerButton.visibility = View.VISIBLE
     }
 
     fun hideBackButton() {
-        if (closeVideoPlayerButton != null)
-            closeVideoPlayerButton.visibility = View.GONE
+        closeVideoPlayerButton.visibility = View.GONE
     }
 
 
@@ -506,7 +505,7 @@ class AltbalajiTvVideoPlayer(
 
     private fun hideAfterTimeout() {
         removeCallbacks(hideAction)
-        if (10000 > 0) {
+        if (true) {
             VideoPlayerTracer.error("Controller Listener:::", "Start Timer")
             hideAtMs = SystemClock.uptimeMillis() + 10000
             if (isAttachedToWindow) {
@@ -560,13 +559,13 @@ class AltbalajiTvVideoPlayer(
         if (videoPlayButton != null) {
             requestPlayPauseFocus =
                 requestPlayPauseFocus or (playing && videoPlayButton!!.isFocused)
-            videoPlayButton!!.visibility =
+            videoPlayButton.visibility =
                 if (playing) GONE else VISIBLE
         }
         if (videoPauseButton != null) {
             requestPlayPauseFocus =
                 requestPlayPauseFocus or (!playing && videoPauseButton!!.isFocused)
-            videoPauseButton!!.visibility =
+            videoPauseButton.visibility =
                 if (!playing) GONE else VISIBLE
         }
         if (requestPlayPauseFocus) {
@@ -576,10 +575,10 @@ class AltbalajiTvVideoPlayer(
 
     private fun requestPlayPauseFocus() {
         val playing = mMediaPlayer != null && mMediaPlayer!!.playWhenReady
-        if (!playing && videoPlayButton != null) {
-            videoPlayButton!!.requestFocus()
-        } else if (playing && videoPauseButton != null) {
-            videoPauseButton!!.requestFocus()
+        if (!playing) {
+            videoPlayButton.requestFocus()
+        } else if (playing) {
+            videoPauseButton.requestFocus()
         }
     }
 
@@ -898,7 +897,7 @@ class AltbalajiTvVideoPlayer(
                     DownloadUtil.getReadOnlyDataSourceFactory(context)
                 )
 
-                mMediaPlayer!!.setMediaSource(mediaSource!!)
+                mMediaPlayer!!.setMediaSource(mediaSource)
 
             } else {
                 mediaItem = if (subtitle != null) {
@@ -957,9 +956,11 @@ class AltbalajiTvVideoPlayer(
             if (volume < 1) {
                 volumeMuteAndUnMuteButton.visibility = View.VISIBLE
                 volumeUnMuteButton.visibility = View.GONE
+                updateLandscapeVolumeButtonAndSeekBar(1)
             } else {
                 volumeMuteAndUnMuteButton.visibility = View.GONE
                 volumeUnMuteButton.visibility = View.VISIBLE
+                updateLandscapeVolumeButtonAndSeekBar(2)
             }
 
 
@@ -1163,7 +1164,7 @@ class AltbalajiTvVideoPlayer(
     }
 
 
-    private val bufferingTimeRunnable: Runnable? = object : Runnable {
+    private val bufferingTimeRunnable: Runnable = object : Runnable {
         override fun run() {
             bufferingTimeInMillis = bufferingTimeInMillis + 1000
 
@@ -1245,10 +1246,10 @@ class AltbalajiTvVideoPlayer(
         decorView.systemUiVisibility = uiOptions
 
         if (contentTitle != null && !TextUtils.isEmpty(contentTitle)) {
-            videoTitle?.visibility = View.VISIBLE
-            videoTitle?.setText(contentTitle)
+            videoTitle.visibility = View.VISIBLE
+            videoTitle.setText(contentTitle)
         } else
-            videoTitle?.visibility = View.GONE
+            videoTitle.visibility = View.GONE
     }
 
     private fun showSystemBar() {
@@ -1257,13 +1258,13 @@ class AltbalajiTvVideoPlayer(
         decorView.systemUiVisibility = uiOptions
         //hideSystemUiFullScreen()
 
-        videoTitle?.visibility = View.GONE
+        videoTitle.visibility = View.GONE
 
         if (contentTitle != null && !TextUtils.isEmpty(contentTitle)) {
-            videoTitle?.visibility = View.VISIBLE
-            videoTitle?.setText(contentTitle)
+            videoTitle.visibility = View.VISIBLE
+            videoTitle.setText(contentTitle)
         } else
-            videoTitle?.visibility = View.GONE
+            videoTitle.visibility = View.GONE
     }
 
     @SuppressLint("InlinedApi")
@@ -1368,15 +1369,6 @@ class AltbalajiTvVideoPlayer(
 
 
     override fun loadPreview(currentPosition: Long, max: Long) {
-        /*    previewFrameLayout.visibility = View.VISIBLE
-            val targetX = updatePreviewX(currentPosition.toInt(), mMediaPlayer!!.duration.toInt())
-            previewFrameLayout.x = targetX.toFloat()
-            Glide.with(previewImageView)
-                .load(spriteImageUrl)
-                .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
-                .transform(GlideThumbnailTransformation(currentPosition))
-                .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-                .into(previewImageView)*/
         previewFrameLayout.visibility = View.VISIBLE
         Glide.with(previewImageView)
             .load(spriteImageUrl)
@@ -1517,7 +1509,7 @@ class AltbalajiTvVideoPlayer(
         if (volumeProgressBar != null)
             volumeProgressBar.setProgress(audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC)!!)
 
-        var volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
+        val volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
 
 
         mMediaPlayer?.audioComponent?.volume = volume.toFloat()
@@ -1525,9 +1517,11 @@ class AltbalajiTvVideoPlayer(
         if (volume < 1) {
             volumeMuteAndUnMuteButton.visibility = View.VISIBLE
             volumeUnMuteButton?.visibility = View.GONE
+            updateLandscapeVolumeButtonAndSeekBar(1)
         } else {
             volumeMuteAndUnMuteButton.visibility = View.GONE
             volumeUnMuteButton.visibility = View.VISIBLE
+            updateLandscapeVolumeButtonAndSeekBar(2)
         }
     }
 
@@ -1541,9 +1535,11 @@ class AltbalajiTvVideoPlayer(
         if (volume < 1) {
             volumeMuteAndUnMuteButton.visibility = View.VISIBLE
             volumeUnMuteButton.visibility = View.GONE
+            updateLandscapeVolumeButtonAndSeekBar(1)
         } else {
             volumeMuteAndUnMuteButton.visibility = View.GONE
             volumeUnMuteButton.visibility = View.VISIBLE
+            updateLandscapeVolumeButtonAndSeekBar(2)
         }
     }
 
@@ -1557,6 +1553,7 @@ class AltbalajiTvVideoPlayer(
             )
             volumeMuteAndUnMuteButton.visibility = View.VISIBLE
             volumeUnMuteButton.visibility = View.GONE
+            updateLandscapeVolumeButtonAndSeekBar(1)
         }
         return super.onKeyDown(keyCode, event)
     }
@@ -1570,9 +1567,20 @@ class AltbalajiTvVideoPlayer(
                 "Volume::::",
                 "KEYCODE_VOLUME_UP::::" + audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC)
             )
+
+            updateLandscapeVolumeButtonAndSeekBar(2)
         }
 
         return super.onKeyUp(keyCode, event)
+    }
+
+
+    private fun updateLandscapeVolumeButtonAndSeekBar(startVolume: Int) {
+
+        if (startVolume > 1)
+            volumeFullScreenButton.setImageResource(R.drawable.ic_balaji_volume_on)
+        else
+            volumeFullScreenButton.setImageResource(R.drawable.ic_balaji_volume_off)
     }
 
     private fun volumeProgressBarSetUp() {
@@ -1633,7 +1641,7 @@ class AltbalajiTvVideoPlayer(
 
 
         if (!TextUtils.isEmpty(parentalAge)) {
-            contentRatedTv.setText("Rated U/A " + parentalAge + "+")
+            contentRatedTv.setText("Rated U/A " + parentalAge)
             contentRatedTv.visibility = View.VISIBLE
         } else {
             contentRatedTv.visibility = View.GONE
@@ -1654,8 +1662,16 @@ class AltbalajiTvVideoPlayer(
             languageTv.visibility = View.GONE
         }
 
+        var timerTotalSec = 0
+
+        if (contentRatingTime > 0)
+            timerTotalSec = contentRatingTime * 1000
+        else
+            timerTotalSec = 5 * 1000
+
         countDownTimer1 =
-            object : CountDownTimerWithPause(10000.toLong(), (tickDuration).toLong(), true) {
+            object :
+                CountDownTimerWithPause(timerTotalSec.toLong(), (tickDuration).toLong(), true) {
                 override fun onTick(millisUntilFinished: Long) {
 
                 }
@@ -1667,9 +1683,15 @@ class AltbalajiTvVideoPlayer(
             }.create()
     }
 
+
+    fun setUATimeDuration(contentRatingTime: Int) {
+        this.contentRatingTime = contentRatingTime;
+    }
+
     private var parentalAge = ""
     private var genure = ""
     private var language = ""
+    private var contentRatingTime = 0
     private lateinit var contentRateLayout: LinearLayoutCompat
     private lateinit var genureTv: TextView
     private lateinit var languageTv: TextView
