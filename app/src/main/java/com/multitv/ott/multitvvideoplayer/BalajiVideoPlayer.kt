@@ -1,6 +1,7 @@
 package com.multitv.ott.multitvvideoplayer
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.*
 import android.content.Context
 import android.content.DialogInterface
@@ -206,6 +207,7 @@ class BalajiVideoPlayer(
 
 
     private var isPipModeOn = false
+    private var isVolmueMute = false
 
 
     constructor(context: Context, attrs: AttributeSet?) : this(
@@ -221,6 +223,7 @@ class BalajiVideoPlayer(
     public boolean onTouchEvent(MotionEvent event) {
         return super.onTouchEvent(event);
     }*/
+    @SuppressLint("MissingInflatedId")
     override fun onFinishInflate() {
         val view =
             LayoutInflater.from(getContext()).inflate(R.layout.balaji_video_player_layout, this)
@@ -311,7 +314,7 @@ class BalajiVideoPlayer(
         volumeFullScreenUnMuteButton.setOnClickListener {
             mMediaPlayer?.audioComponent?.volume = 0f
             mMediaPlayer?.audioComponent?.volume = mMediaPlayer?.audioComponent?.volume!!
-            mMediaPlayer?.audioComponent?.volume = 2f
+            mMediaPlayer?.audioComponent?.volume = 5f
             volumeFullScreenUnMuteButton.visibility = View.GONE
             volumeFullScreenButton.visibility = View.VISIBLE
         }
@@ -322,6 +325,20 @@ class BalajiVideoPlayer(
         videoRotationButton.setOnClickListener(OnClickListener {
             val orientation = getContext().resources.configuration.orientation
             if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+
+
+                if (isVolmueMute) {
+                    mMediaPlayer?.audioComponent?.volume = 0f
+                    volumeFullScreenButton.visibility = View.GONE
+                    volumeFullScreenUnMuteButton.visibility = View.VISIBLE
+                } else {
+                    volumeFullScreenUnMuteButton.visibility = View.GONE
+                    volumeFullScreenButton.visibility = View.VISIBLE
+                    mMediaPlayer?.audioComponent?.volume = 5f
+                }
+
+
+
                 (getContext() as Activity).requestedOrientation =
                     ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
                 (getContext() as Activity).window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
@@ -330,6 +347,7 @@ class BalajiVideoPlayer(
                 videoLockButton.setVisibility(GONE)
                 videoUnLockButton.setVisibility(GONE)
                 setting.visibility = View.GONE
+
                 hideSeekBarLayout()
             } else if (orientation == Configuration.ORIENTATION_PORTRAIT) {
                 (getContext() as Activity).requestedOrientation =
@@ -355,16 +373,16 @@ class BalajiVideoPlayer(
             mMediaPlayer?.audioComponent?.volume = 0f
             volumeMuteAndUnMuteButton.visibility = View.VISIBLE
             volumeUnMuteButton.visibility = View.GONE
+            updateLandscapeVolumeButtonAndSeekBar(1)
         }
 
 
         volumeMuteAndUnMuteButton.setOnClickListener {
-            mMediaPlayer?.audioComponent?.volume = 0f
             mMediaPlayer?.audioComponent?.volume = mMediaPlayer?.audioComponent?.volume!!
-            mMediaPlayer?.audioComponent?.volume = 2f
+            mMediaPlayer?.audioComponent?.volume = 5f
             volumeMuteAndUnMuteButton.visibility = View.GONE
             volumeUnMuteButton.visibility = View.VISIBLE
-
+            updateLandscapeVolumeButtonAndSeekBar(2)
         }
 
 
@@ -1302,9 +1320,11 @@ class BalajiVideoPlayer(
             if (volume < 1) {
                 volumeMuteAndUnMuteButton.visibility = View.VISIBLE
                 volumeUnMuteButton.visibility = View.GONE
+                updateLandscapeVolumeButtonAndSeekBar(1)
             } else {
                 volumeMuteAndUnMuteButton.visibility = View.GONE
                 volumeUnMuteButton.visibility = View.VISIBLE
+                updateLandscapeVolumeButtonAndSeekBar(2)
             }
 
 
@@ -1886,9 +1906,11 @@ class BalajiVideoPlayer(
         if (volume < 1) {
             volumeMuteAndUnMuteButton.visibility = View.VISIBLE
             volumeUnMuteButton.visibility = View.GONE
+            updateLandscapeVolumeButtonAndSeekBar(1)
         } else {
             volumeMuteAndUnMuteButton.visibility = View.GONE
             volumeUnMuteButton.visibility = View.VISIBLE
+            updateLandscapeVolumeButtonAndSeekBar(2)
         }
     }
 
@@ -1903,9 +1925,11 @@ class BalajiVideoPlayer(
         if (volume < 1) {
             volumeMuteAndUnMuteButton.visibility = View.VISIBLE
             volumeUnMuteButton?.visibility = View.GONE
+            updateLandscapeVolumeButtonAndSeekBar(1)
         } else {
             volumeMuteAndUnMuteButton.visibility = View.GONE
             volumeUnMuteButton.visibility = View.VISIBLE
+            updateLandscapeVolumeButtonAndSeekBar(2)
         }
     }
 
@@ -1919,6 +1943,7 @@ class BalajiVideoPlayer(
             )
             volumeMuteAndUnMuteButton.visibility = View.VISIBLE
             volumeUnMuteButton.visibility = View.GONE
+            updateLandscapeVolumeButtonAndSeekBar(1)
         }
         return super.onKeyDown(keyCode, event)
     }
@@ -1928,6 +1953,7 @@ class BalajiVideoPlayer(
             volumeProgressBar.setProgress(audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC)!!)
             volumeMuteAndUnMuteButton.visibility = View.GONE
             volumeUnMuteButton.visibility = View.VISIBLE
+            updateLandscapeVolumeButtonAndSeekBar(2)
             Log.e(
                 "Volume::::",
                 "KEYCODE_VOLUME_UP::::" + audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC)
@@ -2165,6 +2191,15 @@ class BalajiVideoPlayer(
                     skipCountDownTimer?.cancel()
                 }
             }.create()
+    }
+
+
+    private fun updateLandscapeVolumeButtonAndSeekBar(startVolume: Int) {
+
+        if (startVolume > 1)
+            isVolmueMute = true
+        else
+            isVolmueMute = false
     }
 
 
