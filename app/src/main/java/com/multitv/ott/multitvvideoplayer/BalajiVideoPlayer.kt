@@ -79,9 +79,7 @@ import java.util.*
 
 
 class BalajiVideoPlayer(
-    private val context: AppCompatActivity,
-    attrs: AttributeSet?,
-    defStyleAttr: Int
+    private val context: AppCompatActivity, attrs: AttributeSet?, defStyleAttr: Int
 ) : FrameLayout(
     context, attrs, defStyleAttr
 ), PreviewBar.OnScrubListener, PreviewLoader, OnClickListener, SessionAvailabilityListener {
@@ -211,9 +209,7 @@ class BalajiVideoPlayer(
 
 
     constructor(context: Context, attrs: AttributeSet?) : this(
-        context as AppCompatActivity,
-        attrs,
-        0
+        context as AppCompatActivity, attrs, 0
     ) {
     }
 
@@ -236,14 +232,10 @@ class BalajiVideoPlayer(
         }
 
         epsodeNextButton.setOnClickListener {
-            if (userSubscriptionDtatus)
-                videoPlayerSdkCallBackListener?.onPlayNextVideo()
-            else if (contentAccessType.equals("paid") && !userSubscriptionDtatus)
-                videoPlayerSdkCallBackListener?.subscriptionCallBack()
-            else if (contentAccessType.equals("free"))
-                videoPlayerSdkCallBackListener?.onPlayNextVideo()
-            else
-                videoPlayerSdkCallBackListener?.showThumbnailCallback()
+            if (userSubscriptionDtatus) videoPlayerSdkCallBackListener?.onPlayNextVideo()
+            else if (contentAccessType.equals("paid") && !userSubscriptionDtatus) videoPlayerSdkCallBackListener?.subscriptionCallBack()
+            else if (contentAccessType.equals("free")) videoPlayerSdkCallBackListener?.onPlayNextVideo()
+            else videoPlayerSdkCallBackListener?.showThumbnailCallback()
         }
 
         exoTotalDuration = view.findViewById(R.id.exo_duration)
@@ -338,7 +330,6 @@ class BalajiVideoPlayer(
                 }
 
 
-
                 (getContext() as Activity).requestedOrientation =
                     ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
                 (getContext() as Activity).window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
@@ -350,6 +341,23 @@ class BalajiVideoPlayer(
 
                 hideSeekBarLayout()
             } else if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+
+
+                if (isVolmueMute) {
+                    mMediaPlayer?.audioComponent?.volume = 0f
+                    volumeMuteAndUnMuteButton.visibility = View.VISIBLE
+                    volumeUnMuteButton.visibility = View.GONE
+                    updateLandscapeVolumeButtonAndSeekBar(1)
+                } else {
+                    mMediaPlayer?.audioComponent?.volume = mMediaPlayer?.audioComponent?.volume!!
+                    mMediaPlayer?.audioComponent?.volume = 5f
+                    volumeMuteAndUnMuteButton.visibility = View.GONE
+                    volumeUnMuteButton.visibility = View.VISIBLE
+                    updateLandscapeVolumeButtonAndSeekBar(2)
+                }
+
+
+
                 (getContext() as Activity).requestedOrientation =
                     ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
                 (getContext() as Activity).window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
@@ -405,10 +413,8 @@ class BalajiVideoPlayer(
 
 
         videoControllerLayout?.setOnClickListener {
-            if (isControllerShown)
-                hideController()
-            else
-                showController()
+            if (isControllerShown) hideController()
+            else showController()
         }
 
 
@@ -431,8 +437,7 @@ class BalajiVideoPlayer(
                     videoTitle.visibility = View.GONE
                     contentRateLayout.visibility = View.GONE
                     //actions.add(remoteAction)
-                    mPictureInPictureParamsBuilder.setAspectRatio(aspectRatio)
-                        .build()
+                    mPictureInPictureParamsBuilder.setAspectRatio(aspectRatio).build()
                     context.enterPictureInPictureMode(mPictureInPictureParamsBuilder.build())
 
                 } else {
@@ -541,14 +546,12 @@ class BalajiVideoPlayer(
 
     fun initAdSession() {
 
-        if (adsLoader == null)
-            VideoPlayerTracer.error("CONVIVA SDK ADS:::", "AD Loader Null")
-        else
-            VideoPlayerTracer.error("CONVIVA SDK ADS:::", "AD PLAYING")
+        if (adsLoader == null) VideoPlayerTracer.error("CONVIVA SDK ADS:::", "AD Loader Null")
+        else VideoPlayerTracer.error("CONVIVA SDK ADS:::", "AD PLAYING")
 
 
-        if (adAnalytics == null)
-            adAnalytics = ConvivaAnalytics.buildAdAnalytics(context, videoAnalytics)
+        if (adAnalytics == null) adAnalytics =
+            ConvivaAnalytics.buildAdAnalytics(context, videoAnalytics)
 
         val adMetadata: MutableMap<String, Any> = HashMap()
         adMetadata[ConvivaSdkConstants.AD_TAG_URL] = adsUrl!!
@@ -559,8 +562,7 @@ class BalajiVideoPlayer(
 
     fun adBreakStarted() {
         videoAnalytics?.reportAdBreakStarted(
-            ConvivaSdkConstants.AdPlayer.CONTENT,
-            ConvivaSdkConstants.AdType.CLIENT_SIDE
+            ConvivaSdkConstants.AdPlayer.CONTENT, ConvivaSdkConstants.AdType.CLIENT_SIDE
         )
     }
 
@@ -712,9 +714,7 @@ class BalajiVideoPlayer(
 
 
     fun setWebSeriesEnable(
-        isWebSeries: Boolean,
-        UserLoginStatus: Boolean,
-        contentAccessType: String
+        isWebSeries: Boolean, UserLoginStatus: Boolean, contentAccessType: String
     ) {
         this.isWebSeries = isWebSeries
         this.userSubscriptionDtatus = UserLoginStatus
@@ -765,13 +765,11 @@ class BalajiVideoPlayer(
 
 
     fun showBackButton() {
-        if (closeVideoPlayerButton != null)
-            closeVideoPlayerButton.visibility = View.VISIBLE
+        if (closeVideoPlayerButton != null) closeVideoPlayerButton.visibility = View.VISIBLE
     }
 
     fun hideBackButton() {
-        if (closeVideoPlayerButton != null)
-            closeVideoPlayerButton.visibility = View.GONE
+        if (closeVideoPlayerButton != null) closeVideoPlayerButton.visibility = View.GONE
     }
 
 
@@ -823,17 +821,13 @@ class BalajiVideoPlayer(
     }
 
     fun hideTitleContanierView(isSHow: Boolean) {
-        if (isSHow)
-            videoTitle.visibility = View.VISIBLE
-        else
-            videoTitle.visibility = View.GONE
+        if (isSHow) videoTitle.visibility = View.VISIBLE
+        else videoTitle.visibility = View.GONE
     }
 
     fun hideRatingContanierView(isSHow: Boolean) {
-        if (isSHow)
-            contentRateLayout.visibility = View.VISIBLE
-        else
-            contentRateLayout.visibility = View.GONE
+        if (isSHow) contentRateLayout.visibility = View.VISIBLE
+        else contentRateLayout.visibility = View.GONE
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
@@ -843,8 +837,7 @@ class BalajiVideoPlayer(
             if (contentTitle != null && !TextUtils.isEmpty(contentTitle) && !isPipModeOn) {
                 videoTitle.visibility = View.VISIBLE
                 videoTitle.setText(contentTitle)
-            } else
-                videoTitle.visibility = View.GONE
+            } else videoTitle.visibility = View.GONE
         } else if (orientation == Configuration.ORIENTATION_PORTRAIT) {
             videoTitle.visibility = View.GONE
             hideSeekBarLayout()
@@ -906,10 +899,8 @@ class BalajiVideoPlayer(
 
         val orientation = getContext().resources.configuration.orientation
 
-        if (orientation == Configuration.ORIENTATION_LANDSCAPE)
-            showSeekBarLayout()
-        else
-            hideSeekBarLayout()
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) showSeekBarLayout()
+        else hideSeekBarLayout()
     }
 
     private fun updatePlayPauseButton() {
@@ -918,14 +909,12 @@ class BalajiVideoPlayer(
         if (videoPlayButton != null) {
             requestPlayPauseFocus =
                 requestPlayPauseFocus or (playing && videoPlayButton!!.isFocused)
-            videoPlayButton!!.visibility =
-                if (playing) GONE else VISIBLE
+            videoPlayButton!!.visibility = if (playing) GONE else VISIBLE
         }
         if (videoPauseButton != null) {
             requestPlayPauseFocus =
                 requestPlayPauseFocus or (!playing && videoPauseButton!!.isFocused)
-            videoPauseButton!!.visibility =
-                if (!playing) GONE else VISIBLE
+            videoPauseButton!!.visibility = if (!playing) GONE else VISIBLE
         }
         if (requestPlayPauseFocus) {
             requestPlayPauseFocus()
@@ -1127,8 +1116,7 @@ class BalajiVideoPlayer(
         if (mMediaPlayer != null && simpleExoPlayerView != null) {
             simpleExoPlayerView!!.onResume()
             mMediaPlayer!!.playWhenReady = true
-            if (isPipModeOn)
-                videoPlayPauseCallBackListener?.videoStart()
+            if (isPipModeOn) videoPlayPauseCallBackListener?.videoStart()
         }
     }
 
@@ -1137,8 +1125,7 @@ class BalajiVideoPlayer(
         if (mMediaPlayer != null && simpleExoPlayerView != null) {
             simpleExoPlayerView!!.onPause()
             mMediaPlayer!!.playWhenReady = false
-            if (isPipModeOn)
-                videoPlayPauseCallBackListener?.videoStop()
+            if (isPipModeOn) videoPlayPauseCallBackListener?.videoStop()
         }
     }
 
@@ -1171,13 +1158,11 @@ class BalajiVideoPlayer(
         durationLinearLayout.visibility = GONE
         videoPlayerSdkCallBackListener?.prepareVideoPlayer()
         //        ToastMessage.showLogs(ToastMessage.LogType.DEBUG, TAG, "Content url is " + videoUrl);
-        val customLoadControl: LoadControl = DefaultLoadControl.Builder()
-            .setBufferDurationsMs(1000, 50000, 1000, 1)
-            .setAllocator(DefaultAllocator(true, 32 * 1024))
-            .setTargetBufferBytes(C.LENGTH_UNSET)
-            .setPrioritizeTimeOverSizeThresholds(true)
-            .setBackBuffer(0, false)
-            .build()
+        val customLoadControl: LoadControl =
+            DefaultLoadControl.Builder().setBufferDurationsMs(1000, 50000, 1000, 1)
+                .setAllocator(DefaultAllocator(true, 32 * 1024))
+                .setTargetBufferBytes(C.LENGTH_UNSET).setPrioritizeTimeOverSizeThresholds(true)
+                .setBackBuffer(0, false).build()
 
 
 
@@ -1187,8 +1172,7 @@ class BalajiVideoPlayer(
                 context
             )
             val mediaSourceFactory: MediaSourceFactory =
-                DefaultMediaSourceFactory(dataSourceFactory)
-                    .setAdsLoaderProvider { unusedAdTagUri: MediaItem.AdsConfiguration? -> adsLoader }
+                DefaultMediaSourceFactory(dataSourceFactory).setAdsLoaderProvider { unusedAdTagUri: MediaItem.AdsConfiguration? -> adsLoader }
                     .setAdViewProvider(simpleExoPlayerView)
 
             mMediaPlayer = ExoPlayer.Builder(context).setMediaSourceFactory(mediaSourceFactory)
@@ -1229,33 +1213,24 @@ class BalajiVideoPlayer(
                 val uri = Uri.parse(videoUrl)
                 try {
                     drmSessionManager = WVMAgent!!.createDrmSessionManagerByToken(
-                        drmSchemeUuid,
-                        drmdrmLicenseUrl,
-                        uri,
-                        drmContentToken
+                        drmSchemeUuid, drmdrmLicenseUrl, uri, drmContentToken
                     )
                 } catch (e: PallyconDrmException) {
                     e.printStackTrace()
                 }
                 val playerMediaSource = ExoUttils().buildMediaSource(
-                    context,
-                    mediaItem,
-                    videoUrl!!,
-                    drmSessionManager!!
+                    context, mediaItem, videoUrl!!, drmSessionManager!!
                 )
                 mMediaPlayer!!.setMediaSource(playerMediaSource!!)
             } else if (isOfflineContent) {
                 mediaItem = MediaItem.Builder().setUri(videoUrl).build()
-                val downloadRequest: DownloadRequest? =
-                    DownloadUtil.getDownloadTracker(context)
-                        .getDownloadRequest(mediaItem.playbackProperties?.uri)
+                val downloadRequest: DownloadRequest? = DownloadUtil.getDownloadTracker(context)
+                    .getDownloadRequest(mediaItem.playbackProperties?.uri)
                 VideoPlayerTracer.error(
-                    "Offline Video Url:::",
-                    "" + mediaItem.playbackProperties?.uri
+                    "Offline Video Url:::", "" + mediaItem.playbackProperties?.uri
                 )
                 val mediaSource = DownloadHelper.createMediaSource(
-                    downloadRequest!!,
-                    DownloadUtil.getReadOnlyDataSourceFactory(context)
+                    downloadRequest!!, DownloadUtil.getReadOnlyDataSourceFactory(context)
                 )
 
                 mMediaPlayer!!.setMediaSource(mediaSource!!)
@@ -1268,18 +1243,13 @@ class BalajiVideoPlayer(
                     if (adsUrl != null && !TextUtils.isEmpty(adsUrl)) {
                         adsLoader!!.setPlayer(mMediaPlayer)
                         val adTagUri = Uri.parse(adsUrl)
-                        MediaItem.Builder()
-                            .setSubtitleConfigurations(ImmutableList.of(subtitle))
-                            .setUri(videoUrl)
-                            .setAdsConfiguration(
+                        MediaItem.Builder().setSubtitleConfigurations(ImmutableList.of(subtitle))
+                            .setUri(videoUrl).setAdsConfiguration(
                                 MediaItem.AdsConfiguration.Builder(adTagUri).build()
-                            )
-                            .build()
+                            ).build()
                     } else {
-                        MediaItem.Builder()
-                            .setSubtitleConfigurations(ImmutableList.of(subtitle))
-                            .setUri(videoUrl)
-                            .build()
+                        MediaItem.Builder().setSubtitleConfigurations(ImmutableList.of(subtitle))
+                            .setUri(videoUrl).build()
                     }
                 } else {
                     if (adsUrl != null && !TextUtils.isEmpty(adsUrl)) {
@@ -1288,18 +1258,13 @@ class BalajiVideoPlayer(
                         adsLoader!!.focusSkipButton();
                         val adTagUri = Uri.parse(adsUrl)
 
-                        MediaItem.Builder()
-                            .setUri(videoUrl)
-                            .setAdsConfiguration(
-                                MediaItem.AdsConfiguration.Builder(adTagUri).build()
-                            )
-                            .build()
+                        MediaItem.Builder().setUri(videoUrl).setAdsConfiguration(
+                            MediaItem.AdsConfiguration.Builder(adTagUri).build()
+                        ).build()
 
 
                     } else {
-                        MediaItem.Builder()
-                            .setUri(videoUrl)
-                            .build()
+                        MediaItem.Builder().setUri(videoUrl).build()
                     }
                 }
                 mMediaPlayer!!.setMediaItem(mediaItem)
@@ -1328,8 +1293,12 @@ class BalajiVideoPlayer(
             }
 
 
-            if (isWatchDurationEnable)
-                seekTo(Math.max(mMediaPlayer!!.currentPosition + watchDuration * 1000, 0))
+            if (isWatchDurationEnable) seekTo(
+                Math.max(
+                    mMediaPlayer!!.currentPosition + watchDuration * 1000,
+                    0
+                )
+            )
 
 
             if (adsUrl != null && !TextUtils.isEmpty(adsUrl)) {
@@ -1342,12 +1311,10 @@ class BalajiVideoPlayer(
                                 Log.e("Ads Event:::", "" + adEvent.type)
                                 if (adEvent.type.equals("STARTED")) {
                                     videoPlayerSdkCallBackListener?.onAdPlay()
-                                    if (!isPipModeOn)
-                                        setTimerOnVideoPlayer(false)
+                                    if (!isPipModeOn) setTimerOnVideoPlayer(false)
                                 } else if (adEvent.type.equals("COMPLETED")) {
                                     videoPlayerSdkCallBackListener?.onAdCompleted()
-                                    if (!isPipModeOn)
-                                        setTimerOnVideoPlayer(true)
+                                    if (!isPipModeOn) setTimerOnVideoPlayer(true)
                                 }
                             }
 
@@ -1373,8 +1340,7 @@ class BalajiVideoPlayer(
         override fun onPlayerError(error: PlaybackException) {
             super.onPlayerError(error)
             if (mMediaPlayer != null && mMediaPlayer!!.currentPosition != 0L) seekPlayerTo =
-                mMediaPlayer!!.currentPosition
-                    .toInt() / 1000
+                mMediaPlayer!!.currentPosition.toInt() / 1000
             errorRetryLayout.bringToFront()
             errorRetryLayout.visibility = VISIBLE
             videoControllerLayout?.visibility = GONE
@@ -1431,9 +1397,7 @@ class BalajiVideoPlayer(
                             val totalDuration = 1200
                             val tickDuration = 300
                             countDownTimer = object : CountDownTimerWithPause(
-                                totalDuration.toLong(),
-                                (tickDuration / 10).toLong(),
-                                true
+                                totalDuration.toLong(), (tickDuration / 10).toLong(), true
                             ) {
                                 override fun onTick(millisUntilFinished: Long) {
                                     var progress = millisUntilFinished.toFloat() / totalDuration
@@ -1452,20 +1416,14 @@ class BalajiVideoPlayer(
                                     circularProgressLayout.visibility = View.GONE
 
                                     if (isWebSeries) {
-                                        if (userSubscriptionDtatus)
-                                            videoPlayerSdkCallBackListener?.onPlayNextVideo()
-                                        else if (contentAccessType.equals("paid") && !userSubscriptionDtatus)
-                                            videoPlayerSdkCallBackListener?.subscriptionCallBack()
-                                        else if (contentAccessType.equals("free"))
-                                            videoPlayerSdkCallBackListener?.onPlayNextVideo()
-                                        else
-                                            videoPlayerSdkCallBackListener?.showThumbnailCallback()
+                                        if (userSubscriptionDtatus) videoPlayerSdkCallBackListener?.onPlayNextVideo()
+                                        else if (contentAccessType.equals("paid") && !userSubscriptionDtatus) videoPlayerSdkCallBackListener?.subscriptionCallBack()
+                                        else if (contentAccessType.equals("free")) videoPlayerSdkCallBackListener?.onPlayNextVideo()
+                                        else videoPlayerSdkCallBackListener?.showThumbnailCallback()
 
                                     } else {
-                                        if (contentAccessType.equals("free"))
-                                            videoPlayerSdkCallBackListener?.onPlayNextVideo()
-                                        else
-                                            videoPlayerSdkCallBackListener?.subscriptionCallBack()
+                                        if (contentAccessType.equals("free")) videoPlayerSdkCallBackListener?.onPlayNextVideo()
+                                        else videoPlayerSdkCallBackListener?.subscriptionCallBack()
                                     }
 
                                 }
@@ -1523,8 +1481,7 @@ class BalajiVideoPlayer(
             bufferingTimeHandler = Handler()
         }
         if (bufferingTimeRunnable != null) bufferingTimeHandler!!.postDelayed(
-            bufferingTimeRunnable,
-            0
+            bufferingTimeRunnable, 0
         )
 
         videoPlayerSdkCallBackListener?.onBufferStart()
@@ -1605,9 +1562,7 @@ class BalajiVideoPlayer(
 
     override fun onClick(view: View) {
         if (view === setting) {
-            if (!isShowingTrackSelectionDialog
-                && TrackSelectionDialog.willHaveContent(trackSelector)
-            ) {
+            if (!isShowingTrackSelectionDialog && TrackSelectionDialog.willHaveContent(trackSelector)) {
                 isShowingTrackSelectionDialog = true
                 val trackSelectionDialog = TrackSelectionDialog.createForTrackSelector(
                     trackSelector
@@ -1621,15 +1576,13 @@ class BalajiVideoPlayer(
 
     private fun hideSystemBars() {
         val decorView = (getContext() as Activity).window.decorView
-        val uiOptions = (SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                or SYSTEM_UI_FLAG_FULLSCREEN)
+        val uiOptions = (SYSTEM_UI_FLAG_HIDE_NAVIGATION or SYSTEM_UI_FLAG_FULLSCREEN)
         decorView.systemUiVisibility = uiOptions
 
         if (contentTitle != null && !TextUtils.isEmpty(contentTitle) && !isPipModeOn) {
             videoTitle.visibility = View.VISIBLE
             videoTitle.setText(contentTitle)
-        } else
-            videoTitle.visibility = View.GONE
+        } else videoTitle.visibility = View.GONE
     }
 
     private fun showSystemBar() {
@@ -1643,8 +1596,7 @@ class BalajiVideoPlayer(
         if (contentTitle != null && !TextUtils.isEmpty(contentTitle) && !isPipModeOn) {
             videoTitle.visibility = View.VISIBLE
             videoTitle.setText(contentTitle)
-        } else
-            videoTitle.visibility = View.GONE
+        } else videoTitle.visibility = View.GONE
     }
 
     /*  @SuppressLint("InlinedApi")
@@ -1730,9 +1682,7 @@ class BalajiVideoPlayer(
     override fun onScrubMove(previewBar: PreviewBar, progress: Int, fromUser: Boolean) {
         previewFrameLayout.visibility = View.VISIBLE
         exoCurrentPosition.text = Util.getStringForTime(
-            formatBuilder,
-            formatter,
-            progress.toLong()
+            formatBuilder, formatter, progress.toLong()
         )
         pauseVideoPlayer()
 
@@ -1759,12 +1709,10 @@ class BalajiVideoPlayer(
                 .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
                 .into(previewImageView)*/
         previewFrameLayout.visibility = View.VISIBLE
-        Glide.with(previewImageView)
-            .load(spriteImageUrl)
+        Glide.with(previewImageView).load(spriteImageUrl)
             .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
             .transform(GlideThumbnailTransformation(currentPosition, 1000))
-            .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-            .into(previewImageView)
+            .diskCacheStrategy(DiskCacheStrategy.RESOURCE).into(previewImageView)
 
     }
 
@@ -1845,8 +1793,7 @@ class BalajiVideoPlayer(
             )
         } else {
             VideoPlayerTracer.error(
-                "Analatics Error:::",
-                "token or content id or content title is required field."
+                "Analatics Error:::", "token or content id or content title is required field."
             )
         }
     }
@@ -1868,8 +1815,7 @@ class BalajiVideoPlayer(
         sharedPreferencePlayer.setPreferenceInt(context, "pos", 0)
         if (Build.VERSION.SDK_INT >= 31) {
             if (ContextCompat.checkSelfPermission(
-                    context,
-                    Manifest.permission.READ_PHONE_STATE
+                    context, Manifest.permission.READ_PHONE_STATE
                 ) == PackageManager.PERMISSION_GRANTED
             ) {
                 mgr.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE)
@@ -2048,23 +1994,20 @@ class BalajiVideoPlayer(
 
         var timerTotalSec = 0
 
-        if (conentRatingTime > 0)
-            timerTotalSec = conentRatingTime * 1000
-        else
-            timerTotalSec = 5 * 1000
+        if (conentRatingTime > 0) timerTotalSec = conentRatingTime * 1000
+        else timerTotalSec = 5 * 1000
 
-        countDownTimer1 =
-            object :
-                CountDownTimerWithPause(timerTotalSec.toLong(), (tickDuration).toLong(), true) {
-                override fun onTick(millisUntilFinished: Long) {
+        countDownTimer1 = object :
+            CountDownTimerWithPause(timerTotalSec.toLong(), (tickDuration).toLong(), true) {
+            override fun onTick(millisUntilFinished: Long) {
 
-                }
+            }
 
-                override fun onFinish() {
-                    contentRateLayout.visibility = View.GONE
-                    countDownTimer1?.cancel()
-                }
-            }.create()
+            override fun onFinish() {
+                contentRateLayout.visibility = View.GONE
+                countDownTimer1?.cancel()
+            }
+        }.create()
     }
 
 
@@ -2196,10 +2139,8 @@ class BalajiVideoPlayer(
 
     private fun updateLandscapeVolumeButtonAndSeekBar(startVolume: Int) {
 
-        if (startVolume > 1)
-            isVolmueMute = true
-        else
-            isVolmueMute = false
+        if (startVolume > 1) isVolmueMute = true
+        else isVolmueMute = false
     }
 
 
