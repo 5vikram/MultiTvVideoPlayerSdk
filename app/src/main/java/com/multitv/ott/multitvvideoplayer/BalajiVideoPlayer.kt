@@ -347,13 +347,11 @@ class BalajiVideoPlayer(
                     mMediaPlayer?.audioComponent?.volume = 0f
                     volumeMuteAndUnMuteButton.visibility = View.VISIBLE
                     volumeUnMuteButton.visibility = View.GONE
-                    updateLandscapeVolumeButtonAndSeekBar(1)
                 } else {
                     mMediaPlayer?.audioComponent?.volume = mMediaPlayer?.audioComponent?.volume!!
                     mMediaPlayer?.audioComponent?.volume = 5f
                     volumeMuteAndUnMuteButton.visibility = View.GONE
                     volumeUnMuteButton.visibility = View.VISIBLE
-                    updateLandscapeVolumeButtonAndSeekBar(2)
                 }
 
 
