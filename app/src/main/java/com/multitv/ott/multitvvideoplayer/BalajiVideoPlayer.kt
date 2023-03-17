@@ -202,10 +202,7 @@ class BalajiVideoPlayer(
 
 
     private lateinit var volumeProgressBar: SeekBar
-
-
     private var isPipModeOn = false
-    private var isVolmueMute = false
 
 
     constructor(context: Context, attrs: AttributeSet?) : this(
@@ -318,15 +315,7 @@ class BalajiVideoPlayer(
             val orientation = getContext().resources.configuration.orientation
             if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
 
-                if (isVolmueMute) {
-                    mMediaPlayer?.audioComponent?.volume = 0f
-                    volumeFullScreenButton.visibility = View.GONE
-                    volumeFullScreenUnMuteButton.visibility = View.VISIBLE
-                } else {
-                    volumeFullScreenUnMuteButton.visibility = View.GONE
-                    volumeFullScreenButton.visibility = View.VISIBLE
-                    mMediaPlayer?.audioComponent?.volume = 5f
-                }
+                setVolumeCallback()
 
                 (getContext() as Activity).requestedOrientation =
                     ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
@@ -337,19 +326,7 @@ class BalajiVideoPlayer(
                 setting.visibility = View.GONE
                 hideSeekBarLayout()
             } else if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-                if (isVolmueMute) {
-                    mMediaPlayer?.audioComponent?.volume = 0f
-                    volumeMuteAndUnMuteButton.visibility = VISIBLE
-                    volumeUnMuteButton.visibility = GONE
-                } else {
-                    mMediaPlayer?.audioComponent?.volume = mMediaPlayer?.audioComponent?.volume!!
-                    mMediaPlayer?.audioComponent?.volume = 5f
-                    volumeMuteAndUnMuteButton.visibility = GONE
-                    volumeUnMuteButton.visibility = VISIBLE
-                }
-
-
-
+                setVolumeCallback()
                 (getContext() as Activity).requestedOrientation =
                     ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
                 (getContext() as Activity).window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
@@ -389,7 +366,7 @@ class BalajiVideoPlayer(
 
         closeVideoPlayerButton.setOnClickListener {
             val orientation = getContext().resources.configuration.orientation
-
+            setVolumeCallback()
             if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
                 (getContext() as Activity).requestedOrientation =
                     ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
@@ -397,6 +374,7 @@ class BalajiVideoPlayer(
                 showSystemBar()
                 setting.visibility = View.GONE
                 showSeekBarLayout()
+                setVolumeCallback()
                 // videoRotationButton.setImageResource(R.drawable.ic_balaji_fullscreen)
             } else {
                 context.finish()
@@ -2131,8 +2109,31 @@ class BalajiVideoPlayer(
 
     private fun updateLandscapeVolumeButtonAndSeekBar(startVolume: Int) {
 
-        if (startVolume > 1) isVolmueMute = true
-        else isVolmueMute = false
+        if (startVolume > 1) sharedPreferencePlayer.setPreferenceBoolean(
+            context,
+            "volume_call_back",
+            true
+        )
+        else
+            sharedPreferencePlayer.setPreferenceBoolean(
+                context,
+                "volume_call_back",
+                false
+            )
+    }
+
+
+    private fun setVolumeCallback() {
+        val isVolmueMute = sharedPreferencePlayer.getPreferenceBoolean(context, "volume_call_back")
+        if (isVolmueMute) {
+            mMediaPlayer?.audioComponent?.volume = 0f
+            volumeFullScreenButton.visibility = View.GONE
+            volumeFullScreenUnMuteButton.visibility = View.VISIBLE
+        } else {
+            volumeFullScreenUnMuteButton.visibility = View.GONE
+            volumeFullScreenButton.visibility = View.VISIBLE
+            mMediaPlayer?.audioComponent?.volume = 5f
+        }
     }
 
 
