@@ -318,7 +318,6 @@ class BalajiVideoPlayer(
             val orientation = getContext().resources.configuration.orientation
             if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
 
-
                 if (isVolmueMute) {
                     mMediaPlayer?.audioComponent?.volume = 0f
                     volumeFullScreenButton.visibility = View.GONE
@@ -329,20 +328,15 @@ class BalajiVideoPlayer(
                     mMediaPlayer?.audioComponent?.volume = 5f
                 }
 
-
                 (getContext() as Activity).requestedOrientation =
                     ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
                 (getContext() as Activity).window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
                 showSystemBar()
-                // videoRotationButton.setImageResource(R.drawable.ic_balaji_fullscreen)
                 videoLockButton.setVisibility(GONE)
                 videoUnLockButton.setVisibility(GONE)
                 setting.visibility = View.GONE
-
                 hideSeekBarLayout()
             } else if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-
-
                 if (isVolmueMute) {
                     mMediaPlayer?.audioComponent?.volume = 0f
                     volumeMuteAndUnMuteButton.visibility = VISIBLE
