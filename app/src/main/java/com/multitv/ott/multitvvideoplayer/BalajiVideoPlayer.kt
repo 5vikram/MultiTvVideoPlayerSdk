@@ -1643,7 +1643,11 @@ class BalajiVideoPlayer(
     }
 
     override fun onScrubMove(previewBar: PreviewBar, progress: Int, fromUser: Boolean) {
-        previewFrameLayout.visibility = View.VISIBLE
+        if (!TextUtils.isEmpty(spriteImageUrl))
+            previewFrameLayout.visibility = View.VISIBLE
+        else
+            previewFrameLayout.visibility = INVISIBLE
+
         exoCurrentPosition.text = Util.getStringForTime(
             formatBuilder, formatter, progress.toLong()
         )
@@ -1671,11 +1675,17 @@ class BalajiVideoPlayer(
                 .transform(GlideThumbnailTransformation(currentPosition))
                 .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
                 .into(previewImageView)*/
-        previewFrameLayout.visibility = View.VISIBLE
-        Glide.with(previewImageView).load(spriteImageUrl)
-            .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
-            .transform(GlideThumbnailTransformation(currentPosition, 1000))
-            .diskCacheStrategy(DiskCacheStrategy.RESOURCE).into(previewImageView)
+
+        if (!TextUtils.isEmpty(spriteImageUrl)) {
+            previewFrameLayout.visibility = View.VISIBLE
+            Glide.with(previewImageView).load(spriteImageUrl)
+                .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
+                .transform(GlideThumbnailTransformation(currentPosition, 1000))
+                .diskCacheStrategy(DiskCacheStrategy.RESOURCE).into(previewImageView)
+        } else {
+            previewFrameLayout.visibility = View.GONE
+        }
+
 
     }
 
