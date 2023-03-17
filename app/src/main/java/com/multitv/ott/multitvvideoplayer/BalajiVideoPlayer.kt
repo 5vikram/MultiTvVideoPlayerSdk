@@ -293,20 +293,7 @@ class BalajiVideoPlayer(
         volumeFullScreenButton = view.findViewById(R.id.volumeFullScreenButton)
         volumeFullScreenUnMuteButton = view.findViewById(R.id.volumeFullScreenUnMuteButton)
 
-        volumeFullScreenButton.setOnClickListener {
-            mMediaPlayer?.audioComponent?.volume = 0f
-            volumeFullScreenButton.visibility = View.GONE
-            volumeFullScreenUnMuteButton.visibility = View.VISIBLE
-        }
 
-
-        volumeFullScreenUnMuteButton.setOnClickListener {
-            mMediaPlayer?.audioComponent?.volume = 0f
-            mMediaPlayer?.audioComponent?.volume = mMediaPlayer?.audioComponent?.volume!!
-            mMediaPlayer?.audioComponent?.volume = 5f
-            volumeFullScreenUnMuteButton.visibility = View.GONE
-            volumeFullScreenButton.visibility = View.VISIBLE
-        }
 
 
 
@@ -315,7 +302,7 @@ class BalajiVideoPlayer(
             val orientation = getContext().resources.configuration.orientation
             if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
 
-                setVolumeCallback()
+                setPotraitVolumeCallback()
 
                 (getContext() as Activity).requestedOrientation =
                     ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
@@ -326,7 +313,7 @@ class BalajiVideoPlayer(
                 setting.visibility = View.GONE
                 hideSeekBarLayout()
             } else if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-                setVolumeCallback()
+                setLanfscapeVolumeCallback()
                 (getContext() as Activity).requestedOrientation =
                     ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
                 (getContext() as Activity).window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
@@ -355,18 +342,32 @@ class BalajiVideoPlayer(
 
 
         volumeMuteAndUnMuteButton.setOnClickListener {
-            mMediaPlayer?.audioComponent?.volume = mMediaPlayer?.audioComponent?.volume!!
             mMediaPlayer?.audioComponent?.volume = 5f
+            mMediaPlayer?.audioComponent?.volume = mMediaPlayer?.audioComponent?.volume!!
             volumeMuteAndUnMuteButton.visibility = View.GONE
             volumeUnMuteButton.visibility = View.VISIBLE
             updateLandscapeVolumeButtonAndSeekBar(2)
         }
 
+        volumeFullScreenButton.setOnClickListener {
+            mMediaPlayer?.audioComponent?.volume = 0f
+            volumeFullScreenButton.visibility = View.GONE
+            volumeFullScreenUnMuteButton.visibility = View.VISIBLE
+            updateLandscapeVolumeButtonAndSeekBar(1)
+        }
+
+
+        volumeFullScreenUnMuteButton.setOnClickListener {
+            mMediaPlayer?.audioComponent?.volume = 5f
+            mMediaPlayer?.audioComponent?.volume = mMediaPlayer?.audioComponent?.volume!!
+            volumeFullScreenUnMuteButton.visibility = View.GONE
+            volumeFullScreenButton.visibility = View.VISIBLE
+            updateLandscapeVolumeButtonAndSeekBar(2)
+        }
 
 
         closeVideoPlayerButton.setOnClickListener {
             val orientation = getContext().resources.configuration.orientation
-            setVolumeCallback()
             if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
                 (getContext() as Activity).requestedOrientation =
                     ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
@@ -374,7 +375,7 @@ class BalajiVideoPlayer(
                 showSystemBar()
                 setting.visibility = View.GONE
                 showSeekBarLayout()
-                setVolumeCallback()
+                setPotraitVolumeCallback()
                 // videoRotationButton.setImageResource(R.drawable.ic_balaji_fullscreen)
             } else {
                 context.finish()
@@ -2123,16 +2124,32 @@ class BalajiVideoPlayer(
     }
 
 
-    private fun setVolumeCallback() {
+    private fun setLanfscapeVolumeCallback() {
         val isVolmueMute = sharedPreferencePlayer.getPreferenceBoolean(context, "volume_call_back")
         if (isVolmueMute) {
             mMediaPlayer?.audioComponent?.volume = 0f
             volumeFullScreenButton.visibility = View.GONE
             volumeFullScreenUnMuteButton.visibility = View.VISIBLE
+
         } else {
             volumeFullScreenUnMuteButton.visibility = View.GONE
             volumeFullScreenButton.visibility = View.VISIBLE
             mMediaPlayer?.audioComponent?.volume = 5f
+
+        }
+    }
+
+
+    private fun setPotraitVolumeCallback() {
+        val isVolmueMute = sharedPreferencePlayer.getPreferenceBoolean(context, "volume_call_back")
+        if (isVolmueMute) {
+            mMediaPlayer?.audioComponent?.volume = 0f
+            volumeMuteAndUnMuteButton.visibility = View.VISIBLE
+            volumeUnMuteButton.visibility = View.GONE
+        } else {
+            mMediaPlayer?.audioComponent?.volume = 5f
+            volumeMuteAndUnMuteButton.visibility = View.GONE
+            volumeUnMuteButton.visibility = View.VISIBLE
         }
     }
 
