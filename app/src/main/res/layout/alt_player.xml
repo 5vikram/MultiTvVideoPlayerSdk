@@ -77,11 +77,11 @@
         android:id="@+id/midLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:orientation="horizontal">
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/exo_lock"
@@ -219,12 +219,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginLeft="7dp"
         android:layout_marginTop="2dp"
         android:layout_marginRight="10dp"
         android:layout_marginBottom="3dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent">
 
 
         <LinearLayout
@@ -236,9 +236,9 @@
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="10dp"
             android:layout_weight="1"
-            android:visibility="gone"
             android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="gone">
 
 
             <ImageView
@@ -265,32 +265,32 @@
                 android:visibility="gone" />
 
 
-           <FrameLayout
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content">
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
 
-               <ImageView
-                   android:id="@+id/volumeFullScreenButton"
-                   android:layout_width="35dp"
-                   android:layout_height="35dp"
-                   android:layout_gravity="center_vertical"
-                   android:layout_marginRight="10dp"
-                   android:background="@android:color/transparent"
-                   android:padding="5dp"
-                   android:src="@drawable/ic_balaji_volume_on" />
+                <ImageView
+                    android:id="@+id/volumeFullScreenButton"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="10dp"
+                    android:background="@android:color/transparent"
+                    android:padding="5dp"
+                    android:src="@drawable/ic_balaji_volume_on" />
 
 
-               <ImageView
-                   android:id="@+id/volumeFullScreenUnMuteButton"
-                   android:layout_width="35dp"
-                   android:layout_height="35dp"
-                   android:layout_gravity="center"
-                   android:layout_marginRight="5dp"
-                   android:background="@android:color/transparent"
-                   android:padding="5dp"
-                   android:src="@drawable/ic_balaji_volume_off"
-                   android:visibility="gone" />
-           </FrameLayout>
+                <ImageView
+                    android:id="@+id/volumeFullScreenUnMuteButton"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="5dp"
+                    android:background="@android:color/transparent"
+                    android:padding="5dp"
+                    android:src="@drawable/ic_balaji_volume_off"
+                    android:visibility="gone" />
+            </FrameLayout>
 
 
             <SeekBar
@@ -354,7 +354,7 @@
                     android:layout_marginRight="10dp"
                     android:background="@android:color/transparent"
                     android:src="@drawable/ic_balaji_volume_off"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
 
             </LinearLayout>
 
@@ -392,7 +392,6 @@
     </RelativeLayout>
 
 
-
     <TextView
         android:id="@id/vvvvvvvvvv"
         android:layout_width="wrap_content"
@@ -417,53 +416,51 @@
         app:scrubber_dragged_size="24dp"
         app:scrubber_enabled_size="16dp" />
 
-<!--    <TextView-->
-<!--        android:id="@id/exo_duration"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_gravity="bottom"-->
-<!--        android:layout_margin="8dp"-->
-<!--        android:includeFontPadding="false"-->
-<!--        android:textColor="#FFBEBEBE"-->
-<!--        android:textSize="12sp"-->
-<!--        android:textStyle="bold"-->
-<!--        app:layout_constraintBaseline_toBaselineOf="@id/exo_position"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        tools:text="25:23" />-->
-
-
+    <!--    <TextView-->
+    <!--        android:id="@id/exo_duration"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_gravity="bottom"-->
+    <!--        android:layout_margin="8dp"-->
+    <!--        android:includeFontPadding="false"-->
+    <!--        android:textColor="#FFBEBEBE"-->
+    <!--        android:textSize="12sp"-->
+    <!--        android:textStyle="bold"-->
+    <!--        app:layout_constraintBaseline_toBaselineOf="@id/exo_position"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        tools:text="25:23" />-->
 
 
     <TextView
         android:id="@+id/skipVideoButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="Title"
         android:layout_gravity="bottom|end"
-        android:textColor="@color/white"
         android:layout_marginRight="10dp"
         android:layout_marginBottom="10dp"
-        android:paddingRight="30dp"
-        android:paddingLeft="30dp"
-        android:drawablePadding="5dp"
-        android:drawableLeft="@drawable/ic_baseline_fast_forward_24"
-        android:focusable="true"
-        android:paddingBottom="5dp"
-        android:paddingTop="5dp"
-        android:visibility="gone"
         android:alpha="0.7"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/durationLinearLayout"
         android:background="@drawable/skip_button_bg"
-        android:textSize="15sp"/>
+        android:drawableLeft="@drawable/ic_baseline_fast_forward_24"
+        android:drawablePadding="5dp"
+        android:focusable="true"
+        android:paddingLeft="30dp"
+        android:paddingTop="5dp"
+        android:paddingRight="30dp"
+        android:paddingBottom="5dp"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/durationLinearLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="Title" />
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/durationLinearLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:gravity="bottom"
         android:layout_marginRight="15dp"
+        android:gravity="bottom"
         android:orientation="horizontal"
         app:layout_constraintBottom_toTopOf="@id/videoMenuLayout"
         app:layout_constraintEnd_toEndOf="parent">
@@ -515,18 +512,19 @@
     </androidx.appcompat.widget.LinearLayoutCompat>
 
 
-
     <FrameLayout
         android:id="@+id/previewFrameLayout"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="160dp"
+        android:layout_height="90dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:background="@drawable/video_frame"
+        android:maxWidth="160dp"
+        android:maxHeight="90dp"
         android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/exo_progress"
-        app:layout_constraintDimensionRatio="16:9"
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -541,9 +539,6 @@
             android:layout_margin="@dimen/video_frame_width"
             android:scaleType="fitXY" />
     </FrameLayout>
-
-
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
