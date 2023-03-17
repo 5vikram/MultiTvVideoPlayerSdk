@@ -1349,6 +1349,7 @@ class BalajiVideoPlayer(
                     if (isContentRepetPlaying) {
                         repeatVideoLinearLayout.visibility = View.VISIBLE
                         repeatVideoLinearLayout.setOnClickListener {
+                            repeatVideoLinearLayout.visibility = View.GONE
                             initializeMainPlayer(mContentUrl, true)
                         }
                     } else {
