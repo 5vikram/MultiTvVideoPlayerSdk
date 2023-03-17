@@ -2105,14 +2105,14 @@ class BalajiVideoPlayer(
 
     private fun setLandscapeVolumeCallback() {
         if (isVolmueMute) {
-            mMediaPlayer?.audioComponent?.volume = 0f
-            volumeFullScreenButton.visibility = View.GONE
-            volumeFullScreenUnMuteButton.visibility = View.VISIBLE
+            mMediaPlayer?.audioComponent?.volume = 5f
+            volumeFullScreenButton.visibility = View.VISIBLE
+            volumeFullScreenUnMuteButton.visibility = View.GONE
 
         } else {
-            volumeFullScreenUnMuteButton.visibility = View.GONE
-            volumeFullScreenButton.visibility = View.VISIBLE
-            mMediaPlayer?.audioComponent?.volume = 5f
+            volumeFullScreenUnMuteButton.visibility = View.VISIBLE
+            volumeFullScreenButton.visibility = View.GONE
+            mMediaPlayer?.audioComponent?.volume = 0f
 
         }
     }
@@ -2120,13 +2120,14 @@ class BalajiVideoPlayer(
 
     private fun setPotraitVolumeCallback() {
         if (isVolmueMute) {
-            mMediaPlayer?.audioComponent?.volume = 0f
-            volumeMuteAndUnMuteButton.visibility = View.VISIBLE
-            volumeUnMuteButton.visibility = View.GONE
-        } else {
             mMediaPlayer?.audioComponent?.volume = 5f
             volumeMuteAndUnMuteButton.visibility = View.GONE
             volumeUnMuteButton.visibility = View.VISIBLE
+        } else {
+
+            mMediaPlayer?.audioComponent?.volume = 0f
+            volumeMuteAndUnMuteButton.visibility = View.VISIBLE
+            volumeUnMuteButton.visibility = View.GONE
         }
     }
 
