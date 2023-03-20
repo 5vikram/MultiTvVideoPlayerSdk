@@ -300,7 +300,7 @@ class BalajiVideoPlayer(
                 setPotraitVolumeCallback()
 
                 (getContext() as Activity).requestedOrientation =
-                    ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+                    ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
                 (getContext() as Activity).window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
                 showSystemBar()
                 videoLockButton.setVisibility(GONE)
