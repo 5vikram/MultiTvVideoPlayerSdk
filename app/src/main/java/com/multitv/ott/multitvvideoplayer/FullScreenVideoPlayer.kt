@@ -1218,6 +1218,11 @@ class FullScreenVideoPlayer(
         }
     }
 
+    private var maxLine = 0
+    fun setSpriteImageThumbnailMaxLine(maxLine: Int) {
+        this.maxLine = maxLine;
+    }
+
     override fun onScrubStart(previewBar: PreviewBar) {
         //findViewById(R.id.centerButtonLayout)?.setVisibility(View.GONE);
         previewFrameLayout!!.visibility = VISIBLE
@@ -1226,34 +1231,23 @@ class FullScreenVideoPlayer(
     }
 
     override fun onScrubMove(previewBar: PreviewBar, progress: Int, fromUser: Boolean) {
-
         pauseVideoPlayer()
-        previewFrameLayout.visibility = View.VISIBLE
-        previewTimeBar.showPreview()
-        Log.e("Video Sprite::::", "Url position:::" + currentPosition)
-        if (spriteImageUrl != null && !TextUtils.isEmpty(spriteImageUrl)) {
-            Log.e("Video Sprite::::", "Url:::" + spriteImageUrl)
-            Glide.with(previewImageView)
-                .load(spriteImageUrl)
-                .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
-                .transform(GlideThumbnailTransformation(currentPosition, 1000))
-                .into(previewImageView)
-        } else {
-            Log.e("Video Sprite::::", "Url:::Empty")
-        }
+        if (!TextUtils.isEmpty(spriteImageUrl))
+            previewFrameLayout.visibility = View.VISIBLE
+        else
+            previewFrameLayout.visibility = INVISIBLE
 
 
-        if (currentDurationPlayTv != null) {
-            currentDurationPlayTv.text = Util.getStringForTime(
-                formatBuilder,
-                formatter,
-                progress.toLong()
-            )
-        }
+        currentDurationPlayTv.text = Util.getStringForTime(
+            formatBuilder,
+            formatter,
+            progress.toLong()
+        )
     }
 
     override fun onScrubStop(previewBar: PreviewBar) {
-        previewFrameLayout!!.visibility = GONE
+        previewFrameLayout.visibility = INVISIBLE
+
         if (mMediaPlayer != null) {
             seekTo(previewBar.progress.toLong())
         }
@@ -1265,11 +1259,11 @@ class FullScreenVideoPlayer(
     override fun loadPreview(currentPosition: Long, max: Long) {
         pauseVideoPlayer()
 
-        if (spriteImageUrl != null && !TextUtils.isEmpty(spriteImageUrl)) {
+        if (!TextUtils.isEmpty(spriteImageUrl)) {
             Glide.with(context)
                 .load(spriteImageUrl)
                 .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
-                .transform(GlideThumbnailTransformation(currentPosition, 1000))
+                .transform(GlideThumbnailTransformation(currentPosition, maxLine))
                 .into(previewImageView)
         }
 

@@ -1637,8 +1637,11 @@ class BalajiVideoPlayer(
     }
 
     override fun onScrubStart(previewBar: PreviewBar) {
-        previewFrameLayout.visibility = VISIBLE
-        previewTimeBar.showPreview()
+        if (!TextUtils.isEmpty(spriteImageUrl))
+            previewFrameLayout.visibility = View.VISIBLE
+        else
+            previewFrameLayout.visibility = INVISIBLE
+
         pauseVideoPlayer()
     }
 
@@ -1664,6 +1667,11 @@ class BalajiVideoPlayer(
         resumeVideoPlayer()
     }
 
+    private var maxLine = 0
+    fun setSpriteImageThumbnailMaxLine(maxLine: Int) {
+        this.maxLine = maxLine;
+    }
+
 
     override fun loadPreview(currentPosition: Long, max: Long) {
         /*    previewFrameLayout.visibility = View.VISIBLE
@@ -1681,7 +1689,7 @@ class BalajiVideoPlayer(
             Glide.with(previewImageView).load(spriteImageUrl)
                 .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
                 .fitCenter()
-                .transform(GlideThumbnailTransformation(currentPosition, 1000))
+                .transform(GlideThumbnailTransformation(currentPosition, maxLine))
                 .diskCacheStrategy(DiskCacheStrategy.RESOURCE).into(previewImageView)
         } else {
             previewFrameLayout.visibility = View.GONE
