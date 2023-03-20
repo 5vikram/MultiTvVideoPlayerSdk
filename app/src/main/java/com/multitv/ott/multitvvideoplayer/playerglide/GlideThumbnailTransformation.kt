@@ -8,15 +8,15 @@ import java.security.MessageDigest
 
 private const val MAX_LINES = 26
 private const val MAX_COLUMNS = 10
-private const val THUMBNAILS_EACH = 1000 // milliseconds
+private const val THUMBNAILS_EACH = 5000 // milliseconds
 
-class GlideThumbnailTransformation(position: Long,thumbnailEach:Int) : BitmapTransformation() {
+class GlideThumbnailTransformation(position: Long, thumbnailEach: Int) : BitmapTransformation() {
 
     private val x: Int
     private val y: Int
 
     init {
-        val square = position.toInt().div(thumbnailEach)
+        val square = position.toInt().div(THUMBNAILS_EACH)
         x = square % MAX_COLUMNS
         y = square / MAX_COLUMNS
     }
@@ -43,7 +43,7 @@ class GlideThumbnailTransformation(position: Long,thumbnailEach:Int) : BitmapTra
     }
 
     override fun equals(other: Any?): Boolean {
-        if(other !is GlideThumbnailTransformation) return false
+        if (other !is GlideThumbnailTransformation) return false
         return other.x == x && other.y == y
     }
 }

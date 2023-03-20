@@ -1680,6 +1680,7 @@ class BalajiVideoPlayer(
             previewFrameLayout.visibility = View.VISIBLE
             Glide.with(previewImageView).load(spriteImageUrl)
                 .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
+                .fitCenter()
                 .transform(GlideThumbnailTransformation(currentPosition, 1000))
                 .diskCacheStrategy(DiskCacheStrategy.RESOURCE).into(previewImageView)
         } else {
