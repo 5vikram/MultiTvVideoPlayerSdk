@@ -90,7 +90,6 @@ class DownloadTracker(
     }
 
 
-
     fun getDownloadRequestCount(): Int {
         if (downloadManager != null && downloadManager.currentDownloads != null && downloadManager.currentDownloads.size > 0)
             return downloadManager.currentDownloads.size

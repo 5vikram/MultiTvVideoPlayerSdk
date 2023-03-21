@@ -2122,6 +2122,11 @@ class BalajiVideoPlayer(
     private var isVolmueMute = false
 
 
+    fun getVolumeStatus(): Boolean {
+        return isVolmueMute
+    }
+
+
     private fun setLandscapeVolumeCallback() {
         if (isVolmueMute) {
             mMediaPlayer?.audioComponent?.volume = 5f
