@@ -16,7 +16,7 @@ import com.multitv.ott.multitvvideoplayer.download.DownloadUtil.DOWNLOAD_NOTIFIC
 private const val JOB_ID = 8888
 private const val FOREGROUND_NOTIFICATION_ID = 8989
 
-class MyDownloadService: DownloadService(
+class MyDownloadService(private var videoTitle: String) : DownloadService(
     FOREGROUND_NOTIFICATION_ID,
     DEFAULT_FOREGROUND_NOTIFICATION_UPDATE_INTERVAL,
     DOWNLOAD_NOTIFICATION_CHANNEL_ID,
@@ -34,7 +34,7 @@ class MyDownloadService: DownloadService(
             TerminalStateNotificationHelper(
                 this,
                 downloadNotificationHelper,
-                FOREGROUND_NOTIFICATION_ID + 1
+                FOREGROUND_NOTIFICATION_ID + 1, videoTitle
             )
         )
         return downloadManager
@@ -54,12 +54,12 @@ class MyDownloadService: DownloadService(
             )
     }
 
-   /* override fun getForegroundNotification(downloads: MutableList<Download>): Notification {
-        return DownloadUtil.getDownloadNotificationHelper(this)
-            .buildProgressNotification(
-                this, R.drawable.ic_download, null, null, downloads
-            )
-    }*/
+    /* override fun getForegroundNotification(downloads: MutableList<Download>): Notification {
+         return DownloadUtil.getDownloadNotificationHelper(this)
+             .buildProgressNotification(
+                 this, R.drawable.ic_download, null, null, downloads
+             )
+     }*/
 
     /**
      * Creates and displays notifications for downloads when they complete or fail.
@@ -71,7 +71,7 @@ class MyDownloadService: DownloadService(
     private class TerminalStateNotificationHelper(
         context: Context,
         private val notificationHelper: DownloadNotificationHelper,
-        firstNotificationId: Int
+        firstNotificationId: Int, private val title: String
     ) : DownloadManager.Listener {
         private val context: Context = context.applicationContext
         private var nextNotificationId: Int = firstNotificationId
@@ -89,7 +89,7 @@ class MyDownloadService: DownloadService(
                         context,
                         R.drawable.ic_download_done,  /* contentIntent= */
                         null,
-                        Util.fromUtf8Bytes(download.request.data)
+                        title
                     )
                 }
                 Download.STATE_FAILED -> {
@@ -97,10 +97,12 @@ class MyDownloadService: DownloadService(
                         context,
                         R.drawable.ic_download_done,  /* contentIntent= */
                         null,
-                        Util.fromUtf8Bytes(download.request.data)
+                        title
                     )
                 }
-                else -> { return }
+                else -> {
+                    return
+                }
             }
             NotificationUtil.setNotification(context, nextNotificationId++, notification)
         }

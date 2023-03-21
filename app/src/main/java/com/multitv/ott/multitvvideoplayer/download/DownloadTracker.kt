@@ -188,7 +188,7 @@ class DownloadTracker(
                 R.id.resume_download -> {
                     DownloadService.sendSetStopReason(
                         context,
-                        MyDownloadService::class.java,
+                        MyDownloadService(it.title.toString())::class.java,
                         download.request.id,
                         Download.STOP_REASON_NONE,
                         true
@@ -198,7 +198,7 @@ class DownloadTracker(
                 R.id.pause_download -> {
                     DownloadService.sendSetStopReason(
                         context,
-                        MyDownloadService::class.java,
+                        MyDownloadService(it.title.toString())::class.java,
                         download.request.id,
                         Download.STATE_STOPPED,
                         false
@@ -221,7 +221,7 @@ class DownloadTracker(
         download?.let {
             DownloadService.sendRemoveDownload(
                 applicationContext,
-                MyDownloadService::class.java,
+                MyDownloadService(download.request.toMediaItem().mediaMetadata.title.toString())::class.java,
                 download.request.id,
                 false
             )
@@ -331,6 +331,7 @@ class DownloadTracker(
         private var trackSelectionDialog: AlertDialog? = null
 
         init {
+
             downloadHelper.prepare(this)
         }
 
@@ -616,7 +617,8 @@ class DownloadTracker(
                         (mediaItem.playbackProperties?.tag as MediaItemTag).title,
                         Util.getUtf8Bytes(estimatedContentLength.toString())
                     )
-                    startDownload(downloadRequest)
+
+                    startDownload(downloadRequest, mediaItem.mediaMetadata.title.toString())
                     availableBytesLeft -= estimatedContentLength
                     Log.e(TAG, "availableBytesLeft after calculation: $availableBytesLeft")
                     alertDialog.dismiss()
@@ -654,10 +656,10 @@ class DownloadTracker(
         }
 
         // Internal methods.
-        private fun startDownload(downloadRequest: DownloadRequest = buildDownloadRequest()) {
+        private fun startDownload(downloadRequest: DownloadRequest = buildDownloadRequest(), title:String) {
             DownloadService.sendAddDownload(
                 applicationContext,
-                MyDownloadService::class.java,
+                MyDownloadService(title)::class.java,
                 downloadRequest,
                 true
             )
