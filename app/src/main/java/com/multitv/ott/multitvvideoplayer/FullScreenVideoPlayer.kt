@@ -288,20 +288,19 @@ class FullScreenVideoPlayer(
         videoRotationButton.setOnClickListener(OnClickListener {
             context.finish()
         })
-        volumeMuteAndUnMuteButton?.visibility = View.GONE
+        volumeMuteAndUnMuteButton.visibility = View.GONE
 
         volumeUnMuteButton.setOnClickListener {
             mMediaPlayer?.audioComponent?.volume = 0f
-            volumeMuteAndUnMuteButton?.visibility = View.VISIBLE
-            volumeUnMuteButton?.visibility = View.GONE
+            volumeMuteAndUnMuteButton.visibility = View.VISIBLE
+            volumeUnMuteButton.visibility = View.GONE
         }
 
 
         volumeMuteAndUnMuteButton.setOnClickListener {
-            mMediaPlayer?.audioComponent?.volume = 0f
             mMediaPlayer?.audioComponent?.volume = mMediaPlayer?.audioComponent?.volume!!
-            mMediaPlayer?.audioComponent?.volume = 2f
-            volumeMuteAndUnMuteButton?.visibility = View.GONE
+            mMediaPlayer?.audioComponent?.volume = 5f
+            volumeMuteAndUnMuteButton.visibility = View.GONE
             volumeUnMuteButton.visibility = View.VISIBLE
 
         }
@@ -383,6 +382,21 @@ class FullScreenVideoPlayer(
 
         super.onFinishInflate()
     }
+
+
+    fun setVolumeStatus(isVolume: Boolean) {
+        if (isVolume) {
+            mMediaPlayer?.audioComponent?.volume = mMediaPlayer?.audioComponent?.volume!!
+            mMediaPlayer?.audioComponent?.volume = 5f
+            volumeMuteAndUnMuteButton.visibility = View.GONE
+            volumeUnMuteButton.visibility = View.VISIBLE
+        } else {
+            mMediaPlayer?.audioComponent?.volume = 0f
+            volumeMuteAndUnMuteButton.visibility = View.VISIBLE
+            volumeUnMuteButton.visibility = View.GONE
+        }
+    }
+
 
     fun setWebSeriesEnable(
         isWebSeries: Boolean,
