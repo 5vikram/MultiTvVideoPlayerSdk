@@ -164,6 +164,7 @@ class BalajiCarsolVideoPlayer(
             mMediaPlayer?.audioComponent?.volume = 0f
             volumeMuteButton.visibility = View.VISIBLE
             volumeUnMuteButton.visibility = View.GONE
+            isVolmueMute = false
         }
 
 
@@ -173,6 +174,7 @@ class BalajiCarsolVideoPlayer(
             mMediaPlayer?.audioComponent?.volume = 2f
             volumeMuteButton.visibility = View.GONE
             volumeUnMuteButton.visibility = View.VISIBLE
+            isVolmueMute = true
 
         }
 
@@ -459,6 +461,11 @@ class BalajiCarsolVideoPlayer(
         videoPauseButton.visibility = View.VISIBLE
     }
 
+    private var isVolmueMute = false
+
+    fun getVolumeStatus(): Boolean {
+        return isVolmueMute
+    }
 
     private fun initializeMainPlayer(videoUrl: String?, isNeedToPlayInstantly: Boolean) {
 
@@ -598,6 +605,7 @@ class BalajiCarsolVideoPlayer(
             mMediaPlayer?.audioComponent?.volume = 0f
             volumeMuteButton.visibility = View.VISIBLE
             volumeUnMuteButton.visibility = View.GONE
+            isVolmueMute = false
 
             videoPlayButton.visibility = View.GONE
             videoPauseButton.visibility = View.VISIBLE
@@ -776,6 +784,7 @@ class BalajiCarsolVideoPlayer(
         if (event.keyCode === KeyEvent.KEYCODE_VOLUME_DOWN) {
             volumeMuteButton.visibility = View.VISIBLE
             volumeUnMuteButton.visibility = View.GONE
+            isVolmueMute = false
         }
         return super.onKeyDown(keyCode, event)
     }
@@ -784,6 +793,7 @@ class BalajiCarsolVideoPlayer(
         if (event.keyCode === KeyEvent.KEYCODE_VOLUME_UP) {
             volumeMuteButton.visibility = View.GONE
             volumeUnMuteButton.visibility = View.VISIBLE
+            isVolmueMute = true
         }
         return super.onKeyUp(keyCode, event)
     }
@@ -796,9 +806,11 @@ class BalajiCarsolVideoPlayer(
         if (volume < 1) {
             volumeMuteButton.visibility = View.VISIBLE
             volumeUnMuteButton.visibility = View.GONE
+            isVolmueMute = false
         } else {
             volumeMuteButton.visibility = View.GONE
             volumeUnMuteButton.visibility = View.VISIBLE
+            isVolmueMute = true
         }
     }
 
@@ -809,9 +821,11 @@ class BalajiCarsolVideoPlayer(
         if (volume < 1) {
             volumeMuteButton.visibility = View.VISIBLE
             volumeUnMuteButton?.visibility = View.GONE
+            isVolmueMute = false
         } else {
             volumeMuteButton.visibility = View.GONE
             volumeUnMuteButton.visibility = View.VISIBLE
+            isVolmueMute = true
         }
     }
 
