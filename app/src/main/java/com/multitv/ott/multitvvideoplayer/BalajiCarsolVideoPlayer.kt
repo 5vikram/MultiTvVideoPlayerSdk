@@ -228,6 +228,16 @@ class BalajiCarsolVideoPlayer(
 
     }
 
+    fun getVoulmeStatus():Boolean{
+        if (volumeMuteButton.visibility == View.VISIBLE)
+            return true
+        else if (volumeUnMuteButton.visibility == View.VISIBLE)
+            return false
+        else
+            return false
+    }
+
+
     fun unmuteVolume() {
         mMediaPlayer?.audioComponent?.volume = 5f
         mMediaPlayer?.audioComponent?.volume = mMediaPlayer?.audioComponent?.volume!!
