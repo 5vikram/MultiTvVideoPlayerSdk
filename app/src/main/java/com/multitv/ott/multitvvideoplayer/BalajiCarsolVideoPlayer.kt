@@ -168,9 +168,8 @@ class BalajiCarsolVideoPlayer(
         }
 
         volumeMuteButton.setOnClickListener {
-            mMediaPlayer?.audioComponent?.volume = 0f
             mMediaPlayer?.audioComponent?.volume = mMediaPlayer?.audioComponent?.volume!!
-            mMediaPlayer?.audioComponent?.volume = 2f
+            mMediaPlayer?.audioComponent?.volume = 5f
             volumeMuteButton.visibility = View.GONE
             volumeUnMuteButton.visibility = View.VISIBLE
             isVolmueMute = true
@@ -223,14 +222,19 @@ class BalajiCarsolVideoPlayer(
 
     fun muteVolume() {
         mMediaPlayer?.audioComponent?.volume = 0f
+        volumeMuteButton.visibility = View.VISIBLE
+        volumeUnMuteButton.visibility = View.GONE
+        isVolmueMute = true
+
     }
 
     fun unmuteVolume() {
-        var volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
-        mMediaPlayer?.audioComponent?.volume = volume.toFloat()
-
+        mMediaPlayer?.audioComponent?.volume = 5f
+        mMediaPlayer?.audioComponent?.volume = mMediaPlayer?.audioComponent?.volume!!
+        volumeMuteButton.visibility = View.GONE
+        volumeUnMuteButton.visibility = View.VISIBLE
+        isVolmueMute = false
     }
-
 
     fun restoreCarsoulVideoPlayer() {
         mMediaPlayer?.audioComponent?.volume = 0f
@@ -407,11 +411,11 @@ class BalajiCarsolVideoPlayer(
     fun onResumeVolumeWhenScroll() {
 
         if (volumeUnMuteButton.visibility == View.VISIBLE) {
-            var volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
+            val volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
             mMediaPlayer?.audioComponent?.volume = volume.toFloat()
             if (volume < 1) {
                 volumeMuteButton.visibility = View.VISIBLE
-                volumeUnMuteButton?.visibility = View.GONE
+                volumeUnMuteButton.visibility = View.GONE
             } else {
                 volumeMuteButton.visibility = View.GONE
                 volumeUnMuteButton.visibility = View.VISIBLE
@@ -812,11 +816,11 @@ class BalajiCarsolVideoPlayer(
 
     fun onKeyUpEvent() {
 
-        var volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
+        val volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
         mMediaPlayer?.audioComponent?.volume = volume.toFloat()
         if (volume < 1) {
             volumeMuteButton.visibility = View.VISIBLE
-            volumeUnMuteButton?.visibility = View.GONE
+            volumeUnMuteButton.visibility = View.GONE
             isVolmueMute = false
         } else {
             volumeMuteButton.visibility = View.GONE
