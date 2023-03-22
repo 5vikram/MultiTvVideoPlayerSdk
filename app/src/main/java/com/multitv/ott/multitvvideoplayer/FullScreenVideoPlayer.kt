@@ -1387,17 +1387,17 @@ class FullScreenVideoPlayer(
     }
 
     fun onKeyUpEvent() {
-        if (volumeProgressBar != null)
-            volumeProgressBar.setProgress(audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC)!!)
 
-        var volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
+        volumeProgressBar.setProgress(audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC)!!)
+
+        val volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
         mMediaPlayer?.audioComponent?.volume = volume.toFloat()
         if (volume < 1) {
-            volumeMuteAndUnMuteButton?.visibility = View.VISIBLE
-            volumeUnMuteButton?.visibility = View.GONE
+            volumeMuteAndUnMuteButton.visibility = View.VISIBLE
+            volumeUnMuteButton.visibility = View.GONE
         } else {
-            volumeMuteAndUnMuteButton?.visibility = View.GONE
-            volumeUnMuteButton?.visibility = View.VISIBLE
+            volumeMuteAndUnMuteButton.visibility = View.GONE
+            volumeUnMuteButton.visibility = View.VISIBLE
         }
     }
 
@@ -1409,8 +1409,16 @@ class FullScreenVideoPlayer(
                 "Volume::::",
                 "KEYCODE_VOLUME_DOWN:::" + audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC)
             )
-            volumeMuteAndUnMuteButton?.visibility = View.VISIBLE
-            volumeUnMuteButton?.visibility = View.GONE
+            val volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
+            mMediaPlayer?.audioComponent?.volume = volume.toFloat()
+
+            if (volume < 1) {
+                volumeMuteAndUnMuteButton.visibility = View.VISIBLE
+                volumeUnMuteButton.visibility = View.GONE
+            } else {
+                volumeMuteAndUnMuteButton.visibility = View.GONE
+                volumeUnMuteButton.visibility = View.VISIBLE
+            }
         }
         return super.onKeyDown(keyCode, event)
     }
@@ -1418,12 +1426,20 @@ class FullScreenVideoPlayer(
     override fun onKeyUp(keyCode: Int, event: KeyEvent): Boolean {
         if (event.keyCode === KeyEvent.KEYCODE_VOLUME_UP) {
             volumeProgressBar.setProgress(audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC)!!)
-            volumeMuteAndUnMuteButton?.visibility = View.GONE
-            volumeUnMuteButton?.visibility = View.VISIBLE
+            val volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
+            mMediaPlayer?.audioComponent?.volume = volume.toFloat()
             Log.e(
                 "Volume::::",
                 "KEYCODE_VOLUME_UP::::" + audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC)
             )
+
+            if (volume < 1) {
+                volumeMuteAndUnMuteButton.visibility = View.VISIBLE
+                volumeUnMuteButton.visibility = View.GONE
+            } else {
+                volumeMuteAndUnMuteButton.visibility = View.GONE
+                volumeUnMuteButton.visibility = View.VISIBLE
+            }
         }
 
         return super.onKeyUp(keyCode, event)

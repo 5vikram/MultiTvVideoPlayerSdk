@@ -188,7 +188,7 @@ class DownloadTracker(
                 R.id.resume_download -> {
                     DownloadService.sendSetStopReason(
                         context,
-                        MyDownloadService(it.title.toString())::class.java,
+                        MyDownloadService()::class.java,
                         download.request.id,
                         Download.STOP_REASON_NONE,
                         true
@@ -198,7 +198,7 @@ class DownloadTracker(
                 R.id.pause_download -> {
                     DownloadService.sendSetStopReason(
                         context,
-                        MyDownloadService(it.title.toString())::class.java,
+                        MyDownloadService()::class.java,
                         download.request.id,
                         Download.STATE_STOPPED,
                         false
@@ -221,7 +221,7 @@ class DownloadTracker(
         download?.let {
             DownloadService.sendRemoveDownload(
                 applicationContext,
-                MyDownloadService(download.request.toMediaItem().mediaMetadata.title.toString())::class.java,
+                MyDownloadService()::class.java,
                 download.request.id,
                 false
             )
@@ -618,7 +618,7 @@ class DownloadTracker(
                         Util.getUtf8Bytes(estimatedContentLength.toString())
                     )
 
-                    startDownload(downloadRequest, mediaItem.mediaMetadata.title.toString())
+                    startDownload(downloadRequest)
                     availableBytesLeft -= estimatedContentLength
                     Log.e(TAG, "availableBytesLeft after calculation: $availableBytesLeft")
                     alertDialog.dismiss()
@@ -656,10 +656,10 @@ class DownloadTracker(
         }
 
         // Internal methods.
-        private fun startDownload(downloadRequest: DownloadRequest = buildDownloadRequest(), title:String) {
+        private fun startDownload(downloadRequest: DownloadRequest = buildDownloadRequest()) {
             DownloadService.sendAddDownload(
                 applicationContext,
-                MyDownloadService(title)::class.java,
+                MyDownloadService()::class.java,
                 downloadRequest,
                 true
             )

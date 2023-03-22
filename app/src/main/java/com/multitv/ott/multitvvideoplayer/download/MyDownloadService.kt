@@ -16,7 +16,7 @@ import com.multitv.ott.multitvvideoplayer.download.DownloadUtil.DOWNLOAD_NOTIFIC
 private const val JOB_ID = 8888
 private const val FOREGROUND_NOTIFICATION_ID = 8989
 
-class MyDownloadService(private var videoTitle: String) : DownloadService(
+class MyDownloadService() : DownloadService(
     FOREGROUND_NOTIFICATION_ID,
     DEFAULT_FOREGROUND_NOTIFICATION_UPDATE_INTERVAL,
     DOWNLOAD_NOTIFICATION_CHANNEL_ID,
@@ -34,7 +34,7 @@ class MyDownloadService(private var videoTitle: String) : DownloadService(
             TerminalStateNotificationHelper(
                 this,
                 downloadNotificationHelper,
-                FOREGROUND_NOTIFICATION_ID + 1, videoTitle
+                FOREGROUND_NOTIFICATION_ID + 1, ""
             )
         )
         return downloadManager

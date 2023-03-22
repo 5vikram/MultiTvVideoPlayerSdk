@@ -364,7 +364,7 @@ class BalajiVideoPlayer(
             val orientation = getContext().resources.configuration.orientation
             if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
                 (getContext() as Activity).requestedOrientation =
-                    ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+                    ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
                 (getContext() as Activity).window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
                 showSystemBar()
                 setting.visibility = View.GONE
@@ -1865,10 +1865,6 @@ class BalajiVideoPlayer(
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
         if (event.keyCode === KeyEvent.KEYCODE_VOLUME_DOWN) {
             volumeProgressBar.setProgress(audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC)!!)
-            Log.e(
-                "Volume::::",
-                "KEYCODE_VOLUME_DOWN:::" + audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC)
-            )
             volumeMuteAndUnMuteButton.visibility = View.VISIBLE
             volumeUnMuteButton.visibility = View.GONE
             isVolmueMute = false
@@ -1882,10 +1878,6 @@ class BalajiVideoPlayer(
             volumeMuteAndUnMuteButton.visibility = View.GONE
             volumeUnMuteButton.visibility = View.VISIBLE
             isVolmueMute = true
-            Log.e(
-                "Volume::::",
-                "KEYCODE_VOLUME_UP::::" + audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC)
-            )
         }
 
         return super.onKeyUp(keyCode, event)

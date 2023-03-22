@@ -21,6 +21,7 @@ import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.LinearLayoutCompat
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.drm.DrmSessionManager
@@ -43,7 +44,6 @@ import com.multitv.ott.multitvvideoplayer.listener.BannerVideoPlayerEventLister
 import com.multitv.ott.multitvvideoplayer.utils.CommonUtils
 import com.multitv.ott.multitvvideoplayer.utils.ContentType
 import com.multitv.ott.multitvvideoplayer.utils.ExoUttils
-import com.multitv.ott.multitvvideoplayer.utils.VideoPlayerTracer
 import com.pallycon.widevinelibrary.*
 import java.util.*
 
@@ -103,7 +103,6 @@ class BalajiCarsolVideoPlayer(
     private lateinit var videoPlayerControllerRealtiveLayout: RelativeLayout
     private lateinit var repeatVideoLinearLayout: LinearLayout
 
-
     constructor(context: Context, attrs: AttributeSet?) : this(
         context as AppCompatActivity,
         attrs,
@@ -122,6 +121,7 @@ class BalajiCarsolVideoPlayer(
             LayoutInflater.from(getContext())
                 .inflate(R.layout.banner_video_player, this)
         simpleExoPlayerView = view.findViewById(R.id.videoPlayer)
+
         videoPlayerControllerRealtiveLayout =
             view.findViewById(R.id.videoPlayerControllerRealtiveLayout)
         moreInfoLinearLayout = view.findViewById(R.id.moreInfoLinearLayout)
@@ -801,7 +801,7 @@ class BalajiCarsolVideoPlayer(
 
     fun onKeyDownEvent() {
 
-        var volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
+        val volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
         mMediaPlayer?.audioComponent?.volume = volume.toFloat()
         if (volume < 1) {
             volumeMuteButton.visibility = View.VISIBLE
