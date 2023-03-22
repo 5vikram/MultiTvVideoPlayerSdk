@@ -229,9 +229,9 @@ class BalajiCarsolVideoPlayer(
     }
 
     fun getVoulmeStatus():Boolean{
-        if (volumeMuteButton.visibility == View.VISIBLE)
+        if (volumeUnMuteButton.visibility == View.VISIBLE)
             return true
-        else if (volumeUnMuteButton.visibility == View.VISIBLE)
+        else if (volumeMuteButton.visibility == View.VISIBLE)
             return false
         else
             return false
