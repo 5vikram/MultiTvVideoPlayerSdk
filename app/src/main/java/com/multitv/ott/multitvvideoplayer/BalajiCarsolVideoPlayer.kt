@@ -167,7 +167,6 @@ class BalajiCarsolVideoPlayer(
             isVolmueMute = false
         }
 
-
         volumeMuteButton.setOnClickListener {
             mMediaPlayer?.audioComponent?.volume = 0f
             mMediaPlayer?.audioComponent?.volume = mMediaPlayer?.audioComponent?.volume!!
@@ -175,10 +174,7 @@ class BalajiCarsolVideoPlayer(
             volumeMuteButton.visibility = View.GONE
             volumeUnMuteButton.visibility = View.VISIBLE
             isVolmueMute = true
-
         }
-
-
 
         super.onFinishInflate()
     }
