@@ -164,7 +164,7 @@ class BalajiCarsolVideoPlayer(
             mMediaPlayer?.audioComponent?.volume = 0f
             volumeMuteButton.visibility = View.VISIBLE
             volumeUnMuteButton.visibility = View.GONE
-            isVolmueMute = false
+            isVolmueMute = true
         }
 
         volumeMuteButton.setOnClickListener {
@@ -172,7 +172,7 @@ class BalajiCarsolVideoPlayer(
             mMediaPlayer?.audioComponent?.volume = 5f
             volumeMuteButton.visibility = View.GONE
             volumeUnMuteButton.visibility = View.VISIBLE
-            isVolmueMute = true
+            isVolmueMute = false
         }
 
         super.onFinishInflate()
@@ -238,6 +238,9 @@ class BalajiCarsolVideoPlayer(
 
     fun restoreCarsoulVideoPlayer() {
         mMediaPlayer?.audioComponent?.volume = 0f
+        volumeMuteButton.visibility = View.VISIBLE
+        volumeUnMuteButton.visibility = View.GONE
+        isVolmueMute = true
     }
 
 
