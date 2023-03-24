@@ -298,9 +298,8 @@ class BalajiVideoPlayer(
             Log.e("Volume Stauts:::", "" + isVolmueMute)
             if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
                 setPotraitVolumeCallback()
-
                 (getContext() as Activity).requestedOrientation =
-                    ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+                    ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT
                 (getContext() as Activity).window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
                 showSystemBar()
                 videoLockButton.setVisibility(GONE)
