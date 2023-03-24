@@ -70,6 +70,8 @@ public class ExoVideoDownloadHelper implements DownloadTracker.Listener, SdkPopC
             new DownloadVideo(context, this).downloadVideo(mediaItem, videoDurationInSeconds);
         } else if (!DownloadUtil.INSTANCE.getDownloadTracker(context).isMediaDownloadRequestInQueue()) {
             new DownloadVideo(context, this).downloadVideo(mediaItem, videoDurationInSeconds);
+        } else {
+            new DownloadVideo(context, this).downloadVideo(mediaItem, videoDurationInSeconds);
         }
     }
 
