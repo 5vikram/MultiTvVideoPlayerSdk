@@ -90,7 +90,6 @@ class DownloadTracker(
     }
 
 
-
     fun getDownloadRequestCount(): Int {
         if (downloadManager != null && downloadManager.currentDownloads != null && downloadManager.currentDownloads.size > 0)
             return downloadManager.currentDownloads.size
@@ -189,7 +188,7 @@ class DownloadTracker(
                 R.id.resume_download -> {
                     DownloadService.sendSetStopReason(
                         context,
-                        MyDownloadService::class.java,
+                        MyDownloadService()::class.java,
                         download.request.id,
                         Download.STOP_REASON_NONE,
                         true
@@ -199,7 +198,7 @@ class DownloadTracker(
                 R.id.pause_download -> {
                     DownloadService.sendSetStopReason(
                         context,
-                        MyDownloadService::class.java,
+                        MyDownloadService()::class.java,
                         download.request.id,
                         Download.STATE_STOPPED,
                         false
@@ -222,7 +221,7 @@ class DownloadTracker(
         download?.let {
             DownloadService.sendRemoveDownload(
                 applicationContext,
-                MyDownloadService::class.java,
+                MyDownloadService()::class.java,
                 download.request.id,
                 false
             )
@@ -332,6 +331,7 @@ class DownloadTracker(
         private var trackSelectionDialog: AlertDialog? = null
 
         init {
+
             downloadHelper.prepare(this)
         }
 
@@ -617,6 +617,7 @@ class DownloadTracker(
                         (mediaItem.playbackProperties?.tag as MediaItemTag).title,
                         Util.getUtf8Bytes(estimatedContentLength.toString())
                     )
+
                     startDownload(downloadRequest)
                     availableBytesLeft -= estimatedContentLength
                     Log.e(TAG, "availableBytesLeft after calculation: $availableBytesLeft")
@@ -658,7 +659,7 @@ class DownloadTracker(
         private fun startDownload(downloadRequest: DownloadRequest = buildDownloadRequest()) {
             DownloadService.sendAddDownload(
                 applicationContext,
-                MyDownloadService::class.java,
+                MyDownloadService()::class.java,
                 downloadRequest,
                 true
             )

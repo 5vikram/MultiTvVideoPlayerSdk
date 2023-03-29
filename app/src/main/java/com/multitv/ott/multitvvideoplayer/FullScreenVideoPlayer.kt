@@ -288,20 +288,18 @@ class FullScreenVideoPlayer(
         videoRotationButton.setOnClickListener(OnClickListener {
             context.finish()
         })
-        volumeMuteAndUnMuteButton?.visibility = View.GONE
 
         volumeUnMuteButton.setOnClickListener {
             mMediaPlayer?.audioComponent?.volume = 0f
-            volumeMuteAndUnMuteButton?.visibility = View.VISIBLE
-            volumeUnMuteButton?.visibility = View.GONE
+            volumeMuteAndUnMuteButton.visibility = View.VISIBLE
+            volumeUnMuteButton.visibility = View.GONE
         }
 
 
         volumeMuteAndUnMuteButton.setOnClickListener {
-            mMediaPlayer?.audioComponent?.volume = 0f
             mMediaPlayer?.audioComponent?.volume = mMediaPlayer?.audioComponent?.volume!!
-            mMediaPlayer?.audioComponent?.volume = 2f
-            volumeMuteAndUnMuteButton?.visibility = View.GONE
+            mMediaPlayer?.audioComponent?.volume = 5f
+            volumeMuteAndUnMuteButton.visibility = View.GONE
             volumeUnMuteButton.visibility = View.VISIBLE
 
         }
@@ -383,6 +381,31 @@ class FullScreenVideoPlayer(
 
         super.onFinishInflate()
     }
+
+
+    fun getVolumeStatus(): Boolean {
+        if (volumeMuteAndUnMuteButton.visibility == View.VISIBLE)
+            return true
+        else if (volumeUnMuteButton.visibility == View.VISIBLE)
+            return false
+        else
+            return false
+
+    }
+
+    fun setVolumeStatus(isVolume: Boolean) {
+        if (isVolume) {
+            mMediaPlayer?.audioComponent?.volume = mMediaPlayer?.audioComponent?.volume!!
+            mMediaPlayer?.audioComponent?.volume = 5f
+            volumeMuteAndUnMuteButton.visibility = View.GONE
+            volumeUnMuteButton.visibility = View.VISIBLE
+        } else {
+            mMediaPlayer?.audioComponent?.volume = 0f
+            volumeMuteAndUnMuteButton.visibility = View.VISIBLE
+            volumeUnMuteButton.visibility = View.GONE
+        }
+    }
+
 
     fun setWebSeriesEnable(
         isWebSeries: Boolean,
@@ -897,21 +920,6 @@ class FullScreenVideoPlayer(
             mediaSessionConnector.setPlayer(mMediaPlayer)
             mediaSession.isActive = true
 
-
-            /*     mMediaPlayer?.audioComponent?.volume = 0f
-                 volumeMuteAndUnMuteButton?.visibility = View.VISIBLE
-                 volumeUnMuteButton?.visibility = View.GONE*/
-
-            var volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
-            mMediaPlayer?.audioComponent?.volume = volume.toFloat()
-            if (volume < 1) {
-                volumeMuteAndUnMuteButton?.visibility = View.VISIBLE
-                volumeUnMuteButton?.visibility = View.GONE
-            } else {
-                volumeMuteAndUnMuteButton?.visibility = View.GONE
-                volumeUnMuteButton?.visibility = View.VISIBLE
-            }
-
             if (isWatchDurationEnable)
                 seekTo(Math.max(mMediaPlayer!!.currentPosition + watchDuration * 1000, 0))
 
@@ -924,8 +932,8 @@ class FullScreenVideoPlayer(
             if (mMediaPlayer != null && mMediaPlayer!!.currentPosition != 0L) seekPlayerTo =
                 mMediaPlayer!!.currentPosition
                     .toInt() / 1000
-            errorRetryLayout!!.bringToFront()
-            errorRetryLayout!!.visibility = VISIBLE
+            errorRetryLayout.bringToFront()
+            errorRetryLayout.visibility = VISIBLE
             videoPlayerSdkCallBackListener!!.onPlayerError(error.message)
         }
 
@@ -957,9 +965,9 @@ class FullScreenVideoPlayer(
                         bufferingProgressBarLayout!!.visibility = GONE
                         circularProgressRing =
                             findViewById<View>(R.id.circular_progress_ring) as FabButton
-                        circularProgressRing?.showProgress(true)
-                        circularProgressRing?.setProgress(0f)
-                        circularProgressLayout!!.visibility = VISIBLE
+                        circularProgressRing.showProgress(true)
+                        circularProgressRing.setProgress(0f)
+                        circularProgressLayout.visibility = VISIBLE
                         // circularProgressLayout!!.bringToFront()
                         val totalDuration = 1200
                         val tickDuration = 300
@@ -972,7 +980,7 @@ class FullScreenVideoPlayer(
                                 var progress = millisUntilFinished.toFloat() / totalDuration
                                 progress = progress * 100
                                 progress = 100 - progress
-                                circularProgressRing?.setProgress(progress)
+                                circularProgressRing.setProgress(progress)
                             }
 
 
@@ -983,7 +991,7 @@ class FullScreenVideoPlayer(
                                     findViewById<View>(R.id.circular_progress_ring) as FabButton
 
 
-                                circularProgressLayout?.visibility = View.GONE
+                                circularProgressLayout.visibility = View.GONE
 
                                 if (isWebSeries) {
                                     if (userSubscriptionDtatus)
@@ -1009,9 +1017,8 @@ class FullScreenVideoPlayer(
                 ExoPlayer.STATE_IDLE -> {
                     text += "idle"
                     if (!checkForAudioFocus()) return
-                    if (bufferingProgressBarLayout != null) bufferingProgressBarLayout!!.visibility =
-                        GONE
-                    centerButtonLayout!!.visibility = VISIBLE
+                    bufferingProgressBarLayout.visibility = GONE
+                    centerButtonLayout.visibility = VISIBLE
                     if (mMediaPlayer != null) {
                         contentPlayedTimeInMillis = mMediaPlayer!!.currentPosition
                         if (contentType == ContentType.LIVE) startBufferingTimer()
@@ -1023,9 +1030,9 @@ class FullScreenVideoPlayer(
                 ExoPlayer.STATE_READY -> {
                     text += "ready"
                     bufferingProgressBarLayout!!.visibility = GONE
-                    centerButtonLayout!!.visibility = VISIBLE
-                    videoNextButton!!.visibility = GONE
-                    videoPerviousButton!!.visibility = GONE
+                    centerButtonLayout.visibility = VISIBLE
+                    videoNextButton.visibility = GONE
+                    videoPerviousButton.visibility = GONE
                     videoPlayerSdkCallBackListener?.onVideoStartNow()
                 }
                 else -> text += "unknown"
@@ -1144,10 +1151,10 @@ class FullScreenVideoPlayer(
         decorView.systemUiVisibility = uiOptions
 
         if (contentTitle != null && !TextUtils.isEmpty(contentTitle)) {
-            videoTitle?.visibility = View.VISIBLE
-            videoTitle?.setText(contentTitle)
+            videoTitle.visibility = View.VISIBLE
+            videoTitle.setText(contentTitle)
         } else
-            videoTitle?.visibility = View.GONE
+            videoTitle.visibility = View.GONE
     }
 
     private fun showSystemBar() {
@@ -1156,7 +1163,7 @@ class FullScreenVideoPlayer(
         decorView.systemUiVisibility = uiOptions
         //hideSystemUiFullScreen()
 
-        videoTitle?.visibility = View.GONE
+        videoTitle.visibility = View.GONE
     }
 
     @SuppressLint("InlinedApi")
@@ -1185,9 +1192,9 @@ class FullScreenVideoPlayer(
 
     fun showResumedVideoHint(isShow: Boolean) {
         if (isShow)
-            resumedVideoTv?.visibility = View.VISIBLE
+            resumedVideoTv.visibility = View.VISIBLE
         else
-            resumedVideoTv?.visibility = View.GONE
+            resumedVideoTv.visibility = View.GONE
     }
 
     private fun fastForward() {
@@ -1218,42 +1225,36 @@ class FullScreenVideoPlayer(
         }
     }
 
+    private var maxLine = 0
+    fun setSpriteImageThumbnailMaxLine(maxLine: Int) {
+        this.maxLine = maxLine;
+    }
+
     override fun onScrubStart(previewBar: PreviewBar) {
         //findViewById(R.id.centerButtonLayout)?.setVisibility(View.GONE);
-        previewFrameLayout!!.visibility = VISIBLE
+        previewFrameLayout.visibility = VISIBLE
         pauseVideoPlayer()
         removeCallbacks(hideAction)
     }
 
     override fun onScrubMove(previewBar: PreviewBar, progress: Int, fromUser: Boolean) {
-
         pauseVideoPlayer()
-        previewFrameLayout.visibility = View.VISIBLE
-        previewTimeBar.showPreview()
-        Log.e("Video Sprite::::", "Url position:::" + currentPosition)
-        if (spriteImageUrl != null && !TextUtils.isEmpty(spriteImageUrl)) {
-            Log.e("Video Sprite::::", "Url:::" + spriteImageUrl)
-            Glide.with(previewImageView)
-                .load(spriteImageUrl)
-                .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
-                .transform(GlideThumbnailTransformation(currentPosition, 1000))
-                .into(previewImageView)
-        } else {
-            Log.e("Video Sprite::::", "Url:::Empty")
-        }
+        if (!TextUtils.isEmpty(spriteImageUrl))
+            previewFrameLayout.visibility = View.VISIBLE
+        else
+            previewFrameLayout.visibility = INVISIBLE
 
 
-        if (currentDurationPlayTv != null) {
-            currentDurationPlayTv.text = Util.getStringForTime(
-                formatBuilder,
-                formatter,
-                progress.toLong()
-            )
-        }
+        currentDurationPlayTv.text = Util.getStringForTime(
+            formatBuilder,
+            formatter,
+            progress.toLong()
+        )
     }
 
     override fun onScrubStop(previewBar: PreviewBar) {
-        previewFrameLayout!!.visibility = GONE
+        previewFrameLayout.visibility = INVISIBLE
+
         if (mMediaPlayer != null) {
             seekTo(previewBar.progress.toLong())
         }
@@ -1265,11 +1266,11 @@ class FullScreenVideoPlayer(
     override fun loadPreview(currentPosition: Long, max: Long) {
         pauseVideoPlayer()
 
-        if (spriteImageUrl != null && !TextUtils.isEmpty(spriteImageUrl)) {
+        if (!TextUtils.isEmpty(spriteImageUrl)) {
             Glide.with(context)
                 .load(spriteImageUrl)
                 .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
-                .transform(GlideThumbnailTransformation(currentPosition, 1000))
+                .transform(GlideThumbnailTransformation(currentPosition, maxLine))
                 .into(previewImageView)
         }
 
@@ -1364,32 +1365,31 @@ class FullScreenVideoPlayer(
 
 
     fun onKeyDownEvent() {
-        if (volumeProgressBar != null)
-            volumeProgressBar.setProgress(audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC)!!)
+        volumeProgressBar.setProgress(audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC)!!)
 
-        var volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
+        val volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
         mMediaPlayer?.audioComponent?.volume = volume.toFloat()
         if (volume < 1) {
-            volumeMuteAndUnMuteButton?.visibility = View.VISIBLE
-            volumeUnMuteButton?.visibility = View.GONE
+            volumeMuteAndUnMuteButton.visibility = View.VISIBLE
+            volumeUnMuteButton.visibility = View.GONE
         } else {
-            volumeMuteAndUnMuteButton?.visibility = View.GONE
-            volumeUnMuteButton?.visibility = View.VISIBLE
+            volumeMuteAndUnMuteButton.visibility = View.GONE
+            volumeUnMuteButton.visibility = View.VISIBLE
         }
     }
 
     fun onKeyUpEvent() {
-        if (volumeProgressBar != null)
-            volumeProgressBar.setProgress(audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC)!!)
 
-        var volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
+        volumeProgressBar.setProgress(audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC)!!)
+
+        val volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
         mMediaPlayer?.audioComponent?.volume = volume.toFloat()
         if (volume < 1) {
-            volumeMuteAndUnMuteButton?.visibility = View.VISIBLE
-            volumeUnMuteButton?.visibility = View.GONE
+            volumeMuteAndUnMuteButton.visibility = View.VISIBLE
+            volumeUnMuteButton.visibility = View.GONE
         } else {
-            volumeMuteAndUnMuteButton?.visibility = View.GONE
-            volumeUnMuteButton?.visibility = View.VISIBLE
+            volumeMuteAndUnMuteButton.visibility = View.GONE
+            volumeUnMuteButton.visibility = View.VISIBLE
         }
     }
 
@@ -1401,8 +1401,16 @@ class FullScreenVideoPlayer(
                 "Volume::::",
                 "KEYCODE_VOLUME_DOWN:::" + audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC)
             )
-            volumeMuteAndUnMuteButton?.visibility = View.VISIBLE
-            volumeUnMuteButton?.visibility = View.GONE
+            val volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
+            mMediaPlayer?.audioComponent?.volume = volume.toFloat()
+
+            if (volume < 1) {
+                volumeMuteAndUnMuteButton.visibility = View.VISIBLE
+                volumeUnMuteButton.visibility = View.GONE
+            } else {
+                volumeMuteAndUnMuteButton.visibility = View.GONE
+                volumeUnMuteButton.visibility = View.VISIBLE
+            }
         }
         return super.onKeyDown(keyCode, event)
     }
@@ -1410,12 +1418,20 @@ class FullScreenVideoPlayer(
     override fun onKeyUp(keyCode: Int, event: KeyEvent): Boolean {
         if (event.keyCode === KeyEvent.KEYCODE_VOLUME_UP) {
             volumeProgressBar.setProgress(audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC)!!)
-            volumeMuteAndUnMuteButton?.visibility = View.GONE
-            volumeUnMuteButton?.visibility = View.VISIBLE
+            val volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
+            mMediaPlayer?.audioComponent?.volume = volume.toFloat()
             Log.e(
                 "Volume::::",
                 "KEYCODE_VOLUME_UP::::" + audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC)
             )
+
+            if (volume < 1) {
+                volumeMuteAndUnMuteButton.visibility = View.VISIBLE
+                volumeUnMuteButton.visibility = View.GONE
+            } else {
+                volumeMuteAndUnMuteButton.visibility = View.GONE
+                volumeUnMuteButton.visibility = View.VISIBLE
+            }
         }
 
         return super.onKeyUp(keyCode, event)
@@ -1459,14 +1475,14 @@ class FullScreenVideoPlayer(
             countDownTimer1?.cancel()
         }
 
-        if (parentalAge != null && !TextUtils.isEmpty(parentalAge)) {
+        if (!TextUtils.isEmpty(parentalAge)) {
             contentRatedTv.setText("Rated U/A " + parentalAge + "+")
             contentRatedTv.visibility = View.VISIBLE
         } else {
             contentRatedTv.visibility = View.GONE
         }
 
-        if (genure != null && !TextUtils.isEmpty(genure)) {
+        if (!TextUtils.isEmpty(genure)) {
             genureTv.setText(genure)
             genureTv.visibility = View.VISIBLE
         } else {
@@ -1474,7 +1490,7 @@ class FullScreenVideoPlayer(
         }
 
 
-        if (language != null && !TextUtils.isEmpty(language)) {
+        if (!TextUtils.isEmpty(language)) {
             languageTv.setText("Language : " + language)
             languageTv.visibility = View.VISIBLE
         } else {
@@ -1527,8 +1543,8 @@ class FullScreenVideoPlayer(
             (getContext() as Activity).window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
             showSystemBar()
             //  videoRotationButton?.setImageResource(R.drawable.ic_balaji_fullscreen)
-            videoLockButton?.setVisibility(GONE)
-            videoUnLockButton?.setVisibility(GONE)
+            videoLockButton.setVisibility(GONE)
+            videoUnLockButton.setVisibility(GONE)
         } else if (orientation == Configuration.ORIENTATION_PORTRAIT) {
             (getContext() as Activity).requestedOrientation =
                 ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
@@ -1552,8 +1568,8 @@ class FullScreenVideoPlayer(
 
 
     fun hideController() {
-        closeVideoPlayerButton!!.visibility = GONE
-        overlayImageTransparent!!.visibility = GONE
+        closeVideoPlayerButton.visibility = GONE
+        overlayImageTransparent.visibility = GONE
         centerButtonLayout.visibility = GONE
         //    videoProgressLayout.visibility = GONE
         videoMenuLayout.visibility = GONE

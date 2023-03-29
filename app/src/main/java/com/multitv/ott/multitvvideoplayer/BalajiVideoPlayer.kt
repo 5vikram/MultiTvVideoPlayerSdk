@@ -298,9 +298,8 @@ class BalajiVideoPlayer(
             Log.e("Volume Stauts:::", "" + isVolmueMute)
             if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
                 setPotraitVolumeCallback()
-
                 (getContext() as Activity).requestedOrientation =
-                    ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+                    ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT
                 (getContext() as Activity).window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
                 showSystemBar()
                 videoLockButton.setVisibility(GONE)
@@ -364,7 +363,7 @@ class BalajiVideoPlayer(
             val orientation = getContext().resources.configuration.orientation
             if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
                 (getContext() as Activity).requestedOrientation =
-                    ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+                    ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT
                 (getContext() as Activity).window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
                 showSystemBar()
                 setting.visibility = View.GONE
@@ -1637,8 +1636,11 @@ class BalajiVideoPlayer(
     }
 
     override fun onScrubStart(previewBar: PreviewBar) {
-        previewFrameLayout.visibility = VISIBLE
-        previewTimeBar.showPreview()
+        if (!TextUtils.isEmpty(spriteImageUrl))
+            previewFrameLayout.visibility = View.VISIBLE
+        else
+            previewFrameLayout.visibility = INVISIBLE
+
         pauseVideoPlayer()
     }
 
@@ -1664,6 +1666,11 @@ class BalajiVideoPlayer(
         resumeVideoPlayer()
     }
 
+    private var maxLine = 0
+    fun setSpriteImageThumbnailMaxLine(maxLine: Int) {
+        this.maxLine = maxLine;
+    }
+
 
     override fun loadPreview(currentPosition: Long, max: Long) {
         /*    previewFrameLayout.visibility = View.VISIBLE
@@ -1681,7 +1688,7 @@ class BalajiVideoPlayer(
             Glide.with(previewImageView).load(spriteImageUrl)
                 .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
                 .fitCenter()
-                .transform(GlideThumbnailTransformation(currentPosition, 1000))
+                .transform(GlideThumbnailTransformation(currentPosition, maxLine))
                 .diskCacheStrategy(DiskCacheStrategy.RESOURCE).into(previewImageView)
         } else {
             previewFrameLayout.visibility = View.GONE
@@ -1857,10 +1864,6 @@ class BalajiVideoPlayer(
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
         if (event.keyCode === KeyEvent.KEYCODE_VOLUME_DOWN) {
             volumeProgressBar.setProgress(audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC)!!)
-            Log.e(
-                "Volume::::",
-                "KEYCODE_VOLUME_DOWN:::" + audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC)
-            )
             volumeMuteAndUnMuteButton.visibility = View.VISIBLE
             volumeUnMuteButton.visibility = View.GONE
             isVolmueMute = false
@@ -1874,10 +1877,6 @@ class BalajiVideoPlayer(
             volumeMuteAndUnMuteButton.visibility = View.GONE
             volumeUnMuteButton.visibility = View.VISIBLE
             isVolmueMute = true
-            Log.e(
-                "Volume::::",
-                "KEYCODE_VOLUME_UP::::" + audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC)
-            )
         }
 
         return super.onKeyUp(keyCode, event)
@@ -2112,6 +2111,11 @@ class BalajiVideoPlayer(
 
 
     private var isVolmueMute = false
+
+
+    fun getVolumeStatus(): Boolean {
+        return isVolmueMute
+    }
 
 
     private fun setLandscapeVolumeCallback() {

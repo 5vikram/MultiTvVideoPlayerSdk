@@ -1,21 +1,35 @@
 package com.multitv.ott.multitvvideoplayer.playerglide
 
 import android.graphics.Bitmap
+import android.service.autofill.FieldClassification.Match
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation
+import com.multitv.ott.multitvvideoplayer.utils.VideoPlayerTracer
 import java.nio.ByteBuffer
 import java.security.MessageDigest
 
-private const val MAX_LINES = 26
+
 private const val MAX_COLUMNS = 10
 private const val THUMBNAILS_EACH = 5000 // milliseconds
 
-class GlideThumbnailTransformation(position: Long, thumbnailEach: Int) : BitmapTransformation() {
-
+class GlideThumbnailTransformation(position: Long, maxLine: Int) : BitmapTransformation() {
+    private var MAX_LINES = 6
     private val x: Int
     private val y: Int
 
     init {
+
+        if (maxLine > 0) {
+            val totalSecond = maxLine / MAX_COLUMNS / 5
+            MAX_LINES = Math.round(totalSecond.toDouble()).toInt()
+            MAX_LINES = MAX_LINES + 1
+        } else {
+            MAX_LINES = 6
+        }
+
+        VideoPlayerTracer.error("MAX LINE:::", "" + MAX_LINES)
+
+
         val square = position.toInt().div(THUMBNAILS_EACH)
         x = square % MAX_COLUMNS
         y = square / MAX_COLUMNS
