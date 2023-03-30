@@ -44,10 +44,10 @@ public class ExoVideoDownloadHelper implements DownloadTracker.Listener, SdkPopC
         this.downloadsDetailsListener = downloadVideoListener;
     }
 
-    private MediaItem getMediaItem(String uri, String title) {
+    private MediaItem getMediaItem(String uri, String title, String mimeType) {
         return new MediaItem.Builder()
                 .setUri(uri)
-                .setMimeType(MimeTypes.APPLICATION_M3U8)
+                .setMimeType(mimeType)
                 .setMediaMetadata(new MediaMetadata.Builder().setTitle(title).build())
                 .setTag(new MediaItemTag(-1, title))
                 .build();
@@ -63,9 +63,22 @@ public class ExoVideoDownloadHelper implements DownloadTracker.Listener, SdkPopC
         return DownloadUtil.INSTANCE.getDownloadTracker(context).getDownloadRequestCount();
     }
 
+
+    private String getUrlExtension(String url) {
+        return url.substring(url.lastIndexOf(".") + 1);
+    }
+
+    private String getMimeTypeFromExtension(String videoUrl) {
+        if (getUrlExtension(videoUrl).equalsIgnoreCase("mpd"))
+            return MimeTypes.APPLICATION_MPD;
+        else
+            return MimeTypes.APPLICATION_M3U8;
+    }
+
+
     public void downloadVideo(String url, String videoTitle, Long videoDurationInSeconds) {
-        mediaItem = getMediaItem(url, videoTitle);
-        if (!DownloadUtil.INSTANCE.getDownloadTracker(context).isDownloaded(getMediaItem(url, videoTitle))) {
+        mediaItem = getMediaItem(url, videoTitle, getMimeTypeFromExtension(url));
+        if (!DownloadUtil.INSTANCE.getDownloadTracker(context).isDownloaded(getMediaItem(url, videoTitle, getMimeTypeFromExtension(url)))) {
             //new DownloadVideo(context, this).removeVideoFromDownload(mediaItem.playbackProperties.uri);
             new DownloadVideo(context, this).downloadVideo(mediaItem, videoDurationInSeconds);
         } else if (!DownloadUtil.INSTANCE.getDownloadTracker(context).isMediaDownloadRequestInQueue()) {
@@ -83,11 +96,12 @@ public class ExoVideoDownloadHelper implements DownloadTracker.Listener, SdkPopC
 
 
     public void downloadVideo(String url, String videoTitle, Long videoDurationInSeconds, ImageView imageView) {
-        mediaItem = getMediaItem(url, videoTitle);
-        if (!DownloadUtil.INSTANCE.getDownloadTracker(context).isDownloaded(getMediaItem(url, videoTitle))) {
-            new DownloadVideo(context, this).downloadVideo(mediaItem, imageView, videoDurationInSeconds);
-        } else if (DownloadUtil.INSTANCE.getDownloadTracker(context).isMediaDownloadRequestInQueue()) {
+        mediaItem = getMediaItem(url, videoTitle, getMimeTypeFromExtension(url));
+
+        if (DownloadUtil.INSTANCE.getDownloadTracker(context).isMediaDownloadRequestInQueue()) {
             downloadPopUpMenuOption(imageView, url);
+        } else if (!DownloadUtil.INSTANCE.getDownloadTracker(context).isDownloaded(getMediaItem(url, videoTitle, getMimeTypeFromExtension(url)))) {
+            new DownloadVideo(context, this).downloadVideo(mediaItem, imageView, videoDurationInSeconds);
         } else {
             Toast.makeText(context, videoTitle + "video Already Downloaded.", Toast.LENGTH_SHORT).show();
         }
@@ -97,17 +111,17 @@ public class ExoVideoDownloadHelper implements DownloadTracker.Listener, SdkPopC
     }*/
 
 
-    public boolean isVideoDownload(String videoUrl, String videoTitle) {
-        return DownloadUtil.INSTANCE.getDownloadTracker(context).isDownloaded(getMediaItem(videoUrl, videoTitle));
+    public boolean isVideoDownload(String url, String videoTitle) {
+        return DownloadUtil.INSTANCE.getDownloadTracker(context).isDownloaded(getMediaItem(url, videoTitle, getMimeTypeFromExtension(url)));
     }
 
-    public boolean isVideoDownloadingQueue(String videoUrl, String videoTitle) {
-        return DownloadUtil.INSTANCE.getDownloadTracker(context).isVideoDownloadingQueue(getMediaItem(videoUrl, videoTitle));
+    public boolean isVideoDownloadingQueue(String url, String videoTitle) {
+        return DownloadUtil.INSTANCE.getDownloadTracker(context).isVideoDownloadingQueue(getMediaItem(url, videoTitle, getMimeTypeFromExtension(url)));
     }
 
 
-    public boolean isVideoStateResumeAndPause(String videoUrl, String videoTitle) {
-        return DownloadUtil.INSTANCE.getDownloadTracker(context).isVideoDownloadingPauseAndResume(getMediaItem(videoUrl, videoTitle));
+    public boolean isVideoStateResumeAndPause(String url, String videoTitle) {
+        return DownloadUtil.INSTANCE.getDownloadTracker(context).isVideoDownloadingPauseAndResume(getMediaItem(url, videoTitle, getMimeTypeFromExtension(url)));
     }
 
 
