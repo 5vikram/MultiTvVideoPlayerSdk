@@ -957,19 +957,18 @@ class OfflineVIdeoPlayer(
 
 
     private fun initializeMainPlayer(videoUrl: String?, isNeedToPlayInstantly: Boolean) {
-//        ToastMessage.showLogs(ToastMessage.LogType.ERROR, "Video Player:::", "initializeMainPlayer");
+
         if (mMediaPlayer != null) {
             mMediaPlayer!!.release()
             if (adsLoader != null) adsLoader!!.setPlayer(null)
             mMediaPlayer = null
         }
 
-        //var subtitleSource = SingleSampleMediaSource(subtitleUri, ...);
         videoControllerLayout?.visibility = GONE
         previewTimeBar.visibility = GONE
         durationLinearLayout.visibility = GONE
         videoPlayerSdkCallBackListener?.prepareVideoPlayer()
-        //        ToastMessage.showLogs(ToastMessage.LogType.DEBUG, TAG, "Content url is " + videoUrl);
+
         val customLoadControl: LoadControl = DefaultLoadControl.Builder()
             .setBufferDurationsMs(1000, 50000, 1000, 1)
             .setAllocator(DefaultAllocator(true, 32 * 1024))
@@ -981,220 +980,123 @@ class OfflineVIdeoPlayer(
 
 
 
-        if (adsUrl != null && !TextUtils.isEmpty(adsUrl)) {
-            val dataSourceFactory: DataSource.Factory = DefaultDataSource.Factory(
-                context
-            )
-            val mediaSourceFactory: MediaSourceFactory =
-                DefaultMediaSourceFactory(dataSourceFactory)
-                    .setAdsLoaderProvider { unusedAdTagUri: MediaItem.AdsConfiguration? -> adsLoader }
-                    .setAdViewProvider(simpleExoPlayerView)
+        mMediaPlayer = ExoPlayer.Builder(context).setTrackSelector(trackSelector)
+            .setLoadControl(customLoadControl).build()
 
-            mMediaPlayer = ExoPlayer.Builder(context).setMediaSourceFactory(mediaSourceFactory)
-                .setTrackSelector(trackSelector).setLoadControl(customLoadControl).build()
-            adsLoader = ImaAdsLoader.Builder( /* context= */context).build()
+        mMediaPlayer!!.addListener(stateChangeCallback1)
+        simpleExoPlayerView!!.player = mMediaPlayer
+        simpleExoPlayerView!!.controllerHideOnTouch = true
+        simpleExoPlayerView!!.setControllerHideDuringAds(true)
+        var mediaItem: MediaItem? = null
+
+
+        try {
+            WVMAgent = PallyconWVMSDKFactory.getInstance(context)
+            WVMAgent?.init(context, null, siteId, siteKey)
+            WVMAgent?.setPallyconEventListener(pallyconEventListener)
+        } catch (e: PallyconDrmException) {
+            e.printStackTrace()
+        } catch (e: UnAuthorizedDeviceException) {
+            e.printStackTrace()
+        }
+
+        mediaItem = MediaItem.Builder().setUri(videoUrl).build()
+
+        val drmSchemeUuid = UUID.fromString(C.WIDEVINE_UUID.toString())
+        val uri = Uri.parse(videoUrl)
+        try {
+            drmSessionManager = WVMAgent!!.createDrmSessionManagerByToken(
+                drmSchemeUuid,
+                drmdrmLicenseUrl,
+                uri,
+                drmContentToken
+            )
+        } catch (e: PallyconDrmException) {
+            e.printStackTrace()
+        }
+
+
+        val downloadRequest: DownloadRequest? =
+            DownloadUtil.getDownloadTracker(context)
+                .getDownloadRequest(mediaItem.playbackProperties?.uri)
+
+
+        if (isDrmContent) {
+            val mediaSource = DownloadHelper.createMediaSource(
+                downloadRequest!!,
+                DownloadUtil.getReadOnlyDataSourceFactory(context), drmSessionManager
+            )
+
+            mMediaPlayer!!.setMediaSource(mediaSource)
+        } else {
+            val mediaSource = DownloadHelper.createMediaSource(
+                downloadRequest!!,
+                DownloadUtil.getReadOnlyDataSourceFactory(context)
+            )
+
+            mMediaPlayer!!.setMediaSource(mediaSource)
+        }
+
+
+
+
+        mMediaPlayer!!.audioComponent!!.volume = mMediaPlayer!!.audioComponent!!.volume
+        mMediaPlayer!!.prepare()
+        if (isNeedToPlayInstantly) {
+            mMediaPlayer!!.playWhenReady = true
+        }
+
+        val mediaSession = MediaSessionCompat(context, "com.lionsgacom.multitv.ottteplay")
+        val mediaSessionConnector = MediaSessionConnector(mediaSession)
+        mediaSessionConnector.setPlayer(mMediaPlayer)
+        mediaSession.isActive = true
+
+        val volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
+        mMediaPlayer?.audioComponent?.volume = volume.toFloat()
+        if (volume < 1) {
+            volumeMuteAndUnMuteButton.visibility = View.VISIBLE
+            volumeUnMuteButton.visibility = View.GONE
+        } else {
+            volumeMuteAndUnMuteButton.visibility = View.GONE
+            volumeUnMuteButton.visibility = View.VISIBLE
+        }
+
+
+        if (isWatchDurationEnable)
+            seekTo(Math.max(mMediaPlayer!!.currentPosition + watchDuration * 1000, 0))
+
+
+        if (adsUrl != null && !TextUtils.isEmpty(adsUrl)) {
+            adsLoader?.adsLoader?.addAdsLoadedListener(object :
+                com.google.ads.interactivemedia.v3.api.AdsLoader.AdsLoadedListener {
+                override fun onAdsManagerLoaded(adsManagerLoadedEvent: AdsManagerLoadedEvent) {
+                    val adsManager = adsManagerLoadedEvent.getAdsManager()
+                    adsManager.addAdEventListener(object : AdEvent.AdEventListener {
+                        override fun onAdEvent(adEvent: AdEvent) {
+                            Log.e("Ads Event:::", "" + adEvent.type)
+                            if (adEvent.type.equals("STARTED")) {
+                                videoPlayerSdkCallBackListener?.onAdPlay()
+                                if (!isPipModeOn)
+                                    setTimerOnVideoPlayer(false)
+                            } else if (adEvent.type.equals("COMPLETED")) {
+                                videoPlayerSdkCallBackListener?.onAdCompleted()
+                                if (!isPipModeOn)
+                                    setTimerOnVideoPlayer(true)
+                            }
+                        }
+
+                    })
+                }
+
+            })
+
 
         } else {
-            mMediaPlayer = ExoPlayer.Builder(context).setTrackSelector(trackSelector)
-                .setLoadControl(customLoadControl).build()
+            videoPlayerSdkCallBackListener?.onAdCompleted()
+            if (!isPipModeOn)
+                setTimerOnVideoPlayer(true)
         }
-        if (mMediaPlayer != null) {
-            mMediaPlayer!!.addListener(stateChangeCallback1)
-            simpleExoPlayerView!!.player = mMediaPlayer
-            simpleExoPlayerView!!.controllerHideOnTouch = true
-            simpleExoPlayerView!!.setControllerHideDuringAds(true)
-            var mediaItem: MediaItem? = null
-            var subtitle: MediaItem.SubtitleConfiguration? = null
-            if (subTitleUri != null && !TextUtils.isEmpty(subTitleUri)) {
-                subtitle = MediaItem.SubtitleConfiguration.Builder(Uri.parse(subTitleUri))
-                    .setMimeType(MimeTypes.APPLICATION_SUBRIP) // The correct MIME type (required).
-                    .setLanguage("en") // MUST, The subtitle language (optional).
-                    .setSelectionFlags(C.SELECTION_FLAG_DEFAULT) //MUST,  Selection flags for the track (optional).
-                    .build()
-            }
 
-            if (isDrmContent) {
-                try {
-                    WVMAgent = PallyconWVMSDKFactory.getInstance(context)
-                    WVMAgent?.init(context, null, siteId, siteKey)
-                    WVMAgent?.setPallyconEventListener(pallyconEventListener)
-                } catch (e: PallyconDrmException) {
-                    e.printStackTrace()
-                } catch (e: UnAuthorizedDeviceException) {
-                    e.printStackTrace()
-                }
-                mediaItem = MediaItem.Builder().setUri(videoUrl).build()
-                val drmSchemeUuid = UUID.fromString(C.WIDEVINE_UUID.toString())
-                val uri = Uri.parse(videoUrl)
-                try {
-                    drmSessionManager = WVMAgent!!.createDrmSessionManagerByToken(
-                        drmSchemeUuid,
-                        drmdrmLicenseUrl,
-                        uri,
-                        drmContentToken
-                    )
-                } catch (e: PallyconDrmException) {
-                    e.printStackTrace()
-                }
-                val playerMediaSource = ExoUttils().buildMediaSource(
-                    context,
-                    mediaItem,
-                    videoUrl!!,
-                    drmSessionManager!!
-                )
-                mMediaPlayer!!.setMediaSource(playerMediaSource!!)
-            } else if (isOfflineContent) {
-
-                try {
-                    WVMAgent = PallyconWVMSDKFactory.getInstance(context)
-                    WVMAgent?.init(context, null, siteId, siteKey)
-                    WVMAgent?.setPallyconEventListener(pallyconEventListener)
-                } catch (e: PallyconDrmException) {
-                    e.printStackTrace()
-                } catch (e: UnAuthorizedDeviceException) {
-                    e.printStackTrace()
-                }
-
-                mediaItem = MediaItem.Builder().setUri(videoUrl).build()
-
-                val drmSchemeUuid = UUID.fromString(C.WIDEVINE_UUID.toString())
-                val uri = Uri.parse(videoUrl)
-                try {
-                    drmSessionManager = WVMAgent!!.createDrmSessionManagerByToken(
-                        drmSchemeUuid,
-                        drmdrmLicenseUrl,
-                        uri,
-                        drmContentToken
-                    )
-                } catch (e: PallyconDrmException) {
-                    e.printStackTrace()
-                }
-
-
-                val downloadRequest: DownloadRequest? =
-                    DownloadUtil.getDownloadTracker(context)
-                        .getDownloadRequest(mediaItem.playbackProperties?.uri)
-
-
-                if (isDrmContent) {
-                    val mediaSource = DownloadHelper.createMediaSource(
-                        downloadRequest!!,
-                        DownloadUtil.getReadOnlyDataSourceFactory(context), drmSessionManager
-                    )
-
-                    mMediaPlayer!!.setMediaSource(mediaSource)
-                } else {
-                    val mediaSource = DownloadHelper.createMediaSource(
-                        downloadRequest!!,
-                        DownloadUtil.getReadOnlyDataSourceFactory(context)
-                    )
-
-                    mMediaPlayer!!.setMediaSource(mediaSource)
-                }
-
-
-            } else {
-                mediaItem = if (subtitle != null) {
-                    /*MediaSource playerMediaSource = new ExoUttils().buildMediaSource(context, mediaItem, videoUrl, drmSessionManager);
-                    MediaSource mediaSource = new MergingMediaSource(mediaSources);
-                    mMediaPlayer.setMediaSource(mediaSource);*/
-                    if (adsUrl != null && !TextUtils.isEmpty(adsUrl)) {
-                        adsLoader!!.setPlayer(mMediaPlayer)
-                        val adTagUri = Uri.parse(adsUrl)
-                        MediaItem.Builder()
-                            .setSubtitleConfigurations(ImmutableList.of(subtitle))
-                            .setUri(videoUrl)
-                            .setAdsConfiguration(
-                                MediaItem.AdsConfiguration.Builder(adTagUri).build()
-                            )
-                            .build()
-                    } else {
-                        MediaItem.Builder()
-                            .setSubtitleConfigurations(ImmutableList.of(subtitle))
-                            .setUri(videoUrl)
-                            .build()
-                    }
-                } else {
-                    if (adsUrl != null && !TextUtils.isEmpty(adsUrl)) {
-                        adsLoader!!.setPlayer(mMediaPlayer)
-                        adsLoader!!.skipAd()
-                        adsLoader!!.focusSkipButton();
-                        val adTagUri = Uri.parse(adsUrl)
-
-                        MediaItem.Builder()
-                            .setUri(videoUrl)
-                            .setAdsConfiguration(
-                                MediaItem.AdsConfiguration.Builder(adTagUri).build()
-                            )
-                            .build()
-
-
-                    } else {
-                        MediaItem.Builder()
-                            .setUri(videoUrl)
-                            .build()
-                    }
-                }
-                mMediaPlayer!!.setMediaItem(mediaItem)
-            }
-            mMediaPlayer!!.audioComponent!!.volume = mMediaPlayer!!.audioComponent!!.volume
-            mMediaPlayer!!.prepare()
-            if (isNeedToPlayInstantly) {
-                mMediaPlayer!!.playWhenReady = true
-            }
-
-            val mediaSession = MediaSessionCompat(context, "com.lionsgacom.multitv.ottteplay")
-            val mediaSessionConnector = MediaSessionConnector(mediaSession)
-            mediaSessionConnector.setPlayer(mMediaPlayer)
-            mediaSession.isActive = true
-
-            val volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
-            mMediaPlayer?.audioComponent?.volume = volume.toFloat()
-            if (volume < 1) {
-                volumeMuteAndUnMuteButton.visibility = View.VISIBLE
-                volumeUnMuteButton.visibility = View.GONE
-            } else {
-                volumeMuteAndUnMuteButton.visibility = View.GONE
-                volumeUnMuteButton.visibility = View.VISIBLE
-            }
-
-
-            if (isWatchDurationEnable)
-                seekTo(Math.max(mMediaPlayer!!.currentPosition + watchDuration * 1000, 0))
-
-
-            if (adsUrl != null && !TextUtils.isEmpty(adsUrl)) {
-                adsLoader?.adsLoader?.addAdsLoadedListener(object :
-                    com.google.ads.interactivemedia.v3.api.AdsLoader.AdsLoadedListener {
-                    override fun onAdsManagerLoaded(adsManagerLoadedEvent: AdsManagerLoadedEvent) {
-                        val adsManager = adsManagerLoadedEvent.getAdsManager()
-                        adsManager.addAdEventListener(object : AdEvent.AdEventListener {
-                            override fun onAdEvent(adEvent: AdEvent) {
-                                Log.e("Ads Event:::", "" + adEvent.type)
-                                if (adEvent.type.equals("STARTED")) {
-                                    videoPlayerSdkCallBackListener?.onAdPlay()
-                                    if (!isPipModeOn)
-                                        setTimerOnVideoPlayer(false)
-                                } else if (adEvent.type.equals("COMPLETED")) {
-                                    videoPlayerSdkCallBackListener?.onAdCompleted()
-                                    if (!isPipModeOn)
-                                        setTimerOnVideoPlayer(true)
-                                }
-                            }
-
-                        })
-                    }
-
-                })
-
-
-            } else {
-                videoPlayerSdkCallBackListener?.onAdCompleted()
-                if (!isPipModeOn)
-                    setTimerOnVideoPlayer(true)
-            }
-
-        }
     }
 
     var stateChangeCallback1: Player.Listener = object : Player.Listener {
