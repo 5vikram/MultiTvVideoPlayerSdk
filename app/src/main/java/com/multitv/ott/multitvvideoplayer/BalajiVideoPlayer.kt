@@ -299,7 +299,7 @@ class BalajiVideoPlayer(
             if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
                 setPotraitVolumeCallback()
                 (getContext() as Activity).requestedOrientation =
-                    ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT
+                    ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
                 (getContext() as Activity).window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
                 showSystemBar()
                 videoLockButton.setVisibility(GONE)
@@ -363,7 +363,7 @@ class BalajiVideoPlayer(
             val orientation = getContext().resources.configuration.orientation
             if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
                 (getContext() as Activity).requestedOrientation =
-                    ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT
+                    ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
                 (getContext() as Activity).window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
                 showSystemBar()
                 setting.visibility = View.GONE

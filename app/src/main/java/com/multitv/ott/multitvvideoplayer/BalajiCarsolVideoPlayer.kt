@@ -808,38 +808,47 @@ class BalajiCarsolVideoPlayer(
             volumeUnMuteButton.visibility = View.VISIBLE
             isVolmueMute = true
         }
+
         return super.onKeyUp(keyCode, event)
     }
 
 
     fun onKeyDownEvent() {
 
-        val volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
-        mMediaPlayer?.audioComponent?.volume = volume.toFloat()
-        if (volume < 1) {
-            volumeMuteButton.visibility = View.VISIBLE
-            volumeUnMuteButton.visibility = View.GONE
-            isVolmueMute = false
-        } else {
-            volumeMuteButton.visibility = View.GONE
-            volumeUnMuteButton.visibility = View.VISIBLE
-            isVolmueMute = true
+        if (audioManager != null) {
+            val volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
+            mMediaPlayer?.audioComponent?.volume = volume.toFloat()
+            if (volume < 1) {
+                volumeMuteButton.visibility = View.VISIBLE
+                volumeUnMuteButton.visibility = View.GONE
+                isVolmueMute = false
+            } else {
+                volumeMuteButton.visibility = View.GONE
+                volumeUnMuteButton.visibility = View.VISIBLE
+                isVolmueMute = true
+            }
         }
+
+
     }
 
     fun onKeyUpEvent() {
 
-        val volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
-        mMediaPlayer?.audioComponent?.volume = volume.toFloat()
-        if (volume < 1) {
-            volumeMuteButton.visibility = View.VISIBLE
-            volumeUnMuteButton.visibility = View.GONE
-            isVolmueMute = false
-        } else {
-            volumeMuteButton.visibility = View.GONE
-            volumeUnMuteButton.visibility = View.VISIBLE
-            isVolmueMute = true
+        if (audioManager != null) {
+            val volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
+            mMediaPlayer?.audioComponent?.volume = volume.toFloat()
+            if (volume < 1) {
+                volumeMuteButton.visibility = View.VISIBLE
+                volumeUnMuteButton.visibility = View.GONE
+                isVolmueMute = false
+            } else {
+                volumeMuteButton.visibility = View.GONE
+                volumeUnMuteButton.visibility = View.VISIBLE
+                isVolmueMute = true
+            }
         }
+
+
     }
 
 
