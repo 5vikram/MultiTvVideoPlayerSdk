@@ -76,7 +76,7 @@ import com.multitv.ott.multitvvideoplayer.utils.*
 import com.pallycon.widevinelibrary.*
 import java.util.*
 
-class OfflineVIdeoPlayer (
+class OfflineVIdeoPlayer(
     private val context: AppCompatActivity,
     attrs: AttributeSet?,
     defStyleAttr: Int
@@ -158,8 +158,8 @@ class OfflineVIdeoPlayer (
     private lateinit var durationLinearLayout: LinearLayoutCompat
     private lateinit var volumeFullScreenUnMuteButton: ImageView
 
-    private lateinit var exoRewLinearLayout:LinearLayout
-    private lateinit var exoFfwdLinearLayout:LinearLayout
+    private lateinit var exoRewLinearLayout: LinearLayout
+    private lateinit var exoFfwdLinearLayout: LinearLayout
     private var videoControllerLayout: ConstraintLayout? = null
 
 
@@ -229,8 +229,8 @@ class OfflineVIdeoPlayer (
             videoPlayerSdkCallBackListener?.showEpisodeListData()
         }
 
-        epsodeNextButton.visibility=View.GONE
-        epsodeButton.visibility=View.GONE
+        epsodeNextButton.visibility = View.GONE
+        epsodeButton.visibility = View.GONE
 
         epsodeNextButton.setOnClickListener {
             if (userSubscriptionDtatus)
@@ -281,8 +281,8 @@ class OfflineVIdeoPlayer (
         videoPauseButton = view.findViewById(R.id.exo_pause)
         videoLockButton = view.findViewById(R.id.exo_lock)
         videoUnLockButton = view.findViewById(R.id.exo_unlock)
-        exoFfwdLinearLayout= view.findViewById(R.id.exoFfwdLinearLayout)
-        exoRewLinearLayout= view.findViewById(R.id.exoRewLinearLayout)
+        exoFfwdLinearLayout = view.findViewById(R.id.exoFfwdLinearLayout)
+        exoRewLinearLayout = view.findViewById(R.id.exoRewLinearLayout)
         previewTimeBar = view.findViewById(R.id.exo_progress)
 
         previewImageView = view.findViewById(R.id.imageView)
@@ -1044,20 +1044,54 @@ class OfflineVIdeoPlayer (
                 )
                 mMediaPlayer!!.setMediaSource(playerMediaSource!!)
             } else if (isOfflineContent) {
+
+                try {
+                    WVMAgent = PallyconWVMSDKFactory.getInstance(context)
+                    WVMAgent?.init(context, null, siteId, siteKey)
+                    WVMAgent?.setPallyconEventListener(pallyconEventListener)
+                } catch (e: PallyconDrmException) {
+                    e.printStackTrace()
+                } catch (e: UnAuthorizedDeviceException) {
+                    e.printStackTrace()
+                }
+
                 mediaItem = MediaItem.Builder().setUri(videoUrl).build()
+
+                val drmSchemeUuid = UUID.fromString(C.WIDEVINE_UUID.toString())
+                val uri = Uri.parse(videoUrl)
+                try {
+                    drmSessionManager = WVMAgent!!.createDrmSessionManagerByToken(
+                        drmSchemeUuid,
+                        drmdrmLicenseUrl,
+                        uri,
+                        drmContentToken
+                    )
+                } catch (e: PallyconDrmException) {
+                    e.printStackTrace()
+                }
+
+
                 val downloadRequest: DownloadRequest? =
                     DownloadUtil.getDownloadTracker(context)
                         .getDownloadRequest(mediaItem.playbackProperties?.uri)
-                VideoPlayerTracer.error(
-                    "Offline Video Url:::",
-                    "" + mediaItem.playbackProperties?.uri
-                )
-                val mediaSource = DownloadHelper.createMediaSource(
-                    downloadRequest!!,
-                    DownloadUtil.getReadOnlyDataSourceFactory(context)
-                )
 
-                mMediaPlayer!!.setMediaSource(mediaSource!!)
+
+                if (isDrmContent) {
+                    val mediaSource = DownloadHelper.createMediaSource(
+                        downloadRequest!!,
+                        DownloadUtil.getReadOnlyDataSourceFactory(context), drmSessionManager
+                    )
+
+                    mMediaPlayer!!.setMediaSource(mediaSource)
+                } else {
+                    val mediaSource = DownloadHelper.createMediaSource(
+                        downloadRequest!!,
+                        DownloadUtil.getReadOnlyDataSourceFactory(context)
+                    )
+
+                    mMediaPlayer!!.setMediaSource(mediaSource)
+                }
+
 
             } else {
                 mediaItem = if (subtitle != null) {
@@ -1114,7 +1148,7 @@ class OfflineVIdeoPlayer (
             mediaSessionConnector.setPlayer(mMediaPlayer)
             mediaSession.isActive = true
 
-            var volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
+            val volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
             mMediaPlayer?.audioComponent?.volume = volume.toFloat()
             if (volume < 1) {
                 volumeMuteAndUnMuteButton.visibility = View.VISIBLE
@@ -1325,11 +1359,10 @@ class OfflineVIdeoPlayer (
     }
 
 
-    private val bufferingTimeRunnable: Runnable? = object : Runnable {
+    private val bufferingTimeRunnable: Runnable = object : Runnable {
         override fun run() {
             bufferingTimeInMillis = bufferingTimeInMillis + 1000
 
-            //Log.e("Naseeb", "Buffering time " + bufferingTimeInMillis);
             if (bufferingTimeHandler != null) bufferingTimeHandler!!.postDelayed(this, 1000)
         }
     }
@@ -1503,19 +1536,17 @@ class OfflineVIdeoPlayer (
     }
 
     override fun onScrubStart(previewBar: PreviewBar) {
-        previewFrameLayout.visibility = VISIBLE
-        previewTimeBar.showPreview()
-        pauseVideoPlayer()
+        previewFrameLayout.visibility = GONE
     }
 
     override fun onScrubMove(previewBar: PreviewBar, progress: Int, fromUser: Boolean) {
-        previewFrameLayout.visibility = View.VISIBLE
+        previewFrameLayout.visibility = GONE
         exoCurrentPosition.text = Util.getStringForTime(
             formatBuilder,
             formatter,
             progress.toLong()
         )
-        pauseVideoPlayer()
+
 
     }
 
@@ -1535,7 +1566,7 @@ class OfflineVIdeoPlayer (
         Glide.with(previewImageView)
             .load(spriteImageUrl)
             .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
-            .transform(GlideThumbnailTransformation(currentPosition,1000))
+            .transform(GlideThumbnailTransformation(currentPosition, 1000))
             .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
             .into(previewImageView)
 
@@ -1859,7 +1890,7 @@ class OfflineVIdeoPlayer (
                 ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
             (getContext() as Activity).window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
             showSystemBar()
-           // videoRotationButton.setImageResource(R.drawable.ic_balaji_fullscreen)
+            // videoRotationButton.setImageResource(R.drawable.ic_balaji_fullscreen)
             videoLockButton.setVisibility(GONE)
             videoUnLockButton.setVisibility(GONE)
         } else if (orientation == Configuration.ORIENTATION_PORTRAIT) {
@@ -1867,7 +1898,7 @@ class OfflineVIdeoPlayer (
                 ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
             (getContext() as Activity).window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
             hideSystemBars()
-          //  videoRotationButton.setImageResource(R.drawable.ic_minimize)
+            //  videoRotationButton.setImageResource(R.drawable.ic_minimize)
             videoLockUnlockStatus()
         }
     }
