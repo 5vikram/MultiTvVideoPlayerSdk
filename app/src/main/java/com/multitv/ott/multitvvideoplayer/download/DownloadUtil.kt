@@ -122,11 +122,10 @@ object DownloadUtil {
                 getHttpDataSourceFactory(context),
                 Executors.newFixedThreadPool(6)
             ).apply {
-                maxParallelDownloads = 5
+                maxParallelDownloads = 2
             }
             downloadTracker =
                 DownloadTracker(context, getHttpDataSourceFactory(context), downloadManager)
-
         }
     }
 

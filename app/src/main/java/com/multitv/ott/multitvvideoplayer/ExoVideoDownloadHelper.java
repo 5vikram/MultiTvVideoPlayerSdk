@@ -65,13 +65,13 @@ public class ExoVideoDownloadHelper implements DownloadTracker.Listener, SdkPopC
 
     public void downloadVideo(String url, String videoTitle, Long videoDurationInSeconds) {
         mediaItem = getMediaItem(url, videoTitle);
-        if (DownloadUtil.INSTANCE.getDownloadTracker(context).isDownloaded(getMediaItem(url, videoTitle))) {
-            new DownloadVideo(context, this).removeVideoFromDownload(mediaItem.playbackProperties.uri);
+        if (!DownloadUtil.INSTANCE.getDownloadTracker(context).isDownloaded(getMediaItem(url, videoTitle))) {
+            //new DownloadVideo(context, this).removeVideoFromDownload(mediaItem.playbackProperties.uri);
             new DownloadVideo(context, this).downloadVideo(mediaItem, videoDurationInSeconds);
         } else if (!DownloadUtil.INSTANCE.getDownloadTracker(context).isMediaDownloadRequestInQueue()) {
             new DownloadVideo(context, this).downloadVideo(mediaItem, videoDurationInSeconds);
         } else {
-            new DownloadVideo(context, this).downloadVideo(mediaItem, videoDurationInSeconds);
+            Toast.makeText(context, videoTitle + "video Already Downloaded.", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -84,13 +84,12 @@ public class ExoVideoDownloadHelper implements DownloadTracker.Listener, SdkPopC
 
     public void downloadVideo(String url, String videoTitle, Long videoDurationInSeconds, ImageView imageView) {
         mediaItem = getMediaItem(url, videoTitle);
-        if (DownloadUtil.INSTANCE.getDownloadTracker(context).isDownloaded(getMediaItem(url, videoTitle))) {
-            new DownloadVideo(context, this).removeVideoFromDownload(mediaItem.playbackProperties.uri);
+        if (!DownloadUtil.INSTANCE.getDownloadTracker(context).isDownloaded(getMediaItem(url, videoTitle))) {
             new DownloadVideo(context, this).downloadVideo(mediaItem, imageView, videoDurationInSeconds);
         } else if (DownloadUtil.INSTANCE.getDownloadTracker(context).isMediaDownloadRequestInQueue()) {
-            Toast.makeText(context, "Please wait", Toast.LENGTH_SHORT).show();
+            downloadPopUpMenuOption(imageView, url);
         } else {
-            new DownloadVideo(context, this).downloadVideo(mediaItem, imageView, videoDurationInSeconds);
+            Toast.makeText(context, videoTitle + "video Already Downloaded.", Toast.LENGTH_SHORT).show();
         }
     }
 /* public void removeDownload() {
