@@ -22,8 +22,8 @@ import android.text.TextUtils
 import android.util.AttributeSet
 import android.util.DisplayMetrics
 import android.util.Log
-import android.util.Rational
 import android.view.*
+import android.view.View.OnClickListener
 import android.widget.*
 import androidx.annotation.DrawableRes
 import androidx.annotation.RequiresApi
@@ -44,23 +44,21 @@ import com.github.rubensousa.previewseekbar.exoplayer.PreviewTimeBar
 import com.google.ads.interactivemedia.v3.api.AdEvent
 import com.google.ads.interactivemedia.v3.api.AdsManagerLoadedEvent
 import com.google.android.exoplayer2.*
+import com.google.android.exoplayer2.drm.DrmSessionEventListener
 import com.google.android.exoplayer2.drm.DrmSessionManager
+import com.google.android.exoplayer2.drm.OfflineLicenseHelper
 import com.google.android.exoplayer2.ext.ima.ImaAdsLoader
 import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector
 import com.google.android.exoplayer2.offline.DownloadHelper
 import com.google.android.exoplayer2.offline.DownloadRequest
-import com.google.android.exoplayer2.source.DefaultMediaSourceFactory
-import com.google.android.exoplayer2.source.MediaSourceFactory
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.ui.DefaultTimeBar
 import com.google.android.exoplayer2.ui.StyledPlayerView
-import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.DefaultAllocator
-import com.google.android.exoplayer2.upstream.DefaultDataSource
-import com.google.android.exoplayer2.util.MimeTypes
+import com.google.android.exoplayer2.upstream.DefaultHttpDataSource
+import com.google.android.exoplayer2.upstream.HttpDataSource
 import com.google.android.exoplayer2.util.Util
 import com.google.android.exoplayer2.video.VideoSize
-import com.google.common.collect.ImmutableList
 import com.multitv.ott.multitvvideoplayer.R
 import com.multitv.ott.multitvvideoplayer.cast.SessionAvailabilityListener
 import com.multitv.ott.multitvvideoplayer.custom.CountDownTimerWithPause
@@ -75,6 +73,7 @@ import com.multitv.ott.multitvvideoplayer.popup.TrackSelectionDialog
 import com.multitv.ott.multitvvideoplayer.utils.*
 import com.pallycon.widevinelibrary.*
 import java.util.*
+
 
 class OfflineVIdeoPlayer(
     private val context: AppCompatActivity,
@@ -956,6 +955,19 @@ class OfflineVIdeoPlayer(
     }
 
 
+    fun buildOfflineLicenseHelper(): OfflineLicenseHelper {
+        val dataSourceFactory1 = DefaultHttpDataSource.Factory()
+        val eventDispatcher =
+            DrmSessionEventListener.EventDispatcher()
+        return OfflineLicenseHelper.newWidevineInstance(
+            drmdrmLicenseUrl!!,
+            true,
+            dataSourceFactory1,
+            eventDispatcher
+        )
+    }
+
+
     private fun initializeMainPlayer(videoUrl: String?, isNeedToPlayInstantly: Boolean) {
 
         if (mMediaPlayer != null) {
@@ -987,13 +999,14 @@ class OfflineVIdeoPlayer(
         simpleExoPlayerView!!.player = mMediaPlayer
         simpleExoPlayerView!!.controllerHideOnTouch = true
         simpleExoPlayerView!!.setControllerHideDuringAds(true)
-        var mediaItem: MediaItem? = null
+        val mediaItem: MediaItem?
 
 
         try {
             WVMAgent = PallyconWVMSDKFactory.getInstance(context)
             WVMAgent?.init(context, null, siteId, siteKey)
             WVMAgent?.setPallyconEventListener(pallyconEventListener)
+
         } catch (e: PallyconDrmException) {
             e.printStackTrace()
         } catch (e: UnAuthorizedDeviceException) {

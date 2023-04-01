@@ -137,6 +137,7 @@ class FullScreenVideoPlayer(
     private lateinit var videoTitle: TextView
     private lateinit var epsodeButton: ImageView
     private lateinit var epsodeNextButton: ImageView
+    private lateinit var durationLinearLayout: LinearLayoutCompat
 
     // private lateinit var seekBarLayout: ConstraintLayout
     private var videoControllerLayout: ConstraintLayout? = null
@@ -242,7 +243,7 @@ class FullScreenVideoPlayer(
 
         videoControllerLayout = view.findViewById(R.id.videoControllerLayout)
         previewFrameLayout = view.findViewById(R.id.previewFrameLayout)
-
+        durationLinearLayout = view.findViewById(R.id.durationLinearLayout)
 
         exoFfwdLinearLayout = view.findViewById(R.id.exoFfwdLinearLayout)
         exoRewLinearLayout = view.findViewById(R.id.exoRewLinearLayout)
@@ -1253,13 +1254,18 @@ class FullScreenVideoPlayer(
     }
 
     override fun onScrubStop(previewBar: PreviewBar) {
-        previewFrameLayout.visibility = INVISIBLE
 
-        if (mMediaPlayer != null) {
-            seekTo(previewBar.progress.toLong())
+        if (!TextUtils.isEmpty(spriteImageUrl)) {
+            previewFrameLayout.visibility = INVISIBLE
+
+            if (mMediaPlayer != null) {
+                seekTo(previewBar.progress.toLong())
+            }
+            previewTimeBar.hidePreview()
+            resumeVideoPlayer()
+        } else {
+            previewFrameLayout.visibility = GONE
         }
-        previewTimeBar.hidePreview()
-        resumeVideoPlayer()
     }
 
 
@@ -1272,6 +1278,8 @@ class FullScreenVideoPlayer(
                 .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
                 .transform(GlideThumbnailTransformation(currentPosition, maxLine))
                 .into(previewImageView)
+        } else {
+            previewFrameLayout.visibility = GONE
         }
 
     }
@@ -1574,6 +1582,8 @@ class FullScreenVideoPlayer(
         //    videoProgressLayout.visibility = GONE
         videoMenuLayout.visibility = GONE
         resumedVideoTv.visibility = View.GONE
+        previewTimeBar.visibility = View.GONE
+        durationLinearLayout.visibility = View.GONE
         removeCallbacks(hideAction)
         hideAtMs = C.TIME_UNSET
         isControllerShown = false
@@ -1588,6 +1598,9 @@ class FullScreenVideoPlayer(
         // videoProgressLayout.visibility = VISIBLE
         videoMenuLayout.visibility = VISIBLE
         resumedVideoTv.visibility = View.GONE
+
+        previewTimeBar.visibility = View.VISIBLE
+        durationLinearLayout.visibility = View.VISIBLE
         updatePlayPauseButton()
         hideAfterTimeout()
         isControllerShown = true
