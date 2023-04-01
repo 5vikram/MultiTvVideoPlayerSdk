@@ -415,10 +415,14 @@ class BalajiVideoPlayer(
                 countDownTimer1?.cancel()
             }
         })
-        exoRewLinearLayout.setOnClickListener(OnClickListener { rewind() })
+        exoRewLinearLayout.setOnClickListener {
+            // rewind()
+            VideoRenuButton.performClick()
+        }
 
         exoFfwdLinearLayout.setOnClickListener {
-            fastForward()
+            //fastForward()
+            videoFarwardButton.performClick()
         }
 
 
@@ -1138,12 +1142,15 @@ class BalajiVideoPlayer(
                 DefaultMediaSourceFactory(dataSourceFactory).setAdsLoaderProvider { unusedAdTagUri: MediaItem.AdsConfiguration? -> adsLoader }
                     .setAdViewProvider(simpleExoPlayerView)
 
-            mMediaPlayer = ExoPlayer.Builder(context).setMediaSourceFactory(mediaSourceFactory)
+
+            mMediaPlayer = ExoPlayer.Builder(context).setSeekBackIncrementMs(10000)
+                .setSeekForwardIncrementMs(10000).setMediaSourceFactory(mediaSourceFactory)
                 .setTrackSelector(trackSelector).setLoadControl(customLoadControl).build()
             adsLoader = ImaAdsLoader.Builder( /* context= */context).build()
 
         } else {
-            mMediaPlayer = ExoPlayer.Builder(context).setTrackSelector(trackSelector)
+            mMediaPlayer = ExoPlayer.Builder(context).setSeekBackIncrementMs(10000)
+                .setSeekForwardIncrementMs(10000).setTrackSelector(trackSelector)
                 .setLoadControl(customLoadControl).build()
         }
         if (mMediaPlayer != null) {
