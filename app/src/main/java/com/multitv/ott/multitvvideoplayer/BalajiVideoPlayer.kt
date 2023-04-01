@@ -1255,10 +1255,7 @@ class BalajiVideoPlayer(
 
 
             if (isWatchDurationEnable) seekTo(
-                Math.max(
-                    mMediaPlayer!!.currentPosition + watchDuration * 1000,
-                    0
-                )
+                mMediaPlayer!!.currentPosition + watchDuration * 1000
             )
 
 
@@ -1574,12 +1571,12 @@ class BalajiVideoPlayer(
 
 
     private fun rewind() {
-        seekTo(Math.max(mMediaPlayer!!.currentPosition - DEFAULT_REWIND_MS, 0))
+        seekTo(mMediaPlayer!!.currentPosition - DEFAULT_REWIND_MS)
     }
 
     fun seekToVideoPlayer(skipDuration: Int) {
         if (skipDuration > 1) {
-            seekTo(Math.max(mMediaPlayer!!.currentPosition + skipDuration * 1000, 0))
+            seekTo(mMediaPlayer!!.currentPosition + skipDuration * 1000)
         }
     }
 
@@ -1588,7 +1585,7 @@ class BalajiVideoPlayer(
         val seek = watch * 1000 - mMediaPlayer!!.currentPosition
         Log.e("Seek position:::", "" + seek)
         Log.e("Total Skip position:::", "" + mMediaPlayer!!.currentPosition + seek)
-        seekTo(Math.max(mMediaPlayer!!.currentPosition + seek, 0))
+        seekTo(mMediaPlayer!!.currentPosition + seek)
         showController()
     }
 
@@ -1608,11 +1605,11 @@ class BalajiVideoPlayer(
     }
 
     private fun fastForward() {
-        seekTo(Math.max(mMediaPlayer!!.currentPosition + DEFAULT_FAST_FORWARD_MS, 0))
+        seekTo(mMediaPlayer!!.currentPosition + DEFAULT_FAST_FORWARD_MS)
     }
 
     fun seekTo(positionMs: Long) {
-        mMediaPlayer!!.seekTo(positionMs)
+        mMediaPlayer?.seekTo(positionMs)
     }
 
 
