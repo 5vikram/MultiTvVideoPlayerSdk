@@ -385,12 +385,15 @@ class OfflineVIdeoPlayer(
 */
 
 
-        exoRewLinearLayout.setOnClickListener(OnClickListener { rewind() })
-
-        exoFfwdLinearLayout.setOnClickListener {
-            fastForward()
+        exoRewLinearLayout.setOnClickListener {
+            // rewind()
+            VideoRenuButton.performClick()
         }
 
+        exoFfwdLinearLayout.setOnClickListener {
+            //fastForward()
+            videoFarwardButton.performClick()
+        }
 
 
 
@@ -992,7 +995,8 @@ class OfflineVIdeoPlayer(
 
 
 
-        mMediaPlayer = ExoPlayer.Builder(context).setTrackSelector(trackSelector)
+        mMediaPlayer = ExoPlayer.Builder(context).setSeekBackIncrementMs(10000)
+            .setSeekForwardIncrementMs(10000).setTrackSelector(trackSelector)
             .setLoadControl(customLoadControl).build()
 
         mMediaPlayer!!.addListener(stateChangeCallback1)

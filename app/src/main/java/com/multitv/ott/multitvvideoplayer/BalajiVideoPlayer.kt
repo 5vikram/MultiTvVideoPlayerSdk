@@ -1025,6 +1025,7 @@ class BalajiVideoPlayer(
 
     fun setContentTitle(title: String?) {
         contentTitle = title
+        videoTitle.setText(contentTitle)
     }
 
     fun setContentId(id: String?) {
@@ -1118,6 +1119,8 @@ class BalajiVideoPlayer(
             if (adsLoader != null) adsLoader!!.setPlayer(null)
             mMediaPlayer = null
         }
+
+        videoTitle.setText(contentTitle)
 
         //var subtitleSource = SingleSampleMediaSource(subtitleUri, ...);
         videoControllerLayout?.visibility = GONE
