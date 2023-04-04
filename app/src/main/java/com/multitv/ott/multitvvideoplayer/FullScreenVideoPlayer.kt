@@ -322,7 +322,6 @@ class FullScreenVideoPlayer(
 
 
 
-        findViewById<View>(R.id.speed_btn)?.setOnClickListener { showSpeedControlDailog() }
         errorRetryLayout.setOnClickListener(OnClickListener {
             errorRetryLayout?.setVisibility(GONE)
             initializeMainPlayer(mContentUrl, true)
@@ -783,7 +782,7 @@ class FullScreenVideoPlayer(
             if (adsLoader != null) adsLoader!!.setPlayer(null)
             mMediaPlayer = null
         }
-        centerButtonLayout!!.visibility = GONE
+        centerButtonLayout.visibility = GONE
         videoPlayerSdkCallBackListener?.prepareVideoPlayer()
         //        ToastMessage.showLogs(ToastMessage.LogType.DEBUG, TAG, "Content url is " + videoUrl);
         val customLoadControl: LoadControl = DefaultLoadControl.Builder()
@@ -927,8 +926,7 @@ class FullScreenVideoPlayer(
             mediaSessionConnector.setPlayer(mMediaPlayer)
             mediaSession.isActive = true
 
-            if (isWatchDurationEnable)
-                seekTo(Math.max(mMediaPlayer!!.currentPosition + watchDuration * 1000, 0))
+            seekTo(mMediaPlayer!!.currentPosition + watchDuration)
 
         }
     }
@@ -1186,14 +1184,13 @@ class FullScreenVideoPlayer(
 
 
     private fun rewind() {
-        seekTo(Math.max(mMediaPlayer!!.currentPosition - DEFAULT_REWIND_MS, 0))
+        seekTo(mMediaPlayer!!.currentPosition - DEFAULT_REWIND_MS)
     }
 
-    private var isWatchDurationEnable = false
-    private var watchDuration = 0
 
-    fun seekVideoPlayer(watch: Int, isWatchDurationEnable: Boolean) {
-        this.isWatchDurationEnable = isWatchDurationEnable
+    private var watchDuration = 0L
+
+    fun seekVideoPlayer(watch: Long) {
         this.watchDuration = watch;
     }
 
