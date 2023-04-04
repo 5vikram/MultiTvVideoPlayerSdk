@@ -2127,7 +2127,7 @@ class BalajiVideoPlayer(
 
     private fun setLandscapeVolumeCallback() {
         if (isVolmueMute) {
-            mMediaPlayer?.audioComponent?.volume = 5f
+            mMediaPlayer?.audioComponent?.volume = mMediaPlayer?.audioComponent?.volume!!
             volumeFullScreenButton.visibility = View.VISIBLE
             volumeFullScreenUnMuteButton.visibility = View.GONE
 
@@ -2142,7 +2142,7 @@ class BalajiVideoPlayer(
 
     private fun setPotraitVolumeCallback() {
         if (isVolmueMute) {
-            mMediaPlayer?.audioComponent?.volume = 5f
+            mMediaPlayer?.audioComponent?.volume = mMediaPlayer?.audioComponent?.volume!!
             volumeMuteAndUnMuteButton.visibility = View.GONE
             volumeUnMuteButton.visibility = View.VISIBLE
         } else {
