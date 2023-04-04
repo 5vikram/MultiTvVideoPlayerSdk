@@ -1043,9 +1043,9 @@ class FullScreenVideoPlayer(
                         contentPlayedTimeInMillis = mMediaPlayer!!.currentPosition
                         if (contentType == ContentType.LIVE) startBufferingTimer()
                     }
-                    simpleExoPlayerView.videoSurfaceView.visibility = VISIBLE
-                    simpleExoPlayerView.visibility = VISIBLE
-                    simpleExoPlayerView.bringToFront()
+                    simpleExoPlayerView?.videoSurfaceView?.visibility = VISIBLE
+                    simpleExoPlayerView?.visibility = VISIBLE
+                    simpleExoPlayerView?.bringToFront()
                 }
                 ExoPlayer.STATE_READY -> {
                     text += "ready"
