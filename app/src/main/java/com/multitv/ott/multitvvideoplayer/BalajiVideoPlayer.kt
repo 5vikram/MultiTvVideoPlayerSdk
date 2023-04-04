@@ -2117,7 +2117,7 @@ class BalajiVideoPlayer(
     }
 
 
-    private var isVolmueMute = false
+    private var isVolmueMute = true
 
 
     fun getVolumeStatus(): Boolean {
