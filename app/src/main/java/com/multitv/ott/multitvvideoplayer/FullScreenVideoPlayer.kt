@@ -397,7 +397,10 @@ class FullScreenVideoPlayer(
 
     }
 
+    private var isVideoVolumeStatus = false
+
     fun setVolumeStatus(isVolume: Boolean) {
+        this.isVideoVolumeStatus = isVideoVolumeStatus
         if (isVolume) {
             mMediaPlayer?.audioComponent?.volume = mMediaPlayer?.audioComponent?.volume!!
             mMediaPlayer?.audioComponent?.volume = 5f
@@ -658,7 +661,7 @@ class FullScreenVideoPlayer(
 
         mWindow = context.window
 
-        volumeProgressBarSetUp()
+        //volumeProgressBarSetUp()
     }
 
     fun setMultiTvVideoPlayerSdkListener(videoPlayerSdkCallBackListener: VideoPlayerSdkCallBackListener?) {
@@ -858,7 +861,7 @@ class FullScreenVideoPlayer(
                     videoUrl!!,
                     drmSessionManager!!
                 )
-                mMediaPlayer!!.setMediaSource(playerMediaSource!!)
+                mMediaPlayer?.setMediaSource(playerMediaSource!!)
             } else if (isOfflineContent) {
                 mediaItem = MediaItem.Builder().setUri(videoUrl).build()
                 val downloadRequest: DownloadRequest? =
@@ -873,7 +876,7 @@ class FullScreenVideoPlayer(
                     DownloadUtil.getReadOnlyDataSourceFactory(context)
                 )
 
-                mMediaPlayer!!.setMediaSource(mediaSource!!)
+                mMediaPlayer?.setMediaSource(mediaSource!!)
 
             } else {
                 mediaItem = if (subtitle != null) {
@@ -927,6 +930,18 @@ class FullScreenVideoPlayer(
             mediaSession.isActive = true
 
             seekTo(mMediaPlayer!!.currentPosition + watchDuration)
+
+            if (isVideoVolumeStatus) {
+                mMediaPlayer?.audioComponent?.volume = mMediaPlayer?.audioComponent?.volume!!
+                mMediaPlayer?.audioComponent?.volume = 5f
+                volumeMuteAndUnMuteButton.visibility = View.GONE
+                volumeUnMuteButton.visibility = View.VISIBLE
+            } else {
+                mMediaPlayer?.audioComponent?.volume = 0f
+                volumeMuteAndUnMuteButton.visibility = View.VISIBLE
+                volumeUnMuteButton.visibility = View.GONE
+            }
+
 
         }
     }
@@ -1028,13 +1043,13 @@ class FullScreenVideoPlayer(
                         contentPlayedTimeInMillis = mMediaPlayer!!.currentPosition
                         if (contentType == ContentType.LIVE) startBufferingTimer()
                     }
-                    simpleExoPlayerView!!.videoSurfaceView!!.visibility = VISIBLE
-                    simpleExoPlayerView!!.visibility = VISIBLE
-                    simpleExoPlayerView!!.bringToFront()
+                    simpleExoPlayerView.videoSurfaceView.visibility = VISIBLE
+                    simpleExoPlayerView.visibility = VISIBLE
+                    simpleExoPlayerView.bringToFront()
                 }
                 ExoPlayer.STATE_READY -> {
                     text += "ready"
-                    bufferingProgressBarLayout!!.visibility = GONE
+                    bufferingProgressBarLayout.visibility = GONE
                     centerButtonLayout.visibility = VISIBLE
                     videoNextButton.visibility = GONE
                     videoPerviousButton.visibility = GONE
