@@ -120,7 +120,7 @@ object DownloadUtil {
                 getDatabaseProvider(context),
                 getDownloadCache(context),
                 getHttpDataSourceFactory(context),
-                Executors.newFixedThreadPool(1)
+                Executors.newFixedThreadPool(10)
             ).apply {
                 maxParallelDownloads = 1
             }
