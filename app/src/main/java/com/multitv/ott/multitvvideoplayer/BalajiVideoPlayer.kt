@@ -66,7 +66,6 @@ import com.google.common.collect.ImmutableList
 import com.multitv.ott.multitvvideoplayer.cast.SessionAvailabilityListener
 import com.multitv.ott.multitvvideoplayer.custom.CountDownTimerWithPause
 import com.multitv.ott.multitvvideoplayer.database.SharedPreferencePlayer
-import com.multitv.ott.multitvvideoplayer.download.DownloadUtil
 import com.multitv.ott.multitvvideoplayer.fabbutton.FabButton
 import com.multitv.ott.multitvvideoplayer.listener.VideoPlayPauseCallBackListener
 import com.multitv.ott.multitvvideoplayer.listener.VideoPlayerSdkCallBackListener
@@ -1197,13 +1196,13 @@ class BalajiVideoPlayer(
                 mMediaPlayer!!.setMediaSource(playerMediaSource!!)
             } else if (isOfflineContent) {
                 mediaItem = MediaItem.Builder().setUri(videoUrl).build()
-                val downloadRequest: DownloadRequest? = DownloadUtil.getDownloadTracker(context)
+                val downloadRequest: DownloadRequest? = VideoPlayerDownloadUtil.getDownloadTracker(context)
                     .getDownloadRequest(mediaItem.playbackProperties?.uri)
                 VideoPlayerTracer.error(
                     "Offline Video Url:::", "" + mediaItem.playbackProperties?.uri
                 )
                 val mediaSource = DownloadHelper.createMediaSource(
-                    downloadRequest!!, DownloadUtil.getReadOnlyDataSourceFactory(context)
+                    downloadRequest!!, VideoPlayerDownloadUtil.getReadOnlyDataSourceFactory(context)
                 )
 
                 mMediaPlayer!!.setMediaSource(mediaSource!!)

@@ -56,14 +56,12 @@ import com.google.android.exoplayer2.ui.DefaultTimeBar
 import com.google.android.exoplayer2.ui.StyledPlayerView
 import com.google.android.exoplayer2.upstream.DefaultAllocator
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSource
-import com.google.android.exoplayer2.upstream.HttpDataSource
 import com.google.android.exoplayer2.util.Util
 import com.google.android.exoplayer2.video.VideoSize
 import com.multitv.ott.multitvvideoplayer.R
 import com.multitv.ott.multitvvideoplayer.cast.SessionAvailabilityListener
 import com.multitv.ott.multitvvideoplayer.custom.CountDownTimerWithPause
 import com.multitv.ott.multitvvideoplayer.database.SharedPreferencePlayer
-import com.multitv.ott.multitvvideoplayer.download.DownloadUtil
 import com.multitv.ott.multitvvideoplayer.fabbutton.FabButton
 import com.multitv.ott.multitvvideoplayer.listener.VideoPlayPauseCallBackListener
 import com.multitv.ott.multitvvideoplayer.listener.VideoPlayerSdkCallBackListener
@@ -1034,21 +1032,21 @@ class OfflineVIdeoPlayer(
 
 
         val downloadRequest: DownloadRequest? =
-            DownloadUtil.getDownloadTracker(context)
+            VideoPlayerDownloadUtil.getDownloadTracker(context)
                 .getDownloadRequest(mediaItem.playbackProperties?.uri)
 
 
         if (isDrmContent) {
             val mediaSource = DownloadHelper.createMediaSource(
                 downloadRequest!!,
-                DownloadUtil.getReadOnlyDataSourceFactory(context), drmSessionManager
+                VideoPlayerDownloadUtil.getReadOnlyDataSourceFactory(context), drmSessionManager
             )
 
             mMediaPlayer!!.setMediaSource(mediaSource)
         } else {
             val mediaSource = DownloadHelper.createMediaSource(
                 downloadRequest!!,
-                DownloadUtil.getReadOnlyDataSourceFactory(context)
+                VideoPlayerDownloadUtil.getReadOnlyDataSourceFactory(context)
             )
 
             mMediaPlayer!!.setMediaSource(mediaSource)

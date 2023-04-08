@@ -57,7 +57,6 @@ import com.google.common.collect.ImmutableList
 import com.multitv.ott.multitvvideoplayer.cast.SessionAvailabilityListener
 import com.multitv.ott.multitvvideoplayer.custom.CountDownTimerWithPause
 import com.multitv.ott.multitvvideoplayer.database.SharedPreferencePlayer
-import com.multitv.ott.multitvvideoplayer.download.DownloadUtil
 import com.multitv.ott.multitvvideoplayer.fabbutton.FabButton
 import com.multitv.ott.multitvvideoplayer.listener.VideoPlayerSdkCallBackListener
 import com.multitv.ott.multitvvideoplayer.playerglide.GlideThumbnailTransformation
@@ -865,7 +864,7 @@ class FullScreenVideoPlayer(
             } else if (isOfflineContent) {
                 mediaItem = MediaItem.Builder().setUri(videoUrl).build()
                 val downloadRequest: DownloadRequest? =
-                    DownloadUtil.getDownloadTracker(context)
+                    VideoPlayerDownloadUtil.getDownloadTracker(context)
                         .getDownloadRequest(mediaItem.playbackProperties?.uri)
                 VideoPlayerTracer.error(
                     "Offline Video Url:::",
@@ -873,7 +872,7 @@ class FullScreenVideoPlayer(
                 )
                 val mediaSource = DownloadHelper.createMediaSource(
                     downloadRequest!!,
-                    DownloadUtil.getReadOnlyDataSourceFactory(context)
+                    VideoPlayerDownloadUtil.getReadOnlyDataSourceFactory(context)
                 )
 
                 mMediaPlayer?.setMediaSource(mediaSource!!)

@@ -39,11 +39,11 @@ import com.google.android.exoplayer2.util.MimeTypes
 import com.google.android.exoplayer2.video.VideoSize
 import com.google.common.collect.ImmutableList
 import com.multitv.ott.multitvvideoplayer.database.SharedPreferencePlayer
-import com.multitv.ott.multitvvideoplayer.download.DownloadUtil
 import com.multitv.ott.multitvvideoplayer.listener.BannerVideoPlayerEventLister
 import com.multitv.ott.multitvvideoplayer.utils.CommonUtils
 import com.multitv.ott.multitvvideoplayer.utils.ContentType
 import com.multitv.ott.multitvvideoplayer.utils.ExoUttils
+import com.multitv.ott.multitvvideoplayer.utils.VideoPlayerDownloadUtil
 import com.pallycon.widevinelibrary.*
 import java.util.*
 
@@ -566,12 +566,12 @@ class BalajiCarsolVideoPlayer(
             } else if (isOfflineContent) {
                 mediaItem = MediaItem.Builder().setUri(videoUrl).build()
                 val downloadRequest: DownloadRequest? =
-                    DownloadUtil.getDownloadTracker(context)
+                    VideoPlayerDownloadUtil.getDownloadTracker(context)
                         .getDownloadRequest(mediaItem.playbackProperties?.uri)
 
                 val mediaSource = DownloadHelper.createMediaSource(
                     downloadRequest!!,
-                    DownloadUtil.getReadOnlyDataSourceFactory(context)
+                    VideoPlayerDownloadUtil.getReadOnlyDataSourceFactory(context)
                 )
                 mMediaPlayer?.setMediaSource(mediaSource)
 

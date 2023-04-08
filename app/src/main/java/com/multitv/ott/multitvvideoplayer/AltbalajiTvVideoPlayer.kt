@@ -59,7 +59,6 @@ import com.google.common.collect.ImmutableList
 import com.multitv.ott.multitvvideoplayer.cast.SessionAvailabilityListener
 import com.multitv.ott.multitvvideoplayer.custom.CountDownTimerWithPause
 import com.multitv.ott.multitvvideoplayer.database.SharedPreferencePlayer
-import com.multitv.ott.multitvvideoplayer.download.DownloadUtil
 import com.multitv.ott.multitvvideoplayer.fabbutton.FabButton
 import com.multitv.ott.multitvvideoplayer.listener.VideoPlayPauseCallBackListener
 import com.multitv.ott.multitvvideoplayer.listener.VideoPlayerSdkCallBackListener
@@ -67,7 +66,6 @@ import com.multitv.ott.multitvvideoplayer.models.SkipDuration
 import com.multitv.ott.multitvvideoplayer.playerglide.GlideThumbnailTransformation
 import com.multitv.ott.multitvvideoplayer.popup.TrackSelectionDialog
 import com.multitv.ott.multitvvideoplayer.utils.*
-import com.multitv.ott.multitvvideoplayer.videoplayer.MyVideoPlayer
 import com.pallycon.widevinelibrary.*
 import java.util.*
 
@@ -886,7 +884,7 @@ class AltbalajiTvVideoPlayer(
             } else if (isOfflineContent) {
                 mediaItem = MediaItem.Builder().setUri(videoUrl).build()
                 val downloadRequest: DownloadRequest? =
-                    DownloadUtil.getDownloadTracker(context)
+                    VideoPlayerDownloadUtil.getDownloadTracker(context)
                         .getDownloadRequest(mediaItem.playbackProperties?.uri)
                 VideoPlayerTracer.error(
                     "Offline Video Url:::",
@@ -894,7 +892,7 @@ class AltbalajiTvVideoPlayer(
                 )
                 val mediaSource = DownloadHelper.createMediaSource(
                     downloadRequest!!,
-                    DownloadUtil.getReadOnlyDataSourceFactory(context)
+                    VideoPlayerDownloadUtil.getReadOnlyDataSourceFactory(context)
                 )
 
                 mMediaPlayer!!.setMediaSource(mediaSource)
