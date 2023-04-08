@@ -9,9 +9,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
-import com.google.android.exoplayer2.offline.DownloadService;
 import com.google.android.exoplayer2.util.Util;
-import com.multitv.ott.multitvvideoplayer.download.MyDownloadService;
 import com.multitv.ott.multitvvideoplayer.utils.VideoPlayerNukeSSLCerts;
 
 public class VideoPlayerAppController extends Application {
