@@ -28,12 +28,6 @@ public class VideoPlayerAppController extends Application {
         userAgent = Util.getUserAgent(this, "AdaptiveExoplayer");
 
 
-        try {
-            DownloadService.start(this, MyDownloadService.class);
-        } catch (IllegalStateException e) {
-            DownloadService.startForeground(mInstance, MyDownloadService.class);
-        }
-
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         VideoPlayerNukeSSLCerts.nuke();
 
