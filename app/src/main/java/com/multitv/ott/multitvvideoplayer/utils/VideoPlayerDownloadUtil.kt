@@ -98,14 +98,15 @@ object VideoPlayerDownloadUtil {
 
     @Synchronized
     private fun getDownloadCache(context: Context): Cache {
+
+        if (downloadCache != null) {
+            downloadCache.release();
+        }
+
+
         if (!VideoPlayerDownloadUtil::downloadCache.isInitialized) {
             val downloadContentDirectory =
                 File(getDownloadDirectory(context), DOWNLOAD_CONTENT_DIRECTORY)
-
-            if (downloadCache != null) {
-                downloadCache.release();
-            }
-
             downloadCache = SimpleCache(
                 downloadContentDirectory, NoOpCacheEvictor(), getDatabaseProvider(context)
             )

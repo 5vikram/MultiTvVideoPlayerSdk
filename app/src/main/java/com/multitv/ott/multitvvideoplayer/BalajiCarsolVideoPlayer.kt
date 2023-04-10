@@ -21,7 +21,6 @@ import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.LinearLayoutCompat
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.drm.DrmSessionManager
@@ -43,7 +42,6 @@ import com.multitv.ott.multitvvideoplayer.listener.BannerVideoPlayerEventLister
 import com.multitv.ott.multitvvideoplayer.utils.CommonUtils
 import com.multitv.ott.multitvvideoplayer.utils.ContentType
 import com.multitv.ott.multitvvideoplayer.utils.ExoUttils
-import com.multitv.ott.multitvvideoplayer.utils.VideoPlayerDownloadUtil
 import com.pallycon.widevinelibrary.*
 import java.util.*
 

@@ -171,7 +171,6 @@ class OfflineVIdeoPlayer(
     private var drmSessionManager: DrmSessionManager? = null
     private var adsLoader: ImaAdsLoader? = null
     private var adsUrl: String? = null
-    private var isScreenLockEnable = false
     private var isControllerShown = false
     private var isAttachedToWindowStatus = false
     private var hideAtMs: Long = 0
