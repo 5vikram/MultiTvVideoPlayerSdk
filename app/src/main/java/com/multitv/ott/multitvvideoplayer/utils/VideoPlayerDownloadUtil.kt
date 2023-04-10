@@ -99,8 +99,10 @@ object VideoPlayerDownloadUtil {
     @Synchronized
     private fun getDownloadCache(context: Context): Cache {
 
-        if (downloadCache != null) {
-            downloadCache.release();
+        if (VideoPlayerDownloadUtil::downloadCache.isInitialized) {
+            if (downloadCache != null) {
+                downloadCache.release();
+            }
         }
 
 
