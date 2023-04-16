@@ -411,7 +411,7 @@
         app:layout_constraintEnd_toStartOf="@id/durationLinearLayout"
         app:layout_constraintStart_toEndOf="@+id/vvvvvvvvvv"
         app:layout_constraintTop_toTopOf="@+id/vvvvvvvvvv"
-        app:previewAnimationEnabled="true"
+        app:previewAnimationEnabled="false"
         app:previewFrameLayout="@id/previewFrameLayout"
         app:scrubber_dragged_size="24dp"
         app:scrubber_enabled_size="16dp" />

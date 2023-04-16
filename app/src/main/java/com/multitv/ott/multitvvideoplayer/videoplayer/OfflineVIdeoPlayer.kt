@@ -79,7 +79,7 @@ class OfflineVIdeoPlayer(
     defStyleAttr: Int
 ) : FrameLayout(
     context, attrs, defStyleAttr
-), PreviewBar.OnScrubListener, PreviewLoader, View.OnClickListener, SessionAvailabilityListener {
+), OnClickListener, SessionAvailabilityListener {
     private val sharedPreferencePlayer: SharedPreferencePlayer
     private var contentType: ContentType? = null
     private var mMediaPlayer: ExoPlayer? = null
@@ -311,12 +311,7 @@ class OfflineVIdeoPlayer(
 
 
 
-
         volumeMuteAndUnMuteButton.visibility = View.GONE
-
-        //previewTimeBar.setPreviewEnabled(true)
-        previewTimeBar.addOnScrubListener(this)
-        previewTimeBar.setPreviewLoader(this)
 
 
         volumeUnMuteButton.setOnClickListener {
@@ -1451,75 +1446,6 @@ class OfflineVIdeoPlayer(
         }
     }
 
-    override fun onScrubStart(previewBar: PreviewBar) {
-        previewFrameLayout.visibility = GONE
-    }
-
-    override fun onScrubMove(previewBar: PreviewBar, progress: Int, fromUser: Boolean) {
-        previewFrameLayout.visibility = GONE
-        exoCurrentPosition.text = Util.getStringForTime(
-            formatBuilder,
-            formatter,
-            progress.toLong()
-        )
-
-
-    }
-
-    override fun onScrubStop(previewBar: PreviewBar) {
-        previewFrameLayout.visibility = INVISIBLE
-        if (mMediaPlayer != null) {
-            seekTo(previewBar.progress.toLong())
-        }
-
-        resumeVideoPlayer()
-    }
-
-
-    override fun loadPreview(currentPosition: Long, max: Long) {
-
-        previewFrameLayout.visibility = View.VISIBLE
-        Glide.with(previewImageView)
-            .load(spriteImageUrl)
-            .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
-            .transform(GlideThumbnailTransformation(currentPosition, 1000))
-            .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-            .into(previewImageView)
-
-    }
-
-
-    private fun updatePreviewX(progress: Int, max: Int): Int {
-        if (max == 0) {
-            return 0
-        }
-
-        val parent = previewFrameLayout.parent as ViewGroup
-        val layoutParams = previewFrameLayout.layoutParams as MarginLayoutParams
-        val offset = progress.toFloat() / max
-        val minimumX: Int = previewFrameLayout.left
-        val maximumX = (parent.width - parent.paddingRight - layoutParams.rightMargin)
-
-// We remove the padding of the scrubbing, if you have a custom size juste use dimen to calculate this
-        val previewPaddingRadius: Int =
-            dpToPx(resources.displayMetrics, DefaultTimeBar.DEFAULT_SCRUBBER_DRAGGED_SIZE_DP).div(2)
-        val previewLeftX = (previewTimeBar as View).left.toFloat()
-        val previewRightX = (previewTimeBar as View).right.toFloat()
-        val previewSeekBarStartX: Float = previewLeftX + previewPaddingRadius
-        val previewSeekBarEndX: Float = previewRightX - previewPaddingRadius
-        val currentX = (previewSeekBarStartX + (previewSeekBarEndX - previewSeekBarStartX) * offset)
-        val startX: Float = currentX - previewFrameLayout.width / 2f
-        val endX: Float = startX + previewFrameLayout.width
-
-        // Clamp the moves
-        return if (startX >= minimumX && endX <= maximumX) {
-            startX.toInt()
-        } else if (startX < minimumX) {
-            minimumX
-        } else {
-            maximumX - previewFrameLayout.width
-        }
-    }
 
     private fun dpToPx(displayMetrics: DisplayMetrics, dps: Int): Int {
         return (dps * displayMetrics.density).toInt()
