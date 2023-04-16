@@ -468,6 +468,7 @@ class BalajiVideoPlayer(
         durationLinearLayout.visibility = View.GONE
     }
 
+
     fun showSeekBarLayout() {
         previewTimeBar.visibility = View.VISIBLE
         durationLinearLayout.visibility = View.VISIBLE
@@ -799,7 +800,14 @@ class BalajiVideoPlayer(
     override fun onConfigurationChanged(newConfig: Configuration) {
         val orientation = resources.configuration.orientation
         if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            showSeekBarLayout()
+
+            if (isPipModeOn)
+                hideSeekBarLayout()
+            else
+                showSeekBarLayout()
+
+
+
             if (contentTitle != null && !TextUtils.isEmpty(contentTitle) && !isPipModeOn) {
                 videoTitle.visibility = View.VISIBLE
                 videoTitle.setText(contentTitle)
@@ -1196,8 +1204,9 @@ class BalajiVideoPlayer(
                 mMediaPlayer!!.setMediaSource(playerMediaSource!!)
             } else if (isOfflineContent) {
                 mediaItem = MediaItem.Builder().setUri(videoUrl).build()
-                val downloadRequest: DownloadRequest? = VideoPlayerDownloadUtil.getDownloadTracker(context)
-                    .getDownloadRequest(mediaItem.playbackProperties?.uri)
+                val downloadRequest: DownloadRequest? =
+                    VideoPlayerDownloadUtil.getDownloadTracker(context)
+                        .getDownloadRequest(mediaItem.playbackProperties?.uri)
                 VideoPlayerTracer.error(
                     "Offline Video Url:::", "" + mediaItem.playbackProperties?.uri
                 )
