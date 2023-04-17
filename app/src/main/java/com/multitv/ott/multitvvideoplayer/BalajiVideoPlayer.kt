@@ -841,7 +841,7 @@ class BalajiVideoPlayer(
         previewTimeBar.visibility = GONE
         durationLinearLayout.visibility = GONE
         closeVideoPlayerButton.visibility = GONE
-        overlayImageTransparent.visibility = GONE
+       // overlayImageTransparent.visibility = GONE
         centerButtonLayout.visibility = GONE
         videoMenuLayout.visibility = GONE
         resumedVideoTv.visibility = GONE
@@ -864,7 +864,7 @@ class BalajiVideoPlayer(
 
     fun showController() {
         closeVideoPlayerButton.visibility = VISIBLE
-        overlayImageTransparent.visibility = VISIBLE
+        //overlayImageTransparent.visibility = VISIBLE
         centerButtonLayout.visibility = VISIBLE
         videoMenuLayout.visibility = VISIBLE
         resumedVideoTv.visibility = GONE
@@ -1950,7 +1950,7 @@ class BalajiVideoPlayer(
         if (isShow) {
             contentRateLayout.visibility = View.VISIBLE
             closeVideoPlayerButton.visibility = GONE
-            overlayImageTransparent.visibility = GONE
+           // overlayImageTransparent.visibility = GONE
             centerButtonLayout.visibility = GONE
             videoMenuLayout.visibility = GONE
             resumedVideoTv.visibility = View.GONE

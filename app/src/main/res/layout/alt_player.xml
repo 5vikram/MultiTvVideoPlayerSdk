@@ -12,7 +12,8 @@
         android:id="@+id/overlayImageTransparent"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:alpha=".6"
+        android:alpha=".3"
+        android:visibility="gone"
         android:background="#CC212121" />
 
     <RelativeLayout
