@@ -70,6 +70,11 @@
             android:textColor="@color/white_opycity_hundred_present"
             android:textSize="12sp"
             android:visibility="gone" />
+
+
+
+
+
     </RelativeLayout>
 
 

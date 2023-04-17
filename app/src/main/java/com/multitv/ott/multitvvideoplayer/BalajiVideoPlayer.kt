@@ -375,8 +375,12 @@ class BalajiVideoPlayer(
 
 
         videoControllerLayout?.setOnClickListener {
-            if (isControllerShown) hideController()
-            else showController()
+            if (isControllerShown) {
+                hideController()
+            } else {
+                contentRateLayout.visibility = View.GONE
+                showController()
+            }
         }
 
 
