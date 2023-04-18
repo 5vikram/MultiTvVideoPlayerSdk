@@ -338,10 +338,12 @@ class OfflineVIdeoPlayer(
 
 
         videoControllerLayout?.setOnClickListener {
-            if (isControllerShown)
+            if (isControllerShown) {
                 hideController()
-            else
+            }else {
+                contentRateLayout.visibility = View.GONE
                 showController()
+            }
         }
 
 
