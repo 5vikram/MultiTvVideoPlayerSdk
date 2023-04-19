@@ -703,6 +703,10 @@ class BalajiVideoPlayer(
         }
     }
 
+    fun hideNextEpisodeButton() {
+        epsodeNextButton.visibility = View.GONE
+    }
+
 
     fun getCurrentDurationFromTextView(): String {
         return exoCurrentPosition.text.toString()
@@ -841,7 +845,7 @@ class BalajiVideoPlayer(
         previewTimeBar.visibility = GONE
         durationLinearLayout.visibility = GONE
         closeVideoPlayerButton.visibility = GONE
-       // overlayImageTransparent.visibility = GONE
+        // overlayImageTransparent.visibility = GONE
         centerButtonLayout.visibility = GONE
         videoMenuLayout.visibility = GONE
         resumedVideoTv.visibility = GONE
@@ -1950,7 +1954,7 @@ class BalajiVideoPlayer(
         if (isShow) {
             contentRateLayout.visibility = View.VISIBLE
             closeVideoPlayerButton.visibility = GONE
-           // overlayImageTransparent.visibility = GONE
+            // overlayImageTransparent.visibility = GONE
             centerButtonLayout.visibility = GONE
             videoMenuLayout.visibility = GONE
             resumedVideoTv.visibility = View.GONE
