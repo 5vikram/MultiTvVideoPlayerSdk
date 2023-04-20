@@ -666,6 +666,7 @@ class BalajiCarsolVideoPlayer(
                     if (isContentRepetPlaying) {
                         repeatVideoLinearLayout.visibility = View.VISIBLE
                         repeatVideoLinearLayout.setOnClickListener {
+                            releaseVideoPlayer()
                             initializeMainPlayer(mContentUrl, true)
                         }
                     } else {
@@ -698,6 +699,12 @@ class BalajiCarsolVideoPlayer(
 
         override fun onRepeatModeChanged(repeatMode: Int) {}
         override fun onPlaybackParametersChanged(playbackParameters: PlaybackParameters) {}
+    }
+
+
+    private var isNeedReplayIcon = false
+    fun setReplyVisiblityEnabled(isNeedReplayIcon: Boolean) {
+        this.isNeedReplayIcon = isNeedReplayIcon;
     }
 
 

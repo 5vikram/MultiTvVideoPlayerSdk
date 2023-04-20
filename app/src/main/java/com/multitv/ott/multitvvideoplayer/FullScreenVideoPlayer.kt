@@ -137,6 +137,7 @@ class FullScreenVideoPlayer(
     private lateinit var epsodeButton: ImageView
     private lateinit var epsodeNextButton: ImageView
     private lateinit var durationLinearLayout: LinearLayoutCompat
+    private lateinit var repeatVideoLinearLayout: LinearLayout
 
     // private lateinit var seekBarLayout: ConstraintLayout
     private var videoControllerLayout: ConstraintLayout? = null
@@ -200,6 +201,8 @@ class FullScreenVideoPlayer(
 
         epsodeButton = view.findViewById(R.id.epsodeButton)
         epsodeNextButton = view.findViewById(R.id.epsodeNextButton)
+
+        repeatVideoLinearLayout = view.findViewById(R.id.repeatVideoLinearLayout)
 
         epsodeButton.setOnClickListener {
             videoPlayerSdkCallBackListener?.showEpisodeListData()
@@ -972,13 +975,27 @@ class FullScreenVideoPlayer(
             when (playbackState) {
                 ExoPlayer.STATE_BUFFERING -> {
                     text += "buffering"
-                    bufferingProgressBarLayout!!.bringToFront()
-                    bufferingProgressBarLayout!!.visibility = VISIBLE
-                    centerButtonLayout!!.visibility = GONE
+                    bufferingProgressBarLayout.bringToFront()
+                    bufferingProgressBarLayout.visibility = VISIBLE
+                    centerButtonLayout.visibility = GONE
                     if (contentType == ContentType.LIVE) startBufferingTimer()
                 }
                 ExoPlayer.STATE_ENDED -> {
                     text += "ended"
+
+                    if (isNeedReplayIcon) {
+                        repeatVideoLinearLayout.visibility = View.VISIBLE
+                        circularProgressLayout.visibility = View.GONE
+                        bufferingProgressBarLayout.visibility = GONE
+                        repeatVideoLinearLayout.setOnClickListener {
+                            repeatVideoLinearLayout.visibility = View.GONE
+                            releaseVideoPlayer()
+                            initializeMainPlayer(mContentUrl, true)
+                        }
+                    }
+
+
+/*
                     if (contentType == ContentType.VOD) {
                         if (mMediaPlayer != null) contentPlayedTimeInMillis =
                             mMediaPlayer!!.currentPosition
@@ -1034,6 +1051,7 @@ class FullScreenVideoPlayer(
                             }
                         }.create()
                     }
+*/
                 }
                 ExoPlayer.STATE_IDLE -> {
                     text += "idle"
@@ -1065,6 +1083,12 @@ class FullScreenVideoPlayer(
 
         override fun onRepeatModeChanged(repeatMode: Int) {}
         override fun onPlaybackParametersChanged(playbackParameters: PlaybackParameters) {}
+    }
+
+
+    private var isNeedReplayIcon = false
+    fun setReplyVisiblityEnabled(isNeedReplayIcon: Boolean) {
+        this.isNeedReplayIcon = isNeedReplayIcon;
     }
 
 
