@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:animation_enabled="false"
-        app:controller_layout_id="@layout/alt_player"
+        app:controller_layout_id="@layout/offline_video_player_controller"
         app:resize_mode="fill" />
 
 
