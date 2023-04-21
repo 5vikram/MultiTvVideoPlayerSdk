@@ -143,7 +143,7 @@ class OfflineVIdeoPlayer(
     private lateinit var videoFarwardButton: ImageView
     private lateinit var videoPlayButton: ImageView
     private lateinit var videoPauseButton: ImageView
-    private lateinit var previewTimeBar: PreviewTimeBar
+    private lateinit var previewTimeBar: DefaultTimeBar
     private lateinit var previewFrameLayout: FrameLayout
     private lateinit var videoTitle: TextView
     private lateinit var epsodeButton: ImageView
@@ -216,7 +216,7 @@ class OfflineVIdeoPlayer(
     }*/
     override fun onFinishInflate() {
         val view =
-            LayoutInflater.from(getContext()).inflate(R.layout.balaji_video_player_layout, this)
+            LayoutInflater.from(getContext()).inflate(R.layout.offline_video_player, this)
 
         epsodeButton = view.findViewById(R.id.epsodeButton)
         epsodeNextButton = view.findViewById(R.id.epsodeNextButton)
@@ -1133,10 +1133,6 @@ class OfflineVIdeoPlayer(
         override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
             var text = "Main player"
             updatePlayPauseButton()
-
-            if (playbackState == Player.STATE_READY && playWhenReady) {
-                previewTimeBar.hidePreview()
-            }
 
             when (playbackState) {
                 ExoPlayer.STATE_BUFFERING -> {
