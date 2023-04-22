@@ -407,7 +407,7 @@
         app:layout_constraintBottom_toTopOf="@id/videoMenuLayout"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <com.github.rubensousa.previewseekbar.exoplayer.PreviewTimeBar
+    <com.google.android.exoplayer2.ui.DefaultTimeBar
         android:id="@+id/exo_progress"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -417,10 +417,7 @@
         app:layout_constraintEnd_toStartOf="@id/durationLinearLayout"
         app:layout_constraintStart_toEndOf="@+id/vvvvvvvvvv"
         app:layout_constraintTop_toTopOf="@+id/vvvvvvvvvv"
-        app:previewAnimationEnabled="false"
-        app:previewFrameLayout="@id/previewFrameLayout"
-        app:scrubber_dragged_size="24dp"
-        app:scrubber_enabled_size="16dp" />
+        />
 
     <!--    <TextView-->
     <!--        android:id="@id/exo_duration"-->

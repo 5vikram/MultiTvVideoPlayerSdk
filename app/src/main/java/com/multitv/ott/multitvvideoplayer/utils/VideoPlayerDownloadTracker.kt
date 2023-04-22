@@ -1,47 +1,27 @@
-package com.multitv.ott.multitvvideoplayer.download
+package com.multitv.ott.multitvvideoplayer.utils
 
 import android.content.Context
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.StatFs
-import android.view.*
-import android.widget.CheckBox
-import android.widget.PopupMenu
-import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.widget.AppCompatImageView
-import androidx.appcompat.widget.AppCompatTextView
-import androidx.cardview.widget.CardView
-import androidx.core.content.ContextCompat
-import com.google.android.exoplayer2.C
+
+import com.google.android.exoplayer2.offline.Download
+import com.google.android.exoplayer2.offline.DownloadIndex
+import com.google.android.exoplayer2.offline.DownloadManager
+import com.google.android.exoplayer2.offline.DownloadRequest
+import java.util.concurrent.CopyOnWriteArraySet
 import com.google.android.exoplayer2.DefaultRenderersFactory
-import com.google.android.exoplayer2.Format
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.offline.*
-import com.google.android.exoplayer2.offline.DownloadHelper.LiveContentUnsupportedException
-import com.google.android.exoplayer2.source.TrackGroup
-import com.google.android.exoplayer2.source.TrackGroupArray
-import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.upstream.HttpDataSource
 import com.google.android.exoplayer2.util.Assertions
 import com.google.android.exoplayer2.util.Log
 import com.google.android.exoplayer2.util.MimeTypes
 import com.google.android.exoplayer2.util.Util
-import com.multitv.ott.multitvvideoplayer.R
-import com.multitv.ott.multitvvideoplayer.listener.DownloadsDetailsListener
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
+import com.multitv.ott.multitvvideoplayer.VideoPlayerAppController.TAG
 import java.io.IOException
-import java.util.*
-import java.util.concurrent.CopyOnWriteArraySet
-
-
-private const val TAG = "DownloadTracker"
 
 /** Tracks media that has been downloaded.  */
-class DownloadTracker(
+class VideoPlayerDownloadTracker(
     context: Context,
     private val httpDataSourceFactory: HttpDataSource.Factory,
     private val downloadManager: DownloadManager
@@ -60,9 +40,8 @@ class DownloadTracker(
     private val applicationContext: Context = context.applicationContext
     private val listeners: CopyOnWriteArraySet<Listener> = CopyOnWriteArraySet()
     private val downloadIndex: DownloadIndex = downloadManager.downloadIndex
-    private var startDownloadDialogHelper: StartDownloadDialogHelper? = null
     private var availableBytesLeft: Long =
-        StatFs(DownloadUtil.getDownloadDirectory(context).path).availableBytes
+        StatFs(VideoPlayerDownloadUtil.getDownloadDirectory(context).path).availableBytes
 
     val downloads: HashMap<Uri, Download> = HashMap()
 
@@ -83,18 +62,14 @@ class DownloadTracker(
     }
 
     fun isMediaDownloadRequestInQueue(): Boolean {
-        if (downloadManager != null && downloadManager.currentDownloads != null && downloadManager.currentDownloads.size > 0)
-            return true
-        else
-            return false
+        if (downloadManager != null && downloadManager.currentDownloads != null && downloadManager.currentDownloads.size > 0) return true
+        else return false
     }
 
 
     fun getDownloadRequestCount(): Int {
-        if (downloadManager != null && downloadManager.currentDownloads != null && downloadManager.currentDownloads.size > 0)
-            return downloadManager.currentDownloads.size
-        else
-            return 0
+        if (downloadManager != null && downloadManager.currentDownloads != null && downloadManager.currentDownloads.size > 0) return downloadManager.currentDownloads.size
+        else return 0
     }
 
     fun isDownloaded(mediaItem: MediaItem): Boolean {
@@ -110,10 +85,8 @@ class DownloadTracker(
     fun isVideoDownloadingPauseAndResume(mediaItem: MediaItem): Boolean {
         val download = downloads[mediaItem.playbackProperties?.uri]
 
-        return if (download == null)
-            false
-        else
-            download.state == Download.STATE_STOPPED || download.state == Download.STATE_RESTARTING
+        return if (download == null) false
+        else download.state == Download.STATE_STOPPED || download.state == Download.STATE_RESTARTING
 
 
     }
@@ -131,21 +104,6 @@ class DownloadTracker(
         return if (download != null && download.state != Download.STATE_FAILED) download.request else null
     }
 
-    fun toggleDownloadDialogHelper(
-        context: Context, mediaItem: MediaItem, dailogCallbackListener: DailogCallbackListener,
-        positiveCallback: (() -> Unit)? = null, dismissCallback: (() -> Unit)? = null
-    ) {
-        startDownloadDialogHelper?.release()
-        startDownloadDialogHelper =
-            StartDownloadDialogHelper(
-                context,
-                getDownloadHelper(mediaItem),
-                mediaItem,
-                positiveCallback,
-                dismissCallback, dailogCallbackListener
-            )
-    }
-
 
     fun getTrackDailogStatus(): Boolean {
         return isTrackDailogShowing
@@ -155,76 +113,13 @@ class DownloadTracker(
         this.isTrackDailogShowing = isTrackDailogShowing
     }
 
-    fun toggleDownloadPopupMenu(
-        context: Context,
-        anchor: View,
-        uri: Uri?,
-        downloadsDetailsListener: DownloadsDetailsListener
-    ) {
-        val popupMenu = PopupMenu(context, anchor).apply { inflate(R.menu.popup_menu) }
-        val download = downloads[uri]
-        download ?: return
-
-        popupMenu.menu.apply {
-            findItem(R.id.cancel_download).isVisible =
-                listOf(
-                    Download.STATE_DOWNLOADING,
-                    Download.STATE_STOPPED,
-                    Download.STATE_QUEUED,
-                    Download.STATE_FAILED
-                ).contains(download.state)
-            findItem(R.id.delete_download).isVisible = download.state == Download.STATE_COMPLETED
-            findItem(R.id.resume_download).isVisible =
-                listOf(Download.STATE_STOPPED, Download.STATE_FAILED).contains(download.state)
-            findItem(R.id.pause_download).isVisible = download.state == Download.STATE_DOWNLOADING
-        }
-
-        popupMenu.setOnMenuItemClickListener {
-            when (it.itemId) {
-                R.id.cancel_download, R.id.delete_download -> {
-                    removeDownload(download.request.uri)
-                    downloadsDetailsListener.cancelDownloads()
-                }
-                R.id.resume_download -> {
-                    DownloadService.sendSetStopReason(
-                        context,
-                        MyDownloadService()::class.java,
-                        download.request.id,
-                        Download.STOP_REASON_NONE,
-                        true
-                    )
-                    downloadsDetailsListener.resumeDownload()
-                }
-                R.id.pause_download -> {
-                    DownloadService.sendSetStopReason(
-                        context,
-                        MyDownloadService()::class.java,
-                        download.request.id,
-                        Download.STATE_STOPPED,
-                        false
-                    )
-
-                    downloadsDetailsListener.pauseDownload()
-                }
-
-                R.id.downloads -> {
-                    downloadsDetailsListener.openDownloadScreen()
-                }
-            }
-            return@setOnMenuItemClickListener true
-        }
-        popupMenu.show()
-    }
 
     fun removeDownload(uri: Uri?) {
         val download = downloads[uri]
         download?.let {
-            DownloadService.sendRemoveDownload(
-                applicationContext,
-                MyDownloadService()::class.java,
-                download.request.id,
-                false
-            )
+            /*  DownloadService.sendRemoveDownload(
+                  applicationContext, MyDownloadService()::class.java, download.request.id, false
+              )*/
 
 
         }
@@ -245,15 +140,15 @@ class DownloadTracker(
         }
     }
 
-    @ExperimentalCoroutinesApi
-    suspend fun getAllDownloadProgressFlow(): Flow<List<Download>> = callbackFlow {
-        while (coroutineContext.isActive) {
-            offer(downloads.values.toList())
-            delay(1000)
-        }
-    }
+    /* @ExperimentalCoroutinesApi
+     suspend fun getAllDownloadProgressFlow(): Flow<List<Download>> = callbackFlow {
+         while (coroutineContext.isActive) {
+             trySend(downloads.values.toList()).isSuccess
+             delay(1000)
+         }
+     }*/
 
-    @ExperimentalCoroutinesApi
+/*    @ExperimentalCoroutinesApi
     suspend fun getCurrentProgressDownload(uri: Uri?): Flow<Float?> {
         var percent: Float? =
             downloadManager.currentDownloads.find { it.request.uri == uri }?.percentDownloaded
@@ -261,13 +156,13 @@ class DownloadTracker(
             while (percent != null) {
                 percent =
                     downloadManager.currentDownloads.find { it.request.uri == uri }?.percentDownloaded
-                offer(percent)
+                trySend(percent).isSuccess
                 withContext(Dispatchers.IO) {
                     delay(1000)
                 }
             }
         }
-    }
+    }*/
 
 
     private fun getDownloadHelper(mediaItem: MediaItem): DownloadHelper {
@@ -286,9 +181,7 @@ class DownloadTracker(
 
     private inner class DownloadManagerListener : DownloadManager.Listener {
         override fun onDownloadChanged(
-            downloadManager: DownloadManager,
-            download: Download,
-            finalException: Exception?
+            downloadManager: DownloadManager, download: Download, finalException: Exception?
         ) {
             downloads[download.request.uri] = download
             for (listener in listeners) {
@@ -319,6 +212,7 @@ class DownloadTracker(
 
     // Can't use applicationContext because it'll result in a crash, instead
     // Use context of the activity calling for the AlertDialog
+/*
     private inner class StartDownloadDialogHelper(
         private val context: Context,
         private val downloadHelper: DownloadHelper,
@@ -349,14 +243,19 @@ class DownloadTracker(
             }
 
             setTrackDailogStatus(true)
-            /*val dialogBuilder: AlertDialog.Builder = AlertDialog.Builder(context)
+            */
+/*val dialogBuilder: AlertDialog.Builder = AlertDialog.Builder(context)
             dialogBuilder.setCancelable(false)
 
-          *//*  val factory = LayoutInflater.from(context)
+          *//*
+*/
+/*  val factory = LayoutInflater.from(context)
             val deleteDialogView: View = factory.inflate(R.layout.alert_download_dialog, null)
             val dialogBuilder = AlertDialog.Builder(context).create()
             dialogBuilder.setView(deleteDialogView)
             dialogBuilder.show()*//*
+*/
+/*
 
             val formatDownloadable: MutableList<Format> = mutableListOf()
             var qualitySelected: DefaultTrackSelector.Parameters
@@ -446,11 +345,13 @@ class DownloadTracker(
                     dismissCallback?.invoke()
                     dailogCallbackListener.trackDailogStatus(false)
                 }
-            trackSelectionDialog = dialogBuilder.create().apply { show() }*/
+            trackSelectionDialog = dialogBuilder.create().apply { show() }*//*
+
 
             //dailogCallbackListener.trackDailogStatus(true)
 
-
+*/
+/*
             // Custom dialog
             val factory = LayoutInflater.from(context)
             val deleteDialogView: View = factory.inflate(R.layout.alert_download_dialog, null)
@@ -501,7 +402,8 @@ class DownloadTracker(
             val mediaItemTag: MediaItemTag = mediaItem.playbackProperties?.tag as MediaItemTag
             val optionsDownload: List<String> = formatDownloadable.map {
                 context.getString(
-                    R.string.dialog_option, it.height,
+                    R.string.dialog_option,
+                    it.height,
                     (it.bitrate * mediaItemTag.duration).div(8000).formatFileSize()
                 )
             }
@@ -512,8 +414,7 @@ class DownloadTracker(
                 .setMinVideoSize(formatDownloadable[0].width, formatDownloadable[0].height)
                 .setMinVideoBitrate(formatDownloadable[0].bitrate)
                 .setMaxVideoSize(formatDownloadable[0].width, formatDownloadable[0].height)
-                .setMaxVideoBitrate(formatDownloadable[0].bitrate)
-                .build()
+                .setMaxVideoBitrate(formatDownloadable[0].bitrate).build()
 
             // HD QUALITY
             cardHd?.setOnClickListener {
@@ -521,15 +422,13 @@ class DownloadTracker(
                 cardSd.setCardBackgroundColor(context.resources.getColor(R.color.button_background_color_2))
                 hd_720.setTextColor(
                     ContextCompat.getColor(
-                        context,
-                        R.color.white_opycity_hundred_present
+                        context, R.color.white_opycity_hundred_present
                     )
                 )
                 sd_480.setTextColor(ContextCompat.getColor(context, R.color.text_color_2))
                 hdIcon.setColorFilter(
                     ContextCompat.getColor(
-                        context,
-                        R.color.white_opycity_hundred_present
+                        context, R.color.white_opycity_hundred_present
                     ), android.graphics.PorterDuff.Mode.SRC_IN
                 )
                 sdIcon.setColorFilter(
@@ -543,8 +442,7 @@ class DownloadTracker(
                         .setMinVideoSize(format.width, format.height)
                         .setMinVideoBitrate(format.bitrate)
                         .setMaxVideoSize(format.width, format.height)
-                        .setMaxVideoBitrate(format.bitrate)
-                        .build()
+                        .setMaxVideoBitrate(format.bitrate).build()
                     when (formatDownloadable[item].height) {
                         720 -> {
                             break
@@ -569,8 +467,7 @@ class DownloadTracker(
                 hd_720.setTextColor(ContextCompat.getColor(context, R.color.text_color_2))
                 sd_480.setTextColor(
                     ContextCompat.getColor(
-                        context,
-                        R.color.white_opycity_hundred_present
+                        context, R.color.white_opycity_hundred_present
                     )
                 )
                 hdIcon.setColorFilter(
@@ -579,8 +476,7 @@ class DownloadTracker(
                 )
                 sdIcon.setColorFilter(
                     ContextCompat.getColor(
-                        context,
-                        R.color.white_opycity_hundred_present
+                        context, R.color.white_opycity_hundred_present
                     ), android.graphics.PorterDuff.Mode.SRC_IN
                 )
 
@@ -590,8 +486,7 @@ class DownloadTracker(
                         .setMinVideoSize(format.width, format.height)
                         .setMinVideoBitrate(format.bitrate)
                         .setMaxVideoSize(format.width, format.height)
-                        .setMaxVideoBitrate(format.bitrate)
-                        .build()
+                        .setMaxVideoBitrate(format.bitrate).build()
                     when (formatDownloadable[item].height) {
                         480 -> {
                             break
@@ -624,9 +519,7 @@ class DownloadTracker(
                     alertDialog.dismiss()
                 } else {
                     Toast.makeText(
-                        context,
-                        "Not enough space to download this file",
-                        Toast.LENGTH_LONG
+                        context, "Not enough space to download this file", Toast.LENGTH_LONG
                     ).show()
                 }
                 dailogCallbackListener.trackDailogStatus(false)
@@ -641,35 +534,60 @@ class DownloadTracker(
 
             }
 
-            alertDialog.show()
+            alertDialog.show()*//*
+
         }
 
         override fun onPrepareError(helper: DownloadHelper, e: IOException) {
             dailogCallbackListener.trackDailogStatus(false)
-            Toast.makeText(applicationContext, R.string.download_start_error, Toast.LENGTH_LONG)
+            */
+/*Toast.makeText(applicationContext, R.string.download_start_error, Toast.LENGTH_LONG)
                 .show()
             Log.e(
                 TAG,
                 if (e is LiveContentUnsupportedException) "Downloading live content unsupported" else "Failed to start download",
                 e
-            )
+            )*//*
+
         }
 
         // Internal methods.
+*/
+/*
         private fun startDownload(downloadRequest: DownloadRequest = buildDownloadRequest()) {
+<<<<<<< HEAD:app/src/main/java/com/multitv/ott/multitvvideoplayer/download/DownloadTracker.kt
             DownloadService.sendAddDownload(
                 applicationContext,
                 MyDownloadService()::class.java,
                 downloadRequest,
                 true
             )
-        }
+=======
+          *//*
 
+*/
+/*  DownloadService.sendAddDownload(
+                applicationContext, MyDownloadService()::class.java, downloadRequest, true
+            )*//*
+*/
+/*
+
+
+>>>>>>> bfc01f67509571cec7733901255749f89d275ef4:app/src/main/java/com/multitv/ott/multitvvideoplayer/utils/VideoPlayerDownloadTracker.kt
+        }
+*//*
+
+
+*/
+/*
         private fun buildDownloadRequest(): DownloadRequest {
             return downloadHelper.getDownloadRequest(
                 (mediaItem.playbackProperties?.tag as MediaItemTag).title,
                 Util.getUtf8Bytes(mediaItem.playbackProperties?.uri.toString())
             )
         }
+*//*
+
     }
+*/
 }

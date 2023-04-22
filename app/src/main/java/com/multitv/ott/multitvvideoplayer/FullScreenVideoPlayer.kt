@@ -57,7 +57,6 @@ import com.google.common.collect.ImmutableList
 import com.multitv.ott.multitvvideoplayer.cast.SessionAvailabilityListener
 import com.multitv.ott.multitvvideoplayer.custom.CountDownTimerWithPause
 import com.multitv.ott.multitvvideoplayer.database.SharedPreferencePlayer
-import com.multitv.ott.multitvvideoplayer.download.DownloadUtil
 import com.multitv.ott.multitvvideoplayer.fabbutton.FabButton
 import com.multitv.ott.multitvvideoplayer.listener.VideoPlayerSdkCallBackListener
 import com.multitv.ott.multitvvideoplayer.playerglide.GlideThumbnailTransformation
@@ -137,6 +136,8 @@ class FullScreenVideoPlayer(
     private lateinit var videoTitle: TextView
     private lateinit var epsodeButton: ImageView
     private lateinit var epsodeNextButton: ImageView
+    private lateinit var durationLinearLayout: LinearLayoutCompat
+    private lateinit var repeatVideoLinearLayout: LinearLayout
 
     // private lateinit var seekBarLayout: ConstraintLayout
     private var videoControllerLayout: ConstraintLayout? = null
@@ -201,6 +202,8 @@ class FullScreenVideoPlayer(
         epsodeButton = view.findViewById(R.id.epsodeButton)
         epsodeNextButton = view.findViewById(R.id.epsodeNextButton)
 
+        repeatVideoLinearLayout = view.findViewById(R.id.repeatVideoLinearLayout)
+
         epsodeButton.setOnClickListener {
             videoPlayerSdkCallBackListener?.showEpisodeListData()
         }
@@ -242,7 +245,7 @@ class FullScreenVideoPlayer(
 
         videoControllerLayout = view.findViewById(R.id.videoControllerLayout)
         previewFrameLayout = view.findViewById(R.id.previewFrameLayout)
-
+        durationLinearLayout = view.findViewById(R.id.durationLinearLayout)
 
         exoFfwdLinearLayout = view.findViewById(R.id.exoFfwdLinearLayout)
         exoRewLinearLayout = view.findViewById(R.id.exoRewLinearLayout)
@@ -313,15 +316,16 @@ class FullScreenVideoPlayer(
 
 
         videoControllerLayout?.setOnClickListener {
-            if (isControllerShown)
+            if (isControllerShown) {
                 hideController()
-            else
+            } else {
+                contentRateLayout.visibility = View.GONE
                 showController()
+            }
         }
 
 
 
-        findViewById<View>(R.id.speed_btn)?.setOnClickListener { showSpeedControlDailog() }
         errorRetryLayout.setOnClickListener(OnClickListener {
             errorRetryLayout?.setVisibility(GONE)
             initializeMainPlayer(mContentUrl, true)
@@ -349,10 +353,14 @@ class FullScreenVideoPlayer(
 
 
 
-        exoRewLinearLayout.setOnClickListener(OnClickListener { rewind() })
+        exoRewLinearLayout.setOnClickListener {
+            // rewind()
+            VideoRenuButton.performClick()
+        }
 
         exoFfwdLinearLayout.setOnClickListener {
-            fastForward()
+            //fastForward()
+            videoFarwardButton.performClick()
         }
 
 
@@ -393,7 +401,10 @@ class FullScreenVideoPlayer(
 
     }
 
+    private var isVideoVolumeStatus = false
+
     fun setVolumeStatus(isVolume: Boolean) {
+        this.isVideoVolumeStatus = isVideoVolumeStatus
         if (isVolume) {
             mMediaPlayer?.audioComponent?.volume = mMediaPlayer?.audioComponent?.volume!!
             mMediaPlayer?.audioComponent?.volume = 5f
@@ -654,7 +665,7 @@ class FullScreenVideoPlayer(
 
         mWindow = context.window
 
-        volumeProgressBarSetUp()
+        //volumeProgressBarSetUp()
     }
 
     fun setMultiTvVideoPlayerSdkListener(videoPlayerSdkCallBackListener: VideoPlayerSdkCallBackListener?) {
@@ -778,7 +789,7 @@ class FullScreenVideoPlayer(
             if (adsLoader != null) adsLoader!!.setPlayer(null)
             mMediaPlayer = null
         }
-        centerButtonLayout!!.visibility = GONE
+        centerButtonLayout.visibility = GONE
         videoPlayerSdkCallBackListener?.prepareVideoPlayer()
         //        ToastMessage.showLogs(ToastMessage.LogType.DEBUG, TAG, "Content url is " + videoUrl);
         val customLoadControl: LoadControl = DefaultLoadControl.Builder()
@@ -801,11 +812,13 @@ class FullScreenVideoPlayer(
                     .setAdsLoaderProvider { unusedAdTagUri: MediaItem.AdsConfiguration? -> adsLoader }
                     .setAdViewProvider(simpleExoPlayerView)
 
-            mMediaPlayer = ExoPlayer.Builder(context).setMediaSourceFactory(mediaSourceFactory)
+            mMediaPlayer = ExoPlayer.Builder(context).setSeekBackIncrementMs(10000)
+                .setSeekForwardIncrementMs(10000).setMediaSourceFactory(mediaSourceFactory)
                 .setTrackSelector(trackSelector).setLoadControl(customLoadControl).build()
             adsLoader = ImaAdsLoader.Builder( /* context= */context).build()
         } else {
-            mMediaPlayer = ExoPlayer.Builder(context).setTrackSelector(trackSelector)
+            mMediaPlayer = ExoPlayer.Builder(context).setSeekBackIncrementMs(10000)
+                .setSeekForwardIncrementMs(10000).setTrackSelector(trackSelector)
                 .setLoadControl(customLoadControl).build()
         }
         if (mMediaPlayer != null) {
@@ -852,11 +865,11 @@ class FullScreenVideoPlayer(
                     videoUrl!!,
                     drmSessionManager!!
                 )
-                mMediaPlayer!!.setMediaSource(playerMediaSource!!)
+                mMediaPlayer?.setMediaSource(playerMediaSource!!)
             } else if (isOfflineContent) {
                 mediaItem = MediaItem.Builder().setUri(videoUrl).build()
                 val downloadRequest: DownloadRequest? =
-                    DownloadUtil.getDownloadTracker(context)
+                    VideoPlayerDownloadUtil.getDownloadTracker(context)
                         .getDownloadRequest(mediaItem.playbackProperties?.uri)
                 VideoPlayerTracer.error(
                     "Offline Video Url:::",
@@ -864,10 +877,10 @@ class FullScreenVideoPlayer(
                 )
                 val mediaSource = DownloadHelper.createMediaSource(
                     downloadRequest!!,
-                    DownloadUtil.getReadOnlyDataSourceFactory(context)
+                    VideoPlayerDownloadUtil.getReadOnlyDataSourceFactory(context)
                 )
 
-                mMediaPlayer!!.setMediaSource(mediaSource!!)
+                mMediaPlayer?.setMediaSource(mediaSource!!)
 
             } else {
                 mediaItem = if (subtitle != null) {
@@ -920,8 +933,19 @@ class FullScreenVideoPlayer(
             mediaSessionConnector.setPlayer(mMediaPlayer)
             mediaSession.isActive = true
 
-            if (isWatchDurationEnable)
-                seekTo(Math.max(mMediaPlayer!!.currentPosition + watchDuration * 1000, 0))
+            seekTo(mMediaPlayer!!.currentPosition + watchDuration)
+
+            if (isVideoVolumeStatus) {
+                mMediaPlayer?.audioComponent?.volume = mMediaPlayer?.audioComponent?.volume!!
+                mMediaPlayer?.audioComponent?.volume = 5f
+                volumeMuteAndUnMuteButton.visibility = View.GONE
+                volumeUnMuteButton.visibility = View.VISIBLE
+            } else {
+                mMediaPlayer?.audioComponent?.volume = 0f
+                volumeMuteAndUnMuteButton.visibility = View.VISIBLE
+                volumeUnMuteButton.visibility = View.GONE
+            }
+
 
         }
     }
@@ -951,13 +975,27 @@ class FullScreenVideoPlayer(
             when (playbackState) {
                 ExoPlayer.STATE_BUFFERING -> {
                     text += "buffering"
-                    bufferingProgressBarLayout!!.bringToFront()
-                    bufferingProgressBarLayout!!.visibility = VISIBLE
-                    centerButtonLayout!!.visibility = GONE
+                    bufferingProgressBarLayout.bringToFront()
+                    bufferingProgressBarLayout.visibility = VISIBLE
+                    centerButtonLayout.visibility = GONE
                     if (contentType == ContentType.LIVE) startBufferingTimer()
                 }
                 ExoPlayer.STATE_ENDED -> {
                     text += "ended"
+
+                    if (isNeedReplayIcon) {
+                        repeatVideoLinearLayout.visibility = View.VISIBLE
+                        circularProgressLayout.visibility = View.GONE
+                        bufferingProgressBarLayout.visibility = GONE
+                        repeatVideoLinearLayout.setOnClickListener {
+                            repeatVideoLinearLayout.visibility = View.GONE
+                            releaseVideoPlayer()
+                            initializeMainPlayer(mContentUrl, true)
+                        }
+                    }
+
+
+/*
                     if (contentType == ContentType.VOD) {
                         if (mMediaPlayer != null) contentPlayedTimeInMillis =
                             mMediaPlayer!!.currentPosition
@@ -1013,6 +1051,7 @@ class FullScreenVideoPlayer(
                             }
                         }.create()
                     }
+*/
                 }
                 ExoPlayer.STATE_IDLE -> {
                     text += "idle"
@@ -1023,13 +1062,13 @@ class FullScreenVideoPlayer(
                         contentPlayedTimeInMillis = mMediaPlayer!!.currentPosition
                         if (contentType == ContentType.LIVE) startBufferingTimer()
                     }
-                    simpleExoPlayerView!!.videoSurfaceView!!.visibility = VISIBLE
-                    simpleExoPlayerView!!.visibility = VISIBLE
-                    simpleExoPlayerView!!.bringToFront()
+                    simpleExoPlayerView?.videoSurfaceView?.visibility = VISIBLE
+                    simpleExoPlayerView?.visibility = VISIBLE
+                    simpleExoPlayerView?.bringToFront()
                 }
                 ExoPlayer.STATE_READY -> {
                     text += "ready"
-                    bufferingProgressBarLayout!!.visibility = GONE
+                    bufferingProgressBarLayout.visibility = GONE
                     centerButtonLayout.visibility = VISIBLE
                     videoNextButton.visibility = GONE
                     videoPerviousButton.visibility = GONE
@@ -1044,6 +1083,12 @@ class FullScreenVideoPlayer(
 
         override fun onRepeatModeChanged(repeatMode: Int) {}
         override fun onPlaybackParametersChanged(playbackParameters: PlaybackParameters) {}
+    }
+
+
+    private var isNeedReplayIcon = false
+    fun setReplyVisiblityEnabled(isNeedReplayIcon: Boolean) {
+        this.isNeedReplayIcon = isNeedReplayIcon;
     }
 
 
@@ -1179,14 +1224,13 @@ class FullScreenVideoPlayer(
 
 
     private fun rewind() {
-        seekTo(Math.max(mMediaPlayer!!.currentPosition - DEFAULT_REWIND_MS, 0))
+        seekTo(mMediaPlayer!!.currentPosition - DEFAULT_REWIND_MS)
     }
 
-    private var isWatchDurationEnable = false
-    private var watchDuration = 0
 
-    fun seekVideoPlayer(watch: Int, isWatchDurationEnable: Boolean) {
-        this.isWatchDurationEnable = isWatchDurationEnable
+    private var watchDuration = 0L
+
+    fun seekVideoPlayer(watch: Long) {
         this.watchDuration = watch;
     }
 
@@ -1253,13 +1297,18 @@ class FullScreenVideoPlayer(
     }
 
     override fun onScrubStop(previewBar: PreviewBar) {
-        previewFrameLayout.visibility = INVISIBLE
 
-        if (mMediaPlayer != null) {
-            seekTo(previewBar.progress.toLong())
+        if (!TextUtils.isEmpty(spriteImageUrl)) {
+            previewFrameLayout.visibility = INVISIBLE
+
+            if (mMediaPlayer != null) {
+                seekTo(previewBar.progress.toLong())
+            }
+            previewTimeBar.hidePreview()
+            resumeVideoPlayer()
+        } else {
+            previewFrameLayout.visibility = GONE
         }
-        previewTimeBar.hidePreview()
-        resumeVideoPlayer()
     }
 
 
@@ -1272,6 +1321,8 @@ class FullScreenVideoPlayer(
                 .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
                 .transform(GlideThumbnailTransformation(currentPosition, maxLine))
                 .into(previewImageView)
+        } else {
+            previewFrameLayout.visibility = GONE
         }
 
     }
@@ -1574,6 +1625,8 @@ class FullScreenVideoPlayer(
         //    videoProgressLayout.visibility = GONE
         videoMenuLayout.visibility = GONE
         resumedVideoTv.visibility = View.GONE
+        previewTimeBar.visibility = View.GONE
+        durationLinearLayout.visibility = View.GONE
         removeCallbacks(hideAction)
         hideAtMs = C.TIME_UNSET
         isControllerShown = false
@@ -1588,6 +1641,9 @@ class FullScreenVideoPlayer(
         // videoProgressLayout.visibility = VISIBLE
         videoMenuLayout.visibility = VISIBLE
         resumedVideoTv.visibility = View.GONE
+
+        previewTimeBar.visibility = View.VISIBLE
+        durationLinearLayout.visibility = View.VISIBLE
         updatePlayPauseButton()
         hideAfterTimeout()
         isControllerShown = true

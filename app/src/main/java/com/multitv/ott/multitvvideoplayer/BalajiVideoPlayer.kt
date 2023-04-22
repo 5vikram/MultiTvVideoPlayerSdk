@@ -66,7 +66,6 @@ import com.google.common.collect.ImmutableList
 import com.multitv.ott.multitvvideoplayer.cast.SessionAvailabilityListener
 import com.multitv.ott.multitvvideoplayer.custom.CountDownTimerWithPause
 import com.multitv.ott.multitvvideoplayer.database.SharedPreferencePlayer
-import com.multitv.ott.multitvvideoplayer.download.DownloadUtil
 import com.multitv.ott.multitvvideoplayer.fabbutton.FabButton
 import com.multitv.ott.multitvvideoplayer.listener.VideoPlayPauseCallBackListener
 import com.multitv.ott.multitvvideoplayer.listener.VideoPlayerSdkCallBackListener
@@ -299,7 +298,7 @@ class BalajiVideoPlayer(
             if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
                 setPotraitVolumeCallback()
                 (getContext() as Activity).requestedOrientation =
-                    ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT
+                    ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
                 (getContext() as Activity).window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
                 showSystemBar()
                 videoLockButton.setVisibility(GONE)
@@ -363,7 +362,7 @@ class BalajiVideoPlayer(
             val orientation = getContext().resources.configuration.orientation
             if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
                 (getContext() as Activity).requestedOrientation =
-                    ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT
+                    ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
                 (getContext() as Activity).window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
                 showSystemBar()
                 setting.visibility = View.GONE
@@ -376,8 +375,12 @@ class BalajiVideoPlayer(
 
 
         videoControllerLayout?.setOnClickListener {
-            if (isControllerShown) hideController()
-            else showController()
+            if (isControllerShown) {
+                hideController()
+            } else {
+                contentRateLayout.visibility = View.GONE
+                showController()
+            }
         }
 
 
@@ -415,10 +418,14 @@ class BalajiVideoPlayer(
                 countDownTimer1?.cancel()
             }
         })
-        exoRewLinearLayout.setOnClickListener(OnClickListener { rewind() })
+        exoRewLinearLayout.setOnClickListener {
+            // rewind()
+            VideoRenuButton.performClick()
+        }
 
         exoFfwdLinearLayout.setOnClickListener {
-            fastForward()
+            //fastForward()
+            videoFarwardButton.performClick()
         }
 
 
@@ -464,6 +471,7 @@ class BalajiVideoPlayer(
         previewTimeBar.visibility = View.GONE
         durationLinearLayout.visibility = View.GONE
     }
+
 
     fun showSeekBarLayout() {
         previewTimeBar.visibility = View.VISIBLE
@@ -695,6 +703,10 @@ class BalajiVideoPlayer(
         }
     }
 
+    fun hideNextEpisodeButton() {
+        epsodeNextButton.visibility = View.GONE
+    }
+
 
     fun getCurrentDurationFromTextView(): String {
         return exoCurrentPosition.text.toString()
@@ -796,7 +808,14 @@ class BalajiVideoPlayer(
     override fun onConfigurationChanged(newConfig: Configuration) {
         val orientation = resources.configuration.orientation
         if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            showSeekBarLayout()
+
+            if (isPipModeOn)
+                hideSeekBarLayout()
+            else
+                showSeekBarLayout()
+
+
+
             if (contentTitle != null && !TextUtils.isEmpty(contentTitle) && !isPipModeOn) {
                 videoTitle.visibility = View.VISIBLE
                 videoTitle.setText(contentTitle)
@@ -826,7 +845,7 @@ class BalajiVideoPlayer(
         previewTimeBar.visibility = GONE
         durationLinearLayout.visibility = GONE
         closeVideoPlayerButton.visibility = GONE
-        overlayImageTransparent.visibility = GONE
+        // overlayImageTransparent.visibility = GONE
         centerButtonLayout.visibility = GONE
         videoMenuLayout.visibility = GONE
         resumedVideoTv.visibility = GONE
@@ -849,7 +868,7 @@ class BalajiVideoPlayer(
 
     fun showController() {
         closeVideoPlayerButton.visibility = VISIBLE
-        overlayImageTransparent.visibility = VISIBLE
+        //overlayImageTransparent.visibility = VISIBLE
         centerButtonLayout.visibility = VISIBLE
         videoMenuLayout.visibility = VISIBLE
         resumedVideoTv.visibility = GONE
@@ -1021,6 +1040,7 @@ class BalajiVideoPlayer(
 
     fun setContentTitle(title: String?) {
         contentTitle = title
+        videoTitle.setText(contentTitle)
     }
 
     fun setContentId(id: String?) {
@@ -1115,6 +1135,8 @@ class BalajiVideoPlayer(
             mMediaPlayer = null
         }
 
+        videoTitle.setText(contentTitle)
+
         //var subtitleSource = SingleSampleMediaSource(subtitleUri, ...);
         videoControllerLayout?.visibility = GONE
         previewTimeBar.visibility = GONE
@@ -1138,12 +1160,15 @@ class BalajiVideoPlayer(
                 DefaultMediaSourceFactory(dataSourceFactory).setAdsLoaderProvider { unusedAdTagUri: MediaItem.AdsConfiguration? -> adsLoader }
                     .setAdViewProvider(simpleExoPlayerView)
 
-            mMediaPlayer = ExoPlayer.Builder(context).setMediaSourceFactory(mediaSourceFactory)
+
+            mMediaPlayer = ExoPlayer.Builder(context).setSeekBackIncrementMs(10000)
+                .setSeekForwardIncrementMs(10000).setMediaSourceFactory(mediaSourceFactory)
                 .setTrackSelector(trackSelector).setLoadControl(customLoadControl).build()
             adsLoader = ImaAdsLoader.Builder( /* context= */context).build()
 
         } else {
-            mMediaPlayer = ExoPlayer.Builder(context).setTrackSelector(trackSelector)
+            mMediaPlayer = ExoPlayer.Builder(context).setSeekBackIncrementMs(10000)
+                .setSeekForwardIncrementMs(10000).setTrackSelector(trackSelector)
                 .setLoadControl(customLoadControl).build()
         }
         if (mMediaPlayer != null) {
@@ -1187,13 +1212,14 @@ class BalajiVideoPlayer(
                 mMediaPlayer!!.setMediaSource(playerMediaSource!!)
             } else if (isOfflineContent) {
                 mediaItem = MediaItem.Builder().setUri(videoUrl).build()
-                val downloadRequest: DownloadRequest? = DownloadUtil.getDownloadTracker(context)
-                    .getDownloadRequest(mediaItem.playbackProperties?.uri)
+                val downloadRequest: DownloadRequest? =
+                    VideoPlayerDownloadUtil.getDownloadTracker(context)
+                        .getDownloadRequest(mediaItem.playbackProperties?.uri)
                 VideoPlayerTracer.error(
                     "Offline Video Url:::", "" + mediaItem.playbackProperties?.uri
                 )
                 val mediaSource = DownloadHelper.createMediaSource(
-                    downloadRequest!!, DownloadUtil.getReadOnlyDataSourceFactory(context)
+                    downloadRequest!!, VideoPlayerDownloadUtil.getReadOnlyDataSourceFactory(context)
                 )
 
                 mMediaPlayer!!.setMediaSource(mediaSource!!)
@@ -1255,10 +1281,7 @@ class BalajiVideoPlayer(
 
 
             if (isWatchDurationEnable) seekTo(
-                Math.max(
-                    mMediaPlayer!!.currentPosition + watchDuration * 1000,
-                    0
-                )
+                mMediaPlayer!!.currentPosition + watchDuration * 1000
             )
 
 
@@ -1574,12 +1597,12 @@ class BalajiVideoPlayer(
 
 
     private fun rewind() {
-        seekTo(Math.max(mMediaPlayer!!.currentPosition - DEFAULT_REWIND_MS, 0))
+        seekTo(mMediaPlayer!!.currentPosition - DEFAULT_REWIND_MS)
     }
 
     fun seekToVideoPlayer(skipDuration: Int) {
         if (skipDuration > 1) {
-            seekTo(Math.max(mMediaPlayer!!.currentPosition + skipDuration * 1000, 0))
+            seekTo(mMediaPlayer!!.currentPosition + skipDuration * 1000)
         }
     }
 
@@ -1588,7 +1611,7 @@ class BalajiVideoPlayer(
         val seek = watch * 1000 - mMediaPlayer!!.currentPosition
         Log.e("Seek position:::", "" + seek)
         Log.e("Total Skip position:::", "" + mMediaPlayer!!.currentPosition + seek)
-        seekTo(Math.max(mMediaPlayer!!.currentPosition + seek, 0))
+        seekTo(mMediaPlayer!!.currentPosition + seek)
         showController()
     }
 
@@ -1608,11 +1631,11 @@ class BalajiVideoPlayer(
     }
 
     private fun fastForward() {
-        seekTo(Math.max(mMediaPlayer!!.currentPosition + DEFAULT_FAST_FORWARD_MS, 0))
+        seekTo(mMediaPlayer!!.currentPosition + DEFAULT_FAST_FORWARD_MS)
     }
 
     fun seekTo(positionMs: Long) {
-        mMediaPlayer!!.seekTo(positionMs)
+        mMediaPlayer?.seekTo(positionMs)
     }
 
 
@@ -1931,7 +1954,7 @@ class BalajiVideoPlayer(
         if (isShow) {
             contentRateLayout.visibility = View.VISIBLE
             closeVideoPlayerButton.visibility = GONE
-            overlayImageTransparent.visibility = GONE
+            // overlayImageTransparent.visibility = GONE
             centerButtonLayout.visibility = GONE
             videoMenuLayout.visibility = GONE
             resumedVideoTv.visibility = View.GONE
@@ -1944,7 +1967,7 @@ class BalajiVideoPlayer(
 
 
         if (!TextUtils.isEmpty(parentalAge)) {
-            contentRatedTv.setText("Rated U/A " + parentalAge)
+            contentRatedTv.setText("Rated  " + parentalAge)
             contentRatedTv.visibility = View.VISIBLE
         } else {
             contentRatedTv.visibility = View.GONE
@@ -2110,7 +2133,7 @@ class BalajiVideoPlayer(
     }
 
 
-    private var isVolmueMute = false
+    private var isVolmueMute = true
 
 
     fun getVolumeStatus(): Boolean {
@@ -2120,7 +2143,7 @@ class BalajiVideoPlayer(
 
     private fun setLandscapeVolumeCallback() {
         if (isVolmueMute) {
-            mMediaPlayer?.audioComponent?.volume = 5f
+            mMediaPlayer?.audioComponent?.volume = mMediaPlayer?.audioComponent?.volume!!
             volumeFullScreenButton.visibility = View.VISIBLE
             volumeFullScreenUnMuteButton.visibility = View.GONE
 
@@ -2135,7 +2158,7 @@ class BalajiVideoPlayer(
 
     private fun setPotraitVolumeCallback() {
         if (isVolmueMute) {
-            mMediaPlayer?.audioComponent?.volume = 5f
+            mMediaPlayer?.audioComponent?.volume = mMediaPlayer?.audioComponent?.volume!!
             volumeMuteAndUnMuteButton.visibility = View.GONE
             volumeUnMuteButton.visibility = View.VISIBLE
         } else {

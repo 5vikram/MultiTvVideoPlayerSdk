@@ -22,8 +22,8 @@ import android.text.TextUtils
 import android.util.AttributeSet
 import android.util.DisplayMetrics
 import android.util.Log
+import android.util.Rational
 import android.view.*
-import android.view.View.OnClickListener
 import android.widget.*
 import androidx.annotation.DrawableRes
 import androidx.annotation.RequiresApi
@@ -41,23 +41,27 @@ import com.conviva.sdk.ConvivaVideoAnalytics
 import com.github.rubensousa.previewseekbar.PreviewBar
 import com.github.rubensousa.previewseekbar.PreviewLoader
 import com.github.rubensousa.previewseekbar.exoplayer.PreviewTimeBar
+import com.google.ads.interactivemedia.v3.api.Ad
 import com.google.ads.interactivemedia.v3.api.AdEvent
 import com.google.ads.interactivemedia.v3.api.AdsManagerLoadedEvent
 import com.google.android.exoplayer2.*
-import com.google.android.exoplayer2.drm.DrmSessionEventListener
 import com.google.android.exoplayer2.drm.DrmSessionManager
-import com.google.android.exoplayer2.drm.OfflineLicenseHelper
 import com.google.android.exoplayer2.ext.ima.ImaAdsLoader
 import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector
 import com.google.android.exoplayer2.offline.DownloadHelper
 import com.google.android.exoplayer2.offline.DownloadRequest
+import com.google.android.exoplayer2.source.DefaultMediaSourceFactory
+import com.google.android.exoplayer2.source.MediaSourceFactory
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.ui.DefaultTimeBar
 import com.google.android.exoplayer2.ui.StyledPlayerView
+import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.DefaultAllocator
-import com.google.android.exoplayer2.upstream.DefaultHttpDataSource
+import com.google.android.exoplayer2.upstream.DefaultDataSource
+import com.google.android.exoplayer2.util.MimeTypes
 import com.google.android.exoplayer2.util.Util
 import com.google.android.exoplayer2.video.VideoSize
+import com.google.common.collect.ImmutableList
 import com.multitv.ott.multitvvideoplayer.R
 import com.multitv.ott.multitvvideoplayer.cast.SessionAvailabilityListener
 import com.multitv.ott.multitvvideoplayer.custom.CountDownTimerWithPause
@@ -72,14 +76,11 @@ import com.multitv.ott.multitvvideoplayer.utils.*
 import com.pallycon.widevinelibrary.*
 import java.util.*
 
-
-class OfflineVIdeoPlayer(
-    private val context: AppCompatActivity,
-    attrs: AttributeSet?,
-    defStyleAttr: Int
+class AltAndroidTvVideoPlayer(
+    private val context: AppCompatActivity, attrs: AttributeSet?, defStyleAttr: Int
 ) : FrameLayout(
     context, attrs, defStyleAttr
-), OnClickListener, SessionAvailabilityListener {
+), PreviewBar.OnScrubListener, PreviewLoader, View.OnClickListener, SessionAvailabilityListener {
     private val sharedPreferencePlayer: SharedPreferencePlayer
     private var contentType: ContentType? = null
     private var mMediaPlayer: ExoPlayer? = null
@@ -121,42 +122,39 @@ class OfflineVIdeoPlayer(
     private lateinit var errorRetryLayout: LinearLayout
     private lateinit var videoMenuLayout: RelativeLayout
     private lateinit var resumedVideoTv: TextView
-    private lateinit var volumeLayout: LinearLayout
+
     private lateinit var volumeLinearLayout: LinearLayout
     private lateinit var bufferingProgressBarLayout: LinearLayout
     private lateinit var circularProgressLayout: LinearLayout
-    private lateinit var overlayImageTransparent: View
+    private lateinit var repeatVideoLinearLayout: LinearLayout
+
     private lateinit var circularProgressRing: FabButton
     private lateinit var centerButtonLayout: LinearLayout
-    private lateinit var pictureInPicture: ImageView
     private lateinit var previewImageView: ImageView
-    private lateinit var videoLockButton: ImageView
-    private lateinit var videoUnLockButton: ImageView
     private lateinit var volumeMuteAndUnMuteButton: ImageView
     private lateinit var volumeUnMuteButton: ImageView
     private lateinit var closeVideoPlayerButton: ImageView
     private lateinit var setting: ImageView
-    private lateinit var videoRotationButton: ImageView
+
     private lateinit var videoPerviousButton: ImageView
     private lateinit var videoNextButton: ImageView
     private lateinit var VideoRenuButton: ImageView
     private lateinit var videoFarwardButton: ImageView
     private lateinit var videoPlayButton: ImageView
     private lateinit var videoPauseButton: ImageView
-    private lateinit var previewTimeBar: DefaultTimeBar
+    private lateinit var previewTimeBar: PreviewTimeBar
     private lateinit var previewFrameLayout: FrameLayout
     private lateinit var videoTitle: TextView
     private lateinit var epsodeButton: ImageView
-    private lateinit var epsodeNextButton: ImageView
-    private lateinit var volumeFullScreenButton: ImageView
     private lateinit var exoTotalDuration: TextView
     private lateinit var exoCurrentPosition: TextView
     private lateinit var skipVideoButton: TextView
     private lateinit var durationLinearLayout: LinearLayoutCompat
-    private lateinit var volumeFullScreenUnMuteButton: ImageView
+
 
     private lateinit var exoRewLinearLayout: LinearLayout
     private lateinit var exoFfwdLinearLayout: LinearLayout
+
     private var videoControllerLayout: ConstraintLayout? = null
 
 
@@ -190,21 +188,14 @@ class OfflineVIdeoPlayer(
     private var skipDurationArray = ArrayList<SkipDuration>()
 
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    private val mPictureInPictureParamsBuilder = PictureInPictureParams.Builder()
     private var spriteImageUrl = ""
-
-
-    private lateinit var volumeProgressBar: SeekBar
 
 
     private var isPipModeOn = false
 
 
     constructor(context: Context, attrs: AttributeSet?) : this(
-        context as AppCompatActivity,
-        attrs,
-        0
+        context as AppCompatActivity, attrs, 0
     ) {
     }
 
@@ -214,30 +205,18 @@ class OfflineVIdeoPlayer(
     public boolean onTouchEvent(MotionEvent event) {
         return super.onTouchEvent(event);
     }*/
+    @SuppressLint("MissingInflatedId")
     override fun onFinishInflate() {
         val view =
-            LayoutInflater.from(getContext()).inflate(R.layout.offline_video_player, this)
+            LayoutInflater.from(getContext()).inflate(R.layout.android_tv_alt_video_player, this)
 
         epsodeButton = view.findViewById(R.id.epsodeButton)
-        epsodeNextButton = view.findViewById(R.id.epsodeNextButton)
+
         durationLinearLayout = view.findViewById(R.id.durationLinearLayout)
         epsodeButton.setOnClickListener {
             videoPlayerSdkCallBackListener?.showEpisodeListData()
         }
 
-        epsodeNextButton.visibility = View.GONE
-        epsodeButton.visibility = View.GONE
-
-        epsodeNextButton.setOnClickListener {
-            if (userSubscriptionDtatus)
-                videoPlayerSdkCallBackListener?.onPlayNextVideo()
-            else if (contentAccessType.equals("paid") && !userSubscriptionDtatus)
-                videoPlayerSdkCallBackListener?.subscriptionCallBack()
-            else if (contentAccessType.equals("free"))
-                videoPlayerSdkCallBackListener?.onPlayNextVideo()
-            else
-                videoPlayerSdkCallBackListener?.showThumbnailCallback()
-        }
 
         exoTotalDuration = view.findViewById(R.id.exo_duration)
         exoCurrentPosition = view.findViewById(R.id.exo_position)
@@ -250,22 +229,22 @@ class OfflineVIdeoPlayer(
         videoTitle = view.findViewById(R.id.videoTitle)
 
         volumeMuteAndUnMuteButton = view.findViewById(R.id.volumeMuteAndUnMuteButton)
-        overlayImageTransparent = view.findViewById(R.id.overlayImageTransparent)
+
 
         resumedVideoTv = view.findViewById(R.id.resumedVideoTv)
-        volumeProgressBar = view.findViewById(R.id.exo_volume_progress)
         errorRetryLayout = view.findViewById(R.id.errorRetryLayout)
         videoMenuLayout = view.findViewById(R.id.videoMenuLayout)
         volumeUnMuteButton = view.findViewById(R.id.volumeUnMuteButton)
         bufferingProgressBarLayout = view.findViewById(R.id.bufferingProgressBarLayout)
         circularProgressLayout = view.findViewById(R.id.circularProgressLayout)
+        repeatVideoLinearLayout = view.findViewById(R.id.repeatVideoLinearLayout)
         setting = view.findViewById(R.id.settings_btn)
-        volumeLayout = view.findViewById(R.id.volumeLayout)
         volumeLinearLayout = view.findViewById(R.id.volumeLinearLayout)
-
         videoControllerLayout = view.findViewById(R.id.videoControllerLayout)
         previewFrameLayout = view.findViewById(R.id.previewFrameLayout)
 
+        exoFfwdLinearLayout = view.findViewById(R.id.exoFfwdLinearLayout)
+        exoRewLinearLayout = view.findViewById(R.id.exoRewLinearLayout)
 
         setting.setOnClickListener(this)
         centerButtonLayout = view.findViewById(R.id.centerButtonLayout)
@@ -275,61 +254,41 @@ class OfflineVIdeoPlayer(
         videoFarwardButton = view.findViewById(R.id.exo_ffwd)
         videoPlayButton = view.findViewById(R.id.exo_play)
         videoPauseButton = view.findViewById(R.id.exo_pause)
-        videoLockButton = view.findViewById(R.id.exo_lock)
-        videoUnLockButton = view.findViewById(R.id.exo_unlock)
-        exoFfwdLinearLayout = view.findViewById(R.id.exoFfwdLinearLayout)
-        exoRewLinearLayout = view.findViewById(R.id.exoRewLinearLayout)
+
+
         previewTimeBar = view.findViewById(R.id.exo_progress)
 
         previewImageView = view.findViewById(R.id.imageView)
         simpleExoPlayerView = view.findViewById(R.id.videoPlayer)
-        videoRotationButton = view.findViewById(R.id.enter_full_screen)
         closeVideoPlayerButton = view.findViewById(R.id.closeButton);
-        pictureInPicture = view.findViewById(R.id.picture_in_picture)
         videoNextButton.setVisibility(GONE)
         videoPerviousButton.setVisibility(GONE)
-        videoRotationButton.setVisibility(GONE)
-        pictureInPicture.setVisibility(GONE)
-
-        volumeFullScreenButton = view.findViewById(R.id.volumeFullScreenButton)
-        volumeFullScreenUnMuteButton = view.findViewById(R.id.volumeFullScreenUnMuteButton)
-
-        volumeFullScreenButton.setOnClickListener {
-            mMediaPlayer?.audioComponent?.volume = 0f
-            volumeFullScreenButton.visibility = View.GONE
-            volumeFullScreenUnMuteButton.visibility = View.VISIBLE
-        }
-
-
-        volumeFullScreenUnMuteButton.setOnClickListener {
-            mMediaPlayer?.audioComponent?.volume = 0f
-            mMediaPlayer?.audioComponent?.volume = mMediaPlayer?.audioComponent?.volume!!
-            mMediaPlayer?.audioComponent?.volume = 2f
-            volumeFullScreenUnMuteButton.visibility = View.GONE
-            volumeFullScreenButton.visibility = View.VISIBLE
-        }
 
 
 
         volumeMuteAndUnMuteButton.visibility = View.GONE
+        setting.visibility = View.GONE
+
+        //previewTimeBar.setPreviewEnabled(true)
+        previewTimeBar.addOnScrubListener(this)
+        previewTimeBar.setPreviewLoader(this)
 
 
         volumeUnMuteButton.setOnClickListener {
             mMediaPlayer?.audioComponent?.volume = 0f
             volumeMuteAndUnMuteButton.visibility = View.VISIBLE
             volumeUnMuteButton.visibility = View.GONE
+            isVolmueMute = false
         }
 
 
         volumeMuteAndUnMuteButton.setOnClickListener {
-            mMediaPlayer?.audioComponent?.volume = 0f
+            mMediaPlayer?.audioComponent?.volume = 5f
             mMediaPlayer?.audioComponent?.volume = mMediaPlayer?.audioComponent?.volume!!
-            mMediaPlayer?.audioComponent?.volume = 2f
             volumeMuteAndUnMuteButton.visibility = View.GONE
             volumeUnMuteButton.visibility = View.VISIBLE
-
+            isVolmueMute = true
         }
-
 
 
         closeVideoPlayerButton.setOnClickListener {
@@ -340,7 +299,7 @@ class OfflineVIdeoPlayer(
         videoControllerLayout?.setOnClickListener {
             if (isControllerShown) {
                 hideController()
-            }else {
+            } else {
                 contentRateLayout.visibility = View.GONE
                 showController()
             }
@@ -353,32 +312,6 @@ class OfflineVIdeoPlayer(
             initializeMainPlayer(mContentUrl, true)
         })
 
-/*
-        pictureInPicture.setOnClickListener(OnClickListener {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                hideController()
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    val aspectRatio = Rational(16, 9)
-                    val actions: ArrayList<RemoteAction> = ArrayList()
-
-                    videoTitle.visibility = View.VISIBLE
-                    contentRateLayout.visibility = View.GONE
-                    //actions.add(remoteAction)
-                    mPictureInPictureParamsBuilder.setAspectRatio(aspectRatio)
-                        .build()
-                    context.enterPictureInPictureMode(mPictureInPictureParamsBuilder.build())
-
-                } else {
-                    context.enterPictureInPictureMode()
-                }
-
-                isPipModeOn = true
-            }
-        })
-*/
-
-
         exoRewLinearLayout.setOnClickListener {
             // rewind()
             VideoRenuButton.performClick()
@@ -388,7 +321,6 @@ class OfflineVIdeoPlayer(
             //fastForward()
             videoFarwardButton.performClick()
         }
-
 
 
         videoPlayButton.setOnClickListener(OnClickListener {
@@ -429,6 +361,18 @@ class OfflineVIdeoPlayer(
      }*/
 
 
+    fun hideSeekBarLayout() {
+        previewTimeBar.visibility = View.GONE
+        durationLinearLayout.visibility = View.GONE
+    }
+
+
+    fun showSeekBarLayout() {
+        previewTimeBar.visibility = View.VISIBLE
+        durationLinearLayout.visibility = View.VISIBLE
+    }
+
+
     fun releaseVideoAnalatics() {
         VideoPlayerTracer.error("CONVIVA SDK ADS:::", "releaseVideoAnalatics")
         videoAnalytics?.release()
@@ -453,23 +397,132 @@ class OfflineVIdeoPlayer(
         videoAnalytics?.reportPlaybackEnded()
     }
 
+    fun setPictureInPictureModeEnable(isEnable: Boolean) {
+        isPipModeOn = isEnable
+
+        if (isEnable) {
+            countDownTimer1?.cancel()
+            setTimerOnVideoPlayer(false)
+            videoTitle.visibility = View.GONE
+            contentRateLayout.visibility = View.GONE
+        }
+    }
+
 
     fun initAdSession() {
 
-        if (adsLoader == null)
-            VideoPlayerTracer.error("CONVIVA SDK ADS:::", "AD Loader Null")
-        else
-            VideoPlayerTracer.error("CONVIVA SDK ADS:::", "AD PLAYING")
+        if (adsLoader == null) VideoPlayerTracer.error("CONVIVA SDK ADS:::", "AD Loader Null")
+        else VideoPlayerTracer.error("CONVIVA SDK ADS:::", "AD PLAYING")
 
 
-        if (adAnalytics == null)
-            adAnalytics = ConvivaAnalytics.buildAdAnalytics(context, videoAnalytics)
+        if (adAnalytics == null) adAnalytics =
+            ConvivaAnalytics.buildAdAnalytics(context, videoAnalytics)
 
         val adMetadata: MutableMap<String, Any> = HashMap()
         adMetadata[ConvivaSdkConstants.AD_TAG_URL] = adsUrl!!
         adMetadata[ConvivaSdkConstants.AD_PLAYER] = ConvivaSdkConstants.AdPlayer.CONTENT.toString()
         adAnalytics?.setAdListener(adsLoader, adMetadata)
     }
+
+
+    fun adBreakStarted() {
+        videoAnalytics?.reportAdBreakStarted(
+            ConvivaSdkConstants.AdPlayer.CONTENT, ConvivaSdkConstants.AdType.CLIENT_SIDE
+        )
+    }
+
+    fun adBreakEnded() {
+        videoAnalytics?.reportAdBreakEnded()
+    }
+
+    fun reportAdLoaded(mAd: Ad) {
+        adAnalytics?.reportAdLoaded(getAdInfo(mAd))
+    }
+
+    fun reportAdStarted(mAd: Ad) {
+        adAnalytics?.reportAdStarted(getAdInfo(mAd))
+    }
+
+    fun closeAdSession() {
+        adAnalytics?.reportAdEnded()
+    }
+
+    fun skipAdSession() {
+        adAnalytics?.reportAdSkipped()
+    }
+
+    fun reportAdError(message: String?) {
+        //logic should be implemented to figure out the error severity
+        adAnalytics?.reportAdError(message, ConvivaSdkConstants.ErrorSeverity.FATAL)
+    }
+
+    //Can be called directly if we want to report a ad fatal error and end the ad session together
+    fun reportAdFailed(message: String?, mAd: Ad) {
+        adAnalytics?.reportAdFailed(message, getAdInfo(mAd))
+    }
+
+    fun setAdPlayerState(key: String?, value: Enum<*>?) {
+        adAnalytics?.reportAdMetric(key, value)
+    }
+
+    fun setAdBitrate(key: String?, value: Any?) {
+        adAnalytics?.reportAdMetric(key, value)
+    }
+
+    fun setAdResolution(key: String?, width: Any?, height: Any?) {
+        adAnalytics?.reportAdMetric(key, width, height)
+    }
+
+    fun setAdPlayerInfo() {
+        val adPlayerInfo: MutableMap<String, Any> = HashMap()
+        adPlayerInfo[ConvivaSdkConstants.FRAMEWORK_NAME] = "Google IMA"
+        adPlayerInfo[ConvivaSdkConstants.FRAMEWORK_VERSION] = "3.23.0"
+        adAnalytics?.setAdPlayerInfo(adPlayerInfo)
+    }
+
+
+    fun getAdInfo(ad: Ad): Map<String, Any> {
+        //verify ad metadata w.r.t learning center documentation's instructions.
+        val adInfo: MutableMap<String, Any> = HashMap()
+        adInfo[ConvivaSdkConstants.ASSET_NAME] = ad.title
+        //pass ad tag url for STREAM_URL
+        adInfo[ConvivaSdkConstants.STREAM_URL] = adsUrl!!
+        adInfo[ConvivaSdkConstants.IS_LIVE] = false
+        adInfo[ConvivaSdkConstants.DEFAULT_RESOURCE] = "AD_AKAMAI"
+        adInfo[ConvivaSdkConstants.DURATION] = ad.duration.toString()
+        adInfo[ConvivaSdkConstants.ENCODED_FRAMERATE] = 25
+
+        val podInfo = ad.adPodInfo
+        val podPosition =
+            if (podInfo.podIndex == 0) ConvivaSdkConstants.AdPosition.PREROLL.toString() else if (podInfo.podIndex == -1) ConvivaSdkConstants.AdPosition.POSTROLL.toString() else ConvivaSdkConstants.AdPosition.MIDROLL.toString()
+        val firstAdSystem: String
+        val firstAdId: String
+        val firstCreativeId: String
+        if (ad.adWrapperIds.size != 0) {
+            val len = ad.adWrapperIds.size
+            firstAdSystem = ad.adWrapperSystems[len - 1]
+            firstAdId = ad.adWrapperIds[len - 1]
+            firstCreativeId = ad.adWrapperCreativeIds[len - 1]
+        } else {
+            firstAdSystem = ad.adSystem
+            firstAdId = ad.adId
+            firstCreativeId = ad.creativeId
+        }
+        adInfo["c3.ad.technology"] = "Client Side"
+        adInfo["c3.ad.id"] = ad.adId
+        adInfo["c3.ad.system"] = ad.adSystem
+        adInfo["c3.ad.position"] = podPosition
+        adInfo["c3.ad.isSlate"] = "NA"
+        adInfo["c3.ad.mediaFileApiFramework"] = "NA"
+        adInfo["c3.ad.adStitcher"] = "NA"
+        adInfo["c3.ad.firstAdSystem"] = firstAdSystem
+        adInfo["c3.ad.firstAdId"] = firstAdId
+        adInfo["c3.ad.firstCreativeId"] = firstCreativeId
+        adInfo["c3.ad.creativeId"] = ad.creativeId
+        setAdPlayerInfo()
+        return adInfo
+    }
+
 
     /**
      * Demonstration of ConvivaAdAnalytics cleanup.
@@ -482,28 +535,9 @@ class OfflineVIdeoPlayer(
     }
 
 
-    fun updatePictureInPictureActions(
-        @DrawableRes iconId: Int, title: String?, controlType: Int, requestCode: Int
-    ) {
-        val actions = ArrayList<RemoteAction>()
-
-        val intent = PendingIntent.getBroadcast(
-            context,
-            requestCode,
-            Intent(ACTION_MEDIA_CONTROL).putExtra(EXTRA_CONTROL_TYPE, controlType),
-            PendingIntent.FLAG_MUTABLE
-        )
-        val icon: Icon = Icon.createWithResource(context, iconId)
-        actions.add(RemoteAction(icon, title!!, title, intent))
-        mPictureInPictureParamsBuilder.setActions(actions)
-        context.setPictureInPictureParams(mPictureInPictureParamsBuilder.build())
-    }
-
-
     fun setSkipDuraionArrayList(skipDurationArray: ArrayList<SkipDuration>) {
         this.skipDurationArray = skipDurationArray;
     }
-
 
     fun getExoPlayer(): StyledPlayerView {
         return simpleExoPlayerView!!
@@ -514,21 +548,9 @@ class OfflineVIdeoPlayer(
         val units = duration.split(":".toRegex()).toTypedArray()
     }
 
-    fun setEnableFullScreenButton(isEnable: Boolean) {
-        if (isEnable) {
-            videoRotationButton.isClickable = true
-            videoRotationButton.isFocusable = true
-        } else {
-            videoRotationButton.isClickable = false
-            videoRotationButton.isFocusable = false
-        }
-    }
-
 
     fun setWebSeriesEnable(
-        isWebSeries: Boolean,
-        UserLoginStatus: Boolean,
-        contentAccessType: String
+        isWebSeries: Boolean, UserLoginStatus: Boolean, contentAccessType: String
     ) {
         this.isWebSeries = isWebSeries
         this.userSubscriptionDtatus = UserLoginStatus
@@ -539,25 +561,14 @@ class OfflineVIdeoPlayer(
     fun showEpisodeButton(show: Boolean) {
         if (isWebSeries && show) {
             epsodeButton.visibility = View.VISIBLE
-            epsodeNextButton.visibility = View.VISIBLE
         } else {
             epsodeButton.visibility = View.GONE
-            epsodeNextButton.visibility = View.GONE
         }
     }
 
 
     fun getCurrentDurationFromTextView(): String {
         return exoCurrentPosition.text.toString()
-    }
-
-
-    fun showVolumeProgressBarButton() {
-        volumeLayout?.visibility = View.VISIBLE
-    }
-
-    fun hideVolumeProgressBarButton() {
-        volumeLayout?.visibility = View.GONE
     }
 
 
@@ -569,23 +580,13 @@ class OfflineVIdeoPlayer(
         volumeLinearLayout.visibility = View.GONE
     }
 
-    fun showRotateButton() {
-        videoRotationButton.visibility = View.VISIBLE
-    }
-
-    fun hideRotateButton() {
-        videoRotationButton.visibility = View.GONE
-    }
-
 
     fun showBackButton() {
-        if (closeVideoPlayerButton != null)
-            closeVideoPlayerButton.visibility = View.VISIBLE
+        closeVideoPlayerButton.visibility = View.VISIBLE
     }
 
     fun hideBackButton() {
-        if (closeVideoPlayerButton != null)
-            closeVideoPlayerButton.visibility = View.GONE
+        closeVideoPlayerButton.visibility = View.GONE
     }
 
 
@@ -621,7 +622,14 @@ class OfflineVIdeoPlayer(
     }
 
     fun disablePipMode(isPipModeOn: Boolean) {
-        this.isPipModeOn = isPipModeOn;
+        this.isPipModeOn = isPipModeOn
+
+        if (isPipModeOn) {
+            countDownTimer1?.cancel()
+            videoTitle.visibility = View.GONE
+            contentRateLayout.visibility = View.GONE
+        }
+
     }
 
 
@@ -630,29 +638,33 @@ class OfflineVIdeoPlayer(
     }
 
     fun hideTitleContanierView(isSHow: Boolean) {
-        if (isSHow)
-            videoTitle.visibility = View.VISIBLE
-        else
-            videoTitle.visibility = View.GONE
+        if (isSHow) videoTitle.visibility = View.VISIBLE
+        else videoTitle.visibility = View.GONE
     }
 
     fun hideRatingContanierView(isSHow: Boolean) {
-        if (isSHow)
-            contentRateLayout.visibility = View.VISIBLE
-        else
-            contentRateLayout.visibility = View.GONE
+        if (isSHow) contentRateLayout.visibility = View.VISIBLE
+        else contentRateLayout.visibility = View.GONE
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         val orientation = resources.configuration.orientation
         if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            if (contentTitle != null && !TextUtils.isEmpty(contentTitle)) {
+
+            if (isPipModeOn)
+                hideSeekBarLayout()
+            else
+                showSeekBarLayout()
+
+
+
+            if (contentTitle != null && !TextUtils.isEmpty(contentTitle) && !isPipModeOn) {
                 videoTitle.visibility = View.VISIBLE
                 videoTitle.setText(contentTitle)
-            } else
-                videoTitle.visibility = View.GONE
+            } else videoTitle.visibility = View.GONE
         } else if (orientation == Configuration.ORIENTATION_PORTRAIT) {
             videoTitle.visibility = View.GONE
+            hideSeekBarLayout()
         }
         super.onConfigurationChanged(newConfig)
     }
@@ -675,7 +687,7 @@ class OfflineVIdeoPlayer(
         previewTimeBar.visibility = GONE
         durationLinearLayout.visibility = GONE
         closeVideoPlayerButton.visibility = GONE
-        overlayImageTransparent.visibility = GONE
+        // overlayImageTransparent.visibility = GONE
         centerButtonLayout.visibility = GONE
         videoMenuLayout.visibility = GONE
         resumedVideoTv.visibility = GONE
@@ -683,19 +695,22 @@ class OfflineVIdeoPlayer(
         hideAtMs = C.TIME_UNSET
         isControllerShown = false
 
-        if (!isPipModeOn)
+        if (!isPipModeOn) {
+            contentRateLayout.visibility = VISIBLE
             setTimerOnVideoPlayer(true)
+        } else {
+            videoTitle.visibility = View.GONE
+            contentRateLayout.visibility = View.GONE
+        }
 
         updatePlayPauseButton()
-        contentRateLayout.visibility = VISIBLE
+
 
     }
 
     fun showController() {
-        previewTimeBar.visibility = VISIBLE
-        durationLinearLayout.visibility = VISIBLE
         closeVideoPlayerButton.visibility = VISIBLE
-        overlayImageTransparent.visibility = VISIBLE
+        //overlayImageTransparent.visibility = VISIBLE
         centerButtonLayout.visibility = VISIBLE
         videoMenuLayout.visibility = VISIBLE
         resumedVideoTv.visibility = GONE
@@ -705,23 +720,22 @@ class OfflineVIdeoPlayer(
         setTimerOnVideoPlayer(false)
         updatePlayPauseButton()
         contentRateLayout.visibility = View.GONE
+
+        val orientation = getContext().resources.configuration.orientation
+
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) showSeekBarLayout()
+        else hideSeekBarLayout()
     }
 
     private fun updatePlayPauseButton() {
         var requestPlayPauseFocus = false
         val playing = mMediaPlayer != null && mMediaPlayer!!.playWhenReady
-        if (videoPlayButton != null) {
-            requestPlayPauseFocus =
-                requestPlayPauseFocus or (playing && videoPlayButton!!.isFocused)
-            videoPlayButton!!.visibility =
-                if (playing) GONE else VISIBLE
-        }
-        if (videoPauseButton != null) {
-            requestPlayPauseFocus =
-                requestPlayPauseFocus or (!playing && videoPauseButton!!.isFocused)
-            videoPauseButton!!.visibility =
-                if (!playing) GONE else VISIBLE
-        }
+        requestPlayPauseFocus =
+            requestPlayPauseFocus or (playing && videoPlayButton.isFocused)
+        videoPlayButton.visibility = if (playing) GONE else VISIBLE
+        requestPlayPauseFocus =
+            requestPlayPauseFocus or (!playing && videoPauseButton.isFocused)
+        videoPauseButton.visibility = if (!playing) GONE else VISIBLE
         if (requestPlayPauseFocus) {
             requestPlayPauseFocus()
         }
@@ -729,10 +743,10 @@ class OfflineVIdeoPlayer(
 
     private fun requestPlayPauseFocus() {
         val playing = mMediaPlayer != null && mMediaPlayer!!.playWhenReady
-        if (!playing && videoPlayButton != null) {
-            videoPlayButton!!.requestFocus()
-        } else if (playing && videoPauseButton != null) {
-            videoPauseButton!!.requestFocus()
+        if (!playing) {
+            videoPlayButton.requestFocus()
+        } else if (playing) {
+            videoPauseButton.requestFocus()
         }
     }
 
@@ -795,21 +809,9 @@ class OfflineVIdeoPlayer(
         initViews()
     }
 
-    private fun videoLockUnlockStatus() {
-/*
-        if (isScreenLockEnable) {
-            videoLockButton!!.visibility = VISIBLE
-            videoUnLockButton!!.visibility = GONE
-        } else {
-            videoLockButton!!.visibility = GONE
-            videoUnLockButton!!.visibility = VISIBLE
-        }
-*/
-    }
 
     // init view and view group here
     private fun initViews() {
-//        ToastMessage.showLogs(ToastMessage.LogType.ERROR, "Video Player:::", "initViews()");
 
         if (mMediaPlayer != null && simpleExoPlayerView != null) {
             simpleExoPlayerView!!.player!!.release()
@@ -824,10 +826,7 @@ class OfflineVIdeoPlayer(
         if (videoPlayerSdkCallBackListener != null) videoPlayerSdkCallBackListener!!.onPlayerReady(
             mContentUrl
         )
-
         mWindow = context.window
-
-        volumeProgressBarSetUp()
     }
 
     fun setMultiTvVideoPlayerPausePlaySdkListener(videoPlayPauseCallBackListener: VideoPlayPauseCallBackListener?) {
@@ -864,6 +863,7 @@ class OfflineVIdeoPlayer(
 
     fun setContentTitle(title: String?) {
         contentTitle = title
+        videoTitle.setText(contentTitle)
     }
 
     fun setContentId(id: String?) {
@@ -922,8 +922,7 @@ class OfflineVIdeoPlayer(
         if (mMediaPlayer != null && simpleExoPlayerView != null) {
             simpleExoPlayerView!!.onResume()
             mMediaPlayer!!.playWhenReady = true
-            if (isPipModeOn)
-                videoPlayPauseCallBackListener?.videoStart()
+            if (isPipModeOn) videoPlayPauseCallBackListener?.videoStart()
         }
     }
 
@@ -932,8 +931,7 @@ class OfflineVIdeoPlayer(
         if (mMediaPlayer != null && simpleExoPlayerView != null) {
             simpleExoPlayerView!!.onPause()
             mMediaPlayer!!.playWhenReady = false
-            if (isPipModeOn)
-                videoPlayPauseCallBackListener?.videoStop()
+            if (isPipModeOn) videoPlayPauseCallBackListener?.videoStop()
         }
     }
 
@@ -952,170 +950,204 @@ class OfflineVIdeoPlayer(
     }
 
 
-    fun buildOfflineLicenseHelper(): OfflineLicenseHelper {
-        val dataSourceFactory1 = DefaultHttpDataSource.Factory()
-        val eventDispatcher =
-            DrmSessionEventListener.EventDispatcher()
-        return OfflineLicenseHelper.newWidevineInstance(
-            drmdrmLicenseUrl!!,
-            true,
-            dataSourceFactory1,
-            eventDispatcher
-        )
-    }
-
-
     private fun initializeMainPlayer(videoUrl: String?, isNeedToPlayInstantly: Boolean) {
-
+//        ToastMessage.showLogs(ToastMessage.LogType.ERROR, "Video Player:::", "initializeMainPlayer");
         if (mMediaPlayer != null) {
             mMediaPlayer!!.release()
             if (adsLoader != null) adsLoader!!.setPlayer(null)
             mMediaPlayer = null
         }
 
+        videoTitle.setText(contentTitle)
+
+        //var subtitleSource = SingleSampleMediaSource(subtitleUri, ...);
         videoControllerLayout?.visibility = GONE
         previewTimeBar.visibility = GONE
         durationLinearLayout.visibility = GONE
         videoPlayerSdkCallBackListener?.prepareVideoPlayer()
-
-        val customLoadControl: LoadControl = DefaultLoadControl.Builder()
-            .setBufferDurationsMs(1000, 50000, 1000, 1)
-            .setAllocator(DefaultAllocator(true, 32 * 1024))
-            .setTargetBufferBytes(C.LENGTH_UNSET)
-            .setPrioritizeTimeOverSizeThresholds(true)
-            .setBackBuffer(0, false)
-            .build()
+        //        ToastMessage.showLogs(ToastMessage.LogType.DEBUG, TAG, "Content url is " + videoUrl);
+        val customLoadControl: LoadControl =
+            DefaultLoadControl.Builder().setBufferDurationsMs(1000, 50000, 1000, 1)
+                .setAllocator(DefaultAllocator(true, 32 * 1024))
+                .setTargetBufferBytes(C.LENGTH_UNSET).setPrioritizeTimeOverSizeThresholds(true)
+                .setBackBuffer(0, false).build()
 
 
-
-
-        mMediaPlayer = ExoPlayer.Builder(context).setSeekBackIncrementMs(10000)
-            .setSeekForwardIncrementMs(10000).setTrackSelector(trackSelector)
-            .setLoadControl(customLoadControl).build()
-
-        mMediaPlayer!!.addListener(stateChangeCallback1)
-        simpleExoPlayerView!!.player = mMediaPlayer
-        simpleExoPlayerView!!.controllerHideOnTouch = true
-        simpleExoPlayerView!!.setControllerHideDuringAds(true)
-        val mediaItem: MediaItem?
-
-
-        try {
-            WVMAgent = PallyconWVMSDKFactory.getInstance(context)
-            WVMAgent?.init(context, null, siteId, siteKey)
-            WVMAgent?.setPallyconEventListener(pallyconEventListener)
-
-        } catch (e: PallyconDrmException) {
-            e.printStackTrace()
-        } catch (e: UnAuthorizedDeviceException) {
-            e.printStackTrace()
-        }
-
-        mediaItem = MediaItem.Builder().setUri(videoUrl).build()
-
-        val drmSchemeUuid = UUID.fromString(C.WIDEVINE_UUID.toString())
-        val uri = Uri.parse(videoUrl)
-        try {
-            drmSessionManager = WVMAgent!!.createDrmSessionManagerByToken(
-                drmSchemeUuid,
-                drmdrmLicenseUrl,
-                uri,
-                drmContentToken
-            )
-        } catch (e: PallyconDrmException) {
-            e.printStackTrace()
-        }
-
-
-        val downloadRequest: DownloadRequest? =
-            VideoPlayerDownloadUtil.getDownloadTracker(context)
-                .getDownloadRequest(mediaItem.playbackProperties?.uri)
-
-
-        if (isDrmContent) {
-            val mediaSource = DownloadHelper.createMediaSource(
-                downloadRequest!!,
-                VideoPlayerDownloadUtil.getReadOnlyDataSourceFactory(context), drmSessionManager
-            )
-
-            mMediaPlayer!!.setMediaSource(mediaSource)
-        } else {
-            val mediaSource = DownloadHelper.createMediaSource(
-                downloadRequest!!,
-                VideoPlayerDownloadUtil.getReadOnlyDataSourceFactory(context)
-            )
-
-            mMediaPlayer!!.setMediaSource(mediaSource)
-        }
-
-
-
-
-        mMediaPlayer!!.audioComponent!!.volume = mMediaPlayer!!.audioComponent!!.volume
-        mMediaPlayer!!.prepare()
-        if (isNeedToPlayInstantly) {
-            mMediaPlayer!!.playWhenReady = true
-        }
-
-        val mediaSession = MediaSessionCompat(context, "com.lionsgacom.multitv.ottteplay")
-        val mediaSessionConnector = MediaSessionConnector(mediaSession)
-        mediaSessionConnector.setPlayer(mMediaPlayer)
-        mediaSession.isActive = true
-
-        val volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
-        mMediaPlayer?.audioComponent?.volume = volume.toFloat()
-        if (volume < 1) {
-            volumeMuteAndUnMuteButton.visibility = View.VISIBLE
-            volumeUnMuteButton.visibility = View.GONE
-        } else {
-            volumeMuteAndUnMuteButton.visibility = View.GONE
-            volumeUnMuteButton.visibility = View.VISIBLE
-        }
-
-
-        if (isWatchDurationEnable)
-            seekTo(Math.max(mMediaPlayer!!.currentPosition + watchDuration * 1000, 0))
 
 
         if (adsUrl != null && !TextUtils.isEmpty(adsUrl)) {
-            adsLoader?.adsLoader?.addAdsLoadedListener(object :
-                com.google.ads.interactivemedia.v3.api.AdsLoader.AdsLoadedListener {
-                override fun onAdsManagerLoaded(adsManagerLoadedEvent: AdsManagerLoadedEvent) {
-                    val adsManager = adsManagerLoadedEvent.getAdsManager()
-                    adsManager.addAdEventListener(object : AdEvent.AdEventListener {
-                        override fun onAdEvent(adEvent: AdEvent) {
-                            Log.e("Ads Event:::", "" + adEvent.type)
-                            if (adEvent.type.equals("STARTED")) {
-                                videoPlayerSdkCallBackListener?.onAdPlay()
-                                if (!isPipModeOn)
-                                    setTimerOnVideoPlayer(false)
-                            } else if (adEvent.type.equals("COMPLETED")) {
-                                videoPlayerSdkCallBackListener?.onAdCompleted()
-                                if (!isPipModeOn)
-                                    setTimerOnVideoPlayer(true)
-                            }
-                        }
+            val dataSourceFactory: DataSource.Factory = DefaultDataSource.Factory(
+                context
+            )
+            val mediaSourceFactory: MediaSourceFactory =
+                DefaultMediaSourceFactory(dataSourceFactory).setAdsLoaderProvider { unusedAdTagUri: MediaItem.AdsConfiguration? -> adsLoader }
+                    .setAdViewProvider(simpleExoPlayerView)
 
-                    })
-                }
 
-            })
-
+            mMediaPlayer = ExoPlayer.Builder(context).setSeekBackIncrementMs(10000)
+                .setSeekForwardIncrementMs(10000).setMediaSourceFactory(mediaSourceFactory)
+                .setTrackSelector(trackSelector).setLoadControl(customLoadControl).build()
+            adsLoader = ImaAdsLoader.Builder( /* context= */context).build()
 
         } else {
-            videoPlayerSdkCallBackListener?.onAdCompleted()
-            if (!isPipModeOn)
-                setTimerOnVideoPlayer(true)
+            mMediaPlayer = ExoPlayer.Builder(context).setSeekBackIncrementMs(10000)
+                .setSeekForwardIncrementMs(10000).setTrackSelector(trackSelector)
+                .setLoadControl(customLoadControl).build()
         }
+        if (mMediaPlayer != null) {
+            mMediaPlayer!!.addListener(stateChangeCallback1)
+            simpleExoPlayerView!!.player = mMediaPlayer
+            simpleExoPlayerView!!.controllerHideOnTouch = true
+            simpleExoPlayerView!!.setControllerHideDuringAds(true)
+            var mediaItem: MediaItem? = null
+            var subtitle: MediaItem.SubtitleConfiguration? = null
+            if (subTitleUri != null && !TextUtils.isEmpty(subTitleUri)) {
+                subtitle = MediaItem.SubtitleConfiguration.Builder(Uri.parse(subTitleUri))
+                    .setMimeType(MimeTypes.APPLICATION_SUBRIP) // The correct MIME type (required).
+                    .setLanguage("en") // MUST, The subtitle language (optional).
+                    .setSelectionFlags(C.SELECTION_FLAG_DEFAULT) //MUST,  Selection flags for the track (optional).
+                    .build()
+            }
 
+            if (isDrmContent) {
+                try {
+                    WVMAgent = PallyconWVMSDKFactory.getInstance(context)
+                    WVMAgent?.init(context, null, siteId, siteKey)
+                    WVMAgent?.setPallyconEventListener(pallyconEventListener)
+                } catch (e: PallyconDrmException) {
+                    e.printStackTrace()
+                } catch (e: UnAuthorizedDeviceException) {
+                    e.printStackTrace()
+                }
+                mediaItem = MediaItem.Builder().setUri(videoUrl).build()
+                val drmSchemeUuid = UUID.fromString(C.WIDEVINE_UUID.toString())
+                val uri = Uri.parse(videoUrl)
+                try {
+                    drmSessionManager = WVMAgent!!.createDrmSessionManagerByToken(
+                        drmSchemeUuid, drmdrmLicenseUrl, uri, drmContentToken
+                    )
+                } catch (e: PallyconDrmException) {
+                    e.printStackTrace()
+                }
+                val playerMediaSource = ExoUttils().buildMediaSource(
+                    context, mediaItem, videoUrl!!, drmSessionManager!!
+                )
+                mMediaPlayer!!.setMediaSource(playerMediaSource!!)
+            } else if (isOfflineContent) {
+                mediaItem = MediaItem.Builder().setUri(videoUrl).build()
+                val downloadRequest: DownloadRequest? =
+                    VideoPlayerDownloadUtil.getDownloadTracker(context)
+                        .getDownloadRequest(mediaItem.playbackProperties?.uri)
+                VideoPlayerTracer.error(
+                    "Offline Video Url:::", "" + mediaItem.playbackProperties?.uri
+                )
+                val mediaSource = DownloadHelper.createMediaSource(
+                    downloadRequest!!, VideoPlayerDownloadUtil.getReadOnlyDataSourceFactory(context)
+                )
+
+                mMediaPlayer!!.setMediaSource(mediaSource!!)
+
+            } else {
+                mediaItem = if (subtitle != null) {
+                    /*MediaSource playerMediaSource = new ExoUttils().buildMediaSource(context, mediaItem, videoUrl, drmSessionManager);
+                    MediaSource mediaSource = new MergingMediaSource(mediaSources);
+                    mMediaPlayer.setMediaSource(mediaSource);*/
+                    if (adsUrl != null && !TextUtils.isEmpty(adsUrl)) {
+                        adsLoader!!.setPlayer(mMediaPlayer)
+                        val adTagUri = Uri.parse(adsUrl)
+                        MediaItem.Builder().setSubtitleConfigurations(ImmutableList.of(subtitle))
+                            .setUri(videoUrl).setAdsConfiguration(
+                                MediaItem.AdsConfiguration.Builder(adTagUri).build()
+                            ).build()
+                    } else {
+                        MediaItem.Builder().setSubtitleConfigurations(ImmutableList.of(subtitle))
+                            .setUri(videoUrl).build()
+                    }
+                } else {
+                    if (adsUrl != null && !TextUtils.isEmpty(adsUrl)) {
+                        adsLoader!!.setPlayer(mMediaPlayer)
+                        adsLoader!!.skipAd()
+                        adsLoader!!.focusSkipButton();
+                        val adTagUri = Uri.parse(adsUrl)
+
+                        MediaItem.Builder().setUri(videoUrl).setAdsConfiguration(
+                            MediaItem.AdsConfiguration.Builder(adTagUri).build()
+                        ).build()
+
+
+                    } else {
+                        MediaItem.Builder().setUri(videoUrl).build()
+                    }
+                }
+                mMediaPlayer!!.setMediaItem(mediaItem)
+            }
+            mMediaPlayer!!.audioComponent!!.volume = mMediaPlayer!!.audioComponent!!.volume
+            mMediaPlayer!!.prepare()
+            if (isNeedToPlayInstantly) {
+                mMediaPlayer!!.playWhenReady = true
+            }
+
+            val mediaSession = MediaSessionCompat(context, "com.lionsgacom.multitv.ottteplay")
+            val mediaSessionConnector = MediaSessionConnector(mediaSession)
+            mediaSessionConnector.setPlayer(mMediaPlayer)
+            mediaSession.isActive = true
+
+            val volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
+            mMediaPlayer?.audioComponent?.volume = volume.toFloat()
+            if (volume < 1) {
+                volumeMuteAndUnMuteButton.visibility = View.VISIBLE
+                volumeUnMuteButton.visibility = View.GONE
+            } else {
+                volumeMuteAndUnMuteButton.visibility = View.GONE
+                volumeUnMuteButton.visibility = View.VISIBLE
+            }
+
+
+            if (isWatchDurationEnable) seekTo(
+                mMediaPlayer!!.currentPosition + watchDuration * 1000
+            )
+
+
+            if (adsUrl != null && !TextUtils.isEmpty(adsUrl)) {
+                adsLoader?.adsLoader?.addAdsLoadedListener(object :
+                    com.google.ads.interactivemedia.v3.api.AdsLoader.AdsLoadedListener {
+                    override fun onAdsManagerLoaded(adsManagerLoadedEvent: AdsManagerLoadedEvent) {
+                        val adsManager = adsManagerLoadedEvent.getAdsManager()
+                        adsManager.addAdEventListener(object : AdEvent.AdEventListener {
+                            override fun onAdEvent(adEvent: AdEvent) {
+                                Log.e("Ads Event:::", "" + adEvent.type)
+                                if (adEvent.type.equals("STARTED")) {
+                                    videoPlayerSdkCallBackListener?.onAdPlay()
+                                    if (!isPipModeOn) setTimerOnVideoPlayer(false)
+                                } else if (adEvent.type.equals("COMPLETED")) {
+                                    videoPlayerSdkCallBackListener?.onAdCompleted()
+                                    if (!isPipModeOn) setTimerOnVideoPlayer(true)
+                                }
+                            }
+
+                        })
+                    }
+
+                })
+
+
+            } else {
+                videoPlayerSdkCallBackListener?.onAdCompleted()
+                if (!isPipModeOn) {
+                    setTimerOnVideoPlayer(true)
+                } else {
+                    countDownTimer1?.cancel()
+                }
+            }
+
+        }
     }
 
     var stateChangeCallback1: Player.Listener = object : Player.Listener {
         override fun onPlayerError(error: PlaybackException) {
             super.onPlayerError(error)
             if (mMediaPlayer != null && mMediaPlayer!!.currentPosition != 0L) seekPlayerTo =
-                mMediaPlayer!!.currentPosition
-                    .toInt() / 1000
+                mMediaPlayer!!.currentPosition.toInt() / 1000
             errorRetryLayout.bringToFront()
             errorRetryLayout.visibility = VISIBLE
             videoControllerLayout?.visibility = GONE
@@ -1134,6 +1166,10 @@ class OfflineVIdeoPlayer(
             var text = "Main player"
             updatePlayPauseButton()
 
+            if (playbackState == Player.STATE_READY && playWhenReady) {
+                previewTimeBar.hidePreview()
+            }
+
             when (playbackState) {
                 ExoPlayer.STATE_BUFFERING -> {
                     text += "buffering"
@@ -1144,60 +1180,66 @@ class OfflineVIdeoPlayer(
                 }
                 ExoPlayer.STATE_ENDED -> {
                     text += "ended"
-                    if (contentType == ContentType.VOD) {
-                        if (mMediaPlayer != null) contentPlayedTimeInMillis =
-                            mMediaPlayer!!.currentPosition
-                        releaseVideoPlayer()
-                        bufferingProgressBarLayout!!.visibility = GONE
-                        circularProgressRing =
-                            findViewById<View>(R.id.circular_progress_ring) as FabButton
-                        circularProgressRing.showProgress(true)
-                        circularProgressRing.setProgress(0f)
-                        circularProgressLayout.visibility = VISIBLE
-                        // circularProgressLayout!!.bringToFront()
-                        val totalDuration = 1200
-                        val tickDuration = 300
-                        countDownTimer = object : CountDownTimerWithPause(
-                            totalDuration.toLong(),
-                            (tickDuration / 10).toLong(),
-                            true
-                        ) {
-                            override fun onTick(millisUntilFinished: Long) {
-                                var progress = millisUntilFinished.toFloat() / totalDuration
-                                progress = progress * 100
-                                progress = 100 - progress
-                                circularProgressRing.setProgress(progress)
-                            }
 
 
-                            // comment
+                    if (isContentRepetPlaying) {
+                        repeatVideoLinearLayout.visibility = View.VISIBLE
+                        repeatVideoLinearLayout.setOnClickListener {
+                            repeatVideoLinearLayout.visibility = View.GONE
+                            initializeMainPlayer(mContentUrl, true)
+                        }
+                    } else {
+                        if (contentType == ContentType.VOD) {
+                            repeatVideoLinearLayout.visibility = View.GONE
 
-                            override fun onFinish() {
-                                circularProgressRing =
-                                    findViewById<View>(R.id.circular_progress_ring) as FabButton
-
-                                circularProgressLayout.visibility = View.GONE
-
-                                if (isWebSeries) {
-                                    if (userSubscriptionDtatus)
-                                        videoPlayerSdkCallBackListener?.onPlayNextVideo()
-                                    else if (contentAccessType.equals("paid") && !userSubscriptionDtatus)
-                                        videoPlayerSdkCallBackListener?.subscriptionCallBack()
-                                    else if (contentAccessType.equals("free"))
-                                        videoPlayerSdkCallBackListener?.onPlayNextVideo()
-                                    else
-                                        videoPlayerSdkCallBackListener?.showThumbnailCallback()
-
-                                } else {
-                                    if (contentAccessType.equals("free"))
-                                        videoPlayerSdkCallBackListener?.onPlayNextVideo()
-                                    else
-                                        videoPlayerSdkCallBackListener?.subscriptionCallBack()
+                            if (mMediaPlayer != null) contentPlayedTimeInMillis =
+                                mMediaPlayer!!.currentPosition
+                            releaseVideoPlayer()
+                            bufferingProgressBarLayout.visibility = GONE
+                            circularProgressRing =
+                                findViewById<View>(R.id.circular_progress_ring) as FabButton
+                            circularProgressRing.showProgress(true)
+                            circularProgressRing.setProgress(0f)
+                            circularProgressLayout.visibility = VISIBLE
+                            // circularProgressLayout!!.bringToFront()
+                            val totalDuration = 1200
+                            val tickDuration = 300
+                            countDownTimer = object : CountDownTimerWithPause(
+                                totalDuration.toLong(), (tickDuration / 10).toLong(), true
+                            ) {
+                                override fun onTick(millisUntilFinished: Long) {
+                                    var progress = millisUntilFinished.toFloat() / totalDuration
+                                    progress = progress * 100
+                                    progress = 100 - progress
+                                    circularProgressRing.setProgress(progress)
                                 }
 
-                            }
-                        }.create()
+
+                                // comment
+
+                                override fun onFinish() {
+                                    circularProgressRing =
+                                        findViewById<View>(R.id.circular_progress_ring) as FabButton
+
+                                    circularProgressLayout.visibility = View.GONE
+
+                                    if (isWebSeries) {
+                                        if (userSubscriptionDtatus) videoPlayerSdkCallBackListener?.onPlayNextVideo()
+                                        else if (contentAccessType.equals("paid") && !userSubscriptionDtatus) videoPlayerSdkCallBackListener?.subscriptionCallBack()
+                                        else if (contentAccessType.equals("free")) videoPlayerSdkCallBackListener?.onPlayNextVideo()
+                                        else videoPlayerSdkCallBackListener?.showThumbnailCallback()
+
+                                    } else {
+                                        if (contentAccessType.equals("free")) videoPlayerSdkCallBackListener?.onPlayNextVideo()
+                                        else videoPlayerSdkCallBackListener?.subscriptionCallBack()
+                                    }
+
+                                }
+                            }.create()
+                        }
+
                     }
+
                 }
                 ExoPlayer.STATE_IDLE -> {
                     text += "idle"
@@ -1247,8 +1289,7 @@ class OfflineVIdeoPlayer(
             bufferingTimeHandler = Handler()
         }
         if (bufferingTimeRunnable != null) bufferingTimeHandler!!.postDelayed(
-            bufferingTimeRunnable,
-            0
+            bufferingTimeRunnable, 0
         )
 
         videoPlayerSdkCallBackListener?.onBufferStart()
@@ -1268,10 +1309,11 @@ class OfflineVIdeoPlayer(
     }
 
 
-    private val bufferingTimeRunnable: Runnable = object : Runnable {
+    private val bufferingTimeRunnable: Runnable? = object : Runnable {
         override fun run() {
             bufferingTimeInMillis = bufferingTimeInMillis + 1000
 
+            //Log.e("Naseeb", "Buffering time " + bufferingTimeInMillis);
             if (bufferingTimeHandler != null) bufferingTimeHandler!!.postDelayed(this, 1000)
         }
     }
@@ -1328,9 +1370,7 @@ class OfflineVIdeoPlayer(
 
     override fun onClick(view: View) {
         if (view === setting) {
-            if (!isShowingTrackSelectionDialog
-                && TrackSelectionDialog.willHaveContent(trackSelector)
-            ) {
+            if (!isShowingTrackSelectionDialog && TrackSelectionDialog.willHaveContent(trackSelector)) {
                 isShowingTrackSelectionDialog = true
                 val trackSelectionDialog = TrackSelectionDialog.createForTrackSelector(
                     trackSelector
@@ -1344,15 +1384,13 @@ class OfflineVIdeoPlayer(
 
     private fun hideSystemBars() {
         val decorView = (getContext() as Activity).window.decorView
-        val uiOptions = (SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                or SYSTEM_UI_FLAG_FULLSCREEN)
+        val uiOptions = (SYSTEM_UI_FLAG_HIDE_NAVIGATION or SYSTEM_UI_FLAG_FULLSCREEN)
         decorView.systemUiVisibility = uiOptions
 
-        if (contentTitle != null && !TextUtils.isEmpty(contentTitle)) {
-            videoTitle?.visibility = View.VISIBLE
-            videoTitle?.setText(contentTitle)
-        } else
-            videoTitle?.visibility = View.GONE
+        if (contentTitle != null && !TextUtils.isEmpty(contentTitle) && !isPipModeOn) {
+            videoTitle.visibility = View.VISIBLE
+            videoTitle.setText(contentTitle)
+        } else videoTitle.visibility = View.GONE
     }
 
     private fun showSystemBar() {
@@ -1361,34 +1399,33 @@ class OfflineVIdeoPlayer(
         decorView.systemUiVisibility = uiOptions
         //hideSystemUiFullScreen()
 
-        videoTitle?.visibility = View.GONE
+        videoTitle.visibility = View.GONE
 
-        if (contentTitle != null && !TextUtils.isEmpty(contentTitle)) {
-            videoTitle?.visibility = View.VISIBLE
-            videoTitle?.setText(contentTitle)
-        } else
-            videoTitle?.visibility = View.GONE
+        if (contentTitle != null && !TextUtils.isEmpty(contentTitle) && !isPipModeOn) {
+            videoTitle.visibility = View.VISIBLE
+            videoTitle.setText(contentTitle)
+        } else videoTitle.visibility = View.GONE
     }
 
-    @SuppressLint("InlinedApi")
-    private fun hideSystemUiFullScreen() {
+    /*  @SuppressLint("InlinedApi")
+      private fun hideSystemUiFullScreen() {
 
-        simpleExoPlayerView!!.systemUiVisibility = (View.SYSTEM_UI_FLAG_LOW_PROFILE
-                or View.SYSTEM_UI_FLAG_FULLSCREEN
-                or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
-    }
+          simpleExoPlayerView!!.systemUiVisibility = (View.SYSTEM_UI_FLAG_LOW_PROFILE
+                  or View.SYSTEM_UI_FLAG_FULLSCREEN
+                  or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                  or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                  or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                  or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
+      }*/
 
 
     private fun rewind() {
-        seekTo(Math.max(mMediaPlayer!!.currentPosition - DEFAULT_REWIND_MS, 0))
+        seekTo(mMediaPlayer!!.currentPosition - DEFAULT_REWIND_MS)
     }
 
     fun seekToVideoPlayer(skipDuration: Int) {
         if (skipDuration > 1) {
-            seekTo(Math.max(mMediaPlayer!!.currentPosition + skipDuration * 1000, 0))
+            seekTo(mMediaPlayer!!.currentPosition + skipDuration * 1000)
         }
     }
 
@@ -1397,7 +1434,7 @@ class OfflineVIdeoPlayer(
         val seek = watch * 1000 - mMediaPlayer!!.currentPosition
         Log.e("Seek position:::", "" + seek)
         Log.e("Total Skip position:::", "" + mMediaPlayer!!.currentPosition + seek)
-        seekTo(Math.max(mMediaPlayer!!.currentPosition + seek, 0))
+        seekTo(mMediaPlayer!!.currentPosition + seek)
         showController()
     }
 
@@ -1417,11 +1454,11 @@ class OfflineVIdeoPlayer(
     }
 
     private fun fastForward() {
-        seekTo(Math.max(mMediaPlayer!!.currentPosition + DEFAULT_FAST_FORWARD_MS, 0))
+        seekTo(mMediaPlayer!!.currentPosition + DEFAULT_FAST_FORWARD_MS)
     }
 
     fun seekTo(positionMs: Long) {
-        mMediaPlayer!!.seekTo(positionMs)
+        mMediaPlayer?.seekTo(positionMs)
     }
 
 
@@ -1444,6 +1481,100 @@ class OfflineVIdeoPlayer(
         }
     }
 
+    override fun onScrubStart(previewBar: PreviewBar) {
+        if (!TextUtils.isEmpty(spriteImageUrl))
+            previewFrameLayout.visibility = View.VISIBLE
+        else
+            previewFrameLayout.visibility = INVISIBLE
+
+        pauseVideoPlayer()
+    }
+
+    override fun onScrubMove(previewBar: PreviewBar, progress: Int, fromUser: Boolean) {
+        if (!TextUtils.isEmpty(spriteImageUrl))
+            previewFrameLayout.visibility = View.VISIBLE
+        else
+            previewFrameLayout.visibility = INVISIBLE
+
+        exoCurrentPosition.text = Util.getStringForTime(
+            formatBuilder, formatter, progress.toLong()
+        )
+        pauseVideoPlayer()
+
+    }
+
+    override fun onScrubStop(previewBar: PreviewBar) {
+        previewFrameLayout.visibility = INVISIBLE
+        if (mMediaPlayer != null) {
+            seekTo(previewBar.progress.toLong())
+        }
+
+        resumeVideoPlayer()
+    }
+
+    private var maxLine = 0
+    fun setSpriteImageThumbnailMaxLine(maxLine: Int) {
+        this.maxLine = maxLine;
+    }
+
+
+    override fun loadPreview(currentPosition: Long, max: Long) {
+        /*    previewFrameLayout.visibility = View.VISIBLE
+            val targetX = updatePreviewX(currentPosition.toInt(), mMediaPlayer!!.duration.toInt())
+            previewFrameLayout.x = targetX.toFloat()
+            Glide.with(previewImageView)
+                .load(spriteImageUrl)
+                .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
+                .transform(GlideThumbnailTransformation(currentPosition))
+                .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+                .into(previewImageView)*/
+
+        if (!TextUtils.isEmpty(spriteImageUrl)) {
+            previewFrameLayout.visibility = View.VISIBLE
+            Glide.with(previewImageView).load(spriteImageUrl)
+                .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
+                .fitCenter()
+                .transform(GlideThumbnailTransformation(currentPosition, maxLine))
+                .diskCacheStrategy(DiskCacheStrategy.RESOURCE).into(previewImageView)
+        } else {
+            previewFrameLayout.visibility = View.GONE
+        }
+
+
+    }
+
+
+    private fun updatePreviewX(progress: Int, max: Int): Int {
+        if (max == 0) {
+            return 0
+        }
+
+        val parent = previewFrameLayout.parent as ViewGroup
+        val layoutParams = previewFrameLayout.layoutParams as MarginLayoutParams
+        val offset = progress.toFloat() / max
+        val minimumX: Int = previewFrameLayout.left
+        val maximumX = (parent.width - parent.paddingRight - layoutParams.rightMargin)
+
+// We remove the padding of the scrubbing, if you have a custom size juste use dimen to calculate this
+        val previewPaddingRadius: Int =
+            dpToPx(resources.displayMetrics, DefaultTimeBar.DEFAULT_SCRUBBER_DRAGGED_SIZE_DP).div(2)
+        val previewLeftX = (previewTimeBar as View).left.toFloat()
+        val previewRightX = (previewTimeBar as View).right.toFloat()
+        val previewSeekBarStartX: Float = previewLeftX + previewPaddingRadius
+        val previewSeekBarEndX: Float = previewRightX - previewPaddingRadius
+        val currentX = (previewSeekBarStartX + (previewSeekBarEndX - previewSeekBarStartX) * offset)
+        val startX: Float = currentX - previewFrameLayout.width / 2f
+        val endX: Float = startX + previewFrameLayout.width
+
+        // Clamp the moves
+        return if (startX >= minimumX && endX <= maximumX) {
+            startX.toInt()
+        } else if (startX < minimumX) {
+            minimumX
+        } else {
+            maximumX - previewFrameLayout.width
+        }
+    }
 
     private fun dpToPx(displayMetrics: DisplayMetrics, dps: Int): Int {
         return (dps * displayMetrics.density).toInt()
@@ -1489,8 +1620,7 @@ class OfflineVIdeoPlayer(
             )
         } else {
             VideoPlayerTracer.error(
-                "Analatics Error:::",
-                "token or content id or content title is required field."
+                "Analatics Error:::", "token or content id or content title is required field."
             )
         }
     }
@@ -1512,8 +1642,7 @@ class OfflineVIdeoPlayer(
         sharedPreferencePlayer.setPreferenceInt(context, "pos", 0)
         if (Build.VERSION.SDK_INT >= 31) {
             if (ContextCompat.checkSelfPermission(
-                    context,
-                    Manifest.permission.READ_PHONE_STATE
+                    context, Manifest.permission.READ_PHONE_STATE
                 ) == PackageManager.PERMISSION_GRANTED
             ) {
                 mgr.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE)
@@ -1539,109 +1668,58 @@ class OfflineVIdeoPlayer(
 
 
     fun onKeyDownEvent() {
-        if (volumeProgressBar != null)
-            volumeProgressBar.setProgress(audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC)!!)
 
-        var volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
-
-
+        val volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
         mMediaPlayer?.audioComponent?.volume = volume.toFloat()
 
         if (volume < 1) {
-            volumeMuteAndUnMuteButton?.visibility = View.VISIBLE
-            volumeUnMuteButton?.visibility = View.GONE
+            volumeMuteAndUnMuteButton.visibility = View.VISIBLE
+            volumeUnMuteButton.visibility = View.GONE
+            isVolmueMute = false
         } else {
-            volumeMuteAndUnMuteButton?.visibility = View.GONE
-            volumeUnMuteButton?.visibility = View.VISIBLE
+            volumeMuteAndUnMuteButton.visibility = View.GONE
+            volumeUnMuteButton.visibility = View.VISIBLE
+            isVolmueMute = true
         }
     }
 
     fun onKeyUpEvent() {
-        if (volumeProgressBar != null)
-            volumeProgressBar.setProgress(audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC)!!)
 
-        var volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
+        val volume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) as Int
 
         mMediaPlayer?.audioComponent?.volume = volume.toFloat()
 
         if (volume < 1) {
-            volumeMuteAndUnMuteButton?.visibility = View.VISIBLE
-            volumeUnMuteButton?.visibility = View.GONE
+            volumeMuteAndUnMuteButton.visibility = View.VISIBLE
+            volumeUnMuteButton.visibility = View.GONE
+            isVolmueMute = false
         } else {
-            volumeMuteAndUnMuteButton?.visibility = View.GONE
-            volumeUnMuteButton?.visibility = View.VISIBLE
+            volumeMuteAndUnMuteButton.visibility = View.GONE
+            volumeUnMuteButton.visibility = View.VISIBLE
+            isVolmueMute = true
         }
     }
 
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
         if (event.keyCode === KeyEvent.KEYCODE_VOLUME_DOWN) {
-            volumeProgressBar.setProgress(audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC)!!)
-            Log.e(
-                "Volume::::",
-                "KEYCODE_VOLUME_DOWN:::" + audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC)
-            )
-            volumeMuteAndUnMuteButton?.visibility = View.VISIBLE
+            volumeMuteAndUnMuteButton.visibility = View.VISIBLE
             volumeUnMuteButton.visibility = View.GONE
+            isVolmueMute = false
         }
         return super.onKeyDown(keyCode, event)
     }
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent): Boolean {
         if (event.keyCode === KeyEvent.KEYCODE_VOLUME_UP) {
-            volumeProgressBar.setProgress(audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC)!!)
             volumeMuteAndUnMuteButton.visibility = View.GONE
             volumeUnMuteButton.visibility = View.VISIBLE
-            Log.e(
-                "Volume::::",
-                "KEYCODE_VOLUME_UP::::" + audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC)
-            )
+            isVolmueMute = true
         }
 
         return super.onKeyUp(keyCode, event)
     }
 
-    private fun volumeProgressBarSetUp() {
-        var startVolume: Int = 0
-        var maxVolume: Int = 0
-        maxVolume = audioManager?.getStreamMaxVolume(AudioManager.STREAM_MUSIC) ?: 100
-        startVolume = audioManager?.getStreamVolume(AudioManager.STREAM_MUSIC) ?: 100
-        volumeProgressBar.progress = startVolume
-        volumeProgressBar.max = maxVolume
-
-        if (startVolume > 1) {
-            volumeFullScreenButton.visibility = View.VISIBLE
-            volumeFullScreenUnMuteButton.visibility = View.GONE
-        } else {
-            volumeFullScreenUnMuteButton.visibility = View.VISIBLE
-            volumeFullScreenButton.visibility = View.GONE
-        }
-
-        volumeProgressBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
-                audioManager?.setStreamVolume(AudioManager.STREAM_MUSIC, p0?.progress!!, 0)
-
-            }
-
-            override fun onStartTrackingTouch(p0: SeekBar?) {
-                //showController()
-            }
-
-            override fun onStopTrackingTouch(p0: SeekBar?) {
-                audioManager?.setStreamVolume(AudioManager.STREAM_MUSIC, p0?.progress!!, 0)
-
-                if (startVolume > 1) {
-                    volumeFullScreenButton.visibility = View.VISIBLE
-                    volumeFullScreenUnMuteButton.visibility = View.GONE
-                } else {
-                    volumeFullScreenUnMuteButton.visibility = View.VISIBLE
-                    volumeFullScreenButton.visibility = View.GONE
-                }
-
-            }
-
-        })
-    }
 
     private var countDownTimer1: CountDownTimerWithPause? = null
 
@@ -1652,7 +1730,7 @@ class OfflineVIdeoPlayer(
         if (isShow) {
             contentRateLayout.visibility = View.VISIBLE
             closeVideoPlayerButton.visibility = GONE
-            overlayImageTransparent.visibility = GONE
+            // overlayImageTransparent.visibility = GONE
             centerButtonLayout.visibility = GONE
             videoMenuLayout.visibility = GONE
             resumedVideoTv.visibility = View.GONE
@@ -1665,7 +1743,7 @@ class OfflineVIdeoPlayer(
 
 
         if (!TextUtils.isEmpty(parentalAge)) {
-            contentRatedTv.setText("Rated U/A " + parentalAge + "+")
+            contentRatedTv.setText("Rated  " + parentalAge)
             contentRatedTv.visibility = View.VISIBLE
         } else {
             contentRatedTv.visibility = View.GONE
@@ -1686,30 +1764,50 @@ class OfflineVIdeoPlayer(
             languageTv.visibility = View.GONE
         }
 
-        countDownTimer1 =
-            object : CountDownTimerWithPause(10000.toLong(), (tickDuration).toLong(), true) {
-                override fun onTick(millisUntilFinished: Long) {
+        var timerTotalSec = 0
 
-                }
+        if (conentRatingTime > 0) timerTotalSec = conentRatingTime * 1000
+        else timerTotalSec = 5 * 1000
 
-                override fun onFinish() {
-                    contentRateLayout.visibility = View.GONE
-                    countDownTimer1?.cancel()
-                }
-            }.create()
+        countDownTimer1 = object :
+            CountDownTimerWithPause(timerTotalSec.toLong(), (tickDuration).toLong(), true) {
+            override fun onTick(millisUntilFinished: Long) {
+
+            }
+
+            override fun onFinish() {
+                contentRateLayout.visibility = View.GONE
+                countDownTimer1?.cancel()
+            }
+        }.create()
     }
+
+
+    fun setUATimeDuration(conentratingTime: Int) {
+        this.conentRatingTime = conentratingTime;
+    }
+
 
     private var parentalAge = ""
     private var genure = ""
     private var language = ""
+    private var conentRatingTime = 0
     private lateinit var contentRateLayout: LinearLayoutCompat
     private lateinit var genureTv: TextView
     private lateinit var languageTv: TextView
     private lateinit var contentRatedTv: TextView
 
+    private var isContentRepetPlaying = false
+
     fun setGenure(genure: String) {
         this.genure = genure
     }
+
+
+    fun setContentRepeatModeEnabled(repeat: Boolean) {
+        this.isContentRepetPlaying = repeat
+    }
+
 
     fun setLanguage(language: String) {
         this.language = language;
@@ -1723,35 +1821,13 @@ class OfflineVIdeoPlayer(
         countDownTimer1?.cancel()
     }
 
-    fun onBackButtonPress() {
-        val orientation = getContext().resources.configuration.orientation
-        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            (getContext() as Activity).requestedOrientation =
-                ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-            (getContext() as Activity).window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
-            showSystemBar()
-            // videoRotationButton.setImageResource(R.drawable.ic_balaji_fullscreen)
-            videoLockButton.setVisibility(GONE)
-            videoUnLockButton.setVisibility(GONE)
-        } else if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-            (getContext() as Activity).requestedOrientation =
-                ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-            (getContext() as Activity).window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
-            hideSystemBars()
-            //  videoRotationButton.setImageResource(R.drawable.ic_minimize)
-            videoLockUnlockStatus()
-        }
-    }
-
 
     fun showEpisodeButtonVisiblityListener(size: Int) {
-        if (isWebSeries && size > 1) {
+        if (isWebSeries && size > 1)
             epsodeButton.visibility = View.VISIBLE
-            epsodeNextButton.visibility = View.VISIBLE
-        } else {
+        else
             epsodeButton.visibility = View.GONE
-            epsodeNextButton.visibility = View.GONE
-        }
+
     }
 
 
@@ -1769,44 +1845,11 @@ class OfflineVIdeoPlayer(
     }
 
 
-    private var skipCountDownTimer: CountDownTimerWithPause? = null
+    private var isVolmueMute = true
 
-    private fun startSkipVideoTimer() {
-        val tickDuration = TimeToSeconds.parseTimeStringToSeconds(exoTotalDuration.text.toString())
-        skipCountDownTimer =
-            object : CountDownTimerWithPause(tickDuration.toLong(), (1000).toLong(), true) {
-                override fun onTick(millisUntilFinished: Long) {
-                    Log.e("Video Start Counter:::", "" + millisUntilFinished)
-                    val currentTime = exoCurrentPosition.text.toString()
-                    val tickCurrentDuration = TimeToSeconds.parseTimeStringToSeconds(currentTime)
-                    for (items in skipDurationArray) {
-                        val startPosition =
-                            TimeToSeconds.parseTimeStringToSeconds(items.start).toInt()
-                        val endPosition = TimeToSeconds.parseTimeStringToSeconds(items.end).toInt()
-                        val title = items.title
 
-                        if (tickCurrentDuration.toInt() == startPosition) {
-                            Log.e("Video Start Counter:::", "" + startPosition)
-                            skipVideoButton.visibility = View.VISIBLE
-                            skipVideoButton.setText(title)
-                            skipVideoButton.setOnClickListener {
-                                skipVideoButton.visibility = View.GONE
-                                seekTo(endPosition.toLong())
-                            }
-
-                        } else if (tickCurrentDuration.toInt() == endPosition) {
-                            skipVideoButton.visibility = View.GONE
-                            Log.e("Video Stop Counter:::", "" + endPosition)
-                        } else {
-                            skipVideoButton.visibility = View.GONE
-                        }
-                    }
-                }
-
-                override fun onFinish() {
-                    skipCountDownTimer?.cancel()
-                }
-            }.create()
+    fun getVolumeStatus(): Boolean {
+        return isVolmueMute
     }
 
 

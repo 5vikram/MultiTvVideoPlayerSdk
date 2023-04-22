@@ -1,4 +1,4 @@
-package com.multitv.ott.multitvvideoplayer.download
+package com.multitv.ott.multitvvideoplayer.utils
 
 
 import android.content.Context
@@ -20,7 +20,7 @@ import com.multitv.ott.multitvvideoplayer.R
 import java.io.File
 import java.util.concurrent.Executors
 
-object DownloadUtil {
+object VideoPlayerDownloadUtil {
     const val DOWNLOAD_NOTIFICATION_CHANNEL_ID = "download_channel"
     private const val TAG = "DownloadUtil"
     private const val DOWNLOAD_CONTENT_DIRECTORY = "downloads"
@@ -32,14 +32,13 @@ object DownloadUtil {
     private lateinit var downloadNotificationHelper: DownloadNotificationHelper
     private lateinit var downloadDirectory: File
     private lateinit var downloadManager: DownloadManager
-    private lateinit var downloadTracker: DownloadTracker
+    private lateinit var downloadTracker: VideoPlayerDownloadTracker
 
     @Synchronized
     fun getHttpDataSourceFactory(context: Context): HttpDataSource.Factory {
-        if (!DownloadUtil::httpDataSourceFactory.isInitialized) {
+        if (!VideoPlayerDownloadUtil::httpDataSourceFactory.isInitialized) {
             httpDataSourceFactory = CronetDataSource.Factory(
-                CronetEngineWrapper(context),
-                Executors.newSingleThreadExecutor()
+                CronetEngineWrapper(context), Executors.newSingleThreadExecutor()
             )
         }
         return httpDataSourceFactory
@@ -47,11 +46,10 @@ object DownloadUtil {
 
     @Synchronized
     fun getReadOnlyDataSourceFactory(context: Context): DataSource.Factory {
-        if (!DownloadUtil::dataSourceFactory.isInitialized) {
+        if (!VideoPlayerDownloadUtil::dataSourceFactory.isInitialized) {
             val contextApplication = context.applicationContext
             val upstreamFactory = DefaultDataSourceFactory(
-                contextApplication,
-                getHttpDataSourceFactory(contextApplication)
+                contextApplication, getHttpDataSourceFactory(contextApplication)
             )
             dataSourceFactory =
                 buildReadOnlyCacheDataSource(upstreamFactory, getDownloadCache(contextApplication))
@@ -61,7 +59,7 @@ object DownloadUtil {
 
     @Synchronized
     fun getDownloadNotificationHelper(context: Context?): DownloadNotificationHelper {
-        if (!DownloadUtil::downloadNotificationHelper.isInitialized) {
+        if (!VideoPlayerDownloadUtil::downloadNotificationHelper.isInitialized) {
             downloadNotificationHelper =
                 DownloadNotificationHelper(context!!, DOWNLOAD_NOTIFICATION_CHANNEL_ID)
         }
@@ -75,7 +73,7 @@ object DownloadUtil {
     }
 
     @Synchronized
-    fun getDownloadTracker(context: Context): DownloadTracker {
+    fun getDownloadTracker(context: Context): VideoPlayerDownloadTracker {
         ensureDownloadManagerInitialized(context)
         return downloadTracker
     }
@@ -100,13 +98,11 @@ object DownloadUtil {
 
     @Synchronized
     private fun getDownloadCache(context: Context): Cache {
-        if (!DownloadUtil::downloadCache.isInitialized) {
+        if (!VideoPlayerDownloadUtil::downloadCache.isInitialized) {
             val downloadContentDirectory =
                 File(getDownloadDirectory(context), DOWNLOAD_CONTENT_DIRECTORY)
             downloadCache = SimpleCache(
-                downloadContentDirectory,
-                NoOpCacheEvictor(),
-                getDatabaseProvider(context)
+                downloadContentDirectory, NoOpCacheEvictor(), getDatabaseProvider(context)
             )
         }
         return downloadCache
@@ -114,45 +110,45 @@ object DownloadUtil {
 
     @Synchronized
     private fun ensureDownloadManagerInitialized(context: Context) {
-        if (!DownloadUtil::downloadManager.isInitialized) {
+        if (!VideoPlayerDownloadUtil::downloadManager.isInitialized) {
             downloadManager = DownloadManager(
                 context,
                 getDatabaseProvider(context),
                 getDownloadCache(context),
                 getHttpDataSourceFactory(context),
-                Executors.newFixedThreadPool(6)
+                Executors.newFixedThreadPool(10)
             ).apply {
-                maxParallelDownloads = 5
+                maxParallelDownloads = 1
             }
             downloadTracker =
-                DownloadTracker(context, getHttpDataSourceFactory(context), downloadManager)
-
+                VideoPlayerDownloadTracker(
+                    context,
+                    getHttpDataSourceFactory(context),
+                    downloadManager
+                )
         }
     }
 
     @Synchronized
     private fun getDatabaseProvider(context: Context): DatabaseProvider {
-        if (!DownloadUtil::databaseProvider.isInitialized) databaseProvider =
+        if (!VideoPlayerDownloadUtil::databaseProvider.isInitialized) databaseProvider =
             ExoDatabaseProvider(context)
         return databaseProvider
     }
 
     @Synchronized
     fun getDownloadDirectory(context: Context): File {
-        if (!DownloadUtil::downloadDirectory.isInitialized) {
+        if (!VideoPlayerDownloadUtil::downloadDirectory.isInitialized) {
             downloadDirectory = context.getExternalFilesDir(null) ?: context.filesDir
         }
         return downloadDirectory
     }
 
     private fun buildReadOnlyCacheDataSource(
-        upstreamFactory: DataSource.Factory,
-        cache: Cache
+        upstreamFactory: DataSource.Factory, cache: Cache
     ): CacheDataSource.Factory {
-        return CacheDataSource.Factory()
-            .setCache(cache)
-            .setUpstreamDataSourceFactory(upstreamFactory)
-            .setCacheWriteDataSinkFactory(null)
+        return CacheDataSource.Factory().setCache(cache)
+            .setUpstreamDataSourceFactory(upstreamFactory).setCacheWriteDataSinkFactory(null)
             .setFlags(CacheDataSource.FLAG_IGNORE_CACHE_ON_ERROR)
     }
 }

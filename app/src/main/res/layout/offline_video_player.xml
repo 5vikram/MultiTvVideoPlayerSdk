@@ -2,6 +2,7 @@
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/frame"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -11,12 +12,61 @@
         android:id="@+id/videoPlayer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:show_timeout="5000"
-        android:focusable="true"
-        app:controller_layout_id="@layout/exo_playback_control_view_tv"
-        app:resize_mode="fill" >
+        app:animation_enabled="false"
+        app:controller_layout_id="@layout/offline_video_player_controller"
+        app:resize_mode="fill" />
 
-    </com.google.android.exoplayer2.ui.StyledPlayerView>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/contentRateLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/contentRatedTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            android:visibility="gone"
+            tools:text="Title" />
+
+
+        <TextView
+            android:id="@+id/genureTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/white_opycity_swenty_present"
+            android:textSize="10sp"
+            android:visibility="gone"
+            tools:text="Title" />
+
+
+        <TextView
+            android:id="@+id/languageTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="2dp"
+            android:textColor="@color/white_opycity_swenty_present"
+            android:textSize="10sp"
+            android:visibility="gone"
+            tools:text="Title" />
+
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
 
     <LinearLayout
         android:id="@+id/errorRetryLayout"
@@ -49,7 +99,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <ProgressBar
             android:layout_width="wrap_content"
@@ -75,7 +125,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:clickable="true"
-            android:color="@color/elv_unselected_text"
+            android:color="@color/black"
             android:indeterminate="false"
             android:max="100"
             android:src="@android:drawable/ic_media_play"
@@ -91,13 +141,34 @@
 
 
     <LinearLayout
+        android:id="@+id/repeatVideoLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/video_player_placeholder"
+        android:clickable="true"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="centerCrop"
+            android:src="@drawable/replay" />
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
         android:id="@+id/gesture_controls_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginLeft="40dp"
         android:layout_marginTop="20dp"
         android:layout_marginRight="40dp"
-        android:layout_marginBottom="20dp">
+        android:layout_marginBottom="20dp"
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -131,5 +202,23 @@
         </LinearLayout>
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/skipVideoButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:alpha="0.7"
+        android:background="@drawable/skip_button_bg"
+        android:focusable="true"
+        android:paddingLeft="30dp"
+        android:paddingTop="5dp"
+        android:paddingRight="30dp"
+        android:paddingBottom="7dp"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        android:visibility="gone"
+        tools:text="Title" />
 
 </FrameLayout>

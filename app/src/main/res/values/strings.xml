@@ -21,19 +21,10 @@
     <string name="exo_download_removing">Removing downloads</string>
 
 
-    <string name="dialog_option">%1$dp - %2$s</string>
-
-    <string name="download_start_error">Failed to start download</string>
     <string name="exo_download_queued">Download in queue</string>
     <string name="exo_download_stopped">Download stopped</string>
     <string name="exo_download_restarting">Download restarting</string>
     <string name="exo_track_selection_none">None</string>
-
-    <string name="select_download_quality">Select Download Quality</string>
-    <string name="hd_720p">HD (720p)</string>
-    <string name="save_as_default">Save as default</string>
-    <string name="done">Done</string>
-    <string name="sd_420p">SD (480P)</string>
 
 
 </resources>
