@@ -663,7 +663,6 @@ class DownloadTracker(
                 downloadRequest,
                 true
             )
-
         }
 
         private fun buildDownloadRequest(): DownloadRequest {
