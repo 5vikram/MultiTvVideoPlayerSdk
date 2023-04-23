@@ -136,7 +136,6 @@
                 android:background="?attr/selectableItemBackground"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
-                android:focusedByDefault="true"
                 android:padding="5dp"
                 android:src="@drawable/ic_balaji_pause" />
 
@@ -148,7 +147,6 @@
                 android:background="?attr/selectableItemBackground"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
-                android:focusedByDefault="true"
                 android:padding="5dp"
                 android:src="@drawable/ic_balaji_play" />
 
@@ -259,7 +257,7 @@
 
             <ImageView
                 android:id="@+id/epsodeButton"
-                android:layout_width="50dp"
+                android:layout_width="43dp"
                 android:layout_height="50dp"
                 android:layout_gravity="center"
                 android:layout_marginRight="15dp"
@@ -267,6 +265,7 @@
                 android:focusable="true"
                 android:focusableInTouchMode="true"
                 android:padding="5dp"
+                android:visibility="gone"
                 android:src="@drawable/webseries" />
 
 

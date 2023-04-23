@@ -134,7 +134,7 @@ class AltAndroidTvVideoPlayer(
     private lateinit var volumeMuteAndUnMuteButton: ImageView
     private lateinit var volumeUnMuteButton: ImageView
     private lateinit var closeVideoPlayerButton: ImageView
-    private lateinit var setting: ImageView
+    private lateinit var settingButton: ImageView
 
     private lateinit var videoFarwardButton: ImageView
     private lateinit var videoRenuButton: ImageView
@@ -240,7 +240,7 @@ class AltAndroidTvVideoPlayer(
         bufferingProgressBarLayout = view.findViewById(R.id.bufferingProgressBarLayout)
         circularProgressLayout = view.findViewById(R.id.circularProgressLayout)
         repeatVideoLinearLayout = view.findViewById(R.id.repeatVideoLinearLayout)
-        setting = view.findViewById(R.id.settings_btn)
+        settingButton = view.findViewById(R.id.settings_btn)
         volumeLinearLayout = view.findViewById(R.id.volumeLinearLayout)
         videoControllerLayout = view.findViewById(R.id.videoControllerLayout)
         previewFrameLayout = view.findViewById(R.id.previewFrameLayout)
@@ -248,7 +248,7 @@ class AltAndroidTvVideoPlayer(
         exoFfwdLinearLayout = view.findViewById(R.id.exoFfwdLinearLayout)
         exoRewLinearLayout = view.findViewById(R.id.exoRewLinearLayout)
 
-        setting.setOnClickListener(this)
+        settingButton.setOnClickListener(this)
         centerButtonLayout = view.findViewById(R.id.centerButtonLayout)
 
         videoPlayButton = view.findViewById(R.id.exo_play)
@@ -1539,7 +1539,6 @@ class AltAndroidTvVideoPlayer(
 
 
     }
-
 
 
     private fun dpToPx(displayMetrics: DisplayMetrics, dps: Int): Int {
