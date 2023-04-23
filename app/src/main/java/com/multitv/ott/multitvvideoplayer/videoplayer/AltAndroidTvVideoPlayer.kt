@@ -80,7 +80,7 @@ class AltAndroidTvVideoPlayer(
     private val context: AppCompatActivity, attrs: AttributeSet?, defStyleAttr: Int
 ) : FrameLayout(
     context, attrs, defStyleAttr
-), PreviewBar.OnScrubListener, PreviewLoader, View.OnClickListener, SessionAvailabilityListener {
+), PreviewBar.OnScrubListener, PreviewLoader, SessionAvailabilityListener {
     private val sharedPreferencePlayer: SharedPreferencePlayer
     private var contentType: ContentType? = null
     private var mMediaPlayer: ExoPlayer? = null
@@ -244,7 +244,6 @@ class AltAndroidTvVideoPlayer(
         previewFrameLayout = view.findViewById(R.id.previewFrameLayout)
         exoFfwdLinearLayout = view.findViewById(R.id.exoFfwdLinearLayout)
         exoRewLinearLayout = view.findViewById(R.id.exoRewLinearLayout)
-        settingButton.setOnClickListener(this)
         centerButtonLayout = view.findViewById(R.id.centerButtonLayout)
         videoPlayButton = view.findViewById(R.id.exo_play)
         videoPauseButton = view.findViewById(R.id.exo_pause)
@@ -259,6 +258,16 @@ class AltAndroidTvVideoPlayer(
         previewTimeBar.addOnScrubListener(this)
         previewTimeBar.setPreviewLoader(this)
 
+        settingButton.setOnClickListener {
+            if (!isShowingTrackSelectionDialog && TrackSelectionDialog.willHaveContent(trackSelector)) {
+                isShowingTrackSelectionDialog = true
+                val trackSelectionDialog = TrackSelectionDialog.createForTrackSelector(
+                    trackSelector
+                )  /* onDismissListener= */
+                { dismissedDialog: DialogInterface? -> isShowingTrackSelectionDialog = false }
+                trackSelectionDialog.show(context.supportFragmentManager,  /* tag= */null)
+            }
+        }
 
         volumeUnMuteButton.setOnClickListener {
             mMediaPlayer?.audioComponent?.volume = 0f
@@ -1341,19 +1350,6 @@ class AltAndroidTvVideoPlayer(
         }
         dialog = builder.create()
         dialog?.show()
-    }
-
-    override fun onClick(view: View) {
-        if (view === settingButton) {
-            if (!isShowingTrackSelectionDialog && TrackSelectionDialog.willHaveContent(trackSelector)) {
-                isShowingTrackSelectionDialog = true
-                val trackSelectionDialog = TrackSelectionDialog.createForTrackSelector(
-                    trackSelector
-                )  /* onDismissListener= */
-                { dismissedDialog: DialogInterface? -> isShowingTrackSelectionDialog = false }
-                trackSelectionDialog.show(context.supportFragmentManager,  /* tag= */null)
-            }
-        }
     }
 
 
