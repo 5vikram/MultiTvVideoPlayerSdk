@@ -29,6 +29,8 @@ import java.util.concurrent.TimeUnit;
 
 public class AppSessionUtil {
 
+
+
     public static void sendHeartBeat(final Activity activity, final String userId, final String url, final String contentId, final String contentName,
                                      final long contentPlayedDuration, final long contentBufferDuration,
                                      final long totalDuration, final String token) {
