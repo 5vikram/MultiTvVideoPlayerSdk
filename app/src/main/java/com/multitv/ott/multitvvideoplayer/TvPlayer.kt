@@ -155,16 +155,9 @@ class TvPlayer(
     private lateinit var volumeProgressBar: ProgressBar
     private lateinit var brightnessProgressBar: ProgressBar
 
-    //    private val context: Context? = null
+
     private var mCastPlayer: CastPlayer? = null
-//    private val listener: com.google.android.exoplayer2.castdemo.PlayerManager.Listener? = null
 
-
-    /*
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        return super.onTouchEvent(event);
-    }*/
     @SuppressLint("MissingInflatedId")
     override fun onFinishInflate() {
         val view = LayoutInflater.from(getContext()).inflate(R.layout.player_layout, this)
@@ -292,13 +285,6 @@ class TvPlayer(
             )
         }
 
-//        castContext = CastContext.getSharedInstance(this);
-
-//        val castContext = CastContext.getSharedInstance(context)
-//
-//        castPlayer = CastPlayer(castContext)
-////        castPlayer!!.addListener(this)
-//        castPlayer!!.setSessionAvailabilityListener(this)
 
         super.onFinishInflate()
     }
