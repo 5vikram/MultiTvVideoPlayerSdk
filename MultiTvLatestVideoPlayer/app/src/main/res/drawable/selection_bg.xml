@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<shape android:shape="rectangle" xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <solid android:color="@android:color/transparent"/>
-    <corners android:radius="5dp"/>
-    <stroke android:color="@color/white_opycity_hundred_present"
-        android:width="0.5dp"/>
-
-</shape>
