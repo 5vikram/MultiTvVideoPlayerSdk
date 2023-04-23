@@ -17,6 +17,8 @@
         app:resize_mode="fill" />
 
 
+
+
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/contentRateLayout"
         android:layout_width="match_parent"
