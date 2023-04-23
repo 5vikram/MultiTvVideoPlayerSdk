@@ -238,7 +238,7 @@ class AltAndroidTvVideoPlayer(
         bufferingProgressBarLayout = view.findViewById(R.id.bufferingProgressBarLayout)
         circularProgressLayout = view.findViewById(R.id.circularProgressLayout)
         repeatVideoLinearLayout = view.findViewById(R.id.repeatVideoLinearLayout)
-        settingButton = view.findViewById(R.id.settings_btn)
+        settingButton = view.findViewById(R.id.settingButton)
         volumeLinearLayout = view.findViewById(R.id.volumeLinearLayout)
         videoControllerLayout = view.findViewById(R.id.videoControllerLayout)
         previewFrameLayout = view.findViewById(R.id.previewFrameLayout)
