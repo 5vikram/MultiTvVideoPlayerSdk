@@ -1366,7 +1366,7 @@ class AltAndroidTvVideoPlayer(
     }
 
     override fun onClick(view: View) {
-        if (view === setting) {
+        if (view === settingButton) {
             if (!isShowingTrackSelectionDialog && TrackSelectionDialog.willHaveContent(trackSelector)) {
                 isShowingTrackSelectionDialog = true
                 val trackSelectionDialog = TrackSelectionDialog.createForTrackSelector(
