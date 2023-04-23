@@ -1541,37 +1541,6 @@ class AltAndroidTvVideoPlayer(
     }
 
 
-    private fun updatePreviewX(progress: Int, max: Int): Int {
-        if (max == 0) {
-            return 0
-        }
-
-        val parent = previewFrameLayout.parent as ViewGroup
-        val layoutParams = previewFrameLayout.layoutParams as MarginLayoutParams
-        val offset = progress.toFloat() / max
-        val minimumX: Int = previewFrameLayout.left
-        val maximumX = (parent.width - parent.paddingRight - layoutParams.rightMargin)
-
-// We remove the padding of the scrubbing, if you have a custom size juste use dimen to calculate this
-        val previewPaddingRadius: Int =
-            dpToPx(resources.displayMetrics, DefaultTimeBar.DEFAULT_SCRUBBER_DRAGGED_SIZE_DP).div(2)
-        val previewLeftX = (previewTimeBar as View).left.toFloat()
-        val previewRightX = (previewTimeBar as View).right.toFloat()
-        val previewSeekBarStartX: Float = previewLeftX + previewPaddingRadius
-        val previewSeekBarEndX: Float = previewRightX - previewPaddingRadius
-        val currentX = (previewSeekBarStartX + (previewSeekBarEndX - previewSeekBarStartX) * offset)
-        val startX: Float = currentX - previewFrameLayout.width / 2f
-        val endX: Float = startX + previewFrameLayout.width
-
-        // Clamp the moves
-        return if (startX >= minimumX && endX <= maximumX) {
-            startX.toInt()
-        } else if (startX < minimumX) {
-            minimumX
-        } else {
-            maximumX - previewFrameLayout.width
-        }
-    }
 
     private fun dpToPx(displayMetrics: DisplayMetrics, dps: Int): Int {
         return (dps * displayMetrics.density).toInt()
