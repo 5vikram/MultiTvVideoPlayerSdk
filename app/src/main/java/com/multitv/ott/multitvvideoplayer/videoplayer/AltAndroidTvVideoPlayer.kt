@@ -299,12 +299,10 @@ class AltAndroidTvVideoPlayer(
         })
 
         exoRewLinearLayout.setOnClickListener {
-            // rewind()
             videoRenuButton.performClick()
         }
 
         exoFfwdLinearLayout.setOnClickListener {
-            //fastForward()
             videoFarwardButton.performClick()
         }
 
@@ -338,14 +336,6 @@ class AltAndroidTvVideoPlayer(
 
         super.onFinishInflate()
     }
-
-
-    /* fun sendDeviceInfo() {
-         val deviceInfo: MutableMap<String, Any> = HashMap()
-         deviceInfo[ConvivaSdkConstants.DEVICEINFO.DEVICE_TYPE] = "Android"
-         ConvivaAnalytics.setDeviceInfo(deviceInfo)
-     }*/
-
 
     fun hideSeekBarLayout() {
         previewTimeBar.visibility = View.GONE
