@@ -35,8 +35,6 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.Target
 import com.github.rubensousa.previewseekbar.PreviewBar
 import com.github.rubensousa.previewseekbar.PreviewLoader
-import com.github.rubensousa.previewseekbar.animator.PreviewMorphAnimator
-import com.github.rubensousa.previewseekbar.exoplayer.PreviewTimeBar
 import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.drm.DrmSessionManager
 import com.google.android.exoplayer2.ext.ima.ImaAdsLoader
@@ -46,6 +44,7 @@ import com.google.android.exoplayer2.offline.DownloadRequest
 import com.google.android.exoplayer2.source.DefaultMediaSourceFactory
 import com.google.android.exoplayer2.source.MediaSourceFactory
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
+import com.google.android.exoplayer2.ui.DefaultTimeBar
 import com.google.android.exoplayer2.ui.StyledPlayerView
 import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.DefaultAllocator
@@ -71,7 +70,7 @@ class FullScreenVideoPlayer(
     defStyleAttr: Int
 ) : FrameLayout(
     context, attrs, defStyleAttr
-), PreviewLoader, PreviewBar.OnScrubListener, View.OnClickListener, SessionAvailabilityListener {
+), View.OnClickListener, SessionAvailabilityListener {
     private val sharedPreferencePlayer: SharedPreferencePlayer
     private var contentType: ContentType? = null
     private var mMediaPlayer: ExoPlayer? = null
@@ -130,7 +129,7 @@ class FullScreenVideoPlayer(
     private lateinit var videoFarwardButton: ImageView
     private lateinit var videoPlayButton: ImageView
     private lateinit var videoPauseButton: ImageView
-    private lateinit var previewTimeBar: PreviewTimeBar
+    private lateinit var previewTimeBar: DefaultTimeBar
     private lateinit var currentDurationPlayTv: TextView
     private lateinit var previewFrameLayout: FrameLayout
     private lateinit var videoTitle: TextView
@@ -195,9 +194,10 @@ class FullScreenVideoPlayer(
     public boolean onTouchEvent(MotionEvent event) {
         return super.onTouchEvent(event);
     }*/
+    @SuppressLint("MissingInflatedId")
     override fun onFinishInflate() {
         val view =
-            LayoutInflater.from(getContext()).inflate(R.layout.balaji_video_player_layout, this)
+            LayoutInflater.from(getContext()).inflate(R.layout.full_screen_video_player, this)
 
         epsodeButton = view.findViewById(R.id.epsodeButton)
         epsodeNextButton = view.findViewById(R.id.epsodeNextButton)
@@ -238,7 +238,6 @@ class FullScreenVideoPlayer(
         volumeUnMuteButton = view.findViewById(R.id.volumeUnMuteButton)
         bufferingProgressBarLayout = view.findViewById(R.id.bufferingProgressBarLayout)
         circularProgressLayout = view.findViewById(R.id.circularProgressLayout)
-        //   videoProgressLayout = findViewById(R.id.video_progress_layout)
         setting = view.findViewById(R.id.settings_btn)
         volumeLayout = view.findViewById(R.id.volumeLayout)
         volumeLinearLayout = view.findViewById(R.id.volumeLinearLayout)
@@ -262,7 +261,7 @@ class FullScreenVideoPlayer(
 
         videoLockButton = view.findViewById(R.id.exo_lock)
         videoUnLockButton = view.findViewById(R.id.exo_unlock)
-        previewTimeBar = findViewById<View>(R.id.exo_progress) as PreviewTimeBar
+        previewTimeBar = findViewById<View>(R.id.exo_progress) as DefaultTimeBar
         currentDurationPlayTv = view.findViewById(R.id.exo_position)
         previewImageView = view.findViewById(R.id.imageView)
         videoNextButton.setVisibility(GONE)
@@ -276,14 +275,9 @@ class FullScreenVideoPlayer(
         videoPerviousButton.setVisibility(GONE)
 
 
-        previewTimeBar.setPreviewEnabled(true)
-        previewTimeBar.setAutoHidePreview(true)
-        previewTimeBar.setPreviewAnimator(PreviewMorphAnimator())
-        previewTimeBar.setPreviewAnimationEnabled(true)
+
         previewTimeBar.setAdMarkerColor(Color.argb(0x00, 0xFF, 0xFF, 0xFF))
         previewTimeBar.setPlayedAdMarkerColor(Color.argb(0x98, 0xFF, 0xFF, 0xFF))
-        previewTimeBar.addOnScrubListener(this)
-        previewTimeBar.setPreviewLoader(this)
 
 
 
@@ -379,12 +373,7 @@ class FullScreenVideoPlayer(
             videoPauseButton.setVisibility(GONE)
             videoPlayerSdkCallBackListener?.onPlayClick(0)
         })
-        previewTimeBar.addOnPreviewVisibilityListener { previewBar, isPreviewShowing ->
-            Log.d(
-                "PreviewShowing::::",
-                isPreviewShowing.toString()
-            )
-        }
+
 
 
         super.onFinishInflate()
@@ -1274,63 +1263,11 @@ class FullScreenVideoPlayer(
         this.maxLine = maxLine;
     }
 
-    override fun onScrubStart(previewBar: PreviewBar) {
-        //findViewById(R.id.centerButtonLayout)?.setVisibility(View.GONE);
-        previewFrameLayout.visibility = VISIBLE
-        pauseVideoPlayer()
-        removeCallbacks(hideAction)
-    }
-
-    override fun onScrubMove(previewBar: PreviewBar, progress: Int, fromUser: Boolean) {
-        pauseVideoPlayer()
-        if (!TextUtils.isEmpty(spriteImageUrl))
-            previewFrameLayout.visibility = View.VISIBLE
-        else
-            previewFrameLayout.visibility = INVISIBLE
-
-
-        currentDurationPlayTv.text = Util.getStringForTime(
-            formatBuilder,
-            formatter,
-            progress.toLong()
-        )
-    }
-
-    override fun onScrubStop(previewBar: PreviewBar) {
-
-        if (!TextUtils.isEmpty(spriteImageUrl)) {
-            previewFrameLayout.visibility = INVISIBLE
-
-            if (mMediaPlayer != null) {
-                seekTo(previewBar.progress.toLong())
-            }
-            previewTimeBar.hidePreview()
-            resumeVideoPlayer()
-        } else {
-            previewFrameLayout.visibility = GONE
-        }
-    }
-
-
-    override fun loadPreview(currentPosition: Long, max: Long) {
-        pauseVideoPlayer()
-
-        if (!TextUtils.isEmpty(spriteImageUrl)) {
-            Glide.with(context)
-                .load(spriteImageUrl)
-                .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
-                .transform(GlideThumbnailTransformation(currentPosition, maxLine))
-                .into(previewImageView)
-        } else {
-            previewFrameLayout.visibility = GONE
-        }
-
-    }
 
     private val pallyconEventListener: PallyconEventListener = object : PallyconEventListener {
         override fun onDrmKeysLoaded(licenseInfo: Map<String, String>) {}
         override fun onDrmSessionManagerError(e: Exception) {
-//            Toast.makeText(context, /*e.getMessage()*/ "Error in DRM", Toast.LENGTH_LONG).show();
+            Log.e("Pollycon Error:::", "" + e.message)
         }
 
         override fun onDrmKeysRestored() {}

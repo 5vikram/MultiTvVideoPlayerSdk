@@ -136,10 +136,9 @@ class AltAndroidTvVideoPlayer(
     private lateinit var closeVideoPlayerButton: ImageView
     private lateinit var setting: ImageView
 
-    private lateinit var videoPerviousButton: ImageView
-    private lateinit var videoNextButton: ImageView
-    private lateinit var VideoRenuButton: ImageView
     private lateinit var videoFarwardButton: ImageView
+    private lateinit var videoRenuButton: ImageView
+
     private lateinit var videoPlayButton: ImageView
     private lateinit var videoPauseButton: ImageView
     private lateinit var previewTimeBar: PreviewTimeBar
@@ -218,6 +217,9 @@ class AltAndroidTvVideoPlayer(
         }
 
 
+        videoFarwardButton = view.findViewById(R.id.exo_ffwd)
+        videoRenuButton = view.findViewById(R.id.exo_rew)
+
         exoTotalDuration = view.findViewById(R.id.exo_duration)
         exoCurrentPosition = view.findViewById(R.id.exo_position)
         skipVideoButton = view.findViewById(R.id.skipVideoButton)
@@ -248,10 +250,7 @@ class AltAndroidTvVideoPlayer(
 
         setting.setOnClickListener(this)
         centerButtonLayout = view.findViewById(R.id.centerButtonLayout)
-        videoPerviousButton = view.findViewById(R.id.exo_prev)
-        videoNextButton = view.findViewById(R.id.exo_next)
-        VideoRenuButton = view.findViewById(R.id.exo_rew)
-        videoFarwardButton = view.findViewById(R.id.exo_ffwd)
+
         videoPlayButton = view.findViewById(R.id.exo_play)
         videoPauseButton = view.findViewById(R.id.exo_pause)
 
@@ -261,15 +260,14 @@ class AltAndroidTvVideoPlayer(
         previewImageView = view.findViewById(R.id.imageView)
         simpleExoPlayerView = view.findViewById(R.id.videoPlayer)
         closeVideoPlayerButton = view.findViewById(R.id.closeButton);
-        videoNextButton.setVisibility(GONE)
-        videoPerviousButton.setVisibility(GONE)
+
 
 
 
         volumeMuteAndUnMuteButton.visibility = View.GONE
-        setting.visibility = View.GONE
 
-        //previewTimeBar.setPreviewEnabled(true)
+
+        previewTimeBar.setPreviewEnabled(true)
         previewTimeBar.addOnScrubListener(this)
         previewTimeBar.setPreviewLoader(this)
 
@@ -296,7 +294,7 @@ class AltAndroidTvVideoPlayer(
         }
 
 
-        videoControllerLayout?.setOnClickListener {
+        simpleExoPlayerView?.setOnClickListener {
             if (isControllerShown) {
                 hideController()
             } else {
@@ -314,7 +312,7 @@ class AltAndroidTvVideoPlayer(
 
         exoRewLinearLayout.setOnClickListener {
             // rewind()
-            VideoRenuButton.performClick()
+            videoRenuButton.performClick()
         }
 
         exoFfwdLinearLayout.setOnClickListener {
@@ -1257,8 +1255,7 @@ class AltAndroidTvVideoPlayer(
                     text += "ready"
                     bufferingProgressBarLayout.visibility = GONE
                     videoControllerLayout?.visibility = VISIBLE
-                    videoNextButton.visibility = GONE
-                    videoPerviousButton.visibility = GONE
+
                     videoPlayerSdkCallBackListener?.onVideoStartNow()
 
                     if (mMediaPlayer!!.isPlayingAd()) {

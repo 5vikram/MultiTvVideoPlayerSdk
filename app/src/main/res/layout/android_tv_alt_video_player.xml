@@ -12,6 +12,7 @@
         android:id="@+id/videoPlayer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:focusable="true"
         app:animation_enabled="false"
         app:controller_layout_id="@layout/android_alt_tv_controller"
         app:resize_mode="fill" />
@@ -144,7 +145,6 @@
         android:id="@+id/repeatVideoLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/video_player_placeholder"
         android:clickable="true"
         android:gravity="center"
         android:orientation="vertical"
@@ -156,51 +156,8 @@
             android:scaleType="centerCrop"
             android:src="@drawable/replay" />
 
-
     </LinearLayout>
 
-
-    <LinearLayout
-        android:id="@+id/gesture_controls_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="40dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginRight="40dp"
-        android:layout_marginBottom="20dp"
-        android:visibility="gone">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="left"
-            android:gravity="left">
-
-            <com.multitv.ott.multitvvideoplayer.custom.VerticalSeekBar
-                android:id="@+id/palyer_seek_brightness_gesture"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:visibility="gone" />
-        </LinearLayout>
-
-        <View
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="right"
-            android:gravity="right">
-
-            <com.multitv.ott.multitvvideoplayer.custom.VerticalSeekBar
-                android:id="@+id/palyer_seek_volume_gesture"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:visibility="gone" />
-        </LinearLayout>
-    </LinearLayout>
 
     <TextView
         android:id="@+id/skipVideoButton"
