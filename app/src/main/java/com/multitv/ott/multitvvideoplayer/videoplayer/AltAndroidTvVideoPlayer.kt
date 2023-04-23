@@ -231,8 +231,6 @@ class AltAndroidTvVideoPlayer(
         videoTitle = view.findViewById(R.id.videoTitle)
 
         volumeMuteAndUnMuteButton = view.findViewById(R.id.volumeMuteAndUnMuteButton)
-
-
         resumedVideoTv = view.findViewById(R.id.resumedVideoTv)
         errorRetryLayout = view.findViewById(R.id.errorRetryLayout)
         videoMenuLayout = view.findViewById(R.id.videoMenuLayout)
@@ -244,26 +242,16 @@ class AltAndroidTvVideoPlayer(
         volumeLinearLayout = view.findViewById(R.id.volumeLinearLayout)
         videoControllerLayout = view.findViewById(R.id.videoControllerLayout)
         previewFrameLayout = view.findViewById(R.id.previewFrameLayout)
-
         exoFfwdLinearLayout = view.findViewById(R.id.exoFfwdLinearLayout)
         exoRewLinearLayout = view.findViewById(R.id.exoRewLinearLayout)
-
         settingButton.setOnClickListener(this)
         centerButtonLayout = view.findViewById(R.id.centerButtonLayout)
-
         videoPlayButton = view.findViewById(R.id.exo_play)
         videoPauseButton = view.findViewById(R.id.exo_pause)
-
-
         previewTimeBar = view.findViewById(R.id.exo_progress)
-
         previewImageView = view.findViewById(R.id.imageView)
         simpleExoPlayerView = view.findViewById(R.id.videoPlayer)
         closeVideoPlayerButton = view.findViewById(R.id.closeButton);
-
-
-
-
         volumeMuteAndUnMuteButton.visibility = View.GONE
 
 
