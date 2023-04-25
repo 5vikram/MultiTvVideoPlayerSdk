@@ -555,11 +555,6 @@ class AltAndroidTvVideoPlayer(
     }
 
 
-    fun getCurrentDurationFromTextView(): String {
-        return exoCurrentPosition.text.toString()
-    }
-
-
     fun showMuteUnMuteButton() {
         volumeLinearLayout.visibility = View.VISIBLE
     }
@@ -659,14 +654,10 @@ class AltAndroidTvVideoPlayer(
 
     private fun hideAfterTimeout() {
         removeCallbacks(hideAction)
-        if (5000 > 0) {
-            VideoPlayerTracer.error("Controller Listener:::", "Start Timer")
-            hideAtMs = SystemClock.uptimeMillis() + 5000
-            if (isAttachedToWindow) {
-                postDelayed(hideAction, 5000)
-            }
-        } else {
-            hideAtMs = C.TIME_UNSET
+        VideoPlayerTracer.error("Controller Listener:::", "Start Timer")
+        hideAtMs = SystemClock.uptimeMillis() + 5000
+        if (isAttachedToWindow) {
+            postDelayed(hideAction, 5000)
         }
     }
 
@@ -675,7 +666,6 @@ class AltAndroidTvVideoPlayer(
         previewTimeBar.visibility = GONE
         durationLinearLayout.visibility = GONE
         closeVideoPlayerButton.visibility = GONE
-        // overlayImageTransparent.visibility = GONE
         centerButtonLayout.visibility = GONE
         videoMenuLayout.visibility = GONE
         resumedVideoTv.visibility = GONE
